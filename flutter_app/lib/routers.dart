@@ -1,5 +1,5 @@
 import 'package:flutter_app/fetures/adding_courts/adding_court_screen.dart';
-import 'package:flutter_app/fetures/adding_courts/listing_court_screen.dart';
+import 'package:flutter_app/fetures/listing_courts/listing_court_screen.dart';
 import 'package:go_router/go_router.dart';
 
 final router = GoRouter(

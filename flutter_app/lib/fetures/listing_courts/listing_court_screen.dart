@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../widgets/bb_court_info_card.dart';
+
 class ListingCourtScreen extends StatefulWidget {
 
 
@@ -22,21 +24,7 @@ class _ListingCourtState extends State<ListingCourtScreen> {
         color: Colors.white,
         child: ListView(
           children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-              padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-              color: Colors.lightBlueAccent,
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  Text("Name:"),
-                  Text("Location:"),
-                  Text("Type:"),
-                  Text("Price:"),
-                  Text("Attribute:"),
-                ],
-              ),
-            )
+            BBCourtInfoCard(),
           ],
         ),
       ),

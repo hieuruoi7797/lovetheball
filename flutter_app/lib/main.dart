@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/fetures/adding_courts/adding_court_screen.dart';
 import 'package:flutter_app/routers.dart';
+import 'package:provider/provider.dart';
+
+import 'fetures/adding_courts/adding_court_notifier.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<AddingCourtNotifier>(
+        create: (context) => AddingCourtNotifier(),
+        child: AddingCourtScreen(),
+      )
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
