@@ -9,7 +9,7 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider<AddingCourtNotifier>(
-        create: (context) => AddingCourtNotifier(),
+        create: (context) => AddingCourtNotifier(context),
         child: AddingCourtScreen(),
       )
     ],
