@@ -9,7 +9,7 @@ class ApiDio {
 
   ApiDio(BuildContext context) {
     final BaseOptions options = BaseOptions(
-      baseUrl: "",
+      baseUrl: "https://google.com/",
     );
 
     final Dio dio = Dio(options);
