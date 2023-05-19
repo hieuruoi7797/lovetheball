@@ -11,6 +11,7 @@ class AddingCourtScreen extends StatefulWidget {
 
 class _AddingCourtState extends State<AddingCourtScreen> {
   late AddingCourtNotifier presenter;
+
   @override
   Widget build(BuildContext context) {
     presenter = Provider.of<AddingCourtNotifier>(context);
@@ -31,23 +32,42 @@ class _AddingCourtState extends State<AddingCourtScreen> {
           child: ListView(children: [
             TextFieldNormal(
               title: "Name*",
+              textController: presenter.nameController,
             ),
             TextFieldNormal(
-              title: "Loaction*",
+              title: "Location*",
+              textController: presenter.locationController,
             ),
             TextFieldNormal(
               title: "Type",
+              textController: presenter.typeController,
             ),
             const Center(child: Text("PRICE:")),
-            TextFieldNormal(title: "Hour"),
-            TextFieldNormal(title: "Day"),
-            TextFieldNormal(title: "Week"),
-            TextFieldNormal(title: "Month"),
+            TextFieldNormal(
+              title: "Hour",
+              textController: presenter.hourController,
+            ),
+            TextFieldNormal(
+              title: "Day",
+              textController: presenter.dayController,
+            ),
+            TextFieldNormal(
+              title: "Week",
+              textController: presenter.weekController,
+            ),
+            TextFieldNormal(
+                title: "Month", textController: presenter.monthController),
             const Center(child: Text("ATTRIBUTE:")),
-            TextFieldNormal(title: "Length"),
-            TextFieldNormal(title: "Width"),
-            TextFieldNormal(title: "Hoop Height"),
-            TextFieldNormal(title: "Backboard Size"),
+            TextFieldNormal(
+                title: "Length", textController: presenter.lengthController),
+            TextFieldNormal(
+                title: "Width", textController: presenter.widthController),
+            TextFieldNormal(
+                title: "Hoop Height",
+                textController: presenter.hoopLengthController),
+            TextFieldNormal(
+                title: "Backboard Size",
+                textController: presenter.backBoardSizeController),
           ]),
         ));
   }
