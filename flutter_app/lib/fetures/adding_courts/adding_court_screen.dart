@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/fetures/adding_courts/adding_court_notifier.dart';
 import 'package:flutter_app/widgets/textfield_normal.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class AddingCourtScreen extends StatefulWidget {
@@ -19,7 +18,7 @@ class _AddingCourtState extends State<AddingCourtScreen> {
         appBar: AppBar(title: const Text("Adding Basketball Court")),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            context.go("/listing_court_screen");
+            presenter.addingCourt(context);
             // Add your onPressed code here!
           },
           backgroundColor: Colors.green,
@@ -64,7 +63,7 @@ class _AddingCourtState extends State<AddingCourtScreen> {
                 title: "Width", textController: presenter.widthController),
             TextFieldNormal(
                 title: "Hoop Height",
-                textController: presenter.hoopLengthController),
+                textController: presenter.hoopHeightController),
             TextFieldNormal(
                 title: "Backboard Size",
                 textController: presenter.backBoardSizeController),

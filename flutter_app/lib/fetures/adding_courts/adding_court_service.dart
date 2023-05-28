@@ -7,7 +7,7 @@ class AddingCourtService implements AddingCourtsInterface {
   Future<void> addCourt(
       BuildContext context, Map<dynamic, dynamic> body) async {
     final response = await ApiDio.getInstance(context)!
-        .createPost("/courts", context: context, body: body);
+        .createPost("/courts", context: context, body: body, showLoading: true);
     return response;
   }
 }

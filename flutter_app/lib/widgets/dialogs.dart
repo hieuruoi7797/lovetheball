@@ -9,7 +9,7 @@ class DialogAlert {
           shape: RoundedRectangleBorder(
               borderRadius:
               BorderRadius.all(Radius.circular(8.0))),
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.transparent,
           content: LoadingIndicator(text: "Loading"),
         ));
   }

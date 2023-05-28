@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-
 import 'adding_court_service.dart';
 
 class AddingCourtNotifier extends ChangeNotifier {
@@ -13,27 +12,29 @@ class AddingCourtNotifier extends ChangeNotifier {
     TextEditingController yearController = TextEditingController();
     TextEditingController lengthController = TextEditingController();
     TextEditingController widthController = TextEditingController();
-    TextEditingController hoopLengthController = TextEditingController();
+    TextEditingController hoopHeightController = TextEditingController();
     TextEditingController backBoardSizeController = TextEditingController();
     AddingCourtService service = AddingCourtService();
-    AddingCourtNotifier(BuildContext context) {
-        service.addCourt(context, {
-            "name": "string",
-            "location": "string",
+    AddingCourtNotifier(BuildContext context);
+    Future<void> addingCourt(BuildContext context) async {
+        await service.addCourt(context, {
+            "name": nameController.text,
+            "location": locationController.text,
             "type_": 0,
             "price": {
-                "hour": "string",
-                "day": "string",
-                "week": "string",
-                "month": "string",
-                "year": "string"
+                "hour": hourController.text,
+                "day": dayController.text,
+                "week": weekController.text,
+                "month": monthController.text,
+                "year": yearController.text
             },
             "attributes": {
-                "length": "string",
-                "width": "string",
-                "hoop_height": "string",
-                "backboard_size": "string"
+                "length": lengthController.text,
+                "width": widthController.text,
+                "hoop_height": hoopHeightController.text,
+                "backboard_size": backBoardSizeController.text
             }
-        });
+        }).then((value) =>  Navigator.pushNamed(context, '/listing'));
+
     }
 }

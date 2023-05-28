@@ -17,12 +17,27 @@ class BaseService {
       DialogAlert.showLoading(context);
     }
     try {
-      final Response response = await dio.post(subUri, data: body?? {});
+      final Response response = await dio.post(subUri, data: body ?? {});
       if (showLoading == true) {
         DialogAlert.dismissLoading(context);
       }
       return response;
-    }catch (e){
+    } catch (e) {}
+  }
+
+  Future<dynamic> createGet(
+      String subUri,
+      {bool showLoading = false, required BuildContext context, Map<String, dynamic>? queryParameters}) async {
+    if (showLoading == true) {
+      DialogAlert.showLoading(context);
     }
+    try {
+      final Response response =
+          await dio.get(subUri, queryParameters: queryParameters);
+      if (showLoading == true) {
+        DialogAlert.dismissLoading(context);
+      }
+      return response;
+    } catch (e) {}
   }
 }
