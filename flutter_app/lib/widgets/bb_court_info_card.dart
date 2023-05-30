@@ -20,8 +20,8 @@ class BBCourtInfoCard extends StatelessWidget {
           Text("Name: ${basketballCourt.name}"),
           Text("Location:  ${basketballCourt.location}"),
           Text("Type: ${basketballCourt.type}"),
-          Text("Price: ${basketballCourt.price}"),
-          Text("Attribute: ${basketballCourt.attributes}"),
+          Text("Price: ${basketballCourt.price!.toJson().toString()}"),
+          Text("Attribute: ${basketballCourt.attributes!.toJson().toString()}"),
         ],
       ),
     );
