@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -17,6 +19,18 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 1,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        selectedIconTheme: IconThemeData(color: Color(0xFFE55807)),
+        items: [
+        BottomNavigationBarItem(icon: SvgPicture.asset("assets/svg_pictures/SETTING.svg"),label: ''),
+        BottomNavigationBarItem(icon: SvgPicture.asset("assets/svg_pictures/BASKETBALL.svg"),label: ''),
+        BottomNavigationBarItem(icon: SvgPicture.asset("assets/svg_pictures/CHART.svg"),label: ''),
+      ],
+
+      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
