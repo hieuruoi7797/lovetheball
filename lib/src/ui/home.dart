@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -50,8 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width * 0.9,
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
+                  height: MediaQuery.of(context).size.height * 0.25,
+                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15),
                   decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
@@ -66,6 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       borderRadius: BorderRadius.circular(20)
                   ),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         margin:EdgeInsets.only(top: 66),
@@ -75,6 +77,57 @@ class _MyHomePageState extends State<MyHomePage> {
                               fontWeight: FontWeight.w700
                           ),
                         ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 48),
+                        margin: EdgeInsets.only(bottom: 23),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Game đã chơi",style: TextStyle(color: Colors.grey,fontSize: 12),),
+                                Container(
+                                  margin: EdgeInsets.only(top: 16),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                          margin:EdgeInsets.only(right: 8),
+                                          child: SvgPicture.asset("assets/svg_pictures/BASKETBALL_ORANGE.svg",)),
+                                      Text("18",style: TextStyle(
+                                        fontSize: 28,
+                                        color: Color(0xFF818181)
+                                      ),)
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),//Game da choi
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Thành tích",style: TextStyle(color: Colors.grey, fontSize: 12)),
+                                Container(
+                                  margin: EdgeInsets.only(top: 16),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(right: 8),
+                                        child: SvgPicture.asset("assets/svg_pictures/TROPHY_ORANGE.svg",
+                                        ),
+                                      ),
+                                      Text("37",style: TextStyle(
+                                          fontSize: 28,
+                                          color: Color(0xFF818181)
+                                      ),)
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),//Thanh tich
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -82,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Container(
                   width: MediaQuery.of(context).size.height * 0.12,
                   height: MediaQuery.of(context).size.height * 0.12,
-                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15),
+                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.10),
                   decoration: BoxDecoration(
                     color: Colors.green,
                     borderRadius: BorderRadius.circular(100)
@@ -93,7 +146,61 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ],
-            )
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              height: MediaQuery.of(context).size.height * 0.43,
+              margin: EdgeInsets.only(top: 20),
+              decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 20.0,
+                        offset: Offset(
+                            0,6
+                        )
+                    )
+                  ],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20)
+              ),
+              child: Container(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Tên game",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600
+                    ),),
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      height: 36,
+                      child: TextField(
+                        style: TextStyle(
+                          fontSize: 14
+                        ),
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                          borderSide: BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                          filled: true,
+                          fillColor: Color(0xFFF1F1F1),
+
+                      ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+
           ],
         ),
       ),
