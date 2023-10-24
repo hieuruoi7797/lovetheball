@@ -18,13 +18,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Widget gapDefault = SizedBox(height: 16,);
+    Color mainColor = Color(0xFFE55807);
+
 
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 1,
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        selectedIconTheme: IconThemeData(color: Color(0xFFE55807)),
+        selectedIconTheme: IconThemeData(color: mainColor),
         items: [
         BottomNavigationBarItem(icon: SvgPicture.asset("assets/svg_pictures/SETTING.svg"),label: ''),
         BottomNavigationBarItem(icon: SvgPicture.asset("assets/svg_pictures/BASKETBALL.svg"),label: ''),
@@ -52,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
-                    height: MediaQuery.of(context).size.height * 0.25,
+                    // height: MediaQuery.of(context).size.height * 0.25,
                     margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15),
                     decoration: BoxDecoration(
                         boxShadow: [
@@ -79,6 +82,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                         ),
+                        gapDefault,
+                        gapDefault,
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 48),
                           margin: EdgeInsets.only(bottom: 23),
@@ -150,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Container(
                 width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.43,
+                // height: MediaQuery.of(context).size.height * 0.43,
                 margin: EdgeInsets.only(top: 20),
                 decoration: BoxDecoration(
                     boxShadow: [
@@ -207,65 +212,147 @@ class _MyHomePageState extends State<MyHomePage> {
                             fillColor: Color(0xFFF1F1F1),
                         ),
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.43,
-                margin: EdgeInsets.only(top: 20),
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 20.0,
-                          offset: Offset(
-                              0,6
-                          )
-                      )
-                    ],
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20)
-                ),
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Tên game",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600
-                      ),),
+                      ),
+                      SizedBox(height: 16,),
+                      Text("Người chơi",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600
+                        ),),
+                      gapDefault,
                       Container(
-                        margin: EdgeInsets.only(top: 10),
-                        height: 36,
-                        child: TextField(
-                          style: TextStyle(
-                            fontSize: 14
+                        width: MediaQuery.of(context).size.width,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: mainColor,
                           ),
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50.0),
-                            borderSide: BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
+                          borderRadius: BorderRadius.circular(50)
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Thêm người chơi",
+                            style: TextStyle(
+                              color: mainColor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600
                             ),
                           ),
-                            filled: true,
-                            fillColor: Color(0xFFF1F1F1),
+                        ),
+                      ),
+                      ListView(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 70,
+                            decoration: BoxDecoration(
+                              color: Color(0xFFF1F1F1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 16),
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: Colors.blue
+                                  ),
+                                ),
+                                Text("Pham Hieu",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16),),
+                                Spacer(),
+                                Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 16),
+                                  width: 30,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                    color: Colors.white
+                                  ),
+                                  child: Icon(
+                                      CupertinoIcons.xmark,
+                                      size: 14,
+                                      color: mainColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          gapDefault,
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 70,
+                            decoration: BoxDecoration(
+                              color: Color(0xFFF1F1F1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 16),
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: Colors.blue
+                                  ),
+                                ),
+                                Text("Kien",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16),),
+                                Spacer(),
+                                Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 16),
+                                  width: 30,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                    color: Colors.white
+                                  ),
+                                  child: Icon(
+                                      CupertinoIcons.xmark,
+                                      size: 14,
+                                      color: mainColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      gapDefault,
+                      Center(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.47,
+                          height: 48,
+                          decoration: BoxDecoration(
+                              color: mainColor,
+                              borderRadius: BorderRadius.circular(50)
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Tạo game",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
 
-                        ),
-                        ),
-                      )
                     ],
                   ),
                 ),
               ),
-
             ],
           ),
         ),
