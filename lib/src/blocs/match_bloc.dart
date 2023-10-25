@@ -5,7 +5,7 @@ import 'package:rxdart/rxdart.dart';
 class MatchBloc {
   final _repository = Repository();
   final _matchCreator = PublishSubject<Response>();
-  final _statusBehaviors = PublishSubject<String>();
+  final _statusBehaviors = BehaviorSubject<String>();
 
   Stream<Response> get createMatchRes =>  _matchCreator.stream;
   Stream<String> get status =>  _statusBehaviors.stream;

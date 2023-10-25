@@ -22,6 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    bloc.changeStatus("preparing");
   }
 
   @override
@@ -35,7 +36,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     Widget gapDefault = SizedBox(height: 16,);
     Color mainColor = Color(0xFFE55807);
-    bloc.changeStatus("preparing");
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 1,
