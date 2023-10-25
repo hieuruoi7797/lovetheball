@@ -5,8 +5,15 @@ import 'package:rxdart/rxdart.dart';
 class MatchBloc {
   final _repository = Repository();
   final _matchCreator = PublishSubject<Response>();
+  final _statusBehaviors = PublishSubject<String>();
 
   Stream<Response> get createMatchRes =>  _matchCreator.stream;
+  Stream<String> get status =>  _statusBehaviors.stream;
+
+  changeStatus(String statusChange) async {
+    _statusBehaviors.sink.add(statusChange);
+    _statusBehaviors.stream.forEach((element) {print("Hieu ${element}");});
+  }
 
   createMatch({
     required String name,
@@ -20,7 +27,8 @@ class MatchBloc {
 
   dispose() {
     _matchCreator.close();
+    _statusBehaviors.close();
   }
 
-  final bloc = MatchBloc();
 }
+final bloc = MatchBloc();

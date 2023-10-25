@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' show Client, Response;
 
@@ -17,12 +19,12 @@ class MatchApiProvider {
     Response response;
       response = await client.post(
           Uri.parse(_baseUrl + MATCHES),
-          body: {
-              "name": name,
-              "location": location,
-              "type_": type,
-              "players": players
-          });
+          body: jsonEncode({
+            "name": name,
+            "location": location,
+            "type_": type,
+            "players": players
+          }));
       return response;
   }
 }
