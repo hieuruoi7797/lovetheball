@@ -1,17 +1,26 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:splat_record/constants/ui_styles.dart';
 
-class LoadingWidget  {
+class DialogWidget  {
 
   showLoaderDialog(BuildContext context){
-    AlertDialog alert=AlertDialog(
-      content: new Row(
+    AlertDialog alert = AlertDialog(
+      contentPadding: EdgeInsets.zero,
+      backgroundColor: Colors.transparent,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          CircularProgressIndicator(),
-          Container(margin: EdgeInsets.only(left: 7),child:Text("Loading..." )),
-        ],),
-    );
+          Container(
+            height: 50,
+            width: 50,
+            color: Colors.transparent,
+            child: CircularProgressIndicator(
+              color: color_main,
+              backgroundColor: color_loading_background,
+            ),
+          ),
+        ],
+      ));
     showDialog(barrierDismissible: false,
       context:context,
       builder:(BuildContext context){

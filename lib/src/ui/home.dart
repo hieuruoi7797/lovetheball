@@ -318,7 +318,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   name: nameController.text,
                                   location: "ABCD",
                                   type: 0,
-                                  players: ["1","2"]),
+                                  players: ["1"]),
                               child: Center(
                                 child: Container(
                                   width: MediaQuery

@@ -9,7 +9,7 @@ import '../../constants/api_paths.dart';
 class MatchApiProvider {
   Client client = Client();
   // final _apiKey = 'api-key';
-  final _baseUrl = "http://ample-crawdad-kind.ngrok-free.app/v1";
+  final _baseUrl = "https://ample-crawdad-kind.ngrok-free.app/v1";
 
   Future<Response> createMatch({
     required BuildContext context,
@@ -19,7 +19,7 @@ class MatchApiProvider {
     required List<String> players,
   }) async {
     Response response;
-    LoadingWidget().showLoaderDialog(context);
+    DialogWidget().showLoaderDialog(context);
       response = await client.post(
           Uri.parse(_baseUrl + MATCHES),
           body: jsonEncode({
@@ -28,6 +28,7 @@ class MatchApiProvider {
             "type_": type,
             "players": players
           }));
+    Navigator.pop(context);
       return response;
   }
 }
