@@ -314,10 +314,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             gap_default,
                             GestureDetector(
                               onTap: () => bloc.createMatch(
+                                  context: context,
                                   name: nameController.text,
                                   location: "ABCD",
-                                  type: 1,
-                                  players: ["players"]),
+                                  type: 0,
+                                  players: ["1","2"]),
                               child: Center(
                                 child: Container(
                                   width: MediaQuery

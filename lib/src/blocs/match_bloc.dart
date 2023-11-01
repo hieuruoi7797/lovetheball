@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:splat_record/src/resources/repository.dart';
 import 'package:rxdart/rxdart.dart';
@@ -16,12 +17,13 @@ class MatchBloc {
   }
 
   createMatch({
+    required BuildContext context,
     required String name,
     required String location,
     required int type,
     required List<String> players,
   }) async {
-    Response response = await _repository.createMatch(name: name, location: location, type: type, players: players);
+    Response response = await _repository.createMatch(context: context,name: name, location: location, type: type, players: players);
     _matchCreator.sink.add(response);
   }
 
