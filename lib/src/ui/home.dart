@@ -2,15 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:splat_record/src/blocs/match_bloc.dart';
 import 'package:splat_record/widgets_common/user_name_card.dart';
 import '../../constants/ui_styles.dart';
-import '../blocs/match_bloc.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key});
 
 
-  final String title;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -20,16 +19,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   TextEditingController nameController = TextEditingController();
 
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    bloc.changeStatus("preparing");
+    matchBloc.changeStatus("preparing");
   }
 
   @override
   void dispose() {
-    bloc.dispose();
+    matchBloc.dispose();
     super.dispose();
   }
 
@@ -50,9 +50,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
       ),
       body: StreamBuilder(
-        stream: bloc.status,
+        stream: matchBloc.status,
         builder: (context, AsyncSnapshot<String> snapshot) {
-          // bloc.changeStatus("preparing");
           if (snapshot.data == "preparing") {
             return Container(
               width: MediaQuery
@@ -313,7 +312,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             gap_default,
                             GestureDetector(
-                              onTap: () => bloc.createMatch(
+                              onTap: () => matchBloc.createMatch(
                                   context: context,
                                   name: nameController.text,
                                   location: "ABCD",

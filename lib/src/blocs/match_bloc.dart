@@ -33,4 +33,4 @@ class MatchBloc {
   }
 
 }
-final bloc = MatchBloc();
+final matchBloc = MatchBloc();
