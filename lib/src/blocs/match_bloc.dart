@@ -8,12 +8,15 @@ class MatchBloc {
   final _matchCreator = PublishSubject<Response>();
   final _statusBehaviors = BehaviorSubject<String>();
 
-  Stream<Response> get createMatchRes =>  _matchCreator.stream;
-  Stream<String> get status =>  _statusBehaviors.stream;
+  Stream<Response> get createMatchRes => _matchCreator.stream;
+
+  Stream<String> get status => _statusBehaviors.stream;
 
   changeStatus(String statusChange) async {
     _statusBehaviors.sink.add(statusChange);
-    _statusBehaviors.stream.forEach((element) {print("Hieu ${element}");});
+    _statusBehaviors.stream.forEach((element) {
+      print("Hieu ${element}");
+    });
   }
 
   createMatch({
@@ -23,7 +26,12 @@ class MatchBloc {
     required int type,
     required List<String> players,
   }) async {
-    Response response = await _repository.createMatch(context: context,name: name, location: location, type: type, players: players);
+    Response response = await _repository.createMatch(
+        context: context,
+        name: name,
+        location: location,
+        type: type,
+        players: players);
     _matchCreator.sink.add(response);
   }
 
@@ -31,6 +39,6 @@ class MatchBloc {
     _matchCreator.close();
     _statusBehaviors.close();
   }
-
 }
+
 final matchBloc = MatchBloc();

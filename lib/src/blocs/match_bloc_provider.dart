@@ -15,6 +15,7 @@ class MatchBlocProvider extends InheritedWidget {
 
   static MatchBloc of(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<MatchBlocProvider>()
-    as MatchBlocProvider).matchBloc;
+            as MatchBlocProvider)
+        .matchBloc;
   }
 }

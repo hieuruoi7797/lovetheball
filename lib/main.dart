@@ -4,5 +4,3 @@ import 'package:splat_record/src/app.dart';
 void main() {
   runApp(const MyApp());
 }
-
-

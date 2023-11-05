@@ -8,6 +8,7 @@ import '../../constants/api_paths.dart';
 
 class MatchApiProvider {
   Client client = Client();
+
   // final _apiKey = 'api-key';
   final _baseUrl = "https://ample-crawdad-kind.ngrok-free.app/v1";
 
@@ -20,15 +21,14 @@ class MatchApiProvider {
   }) async {
     Response response;
     DialogWidget().showLoaderDialog(context);
-      response = await client.post(
-          Uri.parse(_baseUrl + MATCHES),
-          body: jsonEncode({
-            "name": name,
-            "location": location,
-            "type_": type,
-            "players": players
-          }));
+    response = await client.post(Uri.parse(_baseUrl + MATCHES),
+        body: jsonEncode({
+          "name": name,
+          "location": location,
+          "type_": type,
+          "players": players
+        }));
     Navigator.pop(context);
-      return response;
+    return response;
   }
 }

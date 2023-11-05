@@ -13,11 +13,11 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
 
       theme: ThemeData(
-          primaryColor: const Color(0xFFE55807),
-          primaryColorLight: const Color(0xFFE55807),
-          primaryIconTheme: const IconThemeData(color: Color(0xFFE55807)),
-          bottomSheetTheme: BottomSheetThemeData(
-              backgroundColor: Colors.black.withOpacity(0),
+        primaryColor: const Color(0xFFE55807),
+        primaryColorLight: const Color(0xFFE55807),
+        primaryIconTheme: const IconThemeData(color: Color(0xFFE55807)),
+        bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: Colors.black.withOpacity(0),
         ),
       ),
       routes: {
@@ -28,4 +28,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

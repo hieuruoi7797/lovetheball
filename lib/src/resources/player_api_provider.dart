@@ -16,16 +16,21 @@ class PlayerApiProvider {
   }) async {
     Response response;
     DialogWidget().showLoaderDialog(context);
-    response = await client.post(
-        Uri.parse(_baseUrl + PLAYERS),
+    response = await client.post(Uri.parse(_baseUrl + PLAYERS),
         body: jsonEncode({
           "name": name,
-          "gender": 0,
-          "birth_date": "",
-          "email": "",
-          "phone": ""
+          // "gender": 0,
+          // "birth_date": "",
+          // "email": "",
+          // "phone": ""
         }));
-    Navigator.pop(context);
-    return response;
+    Future.delayed(Duration.zero, () => Navigator.pop(context));
+    if (response.statusCode == 200) {
+      return response;
+    } else {
+      await Future.delayed(
+          Duration.zero, () => DialogWidget().showFailDialog(context, "FAIL"));
+      return response;
+    }
   }
 }

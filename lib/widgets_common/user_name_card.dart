@@ -11,11 +11,7 @@ StatelessWidget UserNameCard({
   IconData? suffixIcon,
 }) {
   return Container(
-    width: width ??
-        MediaQuery
-        .of(parentContext)
-        .size
-        .width,
+    width: width ?? MediaQuery.of(parentContext).size.width,
     height: height ?? 70,
     decoration: BoxDecoration(
       color: Color(0xFFF1F1F1),
@@ -24,8 +20,7 @@ StatelessWidget UserNameCard({
     child: Row(
       children: [
         Container(
-          margin: EdgeInsets.symmetric(
-          horizontal: 16),
+          margin: EdgeInsets.symmetric(horizontal: 16),
           width: 50,
           height: 50,
           child: CircleAvatar(
@@ -44,21 +39,17 @@ StatelessWidget UserNameCard({
         //       color: Colors.blue
         //   ),
         // ),
-        Text(userName ?? "Unknown",
-          style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 16),),
+        Text(
+          userName ?? "Unknown",
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+        ),
         Spacer(),
         Container(
-          margin: EdgeInsets.symmetric(
-              horizontal: 16),
+          margin: EdgeInsets.symmetric(horizontal: 16),
           width: 30,
           height: 30,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                  100),
-              color: Colors.white
-          ),
+              borderRadius: BorderRadius.circular(100), color: Colors.white),
           child: Icon(
             suffixIcon ?? CupertinoIcons.xmark,
             size: 14,

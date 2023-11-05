@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:splat_record/constants/ui_styles.dart';
 
 class DialogWidget {
-
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
         contentPadding: EdgeInsets.zero,
@@ -22,7 +21,8 @@ class DialogWidget {
             ),
           ],
         ));
-    showDialog(barrierDismissible: false,
+    showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return alert;
@@ -31,31 +31,32 @@ class DialogWidget {
   }
 
   showFailDialog(BuildContext context, String massage) {
-    showDialog(context: context, builder: (BuildContext context){
-      return CupertinoAlertDialog(
-        content: Text(massage),
-        actions: <Widget>[
-          TextButton(
-            style: TextButton.styleFrom(
-              textStyle: Theme.of(context).textTheme.labelLarge,
-            ),
-            child: const Text('Disable'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          TextButton(
-            style: TextButton.styleFrom(
-              textStyle: Theme.of(context).textTheme.labelLarge,
-            ),
-            child: const Text('Enable'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    });
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            content: Text(massage),
+            actions: <Widget>[
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: Theme.of(context).textTheme.labelLarge,
+                ),
+                child: const Text('Disable'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: Theme.of(context).textTheme.labelLarge,
+                ),
+                child: const Text('Enable'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
-
 }

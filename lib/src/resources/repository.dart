@@ -7,26 +7,25 @@ class Repository {
   final matchApiProvider = MatchApiProvider();
   final playerApiProvider = PlayerApiProvider();
 
-  Future<Response> createMatch(
-  {
+  Future<Response> createMatch({
     required BuildContext context,
     required String name,
     required String location,
     required int type,
     required List<String> players,
-  }) => matchApiProvider.createMatch(
-      context: context,
-      name: name,
-      location: location,
-      type: type,
-      players: players,
-  );
+  }) =>
+      matchApiProvider.createMatch(
+        context: context,
+        name: name,
+        location: location,
+        type: type,
+        players: players,
+      );
 
   Future<Response> createPlayer(
-      {required BuildContext context,
-        required String name
-      }) async => playerApiProvider.createPlayer(
-    context: context,
-    name: name,
-  );
+          {required BuildContext context, required String name}) async =>
+      await playerApiProvider.createPlayer(
+        context: context,
+        name: name,
+      );
 }
