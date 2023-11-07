@@ -27,7 +27,7 @@ class PlayerCreatorBloc {
   }) async {
     Response response =
     await _repository.createPlayer(context: context, name: name);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
         _statusBehaviors.add('player_create_success');
         _playerCreator.sink.add(response);
         Future.delayed(

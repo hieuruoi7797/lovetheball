@@ -17,15 +17,18 @@ class PlayerApiProvider {
     Response response;
     DialogWidget().showLoaderDialog(context);
     response = await client.post(Uri.parse(_baseUrl + PLAYERS),
-        body: jsonEncode({
+        body: jsonEncode(<String, dynamic>{
           "name": name,
           // "gender": 0,
           // "birth_date": "",
           // "email": "",
           // "phone": ""
-        }));
+        }),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },);
     Future.delayed(Duration.zero, () => Navigator.pop(context));
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       return response;
     } else {
       await Future.delayed(
