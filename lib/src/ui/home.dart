@@ -15,7 +15,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController nameController = TextEditingController();
-  late MatchBloc matchBloc;
 
   @override
   void initState() {
@@ -24,7 +23,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   @override
   void didChangeDependencies() {
-    matchBloc = MatchBlocProvider.of(context);
     matchBloc.getPlayerSavedName();
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();

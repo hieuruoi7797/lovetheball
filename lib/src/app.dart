@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => const PlayerCreatorScreen(),
-        '/home': (context) => MatchBlocProvider(child: const MyHomePage()),
+        '/home': (context) => const MyHomePage(),
       },
       // home: const MyHomePage(),
     );
