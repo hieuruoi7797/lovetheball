@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:splat_record/src/blocs/match_bloc.dart';
+import 'package:splat_record/src/blocs/match/match_bloc.dart';
+import 'package:splat_record/src/blocs/match/match_bloc_provider.dart';
 import 'package:splat_record/widgets_common/user_name_card.dart';
 import '../../constants/constant_values.dart';
 import '../../constants/ui_styles.dart';
@@ -14,12 +15,19 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController nameController = TextEditingController();
+  late MatchBloc matchBloc;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    matchBloc.changeStatus("preparing");
+  }
+  @override
+  void didChangeDependencies() {
+    matchBloc = MatchBlocProvider.of(context);
+    matchBloc.getPlayerSavedName();
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
   }
 
   @override
@@ -30,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 1,
@@ -45,11 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: SvgPicture.asset(SVG_CHART_HOME), label: ''),
         ],
       ),
-      body: StreamBuilder(
-          stream: matchBloc.status,
-          builder: (context, AsyncSnapshot<String> snapshot) {
-            if (snapshot.data == "preparing") {
-              return Container(
+      body: Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 decoration: const BoxDecoration(
@@ -82,10 +87,15 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  margin: const EdgeInsets.only(top: 66),
-                                  child: const Text("Hoang Mai",
-                                      style: name_big_size),
+                                StreamBuilder(
+                                  stream: matchBloc.userName,
+                                  builder: (context, snapshot) {
+                                    return Container(
+                                      margin: const EdgeInsets.only(top: 66),
+                                      child: Text(snapshot.data??'Unknown',
+                                          style: name_big_size),
+                                    );
+                                  }
                                 ),
                                 gap_default,
                                 gap_default,
@@ -303,11 +313,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                 ),
-              );
-            } else {
-              return SizedBox();
-            }
-          }),
+              )
     );
   }
 }

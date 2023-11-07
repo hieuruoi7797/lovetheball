@@ -1,7 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:splat_record/public/public_methods.dart';
+import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/src/resources/repository.dart';
 import 'package:splat_record/widgets_common/loading.dart';
 
@@ -28,21 +34,30 @@ class PlayerCreatorBloc {
     Response response =
     await _repository.createPlayer(context: context, name: name);
     if (response.statusCode == 201) {
-        _statusBehaviors.add('player_create_success');
-        _playerCreator.sink.add(response);
-        Future.delayed(
-            Duration.zero,
-                () => Navigator.of(context).pushNamed('/home'));
+      _playerCreator.sink.add(response);
+      if (context.mounted) _playerCreatedSuccess(context,response);
     } else {
-        _statusBehaviors.add('player_create_fail');
         _playerCreator.sink.add(response);
-      }
+      () => _playerCreatedFail(context);
+
+    }
     }
 
   dispose() {
     _isDisposed = true;
     _playerCreator.close();
     _statusBehaviors.close();
+  }
+
+  Future<void> _playerCreatedSuccess(BuildContext context,Response response) async {
+    _statusBehaviors.add('player_create_success');
+    Map jsonResponseBody = jsonDecode(response.body)['data'][0];
+    await PublicMethod().writeContentPlayerFile(jsonResponseBody);
+    if (context.mounted) Navigator.of(context).pushNamed('/home');
+  }
+
+  Future<void> _playerCreatedFail(BuildContext context) async{
+    _statusBehaviors.add('player_create_fail');
   }
 }
 

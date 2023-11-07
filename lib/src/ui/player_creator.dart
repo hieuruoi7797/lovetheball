@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:splat_record/src/blocs/player_creator_bloc.dart';
+import 'package:splat_record/src/blocs/player/player_creator_bloc.dart';
 
 import '../../constants/ui_styles.dart';
 
@@ -119,6 +119,7 @@ class _PlayerCreatorState extends State<PlayerCreatorScreen> {
                 height: MediaQuery.of(context).size.height,
                 decoration: const BoxDecoration(
                     image: DecorationImage(
+                        fit: BoxFit.fitWidth,
                         image: AssetImage(
                             'assets/png_images/background_player_creator.png'),
                         alignment: Alignment.topCenter)),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:splat_record/src/blocs/match_bloc.dart';
+import 'package:splat_record/public/public_methods.dart';
+import 'package:splat_record/src/blocs/match/match_bloc.dart';
 
 class MatchBlocProvider extends InheritedWidget {
   final MatchBloc matchBloc;
@@ -9,7 +10,7 @@ class MatchBlocProvider extends InheritedWidget {
         super(key: key, child: child ?? const SizedBox());
 
   @override
-  bool updateShouldNotify(_) {
+  bool updateShouldNotify(oldWidget) {
     return true;
   }
 
