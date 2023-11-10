@@ -36,4 +36,23 @@ class PlayerApiProvider {
       return response;
     }
   }
+
+  Future<Response> getPlayer({
+    required BuildContext context,
+  }) async {
+    Response response;
+    DialogWidget().showLoaderDialog(context);
+    response = await client.get(Uri.parse(_baseUrl + PLAYERS),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },);
+    Future.delayed(Duration.zero, () => Navigator.pop(context));
+    if (response.statusCode == 200) {
+      return response;
+    } else {
+      await Future.delayed(
+          Duration.zero, () => DialogWidget().showFailDialog(context, "FAIL"));
+      return response;
+    }
+  }
 }

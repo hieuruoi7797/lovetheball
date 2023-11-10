@@ -28,4 +28,9 @@ class Repository {
         context: context,
         name: name,
       );
+  Future<Response> getPlayers(
+          {required BuildContext context}) async =>
+      await playerApiProvider.getPlayer(
+        context: context,
+      );
 }

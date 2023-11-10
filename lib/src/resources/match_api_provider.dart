@@ -27,7 +27,10 @@ class MatchApiProvider {
           "location": location,
           "type_": type,
           "players": players
-        }));
+        }),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },);
     Navigator.pop(context);
     return response;
   }

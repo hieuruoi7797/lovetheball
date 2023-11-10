@@ -21,6 +21,13 @@ class _PlayerCreatorState extends State<PlayerCreatorScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    playerBloc.getPlayerSaved(context);
+  }
+
+  @override
   void dispose() {
     playerBloc.dispose();
     super.dispose();

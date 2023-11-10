@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_record/src/blocs/match/match_bloc.dart';
 import 'package:splat_record/src/blocs/match/match_bloc_provider.dart';
+import 'package:splat_record/src/models/player_model.dart';
+import 'package:splat_record/widgets_common/loading.dart';
 import 'package:splat_record/widgets_common/user_name_card.dart';
 import '../../constants/constant_values.dart';
 import '../../constants/ui_styles.dart';
@@ -23,7 +25,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   @override
   void didChangeDependencies() {
-    matchBloc.getPlayerSavedName();
+    matchBloc.getPlayerSavedName(context);
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
@@ -263,21 +265,46 @@ class _MyHomePageState extends State<MyHomePage> {
                                       style: title_main_color),
                                 ),
                               ),
-                              ListView(
-                                padding: EdgeInsets.symmetric(vertical: 16),
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                children: [
-                                  UserNameCard(
-                                    parentContext: context,
-                                    userName: "Pham Hieu",
-                                  ),
-                                  gap_default,
-                                  UserNameCard(
-                                    parentContext: context,
-                                    userName: "Trung Kien",
-                                  ),
-                                ],
+                              StreamBuilder<List<PlayerModel>>(
+                                stream: matchBloc.playerList,
+                                builder: (context, AsyncSnapshot<List<PlayerModel>> snapshot) {
+                                  if (snapshot.hasData){
+                                    return ListView.builder(
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemCount: snapshot.data?.length,
+                                      itemBuilder: (context, index) {
+                                        return Column(
+                                          children: [
+                                            UserNameCard(
+                                              parentContext: context,
+                                              userName: snapshot.data?[index].name,
+                                            ),
+                                            gap_default,
+                                          ],
+                                        );},
+                                      shrinkWrap: true,);
+                                  } else if (snapshot.hasError){
+                                   return DialogWidget().showFailDialog(context, "PLAYERS GETTING FAIL");
+                                  } else {
+                                    return ListView(
+                                      padding: EdgeInsets.symmetric(vertical: 16),
+                                      physics: NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      children: [
+                                        UserNameCard(
+                                          parentContext: context,
+                                          userName: "Pham Hieu",
+                                        ),
+                                        gap_default,
+                                        UserNameCard(
+                                          parentContext: context,
+                                          userName: "Trung Kien",
+                                        ),
+                                      ],
+                                    );
+                                }
+
+                                }
                               ),
                               gap_default,
                               GestureDetector(

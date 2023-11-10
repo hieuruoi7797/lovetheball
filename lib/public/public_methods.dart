@@ -23,7 +23,7 @@ class PublicMethod {
   }
 
 
-  Future<PlayerModel> readContentPlayer() async {
+  Future<dynamic> readContentPlayer() async {
     // try {
       final file = await localPlayerFile;
       // Read the file

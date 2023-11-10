@@ -27,6 +27,16 @@ class PlayerCreatorBloc {
     return statusChanged;
   }
 
+  Future<void> getPlayerSaved(BuildContext context) async{
+    dynamic playerSaved = await PublicMethod().readContentPlayer();
+    if (playerSaved is PlayerModel && playerSaved.name.isNotEmpty){
+      if (context.mounted) Navigator.of(context).pushNamed('/home');
+      return;
+    }else if (playerSaved == 'Error'){
+      return;
+    }
+  }
+
   createPlayer({
     required BuildContext context,
     required String name,
