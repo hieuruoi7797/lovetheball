@@ -107,7 +107,11 @@ class MatchBloc {
     await getPlayerList(context: context, isAdding: true);
   }
 
-  addPlayersTap(BuildContext context) {}
+  addPlayersTap(BuildContext context, int index) {
+    playersListAdded.add(playersListMore[index]);
+    _addedPlayersList.sink.add(playersListAdded);
+    Navigator.pop(context);
+  }
 
   removePlayerTap(int index, BuildContext context, String nameOfGame) async {
     String result = await DialogWidget().showMessageDialog(context,

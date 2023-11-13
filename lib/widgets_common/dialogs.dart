@@ -157,7 +157,7 @@ class DialogWidget {
                                               fit: BoxFit.none,
                                             ),
                                             onTapSuffix: () => matchBloc
-                                                .addPlayersTap(context)),
+                                                .addPlayersTap(context, index)),
                                         gap_default,
                                       ],
                                     );
