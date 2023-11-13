@@ -8,7 +8,8 @@ StatelessWidget UserNameCard({
   double? width,
   double? height,
   String? userName,
-  IconData? suffixIcon,
+  Widget? suffixIcon,
+  Function()? onTapSuffix,
 }) {
   return Container(
     width: width ?? MediaQuery.of(parentContext).size.width,
@@ -44,16 +45,19 @@ StatelessWidget UserNameCard({
           style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
         ),
         Spacer(),
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 16),
-          width: 30,
-          height: 30,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100), color: Colors.white),
-          child: Icon(
-            suffixIcon ?? CupertinoIcons.xmark,
-            size: 14,
-            color: color_main,
+        GestureDetector(
+          onTap: onTapSuffix,
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 16),
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100), color: Colors.white),
+            child: suffixIcon ?? Icon(
+              CupertinoIcons.xmark,
+              size: 14,
+              color: color_main,
+            ),
           ),
         ),
       ],

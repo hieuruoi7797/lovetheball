@@ -18,8 +18,26 @@ const TextStyle title_main_color = TextStyle(
     fontWeight: FontWeight.w600
 );
 
+const TextStyle normal_main_color = TextStyle(
+    color: color_main,
+    fontSize: 14,
+    fontWeight: FontWeight.w400
+);
+
 const TextStyle title_white_color = TextStyle(
     color: Colors.white,
+    fontSize: 16,
+    fontWeight: FontWeight.w600
+);
+
+const TextStyle normal_white_color = TextStyle(
+    color: Colors.white,
+    fontSize: 14,
+    fontWeight: FontWeight.w400
+);
+
+const TextStyle title_black_color = TextStyle(
+    color: Colors.black,
     fontSize: 16,
     fontWeight: FontWeight.w600
 );

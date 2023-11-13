@@ -3,29 +3,29 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_record/src/blocs/match/match_bloc.dart';
 import 'package:splat_record/src/blocs/match/match_bloc_provider.dart';
 import 'package:splat_record/src/models/player_model.dart';
-import 'package:splat_record/widgets_common/loading.dart';
+import 'package:splat_record/widgets_common/dialogs.dart';
 import 'package:splat_record/widgets_common/user_name_card.dart';
 import '../../constants/constant_values.dart';
 import '../../constants/ui_styles.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class MatchCreatorScreen extends StatefulWidget {
+  const MatchCreatorScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MatchCreatorScreen> createState() => _MatchCreatorScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MatchCreatorScreenState extends State<MatchCreatorScreen> {
   TextEditingController nameController = TextEditingController();
 
   @override
   void initState() {
+    matchBloc.getPlayerSavedName(context);
     // TODO: implement initState
     super.initState();
   }
   @override
   void didChangeDependencies() {
-    matchBloc.getPlayerSavedName(context);
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
@@ -38,7 +38,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 1,
@@ -205,13 +204,13 @@ class _MyHomePageState extends State<MyHomePage> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(20)),
                         child: Container(
-                          padding: EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(20),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
                                 "Tên game",
-                                style: title_white_color,
+                                style: title_black_color,
                               ),
                               Container(
                                 margin: EdgeInsets.only(top: 10),
@@ -249,40 +248,46 @@ class _MyHomePageState extends State<MyHomePage> {
                               gap_default,
                               const Text(
                                 "Người chơi",
-                                style: title_white_color,
+                                style: title_black_color,
                               ),
                               gap_default,
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: 48,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: color_main,
-                                    ),
-                                    borderRadius: BorderRadius.circular(50)),
-                                child: const Center(
-                                  child: Text("Thêm người chơi",
-                                      style: title_main_color),
+                              GestureDetector(
+                                onTap: () => matchBloc.showAddingPlayersBottom(context),
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: color_main,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50)),
+                                  child: const Center(
+                                    child: Text("Thêm người chơi",
+                                        style: title_main_color),
+                                  ),
                                 ),
                               ),
                               StreamBuilder<List<PlayerModel>>(
-                                stream: matchBloc.playerList,
+                                stream: matchBloc.addedPlayersList,
                                 builder: (context, AsyncSnapshot<List<PlayerModel>> snapshot) {
                                   if (snapshot.hasData){
+                                    matchBloc.playersListAdded = snapshot.data!;
                                     return ListView.builder(
                                       physics: const NeverScrollableScrollPhysics(),
                                       itemCount: snapshot.data?.length,
+                                      shrinkWrap: true,
+                                      padding: EdgeInsets.only(top: 15),
                                       itemBuilder: (context, index) {
                                         return Column(
                                           children: [
                                             UserNameCard(
                                               parentContext: context,
                                               userName: snapshot.data?[index].name,
+                                              onTapSuffix: () => matchBloc.removePlayerTap(index, context, nameController.text)
                                             ),
                                             gap_default,
                                           ],
-                                        );},
-                                      shrinkWrap: true,);
+                                        );});
                                   } else if (snapshot.hasError){
                                    return DialogWidget().showFailDialog(context, "PLAYERS GETTING FAIL");
                                   } else {
@@ -310,10 +315,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               GestureDetector(
                                 onTap: () => matchBloc.createMatch(
                                     context: context,
-                                    name: nameController.text,
-                                    location: "ABCD",
-                                    type: 0,
-                                    players: ["1"]),
+                                    name: nameController.text),
                                 child: Center(
                                   child: Container(
                                     width: MediaQuery.of(context).size.width *

@@ -9,7 +9,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:splat_record/public/public_methods.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/src/resources/repository.dart';
-import 'package:splat_record/widgets_common/loading.dart';
+import 'package:splat_record/widgets_common/dialogs.dart';
 
 class PlayerCreatorBloc {
   final _repository = Repository();

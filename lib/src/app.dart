@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splat_record/src/blocs/match/match_bloc_provider.dart';
 import 'package:splat_record/src/ui/player_creator.dart';
-import 'ui/home.dart';
+import 'ui/match_creator.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => const PlayerCreatorScreen(),
-        '/home': (context) => const MyHomePage(),
+        '/home': (context) => const MatchCreatorScreen(),
       },
       // home: const MyHomePage(),
     );
