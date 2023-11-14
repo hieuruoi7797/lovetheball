@@ -24,15 +24,15 @@ class PublicMethod {
 
 
   Future<dynamic> readContentPlayer() async {
-    // try {
+    try {
       final file = await localPlayerFile;
       // Read the file
       String contents = await file.readAsString();
       PlayerModel playerCreated = PlayerModel.fromJson(jsonDecode(contents));
       return playerCreated;
-    // } catch (e) {
-    //   // If there is an error reading, return a default String
-    //   return 'Error';
-    // }
+    } catch (e) {
+      // If there is an error reading, return a default String
+      return 'Error';
+    }
   }
 }

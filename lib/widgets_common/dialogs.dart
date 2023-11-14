@@ -69,114 +69,163 @@ class DialogWidget {
     showModalBottomSheet(
         enableDrag: false,
         context: context,
+        isScrollControlled: true,
         builder: (BuildContext context) {
           return Container(
-            height: MediaQuery.of(context).size.height * 0.6,
-            padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+            height: MediaQuery.sizeOf(context).height *0.7,
+            padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(20)),
-            child: ListView(
-              physics: NeverScrollableScrollPhysics(),
+            child: Stack(
+              // shrinkWrap: true,
+              // physics: NeverScrollableScrollPhysics(),
               children: [
-                Row(
+                ListView(
+                  // shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   children: [
-                    GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: SvgPicture.asset("assets/svg_pictures/XICON.svg")),
-                    const Spacer(),
-                    const Text(
-                      "Thêm người chơi",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                    Row(
+                      children: [
+                        GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: SvgPicture.asset("assets/svg_pictures/XICON.svg")),
+                        const Spacer(),
+                        const Text(
+                          "Thêm người chơi",
+                          style:
+                              TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                        ),
+                        const Spacer(),
+                      ],
                     ),
-                    const Spacer(),
+                    Container(
+                      margin: const EdgeInsets.only(top: 20, bottom: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                              flex: 1,
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                child: const Center(
+                                    child: Text(
+                                  "Người chơi",
+                                  style: normal_main_color,
+                                )),
+                              )),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Expanded(
+                              flex: 1,
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: const Color(0xFFDCDCDC),
+                                ),
+                                child: const Center(
+                                    child: Text(
+                                  "Đội bóng",
+                                  style: normal_white_color,
+                                )),
+                              ))
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(top: 20, bottom: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                                flex: 1,
-                                child: Container(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
-                                  child: const Center(
-                                      child: Text(
-                                    "Người chơi",
-                                    style: normal_main_color,
-                                  )),
-                                )),
-                            SizedBox(
-                              width: 20,
+                StreamBuilder<List<PlayerModel>>(
+                    stream: matchBloc.morePlayersList,
+                    builder: (context,
+                        AsyncSnapshot<List<PlayerModel>> snapshot) {
+                      if (snapshot.hasData) {
+                        matchBloc.playersListMore = snapshot.data!;
+                        return Container(
+                          margin: EdgeInsets.only(top:
+                          MediaQuery.of(context).size.height * 0.15),
+                          child: ListView.builder(
+                              // physics: const AlwaysScrollableScrollPhysics(),
+                              itemCount: snapshot.data?.length,
+                              shrinkWrap: true,
+                              padding: const EdgeInsets.only(top: 15),
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    UserNameCard(
+                                        parentContext: context,
+                                        userName:
+                                        snapshot.data?[index].name,
+                                        suffixIcon: SvgPicture.asset(
+                                          'assets/svg_pictures/ADD_PLAYER.svg',
+                                          width: 14,
+                                          height: 14,
+                                          fit: BoxFit.none,
+                                        ),
+                                        onTapSuffix: () => matchBloc
+                                            .addPlayersTap(context, index)),
+                                    gap_default,
+                                  ],
+                                );
+                              }),
+                        );
+                      } else if (snapshot.hasError) {
+                        return DialogWidget().showFailDialog(
+                            context, "PLAYERS GETTING FAIL");
+                      } else {
+                        return ListView(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: const [],
+                        );
+                      }
+                    }),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 80,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                      border: Border.all(color: Colors.transparent),
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                          colors: [
+                            Colors.white,
+                            Colors.white.withOpacity(0.9),
+                            Colors.white.withOpacity(0.8),
+                            Colors.white.withOpacity(0.01),
+                      ])
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        // result = "Y";
+                        Navigator.pop(context);
+                      },
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          // margin: EdgeInsets.only(top: 20),
+                          width: MediaQuery.of(context).size.width * 0.47,
+                          height: 48,
+                          decoration: BoxDecoration(
+                              color: color_main,
+                              borderRadius: BorderRadius.circular(50)),
+                          child: Center(
+                            child: Text(
+                              "Xác nhận",
+                              style: title_white_color,
                             ),
-                            Expanded(
-                                flex: 1,
-                                child: Container(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: const Color(0xFFDCDCDC),
-                                  ),
-                                  child: const Center(
-                                      child: Text(
-                                    "Đội bóng",
-                                    style: normal_white_color,
-                                  )),
-                                ))
-                          ],
+                          ),
                         ),
                       ),
-                      StreamBuilder<List<PlayerModel>>(
-                          stream: matchBloc.morePlayersList,
-                          builder: (context,
-                              AsyncSnapshot<List<PlayerModel>> snapshot) {
-                            if (snapshot.hasData) {
-                              matchBloc.playersListMore = snapshot.data!;
-                              return ListView.builder(
-                                  // physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: snapshot.data?.length,
-                                  shrinkWrap: true,
-                                  padding: const EdgeInsets.only(top: 15),
-                                  itemBuilder: (context, index) {
-                                    return Column(
-                                      children: [
-                                        UserNameCard(
-                                            parentContext: context,
-                                            userName:
-                                                snapshot.data?[index].name,
-                                            suffixIcon: SvgPicture.asset(
-                                              'assets/svg_pictures/ADD_PLAYER.svg',
-                                              width: 14,
-                                              height: 14,
-                                              fit: BoxFit.none,
-                                            ),
-                                            onTapSuffix: () => matchBloc
-                                                .addPlayersTap(context, index)),
-                                        gap_default,
-                                      ],
-                                    );
-                                  });
-                            } else if (snapshot.hasError) {
-                              return DialogWidget().showFailDialog(
-                                  context, "PLAYERS GETTING FAIL");
-                            } else {
-                              return ListView(
-                                padding: EdgeInsets.symmetric(vertical: 16),
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                children: const [],
-                              );
-                            }
-                          }),
-                    ],
+                    ),
                   ),
-                ),
+                )
               ],
             ),
           );
@@ -197,10 +246,11 @@ class DialogWidget {
             child: Container(
               padding: EdgeInsets.all(20),
               width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.22,
+              // height: MediaQuery.of(context).size.height * 0.22,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(20)),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GestureDetector(
@@ -259,10 +309,10 @@ class DialogWidget {
             child: Container(
               padding: EdgeInsets.all(20),
               width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.22,
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(20)),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // GestureDetector(
