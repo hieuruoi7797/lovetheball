@@ -9,7 +9,7 @@ import 'package:splat_record/widgets_common/dialogs.dart';
 
 import '../../../public/public_methods.dart';
 
-class MatchBloc {
+class MatchCreatingBloc {
   final _repository = Repository();
   final _matchCreator = PublishSubject<Response>();
   final _statusBehaviors = BehaviorSubject<String>();
@@ -73,7 +73,9 @@ class MatchBloc {
     if (response.statusCode == 201) {
       if (context.mounted) {
         await DialogWidget().showResultDialog(context,
-            isSuccess: true, content: "Tạo game thành công!");
+            isSuccess: true, content: "Tạo game thành công!").then((value) =>
+            Navigator.pushNamed(context, '/game_on')
+        );
       }
     }
     _matchCreator.sink.add(response);
@@ -124,4 +126,4 @@ class MatchBloc {
   }
 }
 
-final matchBloc = MatchBloc();
+final matchBloc = MatchCreatingBloc();

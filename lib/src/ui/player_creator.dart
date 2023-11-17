@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:splat_record/src/blocs/player/player_creator_bloc.dart';
+import 'package:splat_record/src/blocs/player/player_creating_bloc.dart';
 
 import '../../constants/ui_styles.dart';
 

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_record/constants/ui_styles.dart';
-import 'package:splat_record/src/blocs/match/match_bloc.dart';
+import 'package:splat_record/src/blocs/match/match_creating_bloc.dart';
 import 'package:splat_record/widgets_common/user_name_card.dart';
 
 import '../src/models/player_model.dart';
@@ -319,7 +319,7 @@ class DialogWidget {
                   //     onTap: () => Navigator.pop(context),
                   //     child: SvgPicture.asset("assets/svg_pictures/XICON.svg")),
                   Container(
-                    // margin: EdgeInsets.only(top: 20),
+                    margin: EdgeInsets.only(top: 20),
                     width: MediaQuery.of(context).size.width,
                     child: Text(
                       content ?? "Unknown",
@@ -333,7 +333,7 @@ class DialogWidget {
                         child:
                             SvgPicture.asset("assets/svg_pictures/SUCCESS.svg")),
                   ),
-                  Spacer(),
+                  // Spacer(),
                   GestureDetector(
                     onTap: () {
                       // result = "Y";

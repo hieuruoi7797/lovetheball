@@ -22,7 +22,7 @@ StatelessWidget UserNameCard({
       children: [
         Container(
           margin: EdgeInsets.symmetric(horizontal: 16),
-          width: 50,
+          // width: 50,
           height: 50,
           child: CircleAvatar(
             // radius: 50,
