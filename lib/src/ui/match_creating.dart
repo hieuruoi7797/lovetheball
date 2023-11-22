@@ -242,6 +242,7 @@ class _MatchCreatingScreenState extends State<MatchCreatingScreen> {
                             builder: (context,
                                 AsyncSnapshot<List<PlayerModel>> snapshot) {
                               if (snapshot.hasData) {
+                                print("CHECKDATA: ${snapshot.data?.length}");
                                 matchBloc.playersListAdded = snapshot.data!;
                                 return ListView.builder(
                                     physics:

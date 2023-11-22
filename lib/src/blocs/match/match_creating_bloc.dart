@@ -14,10 +14,12 @@ class MatchCreatingBloc {
   final _matchCreator = PublishSubject<Response>();
   final _statusBehaviors = BehaviorSubject<String>();
   final _userName = PublishSubject<String>();
-  final _addedPlayersList = BehaviorSubject<List<PlayerModel>>();
+  final _addedPlayersList = PublishSubject<List<PlayerModel>>();
   final _morePlayersList = PublishSubject<List<PlayerModel>>();
+  final _listAdding = BehaviorSubject<List<int>>();
   List<PlayerModel> playersListAdded = [];
   List<PlayerModel> playersListMore = [];
+  List<int> listAddingIndexes = [-1];
 
   Stream<Response> get createMatchRes => _matchCreator.stream;
 
@@ -28,6 +30,8 @@ class MatchCreatingBloc {
   Stream<List<PlayerModel>> get addedPlayersList => _addedPlayersList.stream;
 
   Stream<List<PlayerModel>> get morePlayersList => _morePlayersList.stream;
+
+  Stream<List<int>> get listAdding => _listAdding.stream;
 
   changeStatus(String statusChange) async {
     _statusBehaviors.sink.add(statusChange);
@@ -105,14 +109,22 @@ class MatchCreatingBloc {
   }
 
   Future<void> showAddingPlayersBottom(BuildContext context) async {
-    if (context.mounted) DialogWidget().showAddingPlayerBottom(context);
+    listAddingIndexes.clear();
+    _listAdding.sink.add(listAddingIndexes);
+    DialogWidget().showAddingPlayerBottom(context);
     await getPlayerList(context: context, isAdding: true);
-  }
+    }
 
-  addPlayersTap(BuildContext context, int index) {
-    playersListAdded.add(playersListMore[index]);
-    _addedPlayersList.sink.add(playersListAdded);
-    Navigator.pop(context);
+  addPlayersTap(BuildContext context, int index, {bool? changeStatus}) {
+    if (changeStatus == true) {
+      listAddingIndexes.add(index);
+      playersListAdded.add(playersListMore[index]);
+    } else{
+      listAddingIndexes.remove(index);
+      playersListAdded.remove(playersListMore[index]);
+    }
+    _listAdding.sink.add(listAddingIndexes);
+    // Navigator.pop(context);
   }
 
   removePlayerTap(int index, BuildContext context, String nameOfGame) async {
@@ -123,6 +135,11 @@ class MatchCreatingBloc {
       playersListAdded.remove(playersListAdded[index]);
       _addedPlayersList.sink.add(playersListAdded);
     } else {}
+  }
+
+  void confirmAddPlayer(BuildContext context) {
+    _addedPlayersList.sink.add(playersListAdded);
+    Navigator.pop(context);
   }
 }
 

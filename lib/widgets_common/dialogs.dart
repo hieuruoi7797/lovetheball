@@ -65,7 +65,8 @@ class DialogWidget {
         });
   }
 
-  showAddingPlayerBottom(BuildContext context) {
+  Future<String> showAddingPlayerBottom(BuildContext context) async{
+    String result = '';
     showModalBottomSheet(
         enableDrag: false,
         context: context,
@@ -154,18 +155,28 @@ class DialogWidget {
                               itemBuilder: (context, index) {
                                 return Column(
                                   children: [
-                                    UserNameCard(
-                                        parentContext: context,
-                                        userName:
-                                        snapshot.data?[index].name,
-                                        suffixIcon: SvgPicture.asset(
-                                          'assets/svg_pictures/ADD_PLAYER.svg',
-                                          width: 14,
-                                          height: 14,
-                                          fit: BoxFit.none,
-                                        ),
-                                        onTapSuffix: () => matchBloc
-                                            .addPlayersTap(context, index)),
+                                    StreamBuilder<List<int>>(
+                                      stream: matchBloc.listAdding,
+                                      builder: (context, snapshotAddingIndexes) {
+                                        if (snapshotAddingIndexes.hasData){
+                                          return UserNameCard(
+                                              parentContext: context,
+                                              userName:
+                                              snapshot.data?[index].name,
+                                              suffixIcon: (snapshotAddingIndexes.data!.contains(index)) ? SvgPicture.asset(
+                                                'assets/svg_pictures/TICK.svg',
+                                                width: 14,
+                                                height: 14,
+                                                fit: BoxFit.none,
+                                              ):SizedBox(),
+                                              onTapSuffix: () =>
+                                                  matchBloc.addPlayersTap(context, index,
+                                                  changeStatus: (snapshotAddingIndexes.data!.contains(index)) ? false : true));
+                                        }else {
+                                          return SizedBox();
+                                        }
+                                      }
+                                    ),
                                     gap_default,
                                   ],
                                 );
@@ -203,8 +214,7 @@ class DialogWidget {
                     ),
                     child: GestureDetector(
                       onTap: () {
-                        // result = "Y";
-                        Navigator.pop(context);
+                        matchBloc.confirmAddPlayer(context);
                       },
                       child: Align(
                         alignment: Alignment.bottomCenter,
@@ -230,6 +240,7 @@ class DialogWidget {
             ),
           );
         });
+    return result;
   }
 
   Future<String> showMessageDialog(BuildContext context,
