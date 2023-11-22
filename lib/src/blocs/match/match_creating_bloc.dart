@@ -11,25 +11,25 @@ import '../../../public/public_methods.dart';
 
 class MatchCreatingBloc {
   final _repository = Repository();
-  final _matchCreator = PublishSubject<Response>();
+  final _matchCreatorPublish = PublishSubject<Response>();
   final _statusBehaviors = BehaviorSubject<String>();
-  final _userName = PublishSubject<String>();
-  final _addedPlayersList = PublishSubject<List<PlayerModel>>();
-  final _morePlayersList = PublishSubject<List<PlayerModel>>();
+  final _userNamePublish = PublishSubject<String>();
+  final _addedPlayersBehavior = BehaviorSubject<List<PlayerModel>>();
+  final _morePlayersPublish = PublishSubject<List<PlayerModel>>();
   final _listAdding = BehaviorSubject<List<int>>();
   List<PlayerModel> playersListAdded = [];
   List<PlayerModel> playersListMore = [];
   List<int> listAddingIndexes = [-1];
 
-  Stream<Response> get createMatchRes => _matchCreator.stream;
+  Stream<Response> get createMatchRes => _matchCreatorPublish.stream;
 
   Stream<String> get status => _statusBehaviors.stream;
 
-  Stream<String> get userName => _userName.stream;
+  Stream<String> get userName => _userNamePublish.stream;
 
-  Stream<List<PlayerModel>> get addedPlayersList => _addedPlayersList.stream;
+  Stream<List<PlayerModel>> get addedPlayersList => _addedPlayersBehavior.stream;
 
-  Stream<List<PlayerModel>> get morePlayersList => _morePlayersList.stream;
+  Stream<List<PlayerModel>> get morePlayersList => _morePlayersPublish.stream;
 
   Stream<List<int>> get listAdding => _listAdding.stream;
 
@@ -47,13 +47,13 @@ class MatchCreatingBloc {
     if (isAdding == true) {
       for (int i = 5; i < 15; i++) {
         listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
-        _morePlayersList.sink.add(listPlayers);
+        _morePlayersPublish.sink.add(listPlayers);
       }
       return;
     } else {
       for (int i = 0; i < 5; i++) {
         listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
-        _addedPlayersList.sink.add(listPlayers);
+        _addedPlayersBehavior.sink.add(listPlayers);
       }
       return;
     }
@@ -73,16 +73,17 @@ class MatchCreatingBloc {
         location: "DH SU PHAM",
         type: 0,
         players: listPlayersString);
-    _matchCreator.sink.add(response);
+    _matchCreatorPublish.sink.add(response);
     if (response.statusCode == 201) {
       if (context.mounted) {
+        _addedPlayersBehavior.sink.add(playersListAdded);
         await DialogWidget().showResultDialog(context,
             isSuccess: true, content: "Tạo game thành công!").then((value) =>
             Navigator.pushNamed(context, '/game_on')
         );
       }
     }
-    _matchCreator.sink.add(response);
+    _matchCreatorPublish.sink.add(response);
   }
 
   Future<void> getPlayerSavedName(BuildContext context) async {
@@ -90,7 +91,7 @@ class MatchCreatingBloc {
     dynamic savedPlayerFile = await PublicMethod().readContentPlayer();
     if (savedPlayerFile is PlayerModel) {
       playerSaved = savedPlayerFile;
-      _userName.sink.add(playerSaved.name);
+      _userNamePublish.sink.add(playerSaved.name);
       await Future.delayed(Duration.zero, () {
         getPlayerList(context: context);
       });
@@ -133,12 +134,12 @@ class MatchCreatingBloc {
             "Bạn có chắc chắn xoá ${playersListAdded[index].name} khỏi $nameOfGame?");
     if (result == "Y") {
       playersListAdded.remove(playersListAdded[index]);
-      _addedPlayersList.sink.add(playersListAdded);
+      _addedPlayersBehavior.sink.add(playersListAdded);
     } else {}
   }
 
   void confirmAddPlayer(BuildContext context) {
-    _addedPlayersList.sink.add(playersListAdded);
+    _addedPlayersBehavior.sink.add(playersListAdded);
     Navigator.pop(context);
   }
 }
