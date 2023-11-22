@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_record/constants/ui_styles.dart';
-import 'package:splat_record/src/blocs/match/game_on_bloc.dart';
+import 'package:splat_record/src/blocs/game_on/game_on_bloc.dart';
+import 'package:splat_record/src/blocs/match/match_creating_bloc.dart';
+import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/widgets_common/container_common.dart';
 
 import '../../constants/constant_values.dart';
 
 class GameOnScreen extends StatelessWidget {
-  const GameOnScreen({super.key});
+  GameOnScreen({super.key});
+
+  GameOnBloc gameOnBloc = GameOnBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -19,131 +22,115 @@ class GameOnScreen extends StatelessWidget {
             width: MediaQuery.sizeOf(context).width,
             height: MediaQuery.sizeOf(context).height,
             decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      opacity: 0.25,
-                      fit: BoxFit.cover,
-                      image: AssetImage(PNG_BACKGROUND_HOME))
-            ),
+                image: DecorationImage(
+                    opacity: 0.25,
+                    fit: BoxFit.cover,
+                    image: AssetImage(PNG_BACKGROUND_HOME))),
             child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    CommonContainer(
-                      margin: const EdgeInsets.only(top: 32),
-                      padding: const EdgeInsets.all(20),
-                      parentContext: context, child:
-                        Column(
-                          children: [
-                            Center(
-                              child: Text("Game 1", style: title_black_color,),
-                            ),
-                            GridView.count(
-                              shrinkWrap: true,
-                              crossAxisCount: 5,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  child: const Text("He'd have you all unravel at the"),
-                                  decoration: BoxDecoration(
-                                    color: Colors.teal[100],
-                                    borderRadius: BorderRadius.circular(100)
-                                  ),
-                                ), Container(
-                                  padding: const EdgeInsets.all(8),
-                                  child: const Text("He'd have you all unravel at the"),
-                                  decoration: BoxDecoration(
-                                    color: Colors.teal[100],
-                                    borderRadius: BorderRadius.circular(100)
-                                  ),
-                                ), Container(
-                                  padding: const EdgeInsets.all(8),
-                                  child: const Text("He'd have you all unravel at the"),
-                                  decoration: BoxDecoration(
-                                    color: Colors.teal[100],
-                                    borderRadius: BorderRadius.circular(100)
-                                  ),
-                                ), Container(
-                                  padding: const EdgeInsets.all(8),
-                                  child: const Text("He'd have you all unravel at the"),
-                                  decoration: BoxDecoration(
-                                    color: Colors.teal[100],
-                                    borderRadius: BorderRadius.circular(100)
-                                  ),
-                                ), Container(
-                                  padding: const EdgeInsets.all(8),
-                                  child: const Text("He'd have you all unravel at the"),
-                                  decoration: BoxDecoration(
-                                    color: Colors.teal[100],
-                                    borderRadius: BorderRadius.circular(100)
-                                  ),
-                                ), Container(
-                                  padding: const EdgeInsets.all(8),
-                                  child: const Text("He'd have you all unravel at the"),
-                                  decoration: BoxDecoration(
-                                    color: Colors.teal[100],
-                                    borderRadius: BorderRadius.circular(100)
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+              child: Column(
+                children: [
+                  CommonContainer(
+                    margin: const EdgeInsets.only(top: 32),
+                    padding: const EdgeInsets.all(20),
+                    parentContext: context,
+                    child: Column(
+                      children: [
+                        const Center(
+                          child: Text(
+                            "Game 1",
+                            style: title_black_color,
+                          ),
                         ),
+                        StreamBuilder(
+                            stream: matchBloc.addedPlayersList,
+                            builder: (context,
+                                AsyncSnapshot<List<PlayerModel>>
+                                    snapshotPlayerList) {
+                              if (snapshotPlayerList.hasData) {
+                                return GridView.builder(
+                                    itemCount: snapshotPlayerList.data!.length,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 3,
+                                            crossAxisSpacing: 10,
+                                            mainAxisSpacing: 10),
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      return StreamBuilder<int>(
+                                          stream: gameOnBloc.nowPickIndex,
+                                          builder:
+                                              (context, snapshotIndexPicked) {
+                                            if (snapshotIndexPicked.hasData) {
+                                              return GestureDetector(
+                                                  onTap: () => gameOnBloc
+                                                      .pickPlayer(index),
+                                                  child: snapshotIndexPicked
+                                                              .data ==
+                                                          index
+                                                      ? pickedPlayer()
+                                                      : notPickedPlayer(index));
+                                            } else {
+                                              return SizedBox();
+                                            }
+                                          });
+                                    });
+                              } else {
+                                return SizedBox();
+                              }
+                            })
+                      ],
                     ),
-                    CommonContainer(parentContext: context,
-                      margin: EdgeInsets.only(top: 32,
+                  ),
+                  CommonContainer(
+                      parentContext: context,
+                      margin: EdgeInsets.only(
+                          top: 32,
                           bottom: MediaQuery.sizeOf(context).height * 0.1),
                       padding: const EdgeInsets.all(20),
                       child: Column(
                         children: [
                           Center(
-                            child: Text("Pham Hieu", style: title_black_color,),
-                          ),
-                          StatInfoEdittingContainer(
-                            context: context,
-                            statType: "2-Pointer",
-                            quantityStream: gameOnBloc.twoPointerQuantity,
-                            onTapPlus: ()=> gameOnBloc.increase("2-Pointer"),
-                            onTapSub: ()=> gameOnBloc.decrease("2-Pointer")
-                          ),
-                          StatInfoEdittingContainer(
-                              context: context,
-                              statType: "3-Pointer"
-                          ),
-                          StatInfoEdittingContainer(
-                              context: context,
-                              statType: "Assist"
+                            child: StreamBuilder<int>(
+                                stream: gameOnBloc.nowPickIndex,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text(
+                                      gameOnBloc
+                                          .listPlayers[snapshot.data!].name,
+                                      style: title_black_color,
+                                    );
+                                  } else {
+                                    return Text("UNKNOWN");
+                                  }
+                                }),
                           ),
                           StatInfoEdittingContainer(
                               context: context,
-                              statType: "Rebound"
-                          ),
+                              statType: "2-Pointer",
+                              quantityStream: gameOnBloc.twoPointerQuantity,
+                              onTapPlus: () => gameOnBloc.increase("2-Pointer"),
+                              onTapSub: () => gameOnBloc.decrease("2-Pointer")),
                           StatInfoEdittingContainer(
-                              context: context,
-                              statType: "Block"
-                          ),
+                              context: context, statType: "3-Pointer"),
                           StatInfoEdittingContainer(
-                              context: context,
-                              statType: "Steal"
-                          ),
+                              context: context, statType: "Assist"),
                           StatInfoEdittingContainer(
-                              context: context,
-                              statType: "Personal Foul"
-                          ),
+                              context: context, statType: "Rebound"),
                           StatInfoEdittingContainer(
-                              context: context,
-                              statType: "Turn-Over"
-                          ),
+                              context: context, statType: "Block"),
                           StatInfoEdittingContainer(
-                              context: context,
-                              statType: "Dunk"
-                          ),
+                              context: context, statType: "Steal"),
+                          StatInfoEdittingContainer(
+                              context: context, statType: "Personal Foul"),
+                          StatInfoEdittingContainer(
+                              context: context, statType: "Turn-Over"),
+                          StatInfoEdittingContainer(
+                              context: context, statType: "Dunk"),
                         ],
-                      )
-                    )
-                  ],
-                ),
+                      ))
+                ],
               ),
+            ),
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -163,7 +150,7 @@ class GameOnScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(50)),
                       child: const Center(
                         child:
-                        Text("Kết thúc trận đấu", style: title_white_color),
+                            Text("Kết thúc trận đấu", style: title_white_color),
                       ),
                     ),
                   ),
@@ -176,5 +163,38 @@ class GameOnScreen extends StatelessWidget {
     );
   }
 
-}
+  Widget pickedPlayer() {
+    return Column(
+      children: [
+        Container(
+          width: 60,
+          height: 60,
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+              color: Colors.orange[100], borderRadius: BorderRadius.circular(100)),
+        ),
+      ],
+    );
+  }
 
+  Widget notPickedPlayer(int index) {
+    return Column(
+      children: [
+        Container(
+          width: 40,
+          height: 40,
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+              color: Colors.blue[100],
+              borderRadius: BorderRadius.circular(100)),
+          // child: Text(snapshot.data![index].name.toString()),
+        ),
+        Spacer(),
+        Text(
+          gameOnBloc.listPlayers[index].name,
+          textAlign: TextAlign.center,
+        )
+      ],
+    );
+  }
+}

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:splat_record/src/blocs/match/game_on_bloc.dart';
+import 'package:splat_record/src/blocs/game_on/game_on_bloc.dart';
 
 import '../constants/constant_values.dart';
 import '../constants/ui_styles.dart';
@@ -63,7 +63,7 @@ Widget StatInfoEdittingContainer(
                   BoxShadow(
                       blurRadius: 20,
                       offset: const Offset(0, 4),
-                      color: Colors.black.withOpacity(0.2),
+                      color: Colors.black.withOpacity(0.08),
                       spreadRadius: 0.0)
                 ], borderRadius: BorderRadius.circular(100), color: Colors.white),
                 child: Center(
@@ -107,7 +107,7 @@ Widget StatInfoEdittingContainer(
                   BoxShadow(
                       blurRadius: 20,
                       offset: const Offset(0, 4),
-                      color: Colors.black.withOpacity(0.2),
+                      color: Colors.black.withOpacity(0.08),
                       spreadRadius: 0.0)
                 ], borderRadius: BorderRadius.circular(100), color: Colors.white),
                 child: Center(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_record/src/blocs/match/match_creating_bloc.dart';
-import 'package:splat_record/src/blocs/match/match_creating_bloc_provider.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/widgets_common/container_common.dart';
 import 'package:splat_record/widgets_common/dialogs.dart';
@@ -9,14 +8,14 @@ import 'package:splat_record/widgets_common/user_name_card.dart';
 import '../../constants/constant_values.dart';
 import '../../constants/ui_styles.dart';
 
-class MatchCreatorScreen extends StatefulWidget {
-  const MatchCreatorScreen({super.key});
+class MatchCreatingScreen extends StatefulWidget {
+  const MatchCreatingScreen({super.key});
 
   @override
-  State<MatchCreatorScreen> createState() => _MatchCreatorScreenState();
+  State<MatchCreatingScreen> createState() => _MatchCreatingScreenState();
 }
 
-class _MatchCreatorScreenState extends State<MatchCreatorScreen> {
+class _MatchCreatingScreenState extends State<MatchCreatingScreen> {
   TextEditingController nameController = TextEditingController();
 
   @override

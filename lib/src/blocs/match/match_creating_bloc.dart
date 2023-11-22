@@ -14,7 +14,7 @@ class MatchCreatingBloc {
   final _matchCreator = PublishSubject<Response>();
   final _statusBehaviors = BehaviorSubject<String>();
   final _userName = PublishSubject<String>();
-  final _addedPlayersList = PublishSubject<List<PlayerModel>>();
+  final _addedPlayersList = BehaviorSubject<List<PlayerModel>>();
   final _morePlayersList = PublishSubject<List<PlayerModel>>();
   List<PlayerModel> playersListAdded = [];
   List<PlayerModel> playersListMore = [];
@@ -100,7 +100,7 @@ class MatchCreatingBloc {
   }
 
   dispose() {
-    _matchCreator.close();
+    // _matchCreator.close();
     _statusBehaviors.close();
   }
 

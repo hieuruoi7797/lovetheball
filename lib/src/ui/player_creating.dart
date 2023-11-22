@@ -3,14 +3,14 @@ import 'package:splat_record/src/blocs/player/player_creating_bloc.dart';
 
 import '../../constants/ui_styles.dart';
 
-class PlayerCreatorScreen extends StatefulWidget {
-  const PlayerCreatorScreen({super.key});
+class PlayerCreatingScreen extends StatefulWidget {
+  const PlayerCreatingScreen({super.key});
 
   @override
   State<StatefulWidget> createState() => _PlayerCreatorState();
 }
 
-class _PlayerCreatorState extends State<PlayerCreatorScreen> {
+class _PlayerCreatorState extends State<PlayerCreatingScreen> {
   TextEditingController playerNameController = TextEditingController();
 
   @override
