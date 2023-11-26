@@ -36,7 +36,7 @@ Widget StatInfoEdittingContainer(
     EdgeInsets? padding,
     Widget? child,
     String? statType,
-    Stream? quantityStream,
+    String? quantity,
     Function()? onTapPlus,
     Function()? onTapSub,
     }) {
@@ -76,10 +76,7 @@ Widget StatInfoEdittingContainer(
                 ),
               ),
             ),
-            StreamBuilder<dynamic>(
-                stream: quantityStream,
-                builder: (context, snapshot) {
-                  return Container(
+          Container(
                     width: 30,
                     height: 30,
                     margin: const EdgeInsets.symmetric(horizontal: 8),
@@ -89,15 +86,14 @@ Widget StatInfoEdittingContainer(
                     ),
                     child: Center(
                       child: Text(
-                        snapshot.hasData ? snapshot.data.toString() : '0',
+                        quantity ?? '0',
                         style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             color: Color(0xFF818181),
                             fontSize: 14),
                       ),
                     ),
-                  );
-                }),
+                  ),
             GestureDetector(
               onTap: onTapPlus,
               child: Container(

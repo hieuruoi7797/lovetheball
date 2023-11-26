@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:splat_record/constants/ui_styles.dart';
 import 'package:splat_record/src/blocs/game_on/game_on_bloc.dart';
 import 'package:splat_record/src/blocs/match/match_creating_bloc.dart';
+import 'package:splat_record/src/models/full_stat_model.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/widgets_common/container_common.dart';
 
@@ -35,11 +36,16 @@ class GameOnScreen extends StatelessWidget {
                     parentContext: context,
                     child: Column(
                       children: [
-                        const Center(
-                          child: Text(
-                            "Game 1",
-                            style: title_black_color,
-                          ),
+                        Center(
+                          child: StreamBuilder<String>(
+                              stream: matchBloc.matchNameBehavior,
+                              builder:
+                                  (context, AsyncSnapshot<String> snapshot) {
+                                return Text(
+                                  snapshot.hasData ? snapshot.data! : "Game 1",
+                                  style: title_black_color,
+                                );
+                              }),
                         ),
                         StreamBuilder(
                             stream: matchBloc.addedPlayersList,
@@ -104,28 +110,47 @@ class GameOnScreen extends StatelessWidget {
                                   }
                                 }),
                           ),
-                          StatInfoEdittingContainer(
-                              context: context,
-                              statType: "2-Pointer",
-                              quantityStream: gameOnBloc.twoPointerQuantity,
-                              onTapPlus: () => gameOnBloc.increase("2-Pointer"),
-                              onTapSub: () => gameOnBloc.decrease("2-Pointer")),
-                          StatInfoEdittingContainer(
-                              context: context, statType: "3-Pointer"),
-                          StatInfoEdittingContainer(
-                              context: context, statType: "Assist"),
-                          StatInfoEdittingContainer(
-                              context: context, statType: "Rebound"),
-                          StatInfoEdittingContainer(
-                              context: context, statType: "Block"),
-                          StatInfoEdittingContainer(
-                              context: context, statType: "Steal"),
-                          StatInfoEdittingContainer(
-                              context: context, statType: "Personal Foul"),
-                          StatInfoEdittingContainer(
-                              context: context, statType: "Turn-Over"),
-                          StatInfoEdittingContainer(
-                              context: context, statType: "Dunk"),
+                          StreamBuilder<FullStatModel>(
+                            stream: gameOnBloc.pickedPlayerStatPublish,
+                            builder: (context,AsyncSnapshot<FullStatModel> snapshot) {
+                              return Column(
+                                children: [
+                                  StatInfoEdittingContainer(
+                                      context: context,
+                                      statType: TWO,
+                                      quantity: snapshot.hasData? snapshot.data!.twoPointer.toString():"0",
+                                      onTapPlus: () => gameOnBloc.increase(TWO),
+                                      onTapSub: () => gameOnBloc.decrease(TWO)),
+                                  StatInfoEdittingContainer(
+                                      context: context,
+                                      statType: THREE,
+                                      quantity: snapshot.hasData? snapshot.data!.threePointer.toString():"0",
+                                      onTapPlus: () => gameOnBloc.increase(THREE),
+                                      onTapSub: () => gameOnBloc.decrease(THREE)),
+                                  StatInfoEdittingContainer(
+                                      context: context,
+                                      statType: ASSIST,
+                                      quantity: snapshot.hasData? snapshot.data!.assist.toString():"0",
+                                      onTapPlus: () => gameOnBloc.increase(ASSIST),
+                                      onTapSub: () => gameOnBloc.decrease(ASSIST)
+                                  ),
+                                  StatInfoEdittingContainer(
+                                      context: context, statType: "Rebound"),
+                                  StatInfoEdittingContainer(
+                                      context: context, statType: "Block"),
+                                  StatInfoEdittingContainer(
+                                      context: context, statType: "Steal"),
+                                  StatInfoEdittingContainer(
+                                      context: context, statType: "Personal Foul"),
+                                  StatInfoEdittingContainer(
+                                      context: context, statType: "Turn-Over"),
+                                  StatInfoEdittingContainer(
+                                      context: context, statType: "Dunk"),
+                                ],
+                              );
+                            }
+                          ),
+
                         ],
                       ))
                 ],
@@ -171,7 +196,8 @@ class GameOnScreen extends StatelessWidget {
           height: 60,
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-              color: Colors.orange[100], borderRadius: BorderRadius.circular(100)),
+              color: Colors.orange[100],
+              borderRadius: BorderRadius.circular(100)),
         ),
       ],
     );

@@ -12,8 +12,8 @@ import '../../../public/public_methods.dart';
 class MatchCreatingBloc {
   final _repository = Repository();
   final _matchCreatorPublish = PublishSubject<Response>();
-  final _statusBehaviors = BehaviorSubject<String>();
   final _userNamePublish = PublishSubject<String>();
+  final _matchNameBehavior = BehaviorSubject<String>();
   final _addedPlayersBehavior = BehaviorSubject<List<PlayerModel>>();
   final _morePlayersPublish = PublishSubject<List<PlayerModel>>();
   final _listAdding = BehaviorSubject<List<int>>();
@@ -23,7 +23,6 @@ class MatchCreatingBloc {
 
   Stream<Response> get createMatchRes => _matchCreatorPublish.stream;
 
-  Stream<String> get status => _statusBehaviors.stream;
 
   Stream<String> get userName => _userNamePublish.stream;
 
@@ -33,8 +32,9 @@ class MatchCreatingBloc {
 
   Stream<List<int>> get listAdding => _listAdding.stream;
 
+  Stream<String> get matchNameBehavior => _matchNameBehavior.stream;
+
   changeStatus(String statusChange) async {
-    _statusBehaviors.sink.add(statusChange);
   }
 
   getPlayerList({required BuildContext context, bool? isAdding}) async {
@@ -77,6 +77,7 @@ class MatchCreatingBloc {
     if (response.statusCode == 201) {
       if (context.mounted) {
         _addedPlayersBehavior.sink.add(playersListAdded);
+        _matchNameBehavior.sink.add(name);
         await DialogWidget().showResultDialog(context,
             isSuccess: true, content: "Tạo game thành công!").then((value) =>
             Navigator.pushNamed(context, '/game_on')
@@ -105,8 +106,6 @@ class MatchCreatingBloc {
   }
 
   dispose() {
-    // _matchCreator.close();
-    _statusBehaviors.close();
   }
 
   Future<void> showAddingPlayersBottom(BuildContext context) async {
