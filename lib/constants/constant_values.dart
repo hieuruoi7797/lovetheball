@@ -6,7 +6,7 @@ const String SUBTRACTING = "assets/svg_pictures/SUBTRACTING.svg";
 const String ADDING = "assets/svg_pictures/ADD_PLAYER.svg";
 
 
-const String TWO = '2-Pointer';
-const String THREE = '3-Pointer';
-const String ASSIST = 'Assist';
-const String REBOUND = 'REBOUND';
+const String TWO = 'two';
+const String THREE = 'three';
+const String ASSIST = 'assist';
+const String REBOUND = 'rebound';

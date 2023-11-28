@@ -11,7 +11,7 @@ import '../../../public/public_methods.dart';
 
 class MatchCreatingBloc {
   final _repository = Repository();
-  final _matchCreatorPublish = PublishSubject<Response>();
+  final _matchCreatorPublish = BehaviorSubject<Response>();
   final _userNamePublish = PublishSubject<String>();
   final _matchNameBehavior = BehaviorSubject<String>();
   final _addedPlayersBehavior = BehaviorSubject<List<PlayerModel>>();

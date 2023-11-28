@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_record/src/blocs/player/player_creating_bloc.dart';
 
 import '../../constants/ui_styles.dart';
@@ -45,7 +46,9 @@ class _PlayerCreatorState extends State<PlayerCreatingScreen> {
                   backgroundColor: Colors.transparent,
                   builder: (BuildContext context) {
                     return Container(
-                      height: MediaQuery.of(context).size.height * 0.6,
+                      height:MediaQuery.viewInsetsOf(context).bottom == 0 ?
+                      MediaQuery.of(context).size.height * 0.6 :
+                      MediaQuery.of(context).size.height * 0.3,
                       width: MediaQuery.of(context).size.width,
                       padding: const EdgeInsets.only(
                         top: 35,
@@ -130,6 +133,17 @@ class _PlayerCreatorState extends State<PlayerCreatingScreen> {
                         image: AssetImage(
                             'assets/png_images/background_player_creator.png'),
                         alignment: Alignment.topCenter)),
+              // child: Align(
+              //   alignment: Alignment.topCenter,
+              //   child: SizedBox(
+              //     width: 200,
+              //     height: 200,
+              //       child: Container(
+              //         color: Colors.blue,
+              //           child: SvgPicture.asset(
+              //               "assets/svg_pictures/SPLAT.svg",
+              //           ))),
+              // ),
               ));
         });
   }

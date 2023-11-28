@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
+import 'package:splat_record/src/resources/gameon_api_provider.dart';
 import 'package:splat_record/src/resources/match_api_provider.dart';
 import 'package:splat_record/src/resources/player_api_provider.dart';
 
 class Repository {
   final matchApiProvider = MatchApiProvider();
   final playerApiProvider = PlayerApiProvider();
+  final gameOnApiProvider = GameOnApiProvider();
 
   Future<Response> createMatch({
     required BuildContext context,

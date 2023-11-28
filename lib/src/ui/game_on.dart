@@ -8,6 +8,7 @@ import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/widgets_common/container_common.dart';
 
 import '../../constants/constant_values.dart';
+import '../models/stat_model.dart';
 
 class GameOnScreen extends StatelessWidget {
   GameOnScreen({super.key});
@@ -54,6 +55,7 @@ class GameOnScreen extends StatelessWidget {
                                     snapshotPlayerList) {
                               if (snapshotPlayerList.hasData) {
                                 return GridView.builder(
+                                    physics: const NeverScrollableScrollPhysics(),
                                     itemCount: snapshotPlayerList.data!.length,
                                     gridDelegate:
                                         const SliverGridDelegateWithFixedCrossAxisCount(
@@ -110,27 +112,27 @@ class GameOnScreen extends StatelessWidget {
                                   }
                                 }),
                           ),
-                          StreamBuilder<FullStatModel>(
+                          StreamBuilder<Stats>(
                             stream: gameOnBloc.pickedPlayerStatPublish,
-                            builder: (context,AsyncSnapshot<FullStatModel> snapshot) {
+                            builder: (context,AsyncSnapshot<Stats> snapshot) {
                               return Column(
                                 children: [
                                   StatInfoEdittingContainer(
                                       context: context,
                                       statType: TWO,
-                                      quantity: snapshot.hasData? snapshot.data!.twoPointer.toString():"0",
+                                      quantity: snapshot.hasData ? snapshot.data!.twoPointsShoot.toString() :'0',
                                       onTapPlus: () => gameOnBloc.increase(TWO),
                                       onTapSub: () => gameOnBloc.decrease(TWO)),
                                   StatInfoEdittingContainer(
                                       context: context,
                                       statType: THREE,
-                                      quantity: snapshot.hasData? snapshot.data!.threePointer.toString():"0",
+                                      quantity: snapshot.hasData? snapshot.data!.threePointsShoot.toString() : "0",
                                       onTapPlus: () => gameOnBloc.increase(THREE),
                                       onTapSub: () => gameOnBloc.decrease(THREE)),
                                   StatInfoEdittingContainer(
                                       context: context,
                                       statType: ASSIST,
-                                      quantity: snapshot.hasData? snapshot.data!.assist.toString():"0",
+                                      quantity: snapshot.hasData? snapshot.data!.assit.toString() : "0",
                                       onTapPlus: () => gameOnBloc.increase(ASSIST),
                                       onTapSub: () => gameOnBloc.decrease(ASSIST)
                                   ),
