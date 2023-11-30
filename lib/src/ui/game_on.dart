@@ -167,7 +167,7 @@ class GameOnScreen extends StatelessWidget {
               color: Colors.white,
               child: Center(
                 child: GestureDetector(
-                  onTap: () => {Navigator.pop(context)},
+                  onTap: () => {gameOnBloc.dispose()},
                   child: Center(
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.47,

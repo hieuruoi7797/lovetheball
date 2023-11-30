@@ -27,11 +27,15 @@ class GameOnBloc {
   Stream<Stats> get pickedPlayerStatPublish => _nowPlayerStatPublish.stream;
 
   GameOnBloc() {
-  matchBloc.addedPlayersList.listen((event) => updateListPlayers(event));
+    matchBloc.addedPlayersList.listen((event) => updateListPlayers(event));
+    _repository.gameOnApiProvider.socketConnect();
+    emitChangesSocket(isFirstEmit: true);
   }
 
   dispose() {
     _nowPlayerStatPublish.close();
+    _repository.gameOnApiProvider.socket.disconnect();
+    _repository.gameOnApiProvider.socket.close();
   }
 
   increase(String statType) {
@@ -86,33 +90,8 @@ class GameOnBloc {
               )));
     }
     _nowPlayerStatPublish.sink.add(listStatChange[pickedInt].stats);
-
     //Connect to Socket and emit the first event
-    _repository.gameOnApiProvider.socketConnect();
-    // _repository.gameOnApiProvider.emitSocket('changes', body: {
-    //   "first_emit": true,
-    //   "stats_changes": [
-    //     {
-    //       "has_change": false,
-    //       "stats": {
-    //         "match_id": "<match_id>",
-    //         "player_id": "<player_id>",
-    //         "lay_up": 0,
-    //         "assit": 0,
-    //         "two_points_shoot": 0,
-    //         "three_points_shoot": 0,
-    //         "rebound": 0,
-    //         "block": 0,
-    //         "steal": 0,
-    //         "personal_foul": 0,
-    //         "turn_over": 0,
-    //         "dunk": 0
-    //       }
-    //     }
-    //   ]
-    // });
-    _repository.gameOnApiProvider.socket.on('event', (data) => print("RECEIVED $data"));
-    emitChangesSocket(isFirstEmit: true);
+
   }
 
   void emitChangesSocket({bool? isFirstEmit}){
