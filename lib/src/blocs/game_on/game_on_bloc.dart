@@ -1,9 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_record/src/blocs/match/match_creating_bloc.dart';
-import 'package:splat_record/src/models/full_stat_model.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/src/models/stat_model.dart';
 import 'package:splat_record/src/resources/repository.dart';
@@ -26,9 +24,11 @@ class GameOnBloc {
 
   Stream<Stats> get pickedPlayerStatPublish => _nowPlayerStatPublish.stream;
 
+
   GameOnBloc() {
     matchBloc.addedPlayersList.listen((event) => updateListPlayers(event));
     _repository.gameOnApiProvider.socketConnect();
+    _repository.gameOnApiProvider.socket.on('get_stats', (data) => updateStats(data));
     emitChangesSocket(isFirstEmit: true);
   }
 
@@ -42,13 +42,13 @@ class GameOnBloc {
     switch (statType) {
       case TWO:
         listStatChange[pickedInt].stats.twoPointsShoot = listStatChange[pickedInt].stats.twoPointsShoot! + 1;
-        _nowPlayerStatPublish.sink.add(listStatChange[pickedInt].stats);
+        // _nowPlayerStatPublish.sink.add(listStatChange[pickedInt].stats);
       case THREE:
         listStatChange[pickedInt].stats.threePointsShoot = listStatChange[pickedInt].stats.threePointsShoot! + 1;
-        _nowPlayerStatPublish.sink.add(listStatChange[pickedInt].stats);
+        // _nowPlayerStatPublish.sink.add(listStatChange[pickedInt].stats);
       case ASSIST:
         listStatChange[pickedInt].stats.assit = listStatChange[pickedInt].stats.assit! + 1;
-        _nowPlayerStatPublish.sink.add(listStatChange[pickedInt].stats);
+        // _nowPlayerStatPublish.sink.add(listStatChange[pickedInt].stats);
     }
     emitChangesSocket(isFirstEmit: false);
   }
@@ -94,9 +94,9 @@ class GameOnBloc {
 
   }
 
-  void emitChangesSocket({bool? isFirstEmit}){
+  void emitChangesSocket({bool? isFirstEmit}) {
     Map body = {};
-    if (isFirstEmit == true){
+    if (isFirstEmit == true) {
       body = {
         "first_emit": true,
         "stats_changes": [
@@ -119,12 +119,12 @@ class GameOnBloc {
           }
         ]
       };
-    }else{
+    } else {
       List<Map> listStatsMap = [];
       for (var element in listStatChange) {
-        if (listStatChange.indexOf(element) == pickedInt){
+        if (listStatChange.indexOf(element) == pickedInt) {
           element.hasChange = true;
-        }else{
+        } else {
           element.hasChange = false;
         }
         listStatsMap.add(element.toJson());
@@ -140,5 +140,20 @@ class GameOnBloc {
   pickPlayer(int index) {
     pickedInt = index;
     updateListPlayers(listPlayers);
+  }
+
+  void updateStats(dynamic data) {
+    print("DATA: $data");
+    List<Stats> statsList = [];
+    List socketListRes = data as List;
+    for (var element in socketListRes) {
+      statsList.add(Stats.fromJson(element));
+    }
+    for (int i = 0; i < statsList.length; i++) {
+      listStatChange[i].stats = statsList[i];
+      if (i == pickedInt){
+        _nowPlayerStatPublish.sink.add(listStatChange[pickedInt].stats);
+      }
+    }
   }
 }

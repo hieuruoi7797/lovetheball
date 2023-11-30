@@ -40,7 +40,6 @@ class MatchCreatingBloc {
   getPlayerList({required BuildContext context, bool? isAdding}) async {
     Response response;
     response = await _repository.getPlayers(
-      context: context,
     );
     List<dynamic> listPlayerRes = jsonDecode(response.body)['data'] as List;
     List<PlayerModel> listPlayers = [];

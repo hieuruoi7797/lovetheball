@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_record/constants/ui_styles.dart';
+import 'package:splat_record/src/app.dart';
 import 'package:splat_record/src/blocs/match/match_creating_bloc.dart';
 import 'package:splat_record/widgets_common/user_name_card.dart';
 
 import '../src/models/player_model.dart';
 
 class DialogWidget {
-  showLoaderDialog(BuildContext context) {
+  showLoaderDialog() {
     AlertDialog alert = AlertDialog(
         contentPadding: EdgeInsets.zero,
         backgroundColor: Colors.transparent,
@@ -28,7 +29,7 @@ class DialogWidget {
         ));
     showDialog(
       barrierDismissible: false,
-      context: context,
+      context: navigatorKey.currentContext!,
       builder: (BuildContext context) {
         return alert;
       },

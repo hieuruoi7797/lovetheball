@@ -20,7 +20,7 @@ class MatchApiProvider {
     required List<String> players,
   }) async {
     Response response;
-    DialogWidget().showLoaderDialog(context);
+    DialogWidget().showLoaderDialog();
     response = await client.post(Uri.parse(_baseUrl + MATCHES),
         body: jsonEncode({
           "name": name,

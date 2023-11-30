@@ -17,6 +17,7 @@ class GameOnScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // gameOnBloc.getListPlayers();
     return Scaffold(
       body: Stack(
         children: [

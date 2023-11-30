@@ -3,13 +3,16 @@ import 'package:splat_record/src/ui/game_on.dart';
 import 'package:splat_record/src/ui/player_creating.dart';
 import 'ui/match_creating.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       title: 'Flutter Demo',
 
       theme: ThemeData(
