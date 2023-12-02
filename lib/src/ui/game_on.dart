@@ -109,7 +109,7 @@ class GameOnScreen extends StatelessWidget {
                                       style: title_black_color,
                                     );
                                   } else {
-                                    return Text("UNKNOWN");
+                                    return Text(ERROR_UNKNOWN);
                                   }
                                 }),
                           ),

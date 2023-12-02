@@ -10,3 +10,6 @@ const String TWO = 'two';
 const String THREE = 'three';
 const String ASSIST = 'assist';
 const String REBOUND = 'rebound';
+
+const String ERROR_UNKNOWN = "UNKNOWN";
+const String ERROR_FAIL = "FAIL";

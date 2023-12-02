@@ -20,7 +20,7 @@ class _MatchCreatingScreenState extends State<MatchCreatingScreen> {
 
   @override
   void initState() {
-    matchBloc.getPlayerSavedName(context);
+    matchBloc.getPlayerSaved(context);
     // TODO: implement initState
     super.initState();
   }
@@ -80,11 +80,20 @@ class _MatchCreatingScreenState extends State<MatchCreatingScreen> {
                           StreamBuilder(
                               stream: matchBloc.userName,
                               builder: (context, snapshot) {
-                                return Container(
-                                  margin: const EdgeInsets.only(top: 66),
-                                  child: Text(snapshot.data ?? 'Unknown',
-                                      style: name_big_size),
-                                );
+                                if (snapshot.hasData){
+                                  return Container(
+                                    margin: const EdgeInsets.only(top: 66),
+                                    child: Text(snapshot.data!.name,
+                                        style: name_big_size),
+                                  );
+                                }else{
+                                  return Container(
+                                    margin: const EdgeInsets.only(top: 66),
+                                    child: const Text(ERROR_UNKNOWN,
+                                        style: name_big_size),
+                                  );
+                                }
+
                               }),
                           gap_default,
                           gap_default,
@@ -256,7 +265,8 @@ class _MatchCreatingScreenState extends State<MatchCreatingScreen> {
                                               parentContext: context,
                                               userName:
                                                   snapshot.data?[index].name,
-                                              onTapSuffix: () =>
+                                              suffixIcon: snapshot.data?[index].id == matchBloc.playerInfo?.id ? SizedBox() : null,
+                                              onTapSuffix: snapshot.data?[index].id == matchBloc.playerInfo?.id  ? () => {} : () =>
                                                   matchBloc.removePlayerTap(
                                                       index,
                                                       context,

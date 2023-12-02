@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../constants/constant_values.dart';
 import '../constants/ui_styles.dart';
 
 StatelessWidget UserNameCard({
@@ -41,7 +42,7 @@ StatelessWidget UserNameCard({
         //   ),
         // ),
         Text(
-          userName ?? "Unknown",
+          userName ?? ERROR_UNKNOWN,
           style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
         ),
         Spacer(),

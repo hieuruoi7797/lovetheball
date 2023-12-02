@@ -12,19 +12,19 @@ import '../../../public/public_methods.dart';
 class MatchCreatingBloc {
   final _repository = Repository();
   final _matchCreatorPublish = BehaviorSubject<Response>();
-  final _userNamePublish = PublishSubject<String>();
+  final _userInfoPublish = PublishSubject<PlayerModel>();
   final _matchNameBehavior = BehaviorSubject<String>();
   final _addedPlayersBehavior = BehaviorSubject<List<PlayerModel>>();
   final _morePlayersPublish = PublishSubject<List<PlayerModel>>();
   final _listAdding = BehaviorSubject<List<int>>();
+  PlayerModel? playerInfo;
   List<PlayerModel> playersListAdded = [];
   List<PlayerModel> playersListMore = [];
   List<int> listAddingIndexes = [-1];
 
   Stream<Response> get createMatchRes => _matchCreatorPublish.stream;
 
-
-  Stream<String> get userName => _userNamePublish.stream;
+  Stream<PlayerModel> get userName => _userInfoPublish.stream;
 
   Stream<List<PlayerModel>> get addedPlayersList => _addedPlayersBehavior.stream;
 
@@ -34,26 +34,41 @@ class MatchCreatingBloc {
 
   Stream<String> get matchNameBehavior => _matchNameBehavior.stream;
 
-  changeStatus(String statusChange) async {
-  }
+  changeStatus(String statusChange) async {}
 
-  getPlayerList({required BuildContext context, bool? isAdding}) async {
+  getPlayerList(
+      {required BuildContext context, bool? isAdding, String? matchId}) async {
     Response response;
-    response = await _repository.getPlayers(
-    );
+    response = await _repository.getPlayers(matchId: matchId);
     List<dynamic> listPlayerRes = jsonDecode(response.body)['data'] as List;
     List<PlayerModel> listPlayers = [];
     if (isAdding == true) {
+
+      ///get 5 players in the last of the result list to add on More Players List
       for (int i = 5; i < 15; i++) {
         listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
-        _morePlayersPublish.sink.add(listPlayers);
       }
+      _morePlayersPublish.sink.add(listPlayers);
       return;
-    } else {
+    }
+    ///get ALL players of an Match (macthId) in the result list
+    else if (matchId != null) {
+      playersListAdded.clear();
+      for (int i = 0; i < listPlayerRes.length; i++) {
+        listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
+      }
+      playersListAdded.addAll(listPlayers);
+      return;
+    }
+    ///get 5 players start of the result list to add on default added players
+    else {
       for (int i = 0; i < 5; i++) {
         listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
-        _addedPlayersBehavior.sink.add(listPlayers);
       }
+      if (playerInfo != null){
+        listPlayers.add(playerInfo!);
+      }
+      _addedPlayersBehavior.sink.add(listPlayers);
       return;
     }
   }
@@ -75,23 +90,28 @@ class MatchCreatingBloc {
     _matchCreatorPublish.sink.add(response);
     if (response.statusCode == 201) {
       if (context.mounted) {
+        String matchId = jsonDecode(response.body)['data'][0]['id_'];
+        await getPlayerList(context: context, matchId: matchId);
         _addedPlayersBehavior.sink.add(playersListAdded);
         _matchNameBehavior.sink.add(name);
-        await DialogWidget().showResultDialog(context,
-            isSuccess: true, content: "Tạo game thành công!").then((value) =>
-            Navigator.pushNamed(context, '/game_on')
-        );
+        await Future.delayed(Duration.zero, () {
+          DialogWidget()
+              .showResultDialog(context,
+              isSuccess: true, content: "Tạo game thành công!")
+              .then((value) => Navigator.pushNamed(context, '/game_on'));
+        });
       }
     }
     _matchCreatorPublish.sink.add(response);
   }
 
-  Future<void> getPlayerSavedName(BuildContext context) async {
+  Future<void> getPlayerSaved(BuildContext context) async {
     PlayerModel? playerSaved;
     dynamic savedPlayerFile = await PublicMethod().readContentPlayer();
     if (savedPlayerFile is PlayerModel) {
       playerSaved = savedPlayerFile;
-      _userNamePublish.sink.add(playerSaved.name);
+      playerInfo = playerSaved;
+      _userInfoPublish.sink.add(playerInfo ?? playerSaved);
       await Future.delayed(Duration.zero, () {
         getPlayerList(context: context);
       });
@@ -112,13 +132,13 @@ class MatchCreatingBloc {
     _listAdding.sink.add(listAddingIndexes);
     DialogWidget().showAddingPlayerBottom(context);
     await getPlayerList(context: context, isAdding: true);
-    }
+  }
 
   addPlayersTap(BuildContext context, int index, {bool? changeStatus}) {
     if (changeStatus == true) {
       listAddingIndexes.add(index);
       playersListAdded.add(playersListMore[index]);
-    } else{
+    } else {
       listAddingIndexes.remove(index);
       playersListAdded.remove(playersListMore[index]);
     }

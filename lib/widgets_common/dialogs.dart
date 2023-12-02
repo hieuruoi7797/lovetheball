@@ -6,6 +6,7 @@ import 'package:splat_record/src/app.dart';
 import 'package:splat_record/src/blocs/match/match_creating_bloc.dart';
 import 'package:splat_record/widgets_common/user_name_card.dart';
 
+import '../constants/constant_values.dart';
 import '../src/models/player_model.dart';
 
 class DialogWidget {
@@ -272,7 +273,7 @@ class DialogWidget {
                     margin: EdgeInsets.only(top: 20),
                     width: MediaQuery.of(context).size.width,
                     child: Text(
-                      content ?? "Unknown",
+                      content ?? ERROR_UNKNOWN,
                       textAlign: TextAlign.center,
                       style: title_black_color,
                     ),
@@ -334,7 +335,7 @@ class DialogWidget {
                     margin: EdgeInsets.only(top: 20),
                     width: MediaQuery.of(context).size.width,
                     child: Text(
-                      content ?? "Unknown",
+                      content ?? ERROR_UNKNOWN,
                       textAlign: TextAlign.center,
                       style: name_big_size,
                     ),

@@ -6,6 +6,7 @@ import 'package:splat_record/src/app.dart';
 import 'package:splat_record/widgets_common/dialogs.dart';
 
 import '../../constants/api_paths.dart';
+import '../../constants/constant_values.dart';
 
 class PlayerApiProvider {
   Client client = Client();
@@ -35,7 +36,7 @@ class PlayerApiProvider {
       return response;
     } else {
       await Future.delayed(
-          Duration.zero, () => DialogWidget().showFailDialog(context, "FAIL"));
+          Duration.zero, () => DialogWidget().showFailDialog(context, ERROR_FAIL));
       return response;
     }
   }
@@ -57,7 +58,7 @@ class PlayerApiProvider {
       return response;
     } else {
       await Future.delayed(
-          Duration.zero, () => DialogWidget().showFailDialog(navigatorKey.currentContext!, "FAIL"));
+          Duration.zero, () => DialogWidget().showFailDialog(navigatorKey.currentContext!, ERROR_FAIL));
       return response;
     }
   }

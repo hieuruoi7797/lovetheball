@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:splat_record/src/blocs/game_on/game_on_bloc.dart';
 
 import '../constants/constant_values.dart';
-import '../constants/ui_styles.dart';
 
 Widget CommonContainer({
   required BuildContext parentContext,

@@ -1,15 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_record/public/public_methods.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/src/resources/repository.dart';
-import 'package:splat_record/widgets_common/dialogs.dart';
 
 class PlayerCreatingBloc {
   final _repository = Repository();
@@ -20,8 +17,6 @@ class PlayerCreatingBloc {
 
   Stream<String> get status => _statusBehaviors.stream;
 
-  bool _isDisposed = false;
-
   Future<String> changeStatus(String statusChanged) async {
     _statusBehaviors.add('landed');
     return statusChanged;
@@ -29,14 +24,19 @@ class PlayerCreatingBloc {
 
   Future<void> getPlayerSaved(BuildContext context) async{
     dynamic playerSaved = await PublicMethod().readContentPlayer();
+
+    ///if the storage have saved user information already, push to HomeScreen.
     if (playerSaved is PlayerModel && playerSaved.name.isNotEmpty){
       if (context.mounted) Navigator.of(context).pushNamed('/home');
       return;
-    }else if (playerSaved == 'Error'){
+    }
+    ///else stay in User Creating Screen
+    else if (playerSaved == 'Error'){
       return;
     }
   }
 
+  ///Create a player and save user info in storage
   createPlayer({
     required BuildContext context,
     required String name,
@@ -54,7 +54,6 @@ class PlayerCreatingBloc {
     }
 
   dispose() {
-    _isDisposed = true;
     _playerCreator.close();
     _statusBehaviors.close();
   }
