@@ -169,15 +169,21 @@ class GameOnScreen extends StatelessWidget {
                           ),
                         ],
                       )),
-                  Container(
-                    margin: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.1),
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                        color: color_main,
-                        borderRadius: BorderRadius.circular(100)
+                  GestureDetector(
+                    onTap: () {
+                      gameOnBloc.dispose();
+                      Navigator.pop(context);
+                      },
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.1),
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                          color: color_main,
+                          borderRadius: BorderRadius.circular(100)
+                      ),
+                      child: const Center(child: Text('Kết thúc',style: TextStyle(color: Colors.white),),),
                     ),
-                    child: const Center(child: Text('Kết thúc',style: TextStyle(color: Colors.white),),),
                   )
                 ],
               ),
@@ -243,6 +249,7 @@ class GameOnScreen extends StatelessWidget {
         Spacer(),
         Text(
           gameOnBloc.listPlayers[index].name,
+          overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
         )
       ],

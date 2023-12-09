@@ -344,8 +344,10 @@ class DialogWidget {
                     child: Container(
                         margin: EdgeInsets.symmetric(vertical: 20),
                         child:
-                            SvgPicture.asset("assets/svg_pictures/SUCCESS.svg")),
-                  ),
+                            isSuccess ?
+                            SvgPicture.asset("assets/svg_pictures/SUCCESS.svg"):
+                            SvgPicture.asset("assets/svg_pictures/SUCCESS.svg"),
+                    )),
                   // Spacer(),
                   GestureDetector(
                     onTap: () {

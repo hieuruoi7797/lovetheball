@@ -81,32 +81,37 @@ class MatchCreatingBloc {
     required String name,
   }) async {
     List<String> listPlayersString = [];
-    for (var element in playersListAdded) {
-      listPlayersString.add(element.id);
-    }
-    Response response = await _repository.createMatch(
-        context: context,
-        name: name,
-        location: "DH SU PHAM",
-        type: 0,
-        players: listPlayersString);
-    _matchCreatorPublish.sink.add(response);
-    if (response.statusCode == 201) {
-      if (context.mounted) {
-        String matchId = jsonDecode(response.body)['data'][0]['id_'];
-        await getPlayerList(context: context, matchId: matchId);
-        _addedPlayersBehavior.sink.add(playersListAdded);
-        _matchNameBehavior.sink.add(name);
-        _matchIdBehavior.sink.add(matchId);
-        await Future.delayed(Duration.zero, () {
-          DialogWidget()
-              .showResultDialog(context,
-              isSuccess: true, content: "Tạo game thành công!")
-              .then((value) => Navigator.pushNamed(context, '/game_on'));
-        });
+    if (name.isNotEmpty){
+      for (var element in playersListAdded) {
+        listPlayersString.add(element.id);
       }
+      Response response = await _repository.createMatch(
+          context: context,
+          name: name,
+          location: "DH SU PHAM",
+          type: 0,
+          players: listPlayersString);
+      _matchCreatorPublish.sink.add(response);
+      if (response.statusCode == 201) {
+        if (context.mounted) {
+          String matchId = jsonDecode(response.body)['data'][0]['id_'];
+          await getPlayerList(context: context, matchId: matchId);
+          _addedPlayersBehavior.sink.add(playersListAdded);
+          _matchNameBehavior.sink.add(name);
+          _matchIdBehavior.sink.add(matchId);
+          await Future.delayed(Duration.zero, () {
+            DialogWidget()
+                .showResultDialog(context,
+                isSuccess: true, content: "Tạo game thành công!")
+                .then((value) => Navigator.pushNamed(context, '/game_on'));
+          });
+        }
+      }
+      _matchCreatorPublish.sink.add(response);
+    }else{
+      DialogWidget().showMessageDialog(context, content: "Vui lòng nhập tên trận đấu");
     }
-    _matchCreatorPublish.sink.add(response);
+
   }
 
   Future<void> getPlayerSaved(BuildContext context) async {

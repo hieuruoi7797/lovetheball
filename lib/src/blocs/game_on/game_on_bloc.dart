@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_record/src/blocs/match/match_creating_bloc.dart';
