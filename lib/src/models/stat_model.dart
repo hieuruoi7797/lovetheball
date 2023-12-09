@@ -2,7 +2,7 @@ class Stats {
   Stats({
       required this.matchId,
       required this.playerId,
-      this.layUp, 
+      this.layUp,
       this.assit, 
       this.twoPointsShoot,
       this.threePointsShoot, 
@@ -15,6 +15,7 @@ class Stats {
     twoPointsShoot ??= 0;
     threePointsShoot ??= 0;
     assit ??= 0;
+    layUp ??= 0;
   }
 
   Stats.fromJson(dynamic json) {
@@ -33,7 +34,7 @@ class Stats {
   }
   String matchId = "<match_id>";
   String playerId = "<player_id>";
-  int? layUp;
+  int? layUp = 0;
   int? assit;
   int? twoPointsShoot;
   int? threePointsShoot;

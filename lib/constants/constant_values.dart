@@ -6,9 +6,10 @@ const String SUBTRACTING = "assets/svg_pictures/SUBTRACTING.svg";
 const String ADDING = "assets/svg_pictures/ADD_PLAYER.svg";
 
 
-const String TWO = 'two';
-const String THREE = 'three';
-const String ASSIST = 'assist';
+const String TWO = 'Mid-Range Shot';
+const String LAYUP = 'Lay-Up';
+const String THREE = '3-Pointer';
+const String ASSIST = 'Assist';
 const String REBOUND = 'rebound';
 
 const String ERROR_UNKNOWN = "UNKNOWN";

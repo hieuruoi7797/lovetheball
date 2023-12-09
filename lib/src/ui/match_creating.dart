@@ -95,8 +95,7 @@ class _MatchCreatingScreenState extends State<MatchCreatingScreen> {
                                 }
 
                               }),
-                          gap_default,
-                          gap_default,
+                          gap_24,
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 48),
                             margin: const EdgeInsets.only(bottom: 23),
@@ -210,25 +209,25 @@ class _MatchCreatingScreenState extends State<MatchCreatingScreen> {
                                 maxWidth: 50,
                                 maxHeight: 50,
                               ),
-                              suffixIcon: Container(
-                                margin: EdgeInsets.only(right: 16),
-                                child: SvgPicture.asset(
-                                  "assets/svg_pictures/EDITING.svg",
-                                  width: 17,
-                                  height: 17,
-                                ),
-                              ),
+                              // suffixIcon: Container(
+                              //   margin: EdgeInsets.only(right: 16),
+                              //   child: SvgPicture.asset(
+                              //     "assets/svg_pictures/EDITING.svg",
+                              //     width: 17,
+                              //     height: 17,
+                              //   ),
+                              // ),
                               filled: true,
                               fillColor: Color(0xFFF1F1F1),
                             ),
                           ),
                         ),
-                        gap_default,
+                        gap_24,
                         const Text(
                           "Người chơi",
                           style: title_black_color,
                         ),
-                        gap_default,
+                        gap_24,
                         GestureDetector(
                           onTap: () =>
                               matchBloc.showAddingPlayersBottom(context),

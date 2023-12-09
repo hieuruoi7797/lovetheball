@@ -1,9 +1,10 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:splat_record/constants/ui_styles.dart';
 import 'package:splat_record/src/blocs/game_on/game_on_bloc.dart';
 import 'package:splat_record/src/blocs/match/match_creating_bloc.dart';
-import 'package:splat_record/src/models/full_stat_model.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/widgets_common/container_common.dart';
 
@@ -13,7 +14,7 @@ import '../models/stat_model.dart';
 class GameOnScreen extends StatelessWidget {
   GameOnScreen({super.key});
 
-  GameOnBloc gameOnBloc = GameOnBloc();
+  final GameOnBloc gameOnBloc = GameOnBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class GameOnScreen extends StatelessWidget {
               child: Column(
                 children: [
                   CommonContainer(
-                    margin: const EdgeInsets.only(top: 32),
+                    margin: const EdgeInsets.only(top: 75),
                     padding: const EdgeInsets.all(20),
                     parentContext: context,
                     child: Column(
@@ -56,6 +57,7 @@ class GameOnScreen extends StatelessWidget {
                                     snapshotPlayerList) {
                               if (snapshotPlayerList.hasData) {
                                 return GridView.builder(
+                                    padding: EdgeInsets.all(16),
                                     physics: const NeverScrollableScrollPhysics(),
                                     itemCount: snapshotPlayerList.data!.length,
                                     gridDelegate:
@@ -66,7 +68,7 @@ class GameOnScreen extends StatelessWidget {
                                     shrinkWrap: true,
                                     itemBuilder: (context, index) {
                                       return StreamBuilder<int>(
-                                          stream: gameOnBloc.nowPickIndex,
+                                          stream: gameOnBloc.pickPlayerIndex,
                                           builder:
                                               (context, snapshotIndexPicked) {
                                             if (snapshotIndexPicked.hasData) {
@@ -92,15 +94,15 @@ class GameOnScreen extends StatelessWidget {
                   ),
                   CommonContainer(
                       parentContext: context,
-                      margin: EdgeInsets.only(
+                      margin: const EdgeInsets.only(
                           top: 32,
-                          bottom: MediaQuery.sizeOf(context).height * 0.1),
+                          bottom: 24),
                       padding: const EdgeInsets.all(20),
                       child: Column(
                         children: [
                           Center(
                             child: StreamBuilder<int>(
-                                stream: gameOnBloc.nowPickIndex,
+                                stream: gameOnBloc.pickPlayerIndex,
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     return Text(
@@ -116,46 +118,67 @@ class GameOnScreen extends StatelessWidget {
                           StreamBuilder<Stats>(
                             stream: gameOnBloc.pickedPlayerStatPublish,
                             builder: (context,AsyncSnapshot<Stats> snapshot) {
-                              return Column(
-                                children: [
-                                  StatInfoEdittingContainer(
-                                      context: context,
-                                      statType: TWO,
-                                      quantity: snapshot.hasData ? snapshot.data!.twoPointsShoot.toString() :'0',
-                                      onTapPlus: () => gameOnBloc.increase(TWO),
-                                      onTapSub: () => gameOnBloc.decrease(TWO)),
-                                  StatInfoEdittingContainer(
-                                      context: context,
-                                      statType: THREE,
-                                      quantity: snapshot.hasData? snapshot.data!.threePointsShoot.toString() : "0",
-                                      onTapPlus: () => gameOnBloc.increase(THREE),
-                                      onTapSub: () => gameOnBloc.decrease(THREE)),
-                                  StatInfoEdittingContainer(
-                                      context: context,
-                                      statType: ASSIST,
-                                      quantity: snapshot.hasData? snapshot.data!.assit.toString() : "0",
-                                      onTapPlus: () => gameOnBloc.increase(ASSIST),
-                                      onTapSub: () => gameOnBloc.decrease(ASSIST)
-                                  ),
-                                  StatInfoEdittingContainer(
-                                      context: context, statType: "Rebound"),
-                                  StatInfoEdittingContainer(
-                                      context: context, statType: "Block"),
-                                  StatInfoEdittingContainer(
-                                      context: context, statType: "Steal"),
-                                  StatInfoEdittingContainer(
-                                      context: context, statType: "Personal Foul"),
-                                  StatInfoEdittingContainer(
-                                      context: context, statType: "Turn-Over"),
-                                  StatInfoEdittingContainer(
-                                      context: context, statType: "Dunk"),
-                                ],
+                              return StreamBuilder<int>(
+                                stream: gameOnBloc.pickStatIndex,
+                                builder: (context,AsyncSnapshot<int> statIndex) {
+                                  return GridView(
+                                    padding: EdgeInsets.all(16),
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                      crossAxisSpacing: 10,
+                                      mainAxisSpacing: 10,),
+                                    children: [
+                                      StatContainer(
+                                          onTap:() => gameOnBloc.pickStat(LAYUP),
+                                          context: context,
+                                          quantity: snapshot.data?.layUp != null ? snapshot.data!.layUp.toString() :"0",
+                                          statType: LAYUP,
+                                          svgPicture: SvgPicture.asset("assets/svg_pictures/layup.svg"),
+                                          isPicked: statIndex.data == 0  ? true : false),
+                                      StatContainer(
+                                          context: context,
+                                          onTap:() => gameOnBloc.pickStat(ASSIST),
+                                          statType: ASSIST,
+                                          quantity: snapshot.data?.assit != null ? snapshot.data!.assit.toString() :"0",
+                                          isPicked: statIndex.data == 1  ? true : false,
+                                          svgPicture: SvgPicture.asset("assets/svg_pictures/assist.svg"),
+                                          svgPicturePicked: SvgPicture.asset("assets/svg_pictures/assist_picked.svg")),
+                                      StatContainer(
+                                          onTap:() => gameOnBloc.pickStat(TWO),
+                                          context: context,
+                                          quantity: snapshot.data?.twoPointsShoot != null ? snapshot.data!.twoPointsShoot.toString() :"0",
+                                          statType: TWO,
+                                          svgPicture: SvgPicture.asset("assets/svg_pictures/2point.svg"),
+                                          svgPicturePicked: SvgPicture.asset("assets/svg_pictures/2point_picked.svg"),
+                                          isPicked: statIndex.data == 2  ? true : false),
+                                      StatContainer(
+                                          onTap:() => gameOnBloc.pickStat(THREE),
+                                          context: context,
+                                          quantity: snapshot.data?.threePointsShoot != null ? snapshot.data!.threePointsShoot.toString() :"0",
+                                          statType: THREE,
+                                          svgPicture: SvgPicture.asset("assets/svg_pictures/3point.svg"),
+                                          svgPicturePicked: SvgPicture.asset("assets/svg_pictures/3point_picked.svg"),
+                                          isPicked: statIndex.data == 3  ? true : false),
+                                    ],
+                                  );
+                                }
                               );
                             }
                           ),
-
                         ],
-                      ))
+                      )),
+                  Container(
+                    margin: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.1),
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                        color: color_main,
+                        borderRadius: BorderRadius.circular(100)
+                    ),
+                    child: const Center(child: Text('Kết thúc',style: TextStyle(color: Colors.white),),),
+                  )
                 ],
               ),
             ),
@@ -165,25 +188,24 @@ class GameOnScreen extends StatelessWidget {
             child: Container(
               width: MediaQuery.sizeOf(context).width,
               height: MediaQuery.sizeOf(context).height * 0.1,
-              color: Colors.white,
-              child: Center(
-                child: GestureDetector(
-                  onTap: () => {gameOnBloc.dispose()},
-                  child: Center(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.47,
-                      height: 48,
-                      decoration: BoxDecoration(
-                          color: color_main,
-                          borderRadius: BorderRadius.circular(50)),
-                      child: const Center(
-                        child:
-                            Text("Kết thúc trận đấu", style: title_white_color),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              child: CurvedNavigationBar(
+                index: 1,
+                backgroundColor: Colors.transparent ,
+                buttonBackgroundColor: Colors.transparent,
+                letIndexChange: (index) => false,
+                height: 75,
+                // onTap: (index) => index == 0 ? gameOnBloc.decrease():gameOnBloc.increase(),
+                items: [
+                  GestureDetector(
+                      onTap: () => gameOnBloc.decrease(),
+                      child: SvgPicture.asset(SUBTRACTING)),
+                  Container(),
+                  GestureDetector(
+                      onTap: () => gameOnBloc.increase(),
+                      child: SvgPicture.asset(ADDING)),
+                ],
+
+              )
             ),
           )
         ],
@@ -226,4 +248,6 @@ class GameOnScreen extends StatelessWidget {
       ],
     );
   }
+
+
 }

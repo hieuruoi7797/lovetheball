@@ -14,6 +14,7 @@ class MatchCreatingBloc {
   final _matchCreatorPublish = BehaviorSubject<Response>();
   final _userInfoPublish = PublishSubject<PlayerModel>();
   final _matchNameBehavior = BehaviorSubject<String>();
+  final _matchIdBehavior = BehaviorSubject<String>();
   final _addedPlayersBehavior = BehaviorSubject<List<PlayerModel>>();
   final _morePlayersPublish = PublishSubject<List<PlayerModel>>();
   final _listAdding = BehaviorSubject<List<int>>();
@@ -33,6 +34,8 @@ class MatchCreatingBloc {
   Stream<List<int>> get listAdding => _listAdding.stream;
 
   Stream<String> get matchNameBehavior => _matchNameBehavior.stream;
+
+  Stream<String> get matchIdBehavior => _matchIdBehavior.stream;
 
   changeStatus(String statusChange) async {}
 
@@ -78,9 +81,9 @@ class MatchCreatingBloc {
     required String name,
   }) async {
     List<String> listPlayersString = [];
-    playersListAdded.forEach((element) {
+    for (var element in playersListAdded) {
       listPlayersString.add(element.id);
-    });
+    }
     Response response = await _repository.createMatch(
         context: context,
         name: name,
@@ -94,6 +97,7 @@ class MatchCreatingBloc {
         await getPlayerList(context: context, matchId: matchId);
         _addedPlayersBehavior.sink.add(playersListAdded);
         _matchNameBehavior.sink.add(name);
+        _matchIdBehavior.sink.add(matchId);
         await Future.delayed(Duration.zero, () {
           DialogWidget()
               .showResultDialog(context,

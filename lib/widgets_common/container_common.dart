@@ -16,28 +16,30 @@ Widget CommonContainer({
     height: height,
     margin: margin,
     padding: padding,
-    decoration: BoxDecoration(boxShadow: [
-      BoxShadow(
-          color: Colors.black.withOpacity(0.1),
-          blurRadius: 20.0,
-          offset: const Offset(0, 6))
-    ], color: Colors.white, borderRadius: BorderRadius.circular(20)),
+    decoration: BoxDecoration(
+        //     boxShadow: [
+        //   BoxShadow(
+        //       color: Colors.black.withOpacity(0.1),
+        //       blurRadius: 20.0,
+        //       offset: const Offset(0, 6))
+        // ],
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20)),
     child: child ?? const SizedBox(),
   );
 }
 
-Widget StatInfoEdittingContainer(
-    {required BuildContext context,
-    double? width,
-    double? height,
-    EdgeInsets? margin,
-    EdgeInsets? padding,
-    Widget? child,
-    String? statType,
-    String? quantity,
-    Function()? onTapPlus,
-    Function()? onTapSub,
-    }) {
+Widget StatInfoEdittingContainer({
+  required BuildContext context,
+  double? width,
+  double? height,
+  EdgeInsets? margin,
+  EdgeInsets? padding,
+  String? statType,
+  String? quantity,
+  Function()? onTapPlus,
+  Function()? onTapSub,
+}) {
   return Container(
     margin: margin ?? const EdgeInsets.only(top: 20),
     child: Row(
@@ -57,13 +59,16 @@ Widget StatInfoEdittingContainer(
               child: Container(
                 width: 30,
                 height: 30,
-                decoration: BoxDecoration(boxShadow: [
-                  BoxShadow(
-                      blurRadius: 20,
-                      offset: const Offset(0, 4),
-                      color: Colors.black.withOpacity(0.08),
-                      spreadRadius: 0.0)
-                ], borderRadius: BorderRadius.circular(100), color: Colors.white),
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 20,
+                          offset: const Offset(0, 4),
+                          color: Colors.black.withOpacity(0.08),
+                          spreadRadius: 0.0)
+                    ],
+                    borderRadius: BorderRadius.circular(100),
+                    color: Colors.white),
                 child: Center(
                   child: SvgPicture.asset(
                     SUBTRACTING,
@@ -74,36 +79,39 @@ Widget StatInfoEdittingContainer(
                 ),
               ),
             ),
-          Container(
-                    width: 30,
-                    height: 30,
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: const Color(0xFFF1F1F1),
-                    ),
-                    child: Center(
-                      child: Text(
-                        quantity ?? '0',
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF818181),
-                            fontSize: 14),
-                      ),
-                    ),
-                  ),
+            Container(
+              width: 30,
+              height: 30,
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                color: const Color(0xFFF1F1F1),
+              ),
+              child: Center(
+                child: Text(
+                  quantity ?? '0',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF818181),
+                      fontSize: 14),
+                ),
+              ),
+            ),
             GestureDetector(
               onTap: onTapPlus,
               child: Container(
                 width: 30,
                 height: 30,
-                decoration: BoxDecoration(boxShadow: [
-                  BoxShadow(
-                      blurRadius: 20,
-                      offset: const Offset(0, 4),
-                      color: Colors.black.withOpacity(0.08),
-                      spreadRadius: 0.0)
-                ], borderRadius: BorderRadius.circular(100), color: Colors.white),
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 20,
+                          offset: const Offset(0, 4),
+                          color: Colors.black.withOpacity(0.08),
+                          spreadRadius: 0.0)
+                    ],
+                    borderRadius: BorderRadius.circular(100),
+                    color: Colors.white),
                 child: Center(
                   child: SvgPicture.asset(
                     ADDING,
@@ -116,6 +124,58 @@ Widget StatInfoEdittingContainer(
           ],
         )
       ],
+    ),
+  );
+}
+
+Widget StatContainer({
+  required BuildContext context,
+  EdgeInsets? margin,
+  EdgeInsets? padding,
+  Widget? child,
+  String? statType,
+  SvgPicture? svgPicture,
+  SvgPicture? svgPicturePicked,
+  String? quantity,
+  bool? isPicked,
+  Function()? onTap,
+
+}) {
+  return GestureDetector(
+    onTap: onTap ?? () => {},
+    child: Container(
+      width: MediaQuery.sizeOf(context).width * 0.26,
+      height: MediaQuery.sizeOf(context).width * 0.26,
+      decoration: BoxDecoration(
+        color: isPicked == true ? Color(0xFFFD8F51) : Colors.white,
+        borderRadius: BorderRadius.circular(16)
+      ),
+      // padding: EdgeInsets.all(16),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Spacer(),
+          Text(statType??'',style: TextStyle(
+              fontSize: 9,
+              color: isPicked == true ? Colors.white : Colors.black ),),
+          Spacer(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.only(right: 10),
+                  width: 24,
+                  height: 24,
+                  child: isPicked == true ? svgPicturePicked : svgPicture),
+              Text(quantity ??'0',style: TextStyle(
+                  fontSize: 28,
+                  color: isPicked == true ? Colors.white : Colors.black),)
+            ],
+          ),
+          Spacer(),
+          Spacer(),
+        ],
+      )
     ),
   );
 }

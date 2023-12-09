@@ -15,17 +15,22 @@ class GameOnBloc {
 
   final _repository = Repository();
   final _nowPlayerStatPublish = PublishSubject<Stats>();
-  final _nowPickIndex = BehaviorSubject<int>();
+  final _pickedPlayerIndex = BehaviorSubject<int>();
+  final _pickedStatIndex = BehaviorSubject<int>();
 
-  int pickedInt = 0;
+  int pickedPlayerInt = 0;
+  int pickedStatInt = 0;
   String matchId = '';
 
-  Stream<int> get nowPickIndex => _nowPickIndex.stream;
+  Stream<int> get pickStatIndex => _pickedStatIndex.stream;
+
+  Stream<int> get pickPlayerIndex => _pickedPlayerIndex.stream;
 
   Stream<Stats> get pickedPlayerStatPublish => _nowPlayerStatPublish.stream;
 
 
   GameOnBloc() {
+    matchBloc.matchIdBehavior.listen((event) => matchId = event);
     matchBloc.addedPlayersList.listen((event) => updateListPlayers(event));
     _repository.gameOnApiProvider.socketConnect();
     _repository.gameOnApiProvider.socket.on('get_stats', (data) => updateStats(data));
@@ -38,40 +43,63 @@ class GameOnBloc {
     _repository.gameOnApiProvider.socket.close();
   }
 
-  increase(String statType) {
+  increase() {
+    String statType = '';
+    if (pickedStatInt == 0){
+      statType = LAYUP;
+    } else if (pickedStatInt == 1) {
+      statType = ASSIST;
+    } else if (pickedStatInt == 2) {
+      statType = TWO;
+    } else if (pickedStatInt == 3) {
+      statType = THREE;
+    }
     switch (statType) {
+      case LAYUP:
+        listStatChange[pickedPlayerInt].stats.layUp = listStatChange[pickedPlayerInt].stats.layUp! + 1;
+        _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
       case TWO:
-        listStatChange[pickedInt].stats.twoPointsShoot = listStatChange[pickedInt].stats.twoPointsShoot! + 1;
-        // _nowPlayerStatPublish.sink.add(listStatChange[pickedInt].stats);
+        listStatChange[pickedPlayerInt].stats.twoPointsShoot = listStatChange[pickedPlayerInt].stats.twoPointsShoot! + 1;
+        _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
       case THREE:
-        listStatChange[pickedInt].stats.threePointsShoot = listStatChange[pickedInt].stats.threePointsShoot! + 1;
-        // _nowPlayerStatPublish.sink.add(listStatChange[pickedInt].stats);
+        listStatChange[pickedPlayerInt].stats.threePointsShoot = listStatChange[pickedPlayerInt].stats.threePointsShoot! + 1;
+        _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
       case ASSIST:
-        listStatChange[pickedInt].stats.assit = listStatChange[pickedInt].stats.assit! + 1;
-        // _nowPlayerStatPublish.sink.add(listStatChange[pickedInt].stats);
+        listStatChange[pickedPlayerInt].stats.assit = listStatChange[pickedPlayerInt].stats.assit! + 1;
+        _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
     }
     emitChangesSocket(isFirstEmit: false);
   }
 
-  decrease(String s) {
-    switch (s) {
+  decrease() {
+    String statType = '';
+    if (pickedStatInt == 0){
+      statType = LAYUP;
+    } else if (pickedStatInt == 1) {
+      statType = ASSIST;
+    } else if (pickedStatInt == 2) {
+      statType = TWO;
+    } else if (pickedStatInt == 3) {
+      statType = THREE;
+    }
+    switch (statType) {
       case TWO:
-        if (listStatChange[pickedInt].stats.twoPointsShoot! > 0) {
-          listStatChange[pickedInt].stats.twoPointsShoot =
-              listStatChange[pickedInt].stats.twoPointsShoot! - 1;
-          _nowPlayerStatPublish.sink.add(listStatChange[pickedInt].stats);
+        if (listStatChange[pickedPlayerInt].stats.twoPointsShoot! > 0) {
+          listStatChange[pickedPlayerInt].stats.twoPointsShoot =
+              listStatChange[pickedPlayerInt].stats.twoPointsShoot! - 1;
+          _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
         }
       case THREE:
-        if (listStatChange[pickedInt].stats.threePointsShoot! > 0) {
-          listStatChange[pickedInt].stats.threePointsShoot =
-              listStatChange[pickedInt].stats.threePointsShoot! - 1;
-          _nowPlayerStatPublish.sink.add(listStatChange[pickedInt].stats);
+        if (listStatChange[pickedPlayerInt].stats.threePointsShoot! > 0) {
+          listStatChange[pickedPlayerInt].stats.threePointsShoot =
+              listStatChange[pickedPlayerInt].stats.threePointsShoot! - 1;
+          _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
         }
       case ASSIST:
-        if (listStatChange[pickedInt].stats.assit! > 0) {
-          listStatChange[pickedInt].stats.assit =
-              listStatChange[pickedInt].stats.assit! - 1;
-          _nowPlayerStatPublish.sink.add(listStatChange[pickedInt].stats);
+        if (listStatChange[pickedPlayerInt].stats.assit! > 0) {
+          listStatChange[pickedPlayerInt].stats.assit =
+              listStatChange[pickedPlayerInt].stats.assit! - 1;
+          _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
         }
     }
     emitChangesSocket(isFirstEmit: false);
@@ -79,17 +107,17 @@ class GameOnBloc {
 
   void updateListPlayers(List<PlayerModel> list) {
     listPlayers = list;
-    _nowPickIndex.sink.add(pickedInt);
+    _pickedPlayerIndex.sink.add(pickedPlayerInt);
     for (PlayerModel e in listPlayers){
       listStatChange.add(
           StatChangesModel(
               hasChange: false,
               stats: Stats(
                 playerId: e.id,
-                matchId: '<UNKNOWN>'
+                matchId: matchId
               )));
     }
-    _nowPlayerStatPublish.sink.add(listStatChange[pickedInt].stats);
+    _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
     //Connect to Socket and emit the first event
 
   }
@@ -122,7 +150,7 @@ class GameOnBloc {
     } else {
       List<Map> listStatsMap = [];
       for (var element in listStatChange) {
-        if (listStatChange.indexOf(element) == pickedInt) {
+        if (listStatChange.indexOf(element) == pickedPlayerInt) {
           element.hasChange = true;
         } else {
           element.hasChange = false;
@@ -138,7 +166,7 @@ class GameOnBloc {
   }
 
   pickPlayer(int index) {
-    pickedInt = index;
+    pickedPlayerInt = index;
     updateListPlayers(listPlayers);
   }
 
@@ -151,9 +179,37 @@ class GameOnBloc {
     }
     for (int i = 0; i < statsList.length; i++) {
       listStatChange[i].stats = statsList[i];
-      if (i == pickedInt){
-        _nowPlayerStatPublish.sink.add(listStatChange[pickedInt].stats);
+      if (i == pickedPlayerInt){
+        _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
       }
     }
   }
+
+  pickStat(String s) {
+    switch(s) {
+      case LAYUP:
+        {
+          _pickedStatIndex.sink.add(0);
+          pickedStatInt = 0;
+        }
+      case ASSIST: {
+        _pickedStatIndex.sink.add(1);
+        pickedStatInt = 1;
+      }
+      case TWO: {
+        _pickedStatIndex.sink.add(2);
+        pickedStatInt = 2;
+      }
+      case THREE:  {
+        _pickedStatIndex.sink.add(3);
+        pickedStatInt = 3;
+      }
+    }
+  }
+}
+
+class StatType {
+  StatType({required this.typeName, required this.quantity});
+  String typeName;
+  int quantity;
 }

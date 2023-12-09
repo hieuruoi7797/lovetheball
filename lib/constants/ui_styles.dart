@@ -10,6 +10,7 @@ const Color color_loading_background = Colors.blueGrey;
 
 ///Widgets
 const Widget gap_default = SizedBox(height: 16,);
+const Widget gap_24 = SizedBox(height: 16,);
 
 //TextStyle
 const TextStyle title_main_color = TextStyle(
