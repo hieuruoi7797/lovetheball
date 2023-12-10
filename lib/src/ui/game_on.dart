@@ -171,8 +171,7 @@ class GameOnScreen extends StatelessWidget {
                       )),
                   GestureDetector(
                     onTap: () {
-                      gameOnBloc.dispose();
-                      Navigator.pop(context);
+                      gameOnBloc.finishMatch();
                       },
                     child: Container(
                       margin: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.1),

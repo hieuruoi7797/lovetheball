@@ -10,7 +10,7 @@ import '../../constants/constant_values.dart';
 
 class PlayerApiProvider {
   Client client = Client();
-  final _baseUrl = "https://ample-crawdad-kind.ngrok-free.app/v1";
+  final _baseUrl = BASEURL;
 
   Future<Response> createPlayer({
     required BuildContext context,

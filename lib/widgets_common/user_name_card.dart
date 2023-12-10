@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:splat_record/src/app.dart';
 
 import '../constants/constant_values.dart';
 import '../constants/ui_styles.dart';
@@ -41,9 +42,15 @@ StatelessWidget UserNameCard({
         //       color: Colors.blue
         //   ),
         // ),
-        Text(
-          userName ?? ERROR_UNKNOWN,
-          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+        Container(
+          width: width ?? MediaQuery.of(parentContext).size.width * 0.4,
+          child: Text(
+            userName ?? ERROR_UNKNOWN,
+            style: TextStyle(
+                fontWeight: FontWeight.w600, fontSize: 16),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
         Spacer(),
         GestureDetector(

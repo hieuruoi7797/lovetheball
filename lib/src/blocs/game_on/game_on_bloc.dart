@@ -1,9 +1,15 @@
 
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:splat_record/src/app.dart';
 import 'package:splat_record/src/blocs/match/match_creating_bloc.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/src/models/stat_model.dart';
 import 'package:splat_record/src/resources/repository.dart';
+import 'package:splat_record/widgets_common/dialogs.dart';
 
 import '../../../constants/constant_values.dart';
 import '../../models/stats_change_model.dart';
@@ -33,11 +39,28 @@ class GameOnBloc {
     matchBloc.addedPlayersList.listen((event) => updateListPlayers(event));
     _repository.gameOnApiProvider.socketConnect();
     _repository.gameOnApiProvider.socket.on('get_stats', (data) => updateStats(data));
+    _repository.gameOnApiProvider.socket.on('disconnect', (data) => dispose(data));
     emitChangesSocket(isFirstEmit: true);
   }
 
-  dispose() {
-    _nowPlayerStatPublish.close();
+  void finishMatch() {
+    DialogWidget().showMessageDialog(navigatorKey.currentContext! , content: "Bạn muốn kết thúc trận đấu?").then((value)
+     async {
+      if(value == 'Y'){
+        await _repository.gameOnApiProvider.finishMatch(matchId: matchId).then((Response response) {
+          if (jsonDecode(response.body)['status_code'] == 200){
+            Navigator.pushReplacementNamed(navigatorKey.currentContext!, '/home');
+          }else{
+            DialogWidget().showMessageDialog(navigatorKey.currentContext!, content: (jsonDecode(response.body)['message']));
+          }
+        });
+      }else{
+        Navigator.pop(navigatorKey.currentContext!);
+      }
+    });
+  }
+
+  dispose(dynamic data) {
     _repository.gameOnApiProvider.socket.disconnect();
     _repository.gameOnApiProvider.socket.close();
   }
@@ -117,6 +140,7 @@ class GameOnBloc {
               )));
     }
     _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
+    _pickedStatIndex.add(pickedStatInt);
     //Connect to Socket and emit the first event
 
   }

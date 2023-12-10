@@ -281,7 +281,7 @@ class DialogWidget {
                   GestureDetector(
                     onTap: () {
                       result = "Y";
-                      Navigator.pop(context);
+                      Navigator.pop(context,result);
                     },
                     child: Center(
                       child: Container(
