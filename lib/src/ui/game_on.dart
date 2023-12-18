@@ -136,6 +136,7 @@ class GameOnScreen extends StatelessWidget {
                                           quantity: snapshot.data?.layUp != null ? snapshot.data!.layUp.toString() :"0",
                                           statType: LAYUP,
                                           svgPicture: SvgPicture.asset("assets/svg_pictures/layup.svg"),
+                                          svgPicturePicked: SvgPicture.asset("assets/svg_pictures/layup_picked.svg"),
                                           isPicked: statIndex.data == 0  ? true : false),
                                       StatContainer(
                                           context: context,
@@ -169,48 +170,84 @@ class GameOnScreen extends StatelessWidget {
                           ),
                         ],
                       )),
-                  GestureDetector(
-                    onTap: () {
-                      gameOnBloc.finishMatch();
-                      },
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.1),
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                          color: color_main,
-                          borderRadius: BorderRadius.circular(100)
-                      ),
-                      child: const Center(child: Text('Kết thúc',style: TextStyle(color: Colors.white),),),
-                    ),
-                  )
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     gameOnBloc.finishMatch();
+                  //     },
+                  //   child: Container(
+                  //     margin: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.1),
+                  //     width: 100,
+                  //     height: 100,
+                  //     decoration: BoxDecoration(
+                  //         color: color_main,
+                  //         borderRadius: BorderRadius.circular(100)
+                  //     ),
+                  //     child: const Center(child: Text('Kết thúc',style: TextStyle(color: Colors.white),),),
+                  //   ),
+                  // )
                 ],
               ),
             ),
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
-              width: MediaQuery.sizeOf(context).width,
-              height: MediaQuery.sizeOf(context).height * 0.1,
-              child: CurvedNavigationBar(
-                index: 1,
-                backgroundColor: Colors.transparent ,
-                buttonBackgroundColor: Colors.transparent,
-                letIndexChange: (index) => false,
-                height: 75,
-                // onTap: (index) => index == 0 ? gameOnBloc.decrease():gameOnBloc.increase(),
-                items: [
-                  GestureDetector(
-                      onTap: () => gameOnBloc.decrease(),
-                      child: SvgPicture.asset(SUBTRACTING)),
-                  Container(),
-                  GestureDetector(
-                      onTap: () => gameOnBloc.increase(),
-                      child: SvgPicture.asset(ADDING)),
-                ],
+            child: Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                Container(
+                  width: MediaQuery.sizeOf(context).width,
+                  height: MediaQuery.sizeOf(context).height * 0.1,
+                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15),
+                  decoration: BoxDecoration(
+                    color: Colors.white
+                  ),
+                  child: Row(
+                    // index: 1,
+                    // backgroundColor: Colors.transparent ,
+                    // buttonBackgroundColor: Colors.transparent,
+                    // letIndexChange: (index) => false,
+                    // height: 75,
+                    // onTap: (index) => index == 0 ? gameOnBloc.decrease():gameOnBloc.increase(),
+                    children: [
+                      Spacer(),
+                      GestureDetector(
+                          onTap: () => gameOnBloc.decrease(),
+                          child: SvgPicture.asset(SUBTRACTING)),
+                      Container(),
+                      Spacer(),
+                      Spacer(),
+                      Spacer(),
+                      GestureDetector(
+                          onTap: () => gameOnBloc.increase(),
+                          child: SvgPicture.asset(ADDING)),
+                      Spacer(),
 
-              )
+                    ],
+
+                  )
+                ),
+                GestureDetector(
+                  onTap: () {
+                    gameOnBloc.finishMatch();
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.height * 0.12,
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    margin: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height * 0.10),
+                    decoration: BoxDecoration(
+                        color: Color(0xFFE55807),
+                        borderRadius: BorderRadius.circular(100)),
+                    child: Center(
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           )
         ],

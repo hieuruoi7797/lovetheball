@@ -18,6 +18,8 @@ class MatchCreatingBloc {
   final _addedPlayersBehavior = BehaviorSubject<List<PlayerModel>>();
   final _morePlayersPublish = PublishSubject<List<PlayerModel>>();
   final _listAdding = BehaviorSubject<List<int>>();
+  final _userInMatchBehavior = BehaviorSubject<bool>();
+  bool _userInMatch = false;
   PlayerModel? playerInfo;
   List<PlayerModel> playersListAdded = [];
   List<PlayerModel> playersListMore = [];
@@ -37,6 +39,10 @@ class MatchCreatingBloc {
 
   Stream<String> get matchIdBehavior => _matchIdBehavior.stream;
 
+  Stream<bool> get userInMatchBehavior => _userInMatchBehavior.stream;
+
+  bool get userInMatch => _userInMatch;
+
   changeStatus(String statusChange) async {}
 
   getPlayerList(
@@ -45,35 +51,47 @@ class MatchCreatingBloc {
     response = await _repository.getPlayers(matchId: matchId);
     List<dynamic> listPlayerRes = jsonDecode(response.body)['data'] as List;
     List<PlayerModel> listPlayers = [];
-    if (isAdding == true) {
+    ///CHECK USER IF THEY ARE IN ANY MATCH
+    for(int i = 0 ; i < listPlayerRes.length; i++){
+      if (playerInfo!.id == listPlayerRes[i]['id_']){
+        if (listPlayerRes[i]['in_match'] != null){
+          _userInMatch = true;
+        }else{
+          _userInMatch = false;
+        }
+      }
+    }
+    if (userInMatch == false){
+      if (isAdding == true) {
 
-      ///get 5 players in the last of the result list to add on More Players List
-      for (int i = 5; i < 15; i++) {
-        listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
+        ///get 5 players in the last of the result list to add on More Players List
+        for (int i = 5; i < 15; i++) {
+          listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
+        }
+        _morePlayersPublish.sink.add(listPlayers);
       }
-      _morePlayersPublish.sink.add(listPlayers);
-      return;
+      ///get ALL players of an Match (macthId) in the result list
+      else if (matchId != null) {
+        playersListAdded.clear();
+        for (int i = 0; i < listPlayerRes.length; i++) {
+          listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
+        }
+        playersListAdded.addAll(listPlayers);
+      }
+      ///get 5 players start of the result list to add on default added players
+      else {
+        listPlayerRes.removeWhere((element) => (element['in_match'] != null));
+        listPlayerRes.removeWhere((element) => (element['id_'] == playerInfo!.id));
+        for (int i = 0; i < 5; i++) {
+          listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
+        }
+        if (playerInfo != null && !listPlayers.contains(playerInfo)){
+          listPlayers.add(playerInfo!);
+        }
+        _addedPlayersBehavior.sink.add(listPlayers);
+      }
     }
-    ///get ALL players of an Match (macthId) in the result list
-    else if (matchId != null) {
-      playersListAdded.clear();
-      for (int i = 0; i < listPlayerRes.length; i++) {
-        listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
-      }
-      playersListAdded.addAll(listPlayers);
-      return;
-    }
-    ///get 5 players start of the result list to add on default added players
-    else {
-      for (int i = 0; i < 5; i++) {
-        listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
-      }
-      if (playerInfo != null){
-        listPlayers.add(playerInfo!);
-      }
-      _addedPlayersBehavior.sink.add(listPlayers);
-      return;
-    }
+    _userInMatchBehavior.sink.add(userInMatch);
   }
 
   createMatch({

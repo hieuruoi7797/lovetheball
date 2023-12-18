@@ -157,7 +157,7 @@ Widget StatContainer({
           Spacer(),
           Text(statType??'',style: TextStyle(
               fontSize: 9,
-              color: isPicked == true ? Colors.white : Colors.black ),),
+              color: isPicked == true ? Colors.white : Color(0xFF818181) ),),
           Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -169,7 +169,7 @@ Widget StatContainer({
                   child: isPicked == true ? svgPicturePicked : svgPicture),
               Text(quantity ??'0',style: TextStyle(
                   fontSize: 28,
-                  color: isPicked == true ? Colors.white : Colors.black),)
+                  color: isPicked == true ? Colors.white :  Color(0xFF818181)),)
             ],
           ),
           Spacer(),

@@ -7,6 +7,7 @@ class PlayerModel {
     this.email,
     this.phone,
     this.status,
+    this.inMatch,
     this.createdAt,
     this.updatedAt,
   });
@@ -19,6 +20,7 @@ class PlayerModel {
     email = json['email'] ?? '';
     phone = json['phone'] ?? '';
     status = json['status'] ?? false;
+    inMatch = json['in_match'] ?? '';
     createdAt = json['created_at'] ?? '';
     updatedAt = json['updated_at'] ?? '';
   }
@@ -30,6 +32,7 @@ class PlayerModel {
   String? email;
   String? phone;
   bool? status;
+  String? inMatch;
   String? createdAt;
   String? updatedAt;
 
@@ -42,6 +45,7 @@ class PlayerModel {
     map['email'] = email;
     map['phone'] = phone;
     map['status'] = status;
+    map['in_match'] = inMatch;
     map['created_at'] = createdAt;
     map['updated_at'] = updatedAt;
     return map;

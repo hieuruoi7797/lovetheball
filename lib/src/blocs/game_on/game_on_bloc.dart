@@ -50,6 +50,7 @@ class GameOnBloc {
         await _repository.gameOnApiProvider.finishMatch(matchId: matchId).then((Response response) {
           if (jsonDecode(response.body)['status_code'] == 200){
             Navigator.pushReplacementNamed(navigatorKey.currentContext!, '/home');
+            dispose("");
           }else{
             DialogWidget().showMessageDialog(navigatorKey.currentContext!, content: (jsonDecode(response.body)['message']));
           }
@@ -63,6 +64,7 @@ class GameOnBloc {
   dispose(dynamic data) {
     _repository.gameOnApiProvider.socket.disconnect();
     _repository.gameOnApiProvider.socket.close();
+    // matchBloc.getPlayerList(context: navigatorKey.currentContext!);
   }
 
   increase() {
@@ -194,7 +196,7 @@ class GameOnBloc {
   }
 
   void updateStats(dynamic data) {
-    print("DATA: $data");
+      print("DATA: $data");
     List<Stats> statsList = [];
     List socketListRes = data as List;
     for (var element in socketListRes) {

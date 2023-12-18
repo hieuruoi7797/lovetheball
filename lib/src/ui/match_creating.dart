@@ -182,139 +182,173 @@ class _MatchCreatingScreenState extends State<MatchCreatingScreen> {
                   margin: const EdgeInsets.only(top: 20),
                   child: Container(
                     padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Tên game",
-                          style: title_black_color,
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 10),
-                          height: 36,
-                          child: TextField(
-                            controller: nameController,
-                            style: typing_text,
-                            decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 16),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0),
-                                borderSide: const BorderSide(
-                                  width: 0,
-                                  style: BorderStyle.none,
+                    child: StreamBuilder<bool>(
+                      stream: matchBloc.userInMatchBehavior,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData){
+                          if (snapshot.data == true){
+                            return SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height * 0.1,
+                              child: Center(
+                                child: const Text(
+                                    "Bạn đang ở trong một trận đấu!"),
+                              ),
+                            );
+                          } else {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Tên game",
+                                  style: title_black_color,
                                 ),
-                              ),
-                              suffixIconConstraints: const BoxConstraints(
-                                maxWidth: 50,
-                                maxHeight: 50,
-                              ),
-                              // suffixIcon: Container(
-                              //   margin: EdgeInsets.only(right: 16),
-                              //   child: SvgPicture.asset(
-                              //     "assets/svg_pictures/EDITING.svg",
-                              //     width: 17,
-                              //     height: 17,
-                              //   ),
-                              // ),
-                              filled: true,
-                              fillColor: Color(0xFFF1F1F1),
-                            ),
-                          ),
-                        ),
-                        gap_24,
-                        const Text(
-                          "Người chơi",
-                          style: title_black_color,
-                        ),
-                        gap_24,
-                        GestureDetector(
-                          onTap: () =>
-                              matchBloc.showAddingPlayersBottom(context),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 48,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: color_main,
+                                Container(
+                                  margin: EdgeInsets.only(top: 10),
+                                  height: 36,
+                                  child: TextField(
+                                    controller: nameController,
+                                    style: typing_text,
+                                    decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets
+                                          .symmetric(
+                                          vertical: 10, horizontal: 16),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            50.0),
+                                        borderSide: const BorderSide(
+                                          width: 0,
+                                          style: BorderStyle.none,
+                                        ),
+                                      ),
+                                      suffixIconConstraints: const BoxConstraints(
+                                        maxWidth: 50,
+                                        maxHeight: 50,
+                                      ),
+                                      // suffixIcon: Container(
+                                      //   margin: EdgeInsets.only(right: 16),
+                                      //   child: SvgPicture.asset(
+                                      //     "assets/svg_pictures/EDITING.svg",
+                                      //     width: 17,
+                                      //     height: 17,
+                                      //   ),
+                                      // ),
+                                      filled: true,
+                                      fillColor: Color(0xFFF1F1F1),
+                                    ),
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(50)),
-                            child: const Center(
-                              child: Text("Thêm người chơi",
-                                  style: title_main_color),
-                            ),
-                          ),
-                        ),
-                        StreamBuilder<List<PlayerModel>>(
-                            stream: matchBloc.addedPlayersList,
-                            builder: (context,
-                                AsyncSnapshot<List<PlayerModel>> snapshot) {
-                              if (snapshot.hasData) {
-                                matchBloc.playersListAdded = snapshot.data!;
-                                return ListView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    itemCount: snapshot.data?.length,
-                                    shrinkWrap: true,
-                                    padding: EdgeInsets.only(top: 15),
-                                    itemBuilder: (context, index) {
-                                      return Column(
-                                        children: [
-                                          UserNameCard(
-                                              parentContext: context,
-                                              userName:
-                                                  snapshot.data?[index].name,
-                                              suffixIcon: snapshot.data?[index].id == matchBloc.playerInfo?.id ? SizedBox() : null,
-                                              onTapSuffix: snapshot.data?[index].id == matchBloc.playerInfo?.id  ? () => {} : () =>
-                                                  matchBloc.removePlayerTap(
-                                                      index,
-                                                      context,
-                                                      nameController.text)),
-                                          gap_default,
-                                        ],
-                                      );
-                                    });
-                              } else if (snapshot.hasError) {
-                                return DialogWidget().showFailDialog(
-                                    context, "PLAYERS GETTING FAIL");
-                              } else {
-                                return ListView(
-                                  padding: EdgeInsets.symmetric(vertical: 16),
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  children: [
-                                    UserNameCard(
-                                      parentContext: context,
-                                      userName: "Pham Hieu",
+                                gap_24,
+                                const Text(
+                                  "Người chơi",
+                                  style: title_black_color,
+                                ),
+                                gap_24,
+                                GestureDetector(
+                                  onTap: () =>
+                                      matchBloc.showAddingPlayersBottom(
+                                          context),
+                                  child: Container(
+                                    width: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: color_main,
+                                        ),
+                                        borderRadius: BorderRadius.circular(
+                                            50)),
+                                    child: const Center(
+                                      child: Text("Thêm người chơi",
+                                          style: title_main_color),
                                     ),
-                                    gap_default,
-                                    UserNameCard(
-                                      parentContext: context,
-                                      userName: "Trung Kien",
+                                  ),
+                                ),
+                                StreamBuilder<List<PlayerModel>>(
+                                    stream: matchBloc.addedPlayersList,
+                                    builder: (context,
+                                        AsyncSnapshot<
+                                            List<PlayerModel>> snapshot) {
+                                      if (snapshot.hasData) {
+                                        matchBloc.playersListAdded =
+                                        snapshot.data!;
+                                        return ListView.builder(
+                                            physics:
+                                            const NeverScrollableScrollPhysics(),
+                                            itemCount: snapshot.data?.length,
+                                            shrinkWrap: true,
+                                            padding: EdgeInsets.only(top: 15),
+                                            itemBuilder: (context, index) {
+                                              return Column(
+                                                children: [
+                                                  UserNameCard(
+                                                      parentContext: context,
+                                                      userName:
+                                                      snapshot.data?[index]
+                                                          .name,
+                                                      suffixIcon: snapshot
+                                                          .data?[index].id ==
+                                                          matchBloc.playerInfo
+                                                              ?.id
+                                                          ? SizedBox()
+                                                          : null,
+                                                      onTapSuffix: snapshot
+                                                          .data?[index].id ==
+                                                          matchBloc.playerInfo
+                                                              ?.id
+                                                          ? () => {}
+                                                          : () =>
+                                                          matchBloc
+                                                              .removePlayerTap(
+                                                              index,
+                                                              context,
+                                                              nameController
+                                                                  .text)),
+                                                  gap_default,
+                                                ],
+                                              );
+                                            });
+                                      } else if (snapshot.hasError) {
+                                        return DialogWidget().showFailDialog(
+                                            context, "PLAYERS GETTING FAIL");
+                                      } else {
+                                        return Container();
+                                      }
+                                    }),
+                                gap_default,
+                                GestureDetector(
+                                  onTap: () =>
+                                      matchBloc.createMatch(
+                                          context: context,
+                                          name: nameController.text),
+                                  child: Center(
+                                    child: Container(
+                                      width: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width * 0.47,
+                                      height: 48,
+                                      decoration: BoxDecoration(
+                                          color: color_main,
+                                          borderRadius: BorderRadius.circular(
+                                              50)),
+                                      child: const Center(
+                                        child:
+                                        Text("Tạo game",
+                                            style: title_white_color),
+                                      ),
                                     ),
-                                  ],
-                                );
-                              }
-                            }),
-                        gap_default,
-                        GestureDetector(
-                          onTap: () => matchBloc.createMatch(
-                              context: context, name: nameController.text),
-                          child: Center(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.47,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                  color: color_main,
-                                  borderRadius: BorderRadius.circular(50)),
-                              child: const Center(
-                                child:
-                                    Text("Tạo game", style: title_white_color),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                        }else{
+                          return Container();
+                        }
+                      }
                     ),
                   ),
                 ),
