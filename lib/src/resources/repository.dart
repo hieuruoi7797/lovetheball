@@ -24,6 +24,9 @@ class Repository {
         players: players,
       );
 
+  Future<Response> getMatchesList(BuildContext context)
+    => matchApiProvider.getMatchesList(context: context);
+
   Future<Response> createPlayer(
           {required BuildContext context, required String name}) async =>
       await playerApiProvider.createPlayer(

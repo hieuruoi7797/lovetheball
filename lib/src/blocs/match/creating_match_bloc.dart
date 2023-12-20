@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
+import 'package:splat_record/src/models/match_model.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/src/resources/repository.dart';
 import 'package:rxdart/rxdart.dart';
@@ -9,7 +10,7 @@ import 'package:splat_record/widgets_common/dialogs.dart';
 
 import '../../../public/public_methods.dart';
 
-class MatchCreatingBloc {
+class MatchBloc {
   final _repository = Repository();
   final _matchCreatorPublish = BehaviorSubject<Response>();
   final _userInfoPublish = PublishSubject<PlayerModel>();
@@ -23,6 +24,7 @@ class MatchCreatingBloc {
   PlayerModel? playerInfo;
   List<PlayerModel> playersListAdded = [];
   List<PlayerModel> playersListMore = [];
+  List<MatchModel> matchesListAll = [];
   List<int> listAddingIndexes = [-1];
 
   Stream<Response> get createMatchRes => _matchCreatorPublish.stream;
@@ -134,6 +136,13 @@ class MatchCreatingBloc {
 
   }
 
+  getMatchesList(BuildContext context) async {
+    Response matchesListRes = await _repository.getMatchesList(context);
+    if (matchesListRes.statusCode == 200){
+
+    }
+  }
+
   Future<void> getPlayerSaved(BuildContext context) async {
     PlayerModel? playerSaved;
     dynamic savedPlayerFile = await PublicMethod().readContentPlayer();
@@ -191,4 +200,4 @@ class MatchCreatingBloc {
   }
 }
 
-final matchBloc = MatchCreatingBloc();
+final matchBloc = MatchBloc();

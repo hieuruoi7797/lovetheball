@@ -7,6 +7,7 @@ const String SVG_CHART_HOME_DISABLE = "assets/svg_pictures/CHART.svg";
 const String PNG_BACKGROUND_HOME = "assets/png_images/bg_home.png";
 const String SUBTRACTING = "assets/svg_pictures/SUBTRACTING.svg";
 const String ADDING = "assets/svg_pictures/ADD_PLAYER.svg";
+const String LISTING_MATCHES_ICON = "assets/svg_pictures/listing_matches_icon.svg";
 
 
 const String TWO = 'Mid-Range Shot';

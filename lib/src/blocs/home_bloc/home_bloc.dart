@@ -1,4 +1,6 @@
 import 'package:rxdart/rxdart.dart';
+import 'package:splat_record/src/app.dart';
+import 'package:splat_record/src/blocs/match/creating_match_bloc.dart';
 
 class HomeBloc {
   int _pageIndexInt = 1;
@@ -14,6 +16,9 @@ class HomeBloc {
   void onTabPageIndex(int index){
     _pageIndexInt = index;
     _pageIndexBehavior.sink.add(_pageIndexInt);
+    if (index == 2){
+      matchBloc.getMatchesList(navigatorKey.currentContext!);
+    }
   }
 }
 

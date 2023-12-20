@@ -34,4 +34,17 @@ class MatchApiProvider {
     Navigator.pop(context);
     return response;
   }
+
+  Future<Response> getMatchesList({
+    required BuildContext context,
+  }) async {
+    Response response;
+    DialogWidget().showLoaderDialog();
+    response = await client.get(Uri.parse(_baseUrl + MATCHES),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },);
+    Navigator.pop(context);
+    return response;
+  }
 }

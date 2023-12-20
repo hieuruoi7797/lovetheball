@@ -1,89 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:splat_record/constants/constant_values.dart';
+import 'package:splat_record/constants/ui_styles.dart';
 import 'package:splat_record/src/app.dart';
-import 'package:splat_record/src/blocs/home_bloc/home_bloc.dart';
 import 'package:splat_record/src/blocs/match/creating_match_bloc.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/widgets_common/container_common.dart';
 import 'package:splat_record/widgets_common/dialogs.dart';
 import 'package:splat_record/widgets_common/user_name_card.dart';
-import '../../constants/constant_values.dart';
-import '../../constants/ui_styles.dart';
-
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
-
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-
-  @override
-  void initState() {
-    matchBloc.getPlayerSaved(context);
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    matchBloc.dispose();
-    super.dispose();
-  }
-
-  static final List<Widget> _widgetOptions = <Widget>[
-    const Text(
-      'Index 0: Home',
-    ),
-    const CreatingMatchUI(),
-    Text(
-      'Index 2: School',
-    ),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<int>(
-      stream: homeBloc.pageIndex,
-      builder: (context,AsyncSnapshot<int> pageIndexSnap) {
-        if ( pageIndexSnap.hasData){
-          return Scaffold(
-              bottomNavigationBar: BottomNavigationBar(
-                currentIndex: pageIndexSnap.data ?? 1,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                selectedIconTheme: const IconThemeData(color: color_main),
-                onTap:(index) => homeBloc.onTabPageIndex(index),
-                items: [
-                  BottomNavigationBarItem(
-                      icon: pageIndexSnap.data == 0 ?
-                      SvgPicture.asset(SVG_SETTING_HOME) :
-                      SvgPicture.asset(SVG_SETTING_HOME_DISABLE), label: ''),
-                  BottomNavigationBarItem(
-                      icon:  pageIndexSnap.data == 1 ?
-                      SvgPicture.asset(SVG_BASKETBALL_HOME) :
-                      SvgPicture.asset(SVG_BASKETBALL_HOME_DISABLE), label: ''),
-                  BottomNavigationBarItem(
-                      icon:  pageIndexSnap.data == 2 ?
-                      SvgPicture.asset(SVG_CHART_HOME) :
-                      SvgPicture.asset(SVG_CHART_HOME_DISABLE), label: ''),
-                ],
-              ),
-              body: _widgetOptions.elementAt(pageIndexSnap.data ?? 1));
-        }else{
-          return Container();
-        }
-        }
-    );
-  }
-}
 
 class CreatingMatchUI extends StatelessWidget{
   const CreatingMatchUI({super.key});
@@ -94,7 +18,7 @@ class CreatingMatchUI extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-   return Container(
+    return Container(
       width: MediaQuery.of(parentContext).size.width,
       height: MediaQuery.of(parentContext).size.height,
       decoration: const BoxDecoration(
