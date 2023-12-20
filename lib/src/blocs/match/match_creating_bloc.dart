@@ -55,6 +55,8 @@ class MatchCreatingBloc {
     for(int i = 0 ; i < listPlayerRes.length; i++){
       if (playerInfo!.id == listPlayerRes[i]['id_']){
         if (listPlayerRes[i]['in_match'] != null){
+          //TO FISISH A MATCH
+          // _repository.gameOnApiProvider.finishMatch(matchId: listPlayerRes[i]['in_match']);
           _userInMatch = true;
         }else{
           _userInMatch = false;
