@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splat_record/src/ui/game_on.dart';
 import 'package:splat_record/src/ui/player_creating.dart';
-import 'ui/match_creating.dart';
+import 'ui/main_screen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => const PlayerCreatingScreen(),
-        '/home': (context) => const MatchCreatingScreen(),
+        '/home': (context) => const MainScreen(),
         '/game_on': (context) => GameOnScreen()
       },
       // home: const MyHomePage(),

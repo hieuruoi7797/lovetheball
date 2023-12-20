@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_record/src/app.dart';
-import 'package:splat_record/src/blocs/match/match_creating_bloc.dart';
+import 'package:splat_record/src/blocs/match/creating_match_bloc.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/src/models/stat_model.dart';
 import 'package:splat_record/src/resources/repository.dart';

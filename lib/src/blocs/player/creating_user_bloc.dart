@@ -8,7 +8,7 @@ import 'package:splat_record/public/public_methods.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/src/resources/repository.dart';
 
-class PlayerCreatingBloc {
+class CreatingUserBloc {
   final _repository = Repository();
   final _playerCreator = PublishSubject<Response>();
   final _statusBehaviors = BehaviorSubject<String>();
@@ -71,4 +71,4 @@ class PlayerCreatingBloc {
 }
 
 
-  final playerBloc = PlayerCreatingBloc();
+  final playerBloc = CreatingUserBloc();
