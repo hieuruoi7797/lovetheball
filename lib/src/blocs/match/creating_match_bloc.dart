@@ -13,19 +13,23 @@ import '../../../public/public_methods.dart';
 class MatchBloc {
   final _repository = Repository();
   final _matchCreatorPublish = BehaviorSubject<Response>();
-  final _userInfoPublish = PublishSubject<PlayerModel>();
+  final _userInfoPublish = BehaviorSubject<PlayerModel>();
   final _matchNameBehavior = BehaviorSubject<String>();
   final _matchIdBehavior = BehaviorSubject<String>();
   final _addedPlayersBehavior = BehaviorSubject<List<PlayerModel>>();
   final _morePlayersPublish = PublishSubject<List<PlayerModel>>();
   final _listAdding = BehaviorSubject<List<int>>();
   final _userInMatchBehavior = BehaviorSubject<bool>();
+  final _listMatches = BehaviorSubject<List<MatchModel>>();
+  final _listMatchesPreview = BehaviorSubject<List<MatchModel>>();
   bool _userInMatch = false;
   PlayerModel? playerInfo;
   List<PlayerModel> playersListAdded = [];
   List<PlayerModel> playersListMore = [];
   List<MatchModel> matchesListAll = [];
   List<int> listAddingIndexes = [-1];
+  MatchModel matchRunning = MatchModel();
+
 
   Stream<Response> get createMatchRes => _matchCreatorPublish.stream;
 
@@ -42,6 +46,10 @@ class MatchBloc {
   Stream<String> get matchIdBehavior => _matchIdBehavior.stream;
 
   Stream<bool> get userInMatchBehavior => _userInMatchBehavior.stream;
+
+  Stream<List<MatchModel>> get listMatches => _listMatches;
+
+  Stream<List<MatchModel>> get listMatchesPreview => _listMatchesPreview;
 
   bool get userInMatch => _userInMatch;
 
@@ -137,10 +145,29 @@ class MatchBloc {
   }
 
   getMatchesList(BuildContext context) async {
+    matchesListAll = [];
+    // _listMatchesPreview.sink.add(null);
     Response matchesListRes = await _repository.getMatchesList(context);
     if (matchesListRes.statusCode == 200){
+      Map bodyRes = jsonDecode(matchesListRes.body);
+      (bodyRes['data'] as List).forEach((element) {
+        element['created_at'] = '${DateTime.parse(element['created_at']).day}/${DateTime.parse(element['created_at']).month}/${DateTime.parse(element['created_at']).year}';
+        matchesListAll.add(MatchModel.fromJson(element));
+        if (element['status'] != 0) {
+          print("FOUND: ");
+          matchRunning = MatchModel.fromJson(element);
+        }
+      });
+
+    }else{
 
     }
+    _listMatchesPreview.sink.add([
+      matchRunning,
+      matchesListAll[matchesListAll.length-1]
+    ]);
+    _listMatches.sink.add(matchesListAll);
+
   }
 
   Future<void> getPlayerSaved(BuildContext context) async {
