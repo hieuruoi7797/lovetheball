@@ -12,7 +12,7 @@ class ListingMatchesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       child: Column(
@@ -39,7 +39,7 @@ class ListingMatchesScreen extends StatelessWidget {
                 }
 
               }else{
-                return Text('API FAILED');
+                return Container();
               }
             }
           )
@@ -77,7 +77,7 @@ class ListingMatchesScreen extends StatelessWidget {
 
 Widget MatchCard(BuildContext context, {required MatchModel match}) {
   return GestureDetector(
-    onTap: () => match.status != 1 ? Navigator.pushNamed(context, '/game_on') : null,
+    onTap: () => matchBloc.goToMatch(match),
     child: Container(
       padding: EdgeInsets.symmetric(horizontal: 20),
       margin: EdgeInsets.only(top: 20),

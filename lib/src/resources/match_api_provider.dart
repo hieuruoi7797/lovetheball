@@ -39,7 +39,7 @@ class MatchApiProvider {
     required BuildContext context,
   }) async {
     Response response;
-    DialogWidget().showLoaderDialog();
+    // DialogWidget().showLoaderDialog();
     response = await client.get(Uri.parse('$_baseUrl$MATCHES').replace(queryParameters: {
       'limit':'500',
       'offset':'0'
@@ -47,7 +47,7 @@ class MatchApiProvider {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },);
-    Navigator.pop(context);
+    // Navigator.pop(context);
     return response;
   }
 }

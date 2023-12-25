@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
+import 'package:splat_record/src/app.dart';
+import 'package:splat_record/src/blocs/game_on/game_on_bloc.dart';
 import 'package:splat_record/src/models/match_model.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/src/resources/repository.dart';
@@ -137,7 +139,10 @@ class MatchBloc {
             DialogWidget()
                 .showResultDialog(context,
                 isSuccess: true, content: "Tạo game thành công!")
-                .then((value) => Navigator.pushNamed(context, '/game_on'));
+                .then((value) {
+              gameOnBloc.emitChangesSocket(isFirstEmit: true);
+              Navigator.pushNamed(context, '/game_on');
+            });
           });
         }
       }
@@ -167,15 +172,15 @@ class MatchBloc {
           // m
         }
       });
-
+      _listMatchesPreview.sink.add([
+        matchRunning,
+        matchesListAll[matchesListAll.length-1]
+      ]);
+      _listMatches.sink.add(matchesListAll);
     }else{
 
     }
-    _listMatchesPreview.sink.add([
-      matchRunning,
-      matchesListAll[matchesListAll.length-1]
-    ]);
-    _listMatches.sink.add(matchesListAll);
+
 
   }
 
@@ -234,6 +239,38 @@ class MatchBloc {
     _addedPlayersBehavior.sink.add(playersListAdded);
     Navigator.pop(context);
   }
+
+  goToMatch(MatchModel match) {
+    if (match.status == 0) {
+      _repository.gameOnApiProvider.socketConnect();
+      _repository.gameOnApiProvider.emitSocket('changes', body: {
+        "first_emit": true,
+        "stats_changes":[
+          {
+            "has_change": false,
+            "stat":{
+              "match_id": match.id,
+              "player_id": playerInfo!.id,
+              "lay_up": 0,
+              "assit": 0,
+              "two_points_shoot": 0,
+              "three_points_shoot": 0,
+              "rebound": 0,
+              "block": 0,
+              "steal": 0,
+              "personal_foul": 0,
+              "turn_over": 0,
+              "dunk": 0
+            }
+          },
+        ]
+      });
+      Navigator.pushNamed(navigatorKey.currentContext!, '/game_on');
+    }else{
+
+    }
+  }
+
 }
 
 final matchBloc = MatchBloc();

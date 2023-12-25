@@ -19,7 +19,7 @@ class GameOnBloc {
   List<StatChangesModel> listStatChange = [];
 
   final _repository = Repository();
-  final _nowPlayerStatPublish = PublishSubject<Stats>();
+  final _nowPlayerStatPublish = BehaviorSubject<Stats>();
   final _pickedPlayerIndex = BehaviorSubject<int>();
   final _pickedStatIndex = BehaviorSubject<int>();
 
@@ -39,10 +39,6 @@ class GameOnBloc {
   GameOnBloc() {
     matchBloc.matchIdBehavior.listen((event) => matchId = event);
     matchBloc.addedPlayersList.listen((event) => updateListPlayers(event));
-    _repository.gameOnApiProvider.socketConnect();
-    _repository.gameOnApiProvider.socket.on('get_stats', (data) => updateStats(data));
-    _repository.gameOnApiProvider.socket.on('disconnect', (data) => dispose(data));
-    emitChangesSocket(isFirstEmit: true);
   }
 
   void finishMatch(BuildContext context) {
@@ -51,6 +47,7 @@ class GameOnBloc {
       if(value == 'Y'){
         await _repository.gameOnApiProvider.finishMatch(matchId: matchId).then((Response response) {
           if (jsonDecode(response.body)['status_code'] == 200){
+            matchBloc.getMatchesList(context);
             Navigator.pushNamedAndRemoveUntil(context, '/home',
                 ModalRoute.withName('/'));
             dispose("");
@@ -100,33 +97,29 @@ class GameOnBloc {
   }
 
   decrease() {
-    String statType = '';
-    if (pickedStatInt == 0){
-      statType = LAYUP;
-    } else if (pickedStatInt == 1) {
-      statType = ASSIST;
-    } else if (pickedStatInt == 2) {
-      statType = TWO;
-    } else if (pickedStatInt == 3) {
-      statType = THREE;
-    }
-    switch (statType) {
-      case TWO:
+    switch (pickedStatInt) {
+      case 2:
         if (listStatChange[pickedPlayerInt].stats.twoPointsShoot! > 0) {
           listStatChange[pickedPlayerInt].stats.twoPointsShoot =
               listStatChange[pickedPlayerInt].stats.twoPointsShoot! - 1;
           _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
         }
-      case THREE:
+      case 3:
         if (listStatChange[pickedPlayerInt].stats.threePointsShoot! > 0) {
           listStatChange[pickedPlayerInt].stats.threePointsShoot =
               listStatChange[pickedPlayerInt].stats.threePointsShoot! - 1;
           _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
         }
-      case ASSIST:
+      case 1:
         if (listStatChange[pickedPlayerInt].stats.assit! > 0) {
           listStatChange[pickedPlayerInt].stats.assit =
               listStatChange[pickedPlayerInt].stats.assit! - 1;
+          _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
+        }
+      case 0:
+        if (listStatChange[pickedPlayerInt].stats.layUp! > 0) {
+          listStatChange[pickedPlayerInt].stats.layUp =
+              listStatChange[pickedPlayerInt].stats.layUp! - 1;
           _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
         }
     }
@@ -160,8 +153,8 @@ class GameOnBloc {
           {
             "has_change": false,
             "stats": {
-              "match_id": "<match_id>",
-              "player_id": "<player_id>",
+              "match_id": matchId,
+              "player_id": listPlayers[0].id,
               "lay_up": 0,
               "assit": 0,
               "two_points_shoot": 0,
@@ -176,6 +169,7 @@ class GameOnBloc {
           }
         ]
       };
+      _repository.gameOnApiProvider.socketConnect();
     } else {
       List<Map> listStatsMap = [];
       for (var element in listStatChange) {
@@ -200,7 +194,7 @@ class GameOnBloc {
   }
 
   void updateStats(dynamic data) {
-      print("DATA: $data");
+      print("RECEIVED: $data");
     List<Stats> statsList = [];
     List socketListRes = data as List;
     for (var element in socketListRes) {

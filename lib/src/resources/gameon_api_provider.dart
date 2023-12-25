@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:splat_record/src/blocs/game_on/game_on_bloc.dart';
 import 'package:splat_record/src/blocs/match/match_bloc.dart';
 
 import '../../constants/api_paths.dart';
@@ -54,10 +55,13 @@ class GameOnApiProvider {
     socket.onConnect((data) => log('connected to socket'));
     socket.onConnectError((data) => log('E: ${data.toString()}'));
     socket.onDisconnect((data) => log('disconnected to socket'));
+    socket.on('get_stats', (data) => gameOnBloc.updateStats(data));
+    socket.on('disconnect', (data) => gameOnBloc.dispose(data));
     socket.connect();
   }
 
   void emitSocket(String event, {required Map body}) {
+    print(body);
     socket.emit(event, body);
   }
 

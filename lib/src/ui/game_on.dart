@@ -12,12 +12,11 @@ import '../../constants/constant_values.dart';
 import '../models/stat_model.dart';
 
 class GameOnScreen extends StatelessWidget {
-  GameOnScreen({super.key});
+  const GameOnScreen({super.key});
 
 
   @override
   Widget build(BuildContext context) {
-    // gameOnBloc.getListPlayers();
     return Scaffold(
       body: Stack(
         children: [
