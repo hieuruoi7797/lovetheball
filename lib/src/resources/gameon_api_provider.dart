@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:splat_record/src/blocs/match/match_bloc.dart';
 
 import '../../constants/api_paths.dart';
 import '../../constants/constant_values.dart';
@@ -47,8 +48,6 @@ class GameOnApiProvider {
           Duration.zero, () => DialogWidget().showFailDialog(navigatorKey.currentContext!, ERROR_FAIL));
       return response;
     }
-    Navigator.pop(navigatorKey.currentContext!);
-
   }
 
   void socketConnect() {

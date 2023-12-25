@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:splat_record/constants/ui_styles.dart';
 import 'package:splat_record/src/blocs/game_on/game_on_bloc.dart';
-import 'package:splat_record/src/blocs/match/creating_match_bloc.dart';
+import 'package:splat_record/src/blocs/match/match_bloc.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/widgets_common/container_common.dart';
 
@@ -14,7 +14,6 @@ import '../models/stat_model.dart';
 class GameOnScreen extends StatelessWidget {
   GameOnScreen({super.key});
 
-  final GameOnBloc gameOnBloc = GameOnBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +227,7 @@ class GameOnScreen extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    gameOnBloc.finishMatch();
+                    gameOnBloc.finishMatch(context);
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.height * 0.12,

@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_record/constants/constant_values.dart';
 import 'package:splat_record/constants/ui_styles.dart';
 import 'package:splat_record/src/app.dart';
-import 'package:splat_record/src/blocs/match/creating_match_bloc.dart';
+import 'package:splat_record/src/blocs/match/match_bloc.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/widgets_common/container_common.dart';
 import 'package:splat_record/widgets_common/dialogs.dart';

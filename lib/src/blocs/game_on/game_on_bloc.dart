@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_record/src/app.dart';
-import 'package:splat_record/src/blocs/match/creating_match_bloc.dart';
+import 'package:splat_record/src/blocs/match/match_bloc.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/src/models/stat_model.dart';
 import 'package:splat_record/src/resources/repository.dart';
@@ -27,6 +27,8 @@ class GameOnBloc {
   int pickedStatInt = 0;
   String matchId = '';
 
+  bool? isFistEmit;
+
   Stream<int> get pickStatIndex => _pickedStatIndex.stream;
 
   Stream<int> get pickPlayerIndex => _pickedPlayerIndex.stream;
@@ -43,20 +45,21 @@ class GameOnBloc {
     emitChangesSocket(isFirstEmit: true);
   }
 
-  void finishMatch() {
-    DialogWidget().showMessageDialog(navigatorKey.currentContext! , content: "Bạn muốn kết thúc trận đấu?").then((value)
+  void finishMatch(BuildContext context) {
+    DialogWidget().showMessageDialog(context , content: "Bạn muốn kết thúc trận đấu?").then((value)
      async {
       if(value == 'Y'){
         await _repository.gameOnApiProvider.finishMatch(matchId: matchId).then((Response response) {
           if (jsonDecode(response.body)['status_code'] == 200){
-            Navigator.pushReplacementNamed(navigatorKey.currentContext!, '/home');
+            Navigator.pushNamedAndRemoveUntil(context, '/home',
+                ModalRoute.withName('/'));
             dispose("");
           }else{
-            DialogWidget().showMessageDialog(navigatorKey.currentContext!, content: (jsonDecode(response.body)['message']));
+            DialogWidget().showMessageDialog(context, content: (jsonDecode(response.body)['message']));
           }
         });
       }else{
-        Navigator.pop(navigatorKey.currentContext!);
+        // Navigator.pop(context);
       }
     });
   }
@@ -68,29 +71,30 @@ class GameOnBloc {
   }
 
   increase() {
-    String statType = '';
-    if (pickedStatInt == 0){
-      statType = LAYUP;
-    } else if (pickedStatInt == 1) {
-      statType = ASSIST;
-    } else if (pickedStatInt == 2) {
-      statType = TWO;
-    } else if (pickedStatInt == 3) {
-      statType = THREE;
-    }
-    switch (statType) {
-      case LAYUP:
+    // String statType = '';
+    // if (pickedStatInt == 0){
+    //   statType = LAYUP;
+    // } else if (pickedStatInt == 1) {
+    //   statType = ASSIST;
+    // } else if (pickedStatInt == 2) {
+    //   statType = TWO;
+    // } else if (pickedStatInt == 3) {
+    //   statType = THREE;
+    // }
+    switch (pickedStatInt) {
+      case 0:
         listStatChange[pickedPlayerInt].stats.layUp = listStatChange[pickedPlayerInt].stats.layUp! + 1;
         _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
-      case TWO:
-        listStatChange[pickedPlayerInt].stats.twoPointsShoot = listStatChange[pickedPlayerInt].stats.twoPointsShoot! + 1;
-        _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
-      case THREE:
-        listStatChange[pickedPlayerInt].stats.threePointsShoot = listStatChange[pickedPlayerInt].stats.threePointsShoot! + 1;
-        _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
-      case ASSIST:
+      case 1:
         listStatChange[pickedPlayerInt].stats.assit = listStatChange[pickedPlayerInt].stats.assit! + 1;
         _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
+      case 2:
+        listStatChange[pickedPlayerInt].stats.twoPointsShoot = listStatChange[pickedPlayerInt].stats.twoPointsShoot! + 1;
+        _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
+      case 3:
+        listStatChange[pickedPlayerInt].stats.threePointsShoot = listStatChange[pickedPlayerInt].stats.threePointsShoot! + 1;
+        _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
+
     }
     emitChangesSocket(isFirstEmit: false);
   }
@@ -238,3 +242,6 @@ class StatType {
   String typeName;
   int quantity;
 }
+
+final GameOnBloc gameOnBloc = GameOnBloc();
+

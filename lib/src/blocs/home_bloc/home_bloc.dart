@@ -1,6 +1,6 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_record/src/app.dart';
-import 'package:splat_record/src/blocs/match/creating_match_bloc.dart';
+import 'package:splat_record/src/blocs/match/match_bloc.dart';
 
 class HomeBloc {
   int _pageIndexInt = 1;
@@ -18,6 +18,8 @@ class HomeBloc {
     _pageIndexBehavior.sink.add(_pageIndexInt);
     if (index == 2){
       matchBloc.getMatchesList(navigatorKey.currentContext!);
+    }else if (index == 1){
+      matchBloc.getPlayerList(context: navigatorKey.currentContext!);
     }
   }
 }

@@ -29,7 +29,7 @@ class MatchBloc {
   List<MatchModel> matchesListAll = [];
   List<int> listAddingIndexes = [-1];
   MatchModel matchRunning = MatchModel();
-
+  String matchRunningId = '';
 
   Stream<Response> get createMatchRes => _matchCreatorPublish.stream;
 
@@ -65,6 +65,8 @@ class MatchBloc {
     for(int i = 0 ; i < listPlayerRes.length; i++){
       if (playerInfo!.id == listPlayerRes[i]['id_']){
         if (listPlayerRes[i]['in_match'] != null){
+          matchRunningId = listPlayerRes[i]['in_match'];
+          _matchIdBehavior.sink.add(matchRunningId);
           //TO FISISH A MATCH
           // _repository.gameOnApiProvider.finishMatch(matchId: listPlayerRes[i]['in_match']);
           _userInMatch = true;
@@ -73,7 +75,7 @@ class MatchBloc {
         }
       }
     }
-    if (userInMatch == false){
+    // if (userInMatch == false){
       if (isAdding == true) {
 
         ///get 5 players in the last of the result list to add on More Players List
@@ -89,6 +91,7 @@ class MatchBloc {
           listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
         }
         playersListAdded.addAll(listPlayers);
+        _addedPlayersBehavior.sink.add(playersListAdded);
       }
       ///get 5 players start of the result list to add on default added players
       else {
@@ -102,7 +105,7 @@ class MatchBloc {
         }
         _addedPlayersBehavior.sink.add(listPlayers);
       }
-    }
+    // }
     _userInMatchBehavior.sink.add(userInMatch);
   }
 
@@ -126,9 +129,10 @@ class MatchBloc {
         if (context.mounted) {
           String matchId = jsonDecode(response.body)['data'][0]['id_'];
           await getPlayerList(context: context, matchId: matchId);
+          matchRunning = MatchModel.fromJson(jsonDecode(response.body)['data'][0]);
           _addedPlayersBehavior.sink.add(playersListAdded);
           _matchNameBehavior.sink.add(name);
-          _matchIdBehavior.sink.add(matchId);
+          _matchIdBehavior.sink.add(matchRunning.id??'');
           await Future.delayed(Duration.zero, () {
             DialogWidget()
                 .showResultDialog(context,
@@ -146,16 +150,21 @@ class MatchBloc {
 
   getMatchesList(BuildContext context) async {
     matchesListAll = [];
-    // _listMatchesPreview.sink.add(null);
+    _listMatchesPreview.add([]);
+    matchRunning = MatchModel();
     Response matchesListRes = await _repository.getMatchesList(context);
     if (matchesListRes.statusCode == 200){
       Map bodyRes = jsonDecode(matchesListRes.body);
       (bodyRes['data'] as List).forEach((element) {
         element['created_at'] = '${DateTime.parse(element['created_at']).day}/${DateTime.parse(element['created_at']).month}/${DateTime.parse(element['created_at']).year}';
         matchesListAll.add(MatchModel.fromJson(element));
-        if (element['status'] != 0) {
-          print("FOUND: ");
+        if (element['id_'] == matchRunningId && element['status'] == 0) {
           matchRunning = MatchModel.fromJson(element);
+          _matchIdBehavior.add(matchRunning.id??'');
+          _matchNameBehavior.add(matchRunning.name??'');
+          getPlayerList(context: context,matchId: matchRunningId);
+        }else{
+          // m
         }
       });
 

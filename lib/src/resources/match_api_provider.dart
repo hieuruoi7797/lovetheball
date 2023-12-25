@@ -40,7 +40,10 @@ class MatchApiProvider {
   }) async {
     Response response;
     DialogWidget().showLoaderDialog();
-    response = await client.get(Uri.parse(_baseUrl + MATCHES),
+    response = await client.get(Uri.parse('$_baseUrl$MATCHES').replace(queryParameters: {
+      'limit':'500',
+      'offset':'0'
+    }),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },);

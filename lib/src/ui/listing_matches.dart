@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_record/constants/constant_values.dart';
 import 'package:splat_record/constants/ui_styles.dart';
-import 'package:splat_record/src/blocs/match/creating_match_bloc.dart';
+import 'package:splat_record/src/blocs/match/match_bloc.dart';
 import 'package:splat_record/src/models/match_model.dart';
 
 class ListingMatchesScreen extends StatelessWidget {
@@ -21,18 +21,23 @@ class ListingMatchesScreen extends StatelessWidget {
           matchesListTitle(context),
           StreamBuilder<List<MatchModel>>(
             stream: matchBloc.listMatchesPreview,
-            builder: (context, snapshot) {
+            builder: (context, AsyncSnapshot<List<MatchModel>> snapshot) {
               if (snapshot.hasData){
-                return ListView(
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  children: [
-                    (snapshot.data![0].id != null) ?
+                if (snapshot.data!.isNotEmpty){
+                  return ListView(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    children: [
+                      (snapshot.data![0].id != null) ?
                       MatchCard(context, match: snapshot.data![0]):
                       Container(),
-                    MatchCard(context, match: snapshot.data![1])
-                  ],
-                );
+                      MatchCard(context, match: snapshot.data![1])
+                    ],
+                  );
+                }else{
+                  return Container();
+                }
+
               }else{
                 return Text('API FAILED');
               }
@@ -71,49 +76,52 @@ class ListingMatchesScreen extends StatelessWidget {
 }
 
 Widget MatchCard(BuildContext context, {required MatchModel match}) {
-  return Container(
-    padding: EdgeInsets.symmetric(horizontal: 20),
-    margin: EdgeInsets.only(top: 20),
-    height: 70,
-    width: MediaQuery.sizeOf(context).width,
-    decoration: BoxDecoration(
-      color: Color(0xFFF1F1F1),
-      borderRadius: BorderRadius.circular(10)
-    ),
-    child: Row(
-      children: [
-        Container(
-          height: 12,
-          width: 12,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            color: match.status != 0 ? color_main : Color(0xFFA0A0A0)
+  return GestureDetector(
+    onTap: () => match.status != 1 ? Navigator.pushNamed(context, '/game_on') : null,
+    child: Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      margin: EdgeInsets.only(top: 20),
+      height: 70,
+      width: MediaQuery.sizeOf(context).width,
+      decoration: BoxDecoration(
+        color: Color(0xFFF1F1F1),
+        borderRadius: BorderRadius.circular(10)
+      ),
+      child: Row(
+        children: [
+          Container(
+            height: 12,
+            width: 12,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              color: match.status != 1 ? color_main : Color(0xFFA0A0A0)
+            ),
           ),
-        ),
-        SizedBox(width: 16,),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Spacer(),
-            Spacer(),
-            Text(match.name ?? ERROR_UNKNOWN,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 16
-              ),),
-            Spacer(),
+          SizedBox(width: 16,),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Spacer(),
+              Spacer(),
+              Text(match.name ?? ERROR_UNKNOWN,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16
+                ),),
+              Spacer(),
 
-            Text((match.status == 0)
-                ?  match.createdAt ?? '' :"Đang diễn ra",
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 11,
-                color: Color(0xFFA0A0A0)
-              ),),
-            Spacer(),
-          ],
-        ),
-      ],
+              Text((match.status == 1)
+                  ?  match.createdAt ?? '' :"Đang diễn ra",
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 11,
+                  color: Color(0xFFA0A0A0)
+                ),),
+              Spacer(),
+            ],
+          ),
+        ],
+      ),
     ),
   );
 }
