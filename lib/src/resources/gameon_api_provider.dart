@@ -51,15 +51,14 @@ class GameOnApiProvider {
           .setPath("/sio/socket.io")
           .build());
     socket.nsp = '/stats';
-
-    socket.onConnect((data) => log('connected to socket'));
+    socket.connect();
+    socket.onConnect((data) {
+      socket.on('get_stats', (data) =>  gameOnBloc.updateStats(data));
+      socket.on('disconnect', (data) =>  gameOnBloc.dispose(data));
+    });
     socket.onConnectError((data) => log('E: ${data.toString()}'));
     socket.onDisconnect((data) => log('disconnected to socket'));
 
-    socket.on('get_stats', (data) =>  gameOnBloc.updateStats(data));
-    socket.on('disconnect', (data) =>  gameOnBloc.dispose(data));
-
-    socket.connect();
   }
 
   void emitSocket(String event, {required Map body}) {

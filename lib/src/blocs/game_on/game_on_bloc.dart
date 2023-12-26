@@ -63,6 +63,10 @@ class GameOnBloc {
   dispose(dynamic data) {
     repository.disconnect();
     repository.close();
+    _pickedStatIndex.add(0);
+    _nowPlayerStatPublish.add(Stats(matchId: '', playerId: ''));
+    listStatChange = [];
+    listPlayers = [];
     // matchBloc.getPlayerList(context: navigatorKey.currentContext!);
   }
 
