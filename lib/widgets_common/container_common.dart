@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../constants/constant_values.dart';
 
-Widget CommonContainer({
+Widget commonContainer({
   required BuildContext parentContext,
   double? width,
   double? height,
@@ -29,7 +29,7 @@ Widget CommonContainer({
   );
 }
 
-Widget StatInfoEdittingContainer({
+Widget statInfoEdittingContainer({
   required BuildContext context,
   double? width,
   double? height,
@@ -128,7 +128,7 @@ Widget StatInfoEdittingContainer({
   );
 }
 
-Widget StatContainer({
+Widget statContainer({
   required BuildContext context,
   EdgeInsets? margin,
   EdgeInsets? padding,
@@ -147,33 +147,33 @@ Widget StatContainer({
       width: MediaQuery.sizeOf(context).width * 0.26,
       height: MediaQuery.sizeOf(context).width * 0.26,
       decoration: BoxDecoration(
-        color: isPicked == true ? Color(0xFFFD8F51) : Colors.white,
+        color: isPicked == true ? const Color(0xFFFD8F51) : Colors.white,
         borderRadius: BorderRadius.circular(16)
       ),
       // padding: EdgeInsets.all(16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Spacer(),
+          const Spacer(),
           Text(statType??'',style: TextStyle(
               fontSize: 9,
-              color: isPicked == true ? Colors.white : Color(0xFF818181) ),),
-          Spacer(),
+              color: isPicked == true ? Colors.white : const Color(0xFF818181) ),),
+          const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                margin: EdgeInsets.only(right: 10),
+                margin: const EdgeInsets.only(right: 10),
                   width: 24,
                   height: 24,
                   child: isPicked == true ? svgPicturePicked : svgPicture),
               Text(quantity ??'0',style: TextStyle(
                   fontSize: 28,
-                  color: isPicked == true ? Colors.white :  Color(0xFF818181)),)
+                  color: isPicked == true ? Colors.white :  const Color(0xFF818181)),)
             ],
           ),
-          Spacer(),
-          Spacer(),
+          const Spacer(),
+          const Spacer(),
         ],
       )
     ),

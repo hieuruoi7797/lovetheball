@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_record/src/blocs/player/creating_user_bloc.dart';
 
 import '../../constants/ui_styles.dart';

@@ -21,7 +21,7 @@ class DialogWidget {
               height: 50,
               width: 50,
               color: Colors.transparent,
-              child: CircularProgressIndicator(
+              child: const CircularProgressIndicator(
                 color: color_main,
                 backgroundColor: color_loading_background,
               ),
@@ -85,7 +85,7 @@ class DialogWidget {
               children: [
                 ListView(
                   // shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   children: [
                     Row(
                       children: [
@@ -117,7 +117,7 @@ class DialogWidget {
                                   style: normal_main_color,
                                 )),
                               )),
-                          SizedBox(
+                          const SizedBox(
                             width: 20,
                           ),
                           Expanded(
@@ -161,7 +161,7 @@ class DialogWidget {
                                       stream: matchBloc.listAdding,
                                       builder: (context, snapshotAddingIndexes) {
                                         if (snapshotAddingIndexes.hasData){
-                                          return UserNameCard(
+                                          return userNameCard(
                                               parentContext: context,
                                               userName:
                                               snapshot.data?[index].name,
@@ -170,12 +170,12 @@ class DialogWidget {
                                                 width: 14,
                                                 height: 14,
                                                 fit: BoxFit.none,
-                                              ):SizedBox(),
+                                              ):const SizedBox(),
                                               onTapSuffix: () =>
                                                   matchBloc.addPlayersTap(context, index,
                                                   changeStatus: (snapshotAddingIndexes.data!.contains(index)) ? false : true));
                                         }else {
-                                          return SizedBox();
+                                          return const SizedBox();
                                         }
                                       }
                                     ),
@@ -189,8 +189,8 @@ class DialogWidget {
                             context, "PLAYERS GETTING FAIL");
                       } else {
                         return ListView(
-                          padding: EdgeInsets.symmetric(vertical: 16),
-                          physics: NeverScrollableScrollPhysics(),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           children: const [],
                         );
@@ -227,7 +227,7 @@ class DialogWidget {
                           decoration: BoxDecoration(
                               color: color_main,
                               borderRadius: BorderRadius.circular(50)),
-                          child: Center(
+                          child: const Center(
                             child: Text(
                               "Xác nhận",
                               style: title_white_color,
@@ -257,7 +257,7 @@ class DialogWidget {
             elevation: 0,
             backgroundColor: Colors.transparent,
             child: Container(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               width: MediaQuery.of(context).size.width * 0.9,
               // height: MediaQuery.of(context).size.height * 0.22,
               decoration: BoxDecoration(
@@ -270,7 +270,7 @@ class DialogWidget {
                       onTap: () => Navigator.pop(context),
                       child: SvgPicture.asset("assets/svg_pictures/XICON.svg")),
                   Container(
-                    margin: EdgeInsets.only(top: 20),
+                    margin: const EdgeInsets.only(top: 20),
                     width: MediaQuery.of(context).size.width,
                     child: Text(
                       content ?? ERROR_UNKNOWN,
@@ -285,13 +285,13 @@ class DialogWidget {
                     },
                     child: Center(
                       child: Container(
-                        margin: EdgeInsets.only(top: 20),
+                        margin: const EdgeInsets.only(top: 20),
                         width: MediaQuery.of(context).size.width * 0.47,
                         height: 48,
                         decoration: BoxDecoration(
                             color: color_main,
                             borderRadius: BorderRadius.circular(50)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Xác nhận",
                             style: title_white_color,
@@ -342,7 +342,7 @@ class DialogWidget {
                   ),
                   Center(
                     child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 20),
+                        margin: const EdgeInsets.symmetric(vertical: 20),
                         child:
                             isSuccess ?
                             SvgPicture.asset("assets/svg_pictures/SUCCESS.svg"):
@@ -361,7 +361,7 @@ class DialogWidget {
                         decoration: BoxDecoration(
                             color: color_main,
                             borderRadius: BorderRadius.circular(50)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Xác nhận",
                             style: title_white_color,

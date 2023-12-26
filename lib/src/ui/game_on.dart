@@ -1,5 +1,3 @@
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:splat_record/constants/ui_styles.dart';
@@ -13,7 +11,6 @@ import '../models/stat_model.dart';
 
 class GameOnScreen extends StatelessWidget {
   const GameOnScreen({super.key});
-
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +28,7 @@ class GameOnScreen extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  CommonContainer(
+                  commonContainer(
                     margin: const EdgeInsets.only(top: 75),
                     padding: const EdgeInsets.all(20),
                     parentContext: context,
@@ -55,7 +52,7 @@ class GameOnScreen extends StatelessWidget {
                                     snapshotPlayerList) {
                               if (snapshotPlayerList.hasData) {
                                 return GridView.builder(
-                                    padding: EdgeInsets.all(16),
+                                    padding: const EdgeInsets.all(16),
                                     physics: const NeverScrollableScrollPhysics(),
                                     itemCount: snapshotPlayerList.data!.length,
                                     gridDelegate:
@@ -79,18 +76,18 @@ class GameOnScreen extends StatelessWidget {
                                                       ? pickedPlayer()
                                                       : notPickedPlayer(index));
                                             } else {
-                                              return SizedBox();
+                                              return const SizedBox();
                                             }
                                           });
                                     });
                               } else {
-                                return SizedBox();
+                                return const SizedBox();
                               }
                             })
                       ],
                     ),
                   ),
-                  CommonContainer(
+                  commonContainer(
                       parentContext: context,
                       margin: const EdgeInsets.only(
                           top: 32,
@@ -109,7 +106,7 @@ class GameOnScreen extends StatelessWidget {
                                       style: title_black_color,
                                     );
                                   } else {
-                                    return Text(ERROR_UNKNOWN);
+                                    return const Text(ERROR_UNKNOWN);
                                   }
                                 }),
                           ),
@@ -120,15 +117,15 @@ class GameOnScreen extends StatelessWidget {
                                 stream: gameOnBloc.pickStatIndex,
                                 builder: (context,AsyncSnapshot<int> statIndex) {
                                   return GridView(
-                                    padding: EdgeInsets.all(16),
-                                    physics: NeverScrollableScrollPhysics(),
+                                    padding: const EdgeInsets.all(16),
+                                    physics: const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 3,
                                       crossAxisSpacing: 10,
                                       mainAxisSpacing: 10,),
                                     children: [
-                                      StatContainer(
+                                      statContainer(
                                           onTap:() => gameOnBloc.pickStat(LAYUP),
                                           context: context,
                                           quantity: snapshot.data?.layUp != null ? snapshot.data!.layUp.toString() :"0",
@@ -136,7 +133,7 @@ class GameOnScreen extends StatelessWidget {
                                           svgPicture: SvgPicture.asset("assets/svg_pictures/layup.svg"),
                                           svgPicturePicked: SvgPicture.asset("assets/svg_pictures/layup_picked.svg"),
                                           isPicked: statIndex.data == 0  ? true : false),
-                                      StatContainer(
+                                      statContainer(
                                           context: context,
                                           onTap:() => gameOnBloc.pickStat(ASSIST),
                                           statType: ASSIST,
@@ -144,7 +141,7 @@ class GameOnScreen extends StatelessWidget {
                                           isPicked: statIndex.data == 1  ? true : false,
                                           svgPicture: SvgPicture.asset("assets/svg_pictures/assist.svg"),
                                           svgPicturePicked: SvgPicture.asset("assets/svg_pictures/assist_picked.svg")),
-                                      StatContainer(
+                                      statContainer(
                                           onTap:() => gameOnBloc.pickStat(TWO),
                                           context: context,
                                           quantity: snapshot.data?.twoPointsShoot != null ? snapshot.data!.twoPointsShoot.toString() :"0",
@@ -152,7 +149,7 @@ class GameOnScreen extends StatelessWidget {
                                           svgPicture: SvgPicture.asset("assets/svg_pictures/2point.svg"),
                                           svgPicturePicked: SvgPicture.asset("assets/svg_pictures/2point_picked.svg"),
                                           isPicked: statIndex.data == 2  ? true : false),
-                                      StatContainer(
+                                      statContainer(
                                           onTap:() => gameOnBloc.pickStat(THREE),
                                           context: context,
                                           quantity: snapshot.data?.threePointsShoot != null ? snapshot.data!.threePointsShoot.toString() :"0",
@@ -196,7 +193,7 @@ class GameOnScreen extends StatelessWidget {
                   width: MediaQuery.sizeOf(context).width,
                   height: MediaQuery.sizeOf(context).height * 0.1,
                   margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white
                   ),
                   child: Row(
@@ -207,18 +204,18 @@ class GameOnScreen extends StatelessWidget {
                     // height: 75,
                     // onTap: (index) => index == 0 ? gameOnBloc.decrease():gameOnBloc.increase(),
                     children: [
-                      Spacer(),
+                      const Spacer(),
                       GestureDetector(
                           onTap: () => gameOnBloc.decrease(),
                           child: SvgPicture.asset(SUBTRACTING)),
                       Container(),
-                      Spacer(),
-                      Spacer(),
-                      Spacer(),
+                      const Spacer(),
+                      const Spacer(),
+                      const Spacer(),
                       GestureDetector(
                           onTap: () => gameOnBloc.increase(),
                           child: SvgPicture.asset(ADDING)),
-                      Spacer(),
+                      const Spacer(),
 
                     ],
 
@@ -234,7 +231,7 @@ class GameOnScreen extends StatelessWidget {
                     margin: EdgeInsets.only(
                         top: MediaQuery.of(context).size.height * 0.10),
                     decoration: BoxDecoration(
-                        color: Color(0xFFE55807),
+                        color: const Color(0xFFE55807),
                         borderRadius: BorderRadius.circular(100)),
                     child: Center(
                       child: Container(

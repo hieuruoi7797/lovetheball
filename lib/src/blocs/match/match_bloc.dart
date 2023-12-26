@@ -8,12 +8,12 @@ import 'package:splat_record/src/models/match_model.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/src/resources/repository.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:splat_record/src/ui/game_on.dart';
 import 'package:splat_record/widgets_common/dialogs.dart';
 
 import '../../../public/public_methods.dart';
 
 class MatchBloc {
-  final _repository = Repository();
   final _matchCreatorPublish = BehaviorSubject<Response>();
   final _userInfoPublish = BehaviorSubject<PlayerModel>();
   final _matchNameBehavior = BehaviorSubject<String>();
@@ -60,7 +60,7 @@ class MatchBloc {
   getPlayerList(
       {required BuildContext context, bool? isAdding, String? matchId}) async {
     Response response;
-    response = await _repository.getPlayers(matchId: matchId);
+    response = await repository.getPlayers(matchId: matchId);
     List<dynamic> listPlayerRes = jsonDecode(response.body)['data'] as List;
     List<PlayerModel> listPlayers = [];
     ///CHECK USER IF THEY ARE IN ANY MATCH
@@ -120,7 +120,7 @@ class MatchBloc {
       for (var element in playersListAdded) {
         listPlayersString.add(element.id);
       }
-      Response response = await _repository.createMatch(
+      Response response = await repository.createMatch(
           context: context,
           name: name,
           location: "DH SU PHAM",
@@ -140,7 +140,7 @@ class MatchBloc {
                 .showResultDialog(context,
                 isSuccess: true, content: "Tạo game thành công!")
                 .then((value) {
-              gameOnBloc.emitChangesSocket(isFirstEmit: true);
+                  gameOnBloc.emitChangesSocket(isFirstEmit: true);
               Navigator.pushNamed(context, '/game_on');
             });
           });
@@ -157,7 +157,7 @@ class MatchBloc {
     matchesListAll = [];
     _listMatchesPreview.add([]);
     matchRunning = MatchModel();
-    Response matchesListRes = await _repository.getMatchesList(context);
+    Response matchesListRes = await repository.getMatchesList(context);
     if (matchesListRes.statusCode == 200){
       Map bodyRes = jsonDecode(matchesListRes.body);
       (bodyRes['data'] as List).forEach((element) {
@@ -242,29 +242,7 @@ class MatchBloc {
 
   goToMatch(MatchModel match) {
     if (match.status == 0) {
-      _repository.gameOnApiProvider.socketConnect();
-      _repository.gameOnApiProvider.emitSocket('changes', body: {
-        "first_emit": true,
-        "stats_changes":[
-          {
-            "has_change": false,
-            "stat":{
-              "match_id": match.id,
-              "player_id": playerInfo!.id,
-              "lay_up": 0,
-              "assit": 0,
-              "two_points_shoot": 0,
-              "three_points_shoot": 0,
-              "rebound": 0,
-              "block": 0,
-              "steal": 0,
-              "personal_foul": 0,
-              "turn_over": 0,
-              "dunk": 0
-            }
-          },
-        ]
-      });
+      repository.socketConnect();
       Navigator.pushNamed(navigatorKey.currentContext!, '/game_on');
     }else{
 

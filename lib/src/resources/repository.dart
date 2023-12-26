@@ -7,7 +7,7 @@ import 'package:splat_record/src/resources/player_api_provider.dart';
 class Repository {
   final matchApiProvider = MatchApiProvider();
   final playerApiProvider = PlayerApiProvider();
-  final gameOnApiProvider = GameOnApiProvider();
+  final _gameOnApiProvider = GameOnApiProvider();
 
   Future<Response> createMatch({
     required BuildContext context,
@@ -35,4 +35,27 @@ class Repository {
       );
   Future<Response> getPlayers({String? matchId}) async =>
       await playerApiProvider.getPlayer(matchId:  matchId);
+
+  void socketConnect() {
+    _gameOnApiProvider.socketConnect();
+  }
+
+  void emitSocket(String emit, {required Map<dynamic, dynamic> body}) {
+    _gameOnApiProvider.emitSocket(emit, body: body);
+  }
+
+  void disconnect() {
+    _gameOnApiProvider.socket.disconnect();
+  }
+
+  void close() {
+    _gameOnApiProvider.socket.close();
+  }
+
+  Future<Response> finishMatch({required String matchId}) async {
+    Response response = await _gameOnApiProvider.finishMatch(matchId: matchId);
+    return response;
+  }
 }
+
+final repository = Repository();

@@ -18,7 +18,6 @@ class GameOnBloc {
   List<PlayerModel> listPlayers = [];
   List<StatChangesModel> listStatChange = [];
 
-  final _repository = Repository();
   final _nowPlayerStatPublish = BehaviorSubject<Stats>();
   final _pickedPlayerIndex = BehaviorSubject<int>();
   final _pickedStatIndex = BehaviorSubject<int>();
@@ -45,7 +44,7 @@ class GameOnBloc {
     DialogWidget().showMessageDialog(context , content: "Bạn muốn kết thúc trận đấu?").then((value)
      async {
       if(value == 'Y'){
-        await _repository.gameOnApiProvider.finishMatch(matchId: matchId).then((Response response) {
+        await repository.finishMatch(matchId: matchId).then((Response response) {
           if (jsonDecode(response.body)['status_code'] == 200){
             matchBloc.getMatchesList(context);
             Navigator.pushNamedAndRemoveUntil(context, '/home',
@@ -62,8 +61,8 @@ class GameOnBloc {
   }
 
   dispose(dynamic data) {
-    _repository.gameOnApiProvider.socket.disconnect();
-    _repository.gameOnApiProvider.socket.close();
+    repository.disconnect();
+    repository.close();
     // matchBloc.getPlayerList(context: navigatorKey.currentContext!);
   }
 
@@ -146,6 +145,7 @@ class GameOnBloc {
 
   void emitChangesSocket({bool? isFirstEmit}) {
     Map body = {};
+    repository.socketConnect();
     if (isFirstEmit == true) {
       body = {
         "first_emit": true,
@@ -154,7 +154,7 @@ class GameOnBloc {
             "has_change": false,
             "stats": {
               "match_id": matchId,
-              "player_id": listPlayers[0].id,
+              "player_id": matchBloc.playerInfo!.id,
               "lay_up": 0,
               "assit": 0,
               "two_points_shoot": 0,
@@ -169,7 +169,6 @@ class GameOnBloc {
           }
         ]
       };
-      _repository.gameOnApiProvider.socketConnect();
     } else {
       List<Map> listStatsMap = [];
       for (var element in listStatChange) {
@@ -185,7 +184,7 @@ class GameOnBloc {
         "stats_changes": listStatsMap
       };
     }
-    _repository.gameOnApiProvider.emitSocket('changes', body: body);
+    repository.emitSocket('changes', body: body);
   }
 
   pickPlayer(int index) {
@@ -194,17 +193,20 @@ class GameOnBloc {
   }
 
   void updateStats(dynamic data) {
-      print("RECEIVED: $data");
+    print("RECEIVED: $data");
     List<Stats> statsList = [];
     List socketListRes = data as List;
     for (var element in socketListRes) {
       statsList.add(Stats.fromJson(element));
     }
-    for (int i = 0; i < statsList.length; i++) {
-      listStatChange[i].stats = statsList[i];
-      if (i == pickedPlayerInt){
-        _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
-      }
+    if (listStatChange.isNotEmpty) {
+      for (int i = 0; i < statsList.length; i++) {
+        listStatChange[i].stats = statsList[i];
+        if (i == pickedPlayerInt){
+          _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
+        }
+    }
+
     }
   }
 

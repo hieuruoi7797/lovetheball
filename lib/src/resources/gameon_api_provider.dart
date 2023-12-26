@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:splat_record/src/blocs/game_on/game_on_bloc.dart';
-import 'package:splat_record/src/blocs/match/match_bloc.dart';
 
 import '../../constants/api_paths.dart';
 import '../../constants/constant_values.dart';
@@ -17,16 +16,8 @@ class GameOnApiProvider {
   late IO.Socket socket;
   final _baseUrl = BASEURL;
 
-  GameOnApiProvider() {
-    socket = IO.io(
-        'https://ample-crawdad-kind.ngrok-free.app',
-        IO.OptionBuilder()
-            .setTransports(['websocket'])
-            .disableAutoConnect() // for Flutter or Dart VM
-            .setPath("/sio/socket.io")
-            .build());
-    socket.nsp = '/stats';
-  }
+  GameOnApiProvider();
+
   Future<Response> finishMatch({
     required String matchId,
   }) async {
@@ -52,16 +43,27 @@ class GameOnApiProvider {
   }
 
   void socketConnect() {
+    socket = IO.io(
+      'https://ample-crawdad-kind.ngrok-free.app',
+      IO.OptionBuilder()
+          .setTransports(['websocket'])
+          .disableAutoConnect() // for Flutter or Dart VM
+          .setPath("/sio/socket.io")
+          .build());
+    socket.nsp = '/stats';
+
     socket.onConnect((data) => log('connected to socket'));
     socket.onConnectError((data) => log('E: ${data.toString()}'));
     socket.onDisconnect((data) => log('disconnected to socket'));
-    socket.on('get_stats', (data) => gameOnBloc.updateStats(data));
-    socket.on('disconnect', (data) => gameOnBloc.dispose(data));
+
+    socket.on('get_stats', (data) =>  gameOnBloc.updateStats(data));
+    socket.on('disconnect', (data) =>  gameOnBloc.dispose(data));
+
     socket.connect();
   }
 
   void emitSocket(String event, {required Map body}) {
-    print(body);
+    print("EMIT: $body");
     socket.emit(event, body);
   }
 

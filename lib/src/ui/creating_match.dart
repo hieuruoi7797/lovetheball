@@ -34,7 +34,7 @@ class CreatingMatchUI extends StatelessWidget{
             Stack(
               alignment: Alignment.topCenter,
               children: [
-                CommonContainer(
+                commonContainer(
                   parentContext: parentContext,
                   margin: EdgeInsets.only(
                       top: MediaQuery.of(parentContext).size.height * 0.15),
@@ -140,7 +140,7 @@ class CreatingMatchUI extends StatelessWidget{
                 ),
               ],
             ),
-            CommonContainer(
+            commonContainer(
               parentContext: parentContext,
               // height: MediaQuery.of(context).size.height * 0.43,
               margin: const EdgeInsets.only(top: 20),
@@ -154,8 +154,8 @@ class CreatingMatchUI extends StatelessWidget{
                           return SizedBox(
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height * 0.1,
-                            child: Center(
-                              child: const Text(
+                            child: const Center(
+                              child: Text(
                                   "Bạn đang ở trong một trận đấu!"),
                             ),
                           );
@@ -168,7 +168,7 @@ class CreatingMatchUI extends StatelessWidget{
                                 style: title_black_color,
                               ),
                               Container(
-                                margin: EdgeInsets.only(top: 10),
+                                margin: const EdgeInsets.only(top: 10),
                                 height: 36,
                                 child: TextField(
                                   controller: nameController,
@@ -198,7 +198,7 @@ class CreatingMatchUI extends StatelessWidget{
                                     //   ),
                                     // ),
                                     filled: true,
-                                    fillColor: Color(0xFFF1F1F1),
+                                    fillColor: const Color(0xFFF1F1F1),
                                   ),
                                 ),
                               ),
@@ -243,11 +243,11 @@ class CreatingMatchUI extends StatelessWidget{
                                           const NeverScrollableScrollPhysics(),
                                           itemCount: snapshot.data?.length,
                                           shrinkWrap: true,
-                                          padding: EdgeInsets.only(top: 15),
+                                          padding: const EdgeInsets.only(top: 15),
                                           itemBuilder: (context, index) {
                                             return Column(
                                               children: [
-                                                UserNameCard(
+                                                userNameCard(
                                                     parentContext: context,
                                                     userName:
                                                     snapshot.data?[index]
@@ -256,7 +256,7 @@ class CreatingMatchUI extends StatelessWidget{
                                                         .data?[index].id ==
                                                         matchBloc.playerInfo
                                                             ?.id
-                                                        ? SizedBox()
+                                                        ? const SizedBox()
                                                         : null,
                                                     onTapSuffix: snapshot
                                                         .data?[index].id ==

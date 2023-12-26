@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_record/constants/constant_values.dart';
@@ -29,9 +28,9 @@ class ListingMatchesScreen extends StatelessWidget {
                     shrinkWrap: true,
                     children: [
                       (snapshot.data![0].id != null) ?
-                      MatchCard(context, match: snapshot.data![0]):
+                      matchCard(context, match: snapshot.data![0]):
                       Container(),
-                      MatchCard(context, match: snapshot.data![1])
+                      matchCard(context, match: snapshot.data![1])
                     ],
                   );
                 }else{
@@ -51,23 +50,23 @@ class ListingMatchesScreen extends StatelessWidget {
   Widget matchesListTitle(BuildContext context) {
     return Container(
       height: 30,
-      margin: EdgeInsets.only(top: 50),
+      margin: const EdgeInsets.only(top: 50),
       width: MediaQuery.sizeOf(context).width,
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.only(right: 10),
+            margin: const EdgeInsets.only(right: 10),
             child: SvgPicture.asset(LISTING_MATCHES_ICON),
           ),
-          Text('Lịch sử trận đấu',
+          const Text('Lịch sử trận đấu',
             style: TextStyle(
               color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.w700
             ),
           ),
-          Spacer(),
-          Icon(Icons.arrow_forward_ios_rounded)
+          const Spacer(),
+          const Icon(Icons.arrow_forward_ios_rounded)
         ],
       ),
     );
@@ -75,16 +74,16 @@ class ListingMatchesScreen extends StatelessWidget {
 
 }
 
-Widget MatchCard(BuildContext context, {required MatchModel match}) {
+Widget matchCard(BuildContext context, {required MatchModel match}) {
   return GestureDetector(
     onTap: () => matchBloc.goToMatch(match),
     child: Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      margin: EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.only(top: 20),
       height: 70,
       width: MediaQuery.sizeOf(context).width,
       decoration: BoxDecoration(
-        color: Color(0xFFF1F1F1),
+        color: const Color(0xFFF1F1F1),
         borderRadius: BorderRadius.circular(10)
       ),
       child: Row(
@@ -94,30 +93,30 @@ Widget MatchCard(BuildContext context, {required MatchModel match}) {
             width: 12,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
-              color: match.status != 1 ? color_main : Color(0xFFA0A0A0)
+              color: match.status != 1 ? color_main : const Color(0xFFA0A0A0)
             ),
           ),
-          SizedBox(width: 16,),
+          const SizedBox(width: 16,),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Spacer(),
-              Spacer(),
+              const Spacer(),
+              const Spacer(),
               Text(match.name ?? ERROR_UNKNOWN,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16
                 ),),
-              Spacer(),
+              const Spacer(),
 
               Text((match.status == 1)
                   ?  match.createdAt ?? '' :"Đang diễn ra",
-                style: TextStyle(
+                style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 11,
                   color: Color(0xFFA0A0A0)
                 ),),
-              Spacer(),
+              const Spacer(),
             ],
           ),
         ],

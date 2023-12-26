@@ -9,7 +9,6 @@ import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/src/resources/repository.dart';
 
 class CreatingUserBloc {
-  final _repository = Repository();
   final _playerCreator = PublishSubject<Response>();
   final _statusBehaviors = BehaviorSubject<String>();
 
@@ -42,7 +41,7 @@ class CreatingUserBloc {
     required String name,
   }) async {
     Response response =
-    await _repository.createPlayer(context: context, name: name);
+    await repository.createPlayer(context: context, name: name);
     if (response.statusCode == 201) {
       _playerCreator.sink.add(response);
       if (context.mounted) _playerCreatedSuccess(context,response);
