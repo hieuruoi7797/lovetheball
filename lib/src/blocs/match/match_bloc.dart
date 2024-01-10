@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
@@ -24,9 +25,9 @@ class MatchBloc {
   final _userInMatchBehavior = BehaviorSubject<bool>();
   final _listMatches = BehaviorSubject<List<MatchModel>>();
   final _listMatchesPreview = BehaviorSubject<List<MatchModel>>();
-  bool _userInMatch = false;
+  bool _userInMatchCheck = false;
   PlayerModel? playerInfo;
-  List<PlayerModel> playersListAdded = [];
+  List<PlayerModel> addingPlayersList = [];
   List<PlayerModel> playersListMore = [];
   List<MatchModel> matchesListAll = [];
   List<int> listAddingIndexes = [-1];
@@ -53,7 +54,7 @@ class MatchBloc {
 
   Stream<List<MatchModel>> get listMatchesPreview => _listMatchesPreview;
 
-  bool get userInMatch => _userInMatch;
+  bool get userInMatch => _userInMatchCheck;
 
   changeStatus(String statusChange) async {}
 
@@ -65,50 +66,40 @@ class MatchBloc {
     List<PlayerModel> listPlayers = [];
     ///CHECK USER IF THEY ARE IN ANY MATCH
     for(int i = 0 ; i < listPlayerRes.length; i++){
+      listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
       if (playerInfo!.id == listPlayerRes[i]['id_']){
         if (listPlayerRes[i]['in_match'] != null){
           matchRunningId = listPlayerRes[i]['in_match'];
           _matchIdBehavior.sink.add(matchRunningId);
           //TO FISISH A MATCH
           // _repository.gameOnApiProvider.finishMatch(matchId: listPlayerRes[i]['in_match']);
-          _userInMatch = true;
+          _userInMatchCheck = true;
         }else{
-          _userInMatch = false;
+          _userInMatchCheck = false;
         }
       }
     }
+    _userInMatchBehavior.sink.add(userInMatch);
     // if (userInMatch == false){
       if (isAdding == true) {
-
-        ///get 5 players in the last of the result list to add on More Players List
-        for (int i = 5; i < 15; i++) {
-          listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
-        }
-        _morePlayersPublish.sink.add(listPlayers);
+        ///get lasted players in the result list to add on More Players List
+        List<PlayerModel> availableList = listPlayers;
+        print("sau: $availableList");
+        _morePlayersPublish.sink.add(availableList.sublist(6,listPlayers.length));
       }
       ///get ALL players of an Match (macthId) in the result list
       else if (matchId != null) {
-        playersListAdded.clear();
-        for (int i = 0; i < listPlayerRes.length; i++) {
-          listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
-        }
-        playersListAdded.addAll(listPlayers);
-        _addedPlayersBehavior.sink.add(playersListAdded);
+        addingPlayersList.clear();
+        addingPlayersList.addAll(listPlayers);
+        _morePlayersPublish.sink.add(addingPlayersList);
       }
       ///get 5 players start of the result list to add on default added players
       else {
         listPlayerRes.removeWhere((element) => (element['in_match'] != null));
         listPlayerRes.removeWhere((element) => (element['id_'] == playerInfo!.id));
-        for (int i = 0; i < 5; i++) {
-          listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
-        }
-        if (playerInfo != null && !listPlayers.contains(playerInfo)){
-          listPlayers.add(playerInfo!);
-        }
-        _addedPlayersBehavior.sink.add(listPlayers);
+        _addedPlayersBehavior.sink.add(listPlayers.sublist(0,6));
       }
     // }
-    _userInMatchBehavior.sink.add(userInMatch);
   }
 
   createMatch({
@@ -117,7 +108,7 @@ class MatchBloc {
   }) async {
     List<String> listPlayersString = [];
     if (name.isNotEmpty){
-      for (var element in playersListAdded) {
+      for (var element in addingPlayersList) {
         listPlayersString.add(element.id);
       }
       Response response = await repository.createMatch(
@@ -132,7 +123,7 @@ class MatchBloc {
           String matchId = jsonDecode(response.body)['data'][0]['id_'];
           await getPlayerList(context: context, matchId: matchId);
           matchRunning = MatchModel.fromJson(jsonDecode(response.body)['data'][0]);
-          _addedPlayersBehavior.sink.add(playersListAdded);
+          _addedPlayersBehavior.sink.add(addingPlayersList);
           _matchNameBehavior.sink.add(name);
           _matchIdBehavior.sink.add(matchRunning.id??'');
           await Future.delayed(Duration.zero, () {
@@ -216,10 +207,10 @@ class MatchBloc {
   addPlayersTap(BuildContext context, int index, {bool? changeStatus}) {
     if (changeStatus == true) {
       listAddingIndexes.add(index);
-      playersListAdded.add(playersListMore[index]);
+      addingPlayersList.add(playersListMore[index]);
     } else {
       listAddingIndexes.remove(index);
-      playersListAdded.remove(playersListMore[index]);
+      addingPlayersList.remove(playersListMore[index]);
     }
     _listAdding.sink.add(listAddingIndexes);
     // Navigator.pop(context);
@@ -228,15 +219,15 @@ class MatchBloc {
   removePlayerTap(int index, BuildContext context, String nameOfGame) async {
     String result = await DialogWidget().showMessageDialog(context,
         content:
-            "Bạn có chắc chắn xoá ${playersListAdded[index].name} khỏi $nameOfGame?");
+            "Bạn có chắc chắn xoá ${addingPlayersList[index].name} khỏi $nameOfGame?");
     if (result == "Y") {
-      playersListAdded.remove(playersListAdded[index]);
-      _addedPlayersBehavior.sink.add(playersListAdded);
+      addingPlayersList.remove(addingPlayersList[index]);
+      _addedPlayersBehavior.sink.add(addingPlayersList);
     } else {}
   }
 
   void confirmAddPlayer(BuildContext context) {
-    _addedPlayersBehavior.sink.add(playersListAdded);
+    _addedPlayersBehavior.sink.add(addingPlayersList);
     Navigator.pop(context);
   }
 

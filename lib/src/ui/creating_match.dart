@@ -236,7 +236,7 @@ class CreatingMatchUI extends StatelessWidget{
                                       AsyncSnapshot<
                                           List<PlayerModel>> snapshot) {
                                     if (snapshot.hasData) {
-                                      matchBloc.playersListAdded =
+                                      matchBloc.addingPlayersList =
                                       snapshot.data!;
                                       return ListView.builder(
                                           physics:
