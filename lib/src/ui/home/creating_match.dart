@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_record/constants/constant_values.dart';
 import 'package:splat_record/constants/ui_styles.dart';
 import 'package:splat_record/src/app.dart';
+import 'package:splat_record/src/blocs/home_bloc/home_bloc.dart';
 import 'package:splat_record/src/blocs/match/match_bloc.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/widgets_common/container_common.dart';
@@ -42,7 +43,7 @@ class CreatingMatchUI extends StatelessWidget{
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       StreamBuilder(
-                          stream: matchBloc.userName,
+                          stream: homeBloc.userInfo,
                           builder: (context, snapshot) {
                             if (snapshot.hasData){
                               return Container(
@@ -254,13 +255,13 @@ class CreatingMatchUI extends StatelessWidget{
                                                         .name,
                                                     suffixIcon: snapshot
                                                         .data?[index].id ==
-                                                        matchBloc.playerInfo
+                                                        homeBloc.playerInfo
                                                             ?.id
                                                         ? const SizedBox()
                                                         : null,
                                                     onTapSuffix: snapshot
                                                         .data?[index].id ==
-                                                        matchBloc.playerInfo
+                                                        homeBloc.playerInfo
                                                             ?.id
                                                         ? () => {}
                                                         : () =>

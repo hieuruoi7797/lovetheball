@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_record/src/app.dart';
+import 'package:splat_record/src/blocs/home_bloc/home_bloc.dart';
 import 'package:splat_record/src/blocs/match/match_bloc.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/src/models/stat_model.dart';
@@ -158,7 +159,7 @@ class GameOnBloc {
             "has_change": false,
             "stats": {
               "match_id": matchId,
-              "player_id": matchBloc.playerInfo!.id,
+              "player_id": homeBloc.playerInfo!.id,
               "lay_up": 0,
               "assit": 0,
               "two_points_shoot": 0,

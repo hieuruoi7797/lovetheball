@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splat_record/src/ui/game_on.dart';
 import 'package:splat_record/src/ui/player_creating.dart';
-import 'ui/home_screen.dart';
+import 'ui/home/home_screen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 

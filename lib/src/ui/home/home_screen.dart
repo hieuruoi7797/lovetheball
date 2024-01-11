@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_record/src/blocs/home_bloc/home_bloc.dart';
 import 'package:splat_record/src/blocs/match/match_bloc.dart';
-import 'package:splat_record/src/ui/creating_match.dart';
-import 'package:splat_record/src/ui/listing_matches.dart';
-import '../../constants/constant_values.dart';
-import '../../constants/ui_styles.dart';
+import 'package:splat_record/src/ui/home/creating_match.dart';
+import 'package:splat_record/src/ui/home/listing_matches.dart';
+import '../../../constants/constant_values.dart';
+import '../../../constants/ui_styles.dart';
+import 'setting_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    matchBloc.getPlayerSaved(context);
+    homeBloc.getPlayerSaved(context).then((value) =>  matchBloc.getPlayerList(context));
     // TODO: implement initState
     super.initState();
   }
@@ -36,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   static final List<Widget> _widgetOptions = <Widget>[
-    const ListingMatchesScreen(),
+    const SettingScreen(),
     const CreatingMatchUI(),
     const ListingMatchesScreen(),
   ];
