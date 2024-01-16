@@ -39,9 +39,11 @@ class CreatingUserBloc {
   createPlayer({
     required BuildContext context,
     required String name,
+    required String email,
+    required String password,
   }) async {
     Response response =
-    await repository.createPlayer(context: context, name: name);
+    await repository.createPlayer(context: context, name: name, email: email, password: password);
     if (response.statusCode == 201) {
       _playerCreator.sink.add(response);
       if (context.mounted) _playerCreatedSuccess(context,response);

@@ -15,6 +15,8 @@ class PlayerApiProvider {
   Future<Response> createPlayer({
     required BuildContext context,
     required String name,
+    required String email,
+    required String password,
   }) async {
     Response response;
     DialogWidget().showLoaderDialog();
@@ -22,14 +24,14 @@ class PlayerApiProvider {
       Uri.parse(_baseUrl + PLAYERS),
       body: jsonEncode(<String, dynamic>{
         "name": name,
-        // "gender": 0,
-        // "birth_date": "",
-        // "email": "",
-        // "phone": ""
+        "gender": 0,
+        "birth_date": "07/07/1997",
+        "email": email,
+        "phone": "",
+      "avartar": "",
+      "password": password
       }),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: headerWithToken,
     );
     Future.delayed(Duration.zero, () => Navigator.pop(context));
     if (response.statusCode == 201) {
@@ -49,9 +51,7 @@ class PlayerApiProvider {
     response = await client.get(
       Uri.parse(_baseUrl + PLAYERS)
           .replace(queryParameters: {'match_id': matchId ?? ""}),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: headerWithToken,
     );
     Future.delayed(Duration.zero, () => Navigator.pop(navigatorKey.currentContext!));
     if (response.statusCode == 200) {
@@ -63,3 +63,5 @@ class PlayerApiProvider {
     }
   }
 }
+
+

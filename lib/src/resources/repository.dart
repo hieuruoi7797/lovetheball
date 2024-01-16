@@ -28,10 +28,16 @@ class Repository {
     => matchApiProvider.getMatchesList(context: context);
 
   Future<Response> createPlayer(
-          {required BuildContext context, required String name}) async =>
+          {required BuildContext context,
+            required String name,
+            required String email,
+            required String password,
+          }) async =>
       await playerApiProvider.createPlayer(
         context: context,
         name: name,
+        email: email,
+        password: password
       );
   Future<Response> getPlayers({String? matchId}) async =>
       await playerApiProvider.getPlayer(matchId:  matchId);

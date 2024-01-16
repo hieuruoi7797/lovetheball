@@ -12,6 +12,8 @@ class PlayerCreatingScreen extends StatefulWidget {
 
 class _PlayerCreatorState extends State<PlayerCreatingScreen> {
   TextEditingController playerNameController = TextEditingController();
+  TextEditingController playerEmailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -94,12 +96,79 @@ class _PlayerCreatorState extends State<PlayerCreatingScreen> {
                               ),
                             ),
                           ),
+                          const Text(
+                            "Nhập email của bạn:",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Color(0xFF818181),
+                                fontWeight: FontWeight.w600),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 25, bottom: 25),
+                            height: 36,
+                            child: TextField(
+                              controller: playerEmailController,
+                              style: const TextStyle(fontSize: 14),
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 16),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(50.0),
+                                  borderSide: const BorderSide(
+                                    width: 0,
+                                    style: BorderStyle.none,
+                                  ),
+                                ),
+                                suffixIconConstraints: const BoxConstraints(
+                                  maxWidth: 50,
+                                  maxHeight: 50,
+                                ),
+                                filled: true,
+                                fillColor: const Color(0xFFF1F1F1),
+                              ),
+                            ),
+                          ),
+                          const Text(
+                            "Nhập password của bạn:",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Color(0xFF818181),
+                                fontWeight: FontWeight.w600),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 25, bottom: 25),
+                            height: 36,
+                            child: TextField(
+                              controller: passwordController,
+                              style: const TextStyle(fontSize: 14),
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 16),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(50.0),
+                                  borderSide: const BorderSide(
+                                    width: 0,
+                                    style: BorderStyle.none,
+                                  ),
+                                ),
+                                suffixIconConstraints: const BoxConstraints(
+                                  maxWidth: 50,
+                                  maxHeight: 50,
+                                ),
+                                filled: true,
+                                fillColor: const Color(0xFFF1F1F1),
+                              ),
+                            ),
+                          ),
                           Center(
                             child: GestureDetector(
                               onTap: () {
                                 playerBloc.createPlayer(
                                     context: context,
-                                    name: playerNameController.text);
+                                    name: playerNameController.text,
+                                    email: playerEmailController.text,
+                                    password: passwordController.text,
+                                );
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 0.47,

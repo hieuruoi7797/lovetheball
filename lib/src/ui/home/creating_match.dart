@@ -42,9 +42,9 @@ class CreatingMatchUI extends StatelessWidget{
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      StreamBuilder(
+                      StreamBuilder<PlayerModel>(
                           stream: homeBloc.userInfo,
-                          builder: (context, snapshot) {
+                          builder: (context,AsyncSnapshot<PlayerModel> snapshot) {
                             if (snapshot.hasData){
                               return Container(
                                 margin: const EdgeInsets.only(top: 66),

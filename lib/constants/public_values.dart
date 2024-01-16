@@ -1,0 +1,3 @@
+class PublicValues {
+  String? accessToken = '';
+}

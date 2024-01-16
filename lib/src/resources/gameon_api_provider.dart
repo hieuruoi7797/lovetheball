@@ -28,9 +28,7 @@ class GameOnApiProvider {
       body: jsonEncode(<String, dynamic>{
         "match_id": matchId,
       }),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: headerWithToken,
     );
     Navigator.pop(navigatorKey.currentContext!);
     if (response.statusCode == 200) {

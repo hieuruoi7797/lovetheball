@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    homeBloc.getPlayerSaved(context).then((value) =>  matchBloc.getPlayerList(context));
+    homeBloc.getUserSaved(context).then((value) =>  matchBloc.getPlayerList(context));
     // TODO: implement initState
     super.initState();
   }
