@@ -1,3 +1,5 @@
+import 'package:splat_record/constants/public_values.dart';
+
 const String SVG_SETTING_HOME = "assets/svg_pictures/setting_orange.svg";
 const String SVG_SETTING_HOME_DISABLE = "assets/svg_pictures/SETTING.svg";
 const String SVG_BASKETBALL_HOME = "assets/svg_pictures/BASKETBALL.svg";
@@ -18,3 +20,12 @@ const String REBOUND = 'rebound';
 
 const String ERROR_UNKNOWN = "UNKNOWN";
 const String ERROR_FAIL = "FAIL";
+
+Map<String, String> headerWithToken = {
+  'Content-Type': 'application/json; charset=UTF-8',
+  'Authorization': 'Bearer ${PublicValues().accessToken}',
+};
+Map<String, String> headerWithoutToken = {
+  'Content-Type': 'application/json; charset=UTF-8',
+  // 'Authorization': 'Bearer ${PublicValues().accessToken}',
+};

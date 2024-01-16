@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' show Client, Response;
+import 'package:splat_record/constants/constant_values.dart';
 import 'package:splat_record/widgets_common/dialogs.dart';
 
 import '../../constants/api_paths.dart';
@@ -44,9 +45,7 @@ class MatchApiProvider {
       'limit':'500',
       'offset':'0'
     }),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },);
+      headers: headerWithToken,);
     // Navigator.pop(context);
     return response;
   }

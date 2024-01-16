@@ -33,13 +33,13 @@ class HomeBloc {
     }
   }
 
-  Future<void> getPlayerSaved(BuildContext context) async {
-    PlayerModel? playerSaved;
+  Future<void> getUserSaved(BuildContext context) async {
+    PlayerModel? userSaved;
     dynamic savedPlayerFile = await PublicMethod().readContentPlayer();
     if (savedPlayerFile is PlayerModel) {
-      playerSaved = savedPlayerFile;
-      playerInfo = playerSaved;
-      _userInfoBehavior.sink.add(playerInfo ?? playerSaved);
+      userSaved = savedPlayerFile;
+      playerInfo = userSaved;
+      _userInfoBehavior.sink.add(playerInfo ?? userSaved);
       return;
     } else if (savedPlayerFile == "Error") {
       if (context.mounted) {
