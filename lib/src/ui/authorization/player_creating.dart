@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:splat_record/src/blocs/player/creating_user_bloc.dart';
+import 'package:splat_record/src/blocs/player/user_bloc.dart';
 
-import '../../constants/ui_styles.dart';
+import '../../../constants/ui_styles.dart';
 
 class PlayerCreatingScreen extends StatefulWidget {
   const PlayerCreatingScreen({super.key});
@@ -19,27 +19,22 @@ class _PlayerCreatorState extends State<PlayerCreatingScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    playerBloc.changeStatus("landed");
   }
 
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    playerBloc.getPlayerSaved(context);
   }
 
   @override
   void dispose() {
-    playerBloc.dispose();
+    userBloc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: playerBloc.status,
-        builder: (context, AsyncSnapshot<String> snapshot) {
           return Scaffold(
               bottomSheet: BottomSheet(
                   onClosing: () => {},
@@ -65,7 +60,7 @@ class _PlayerCreatorState extends State<PlayerCreatingScreen> {
                       child: Column(
                         children: [
                           const Text(
-                            "Nhập tên của bạn:",
+                            "Nhập tên:",
                             style: TextStyle(
                                 fontSize: 18,
                                 color: Color(0xFF818181),
@@ -97,7 +92,7 @@ class _PlayerCreatorState extends State<PlayerCreatingScreen> {
                             ),
                           ),
                           const Text(
-                            "Nhập email của bạn:",
+                            "Nhập email:",
                             style: TextStyle(
                                 fontSize: 18,
                                 color: Color(0xFF818181),
@@ -129,7 +124,7 @@ class _PlayerCreatorState extends State<PlayerCreatingScreen> {
                             ),
                           ),
                           const Text(
-                            "Nhập password của bạn:",
+                            "Nhập password:",
                             style: TextStyle(
                                 fontSize: 18,
                                 color: Color(0xFF818181),
@@ -163,8 +158,7 @@ class _PlayerCreatorState extends State<PlayerCreatingScreen> {
                           Center(
                             child: GestureDetector(
                               onTap: () {
-                                playerBloc.createPlayer(
-                                    context: context,
+                                userBloc.createPlayer(
                                     name: playerNameController.text,
                                     email: playerEmailController.text,
                                     password: passwordController.text,
@@ -213,6 +207,5 @@ class _PlayerCreatorState extends State<PlayerCreatingScreen> {
               //           ))),
               // ),
               ));
-        });
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
+import 'package:splat_record/src/resources/authorization_api_provider.dart';
 import 'package:splat_record/src/resources/gameon_api_provider.dart';
 import 'package:splat_record/src/resources/match_api_provider.dart';
 import 'package:splat_record/src/resources/player_api_provider.dart';
@@ -7,6 +8,7 @@ import 'package:splat_record/src/resources/player_api_provider.dart';
 class Repository {
   final matchApiProvider = MatchApiProvider();
   final playerApiProvider = PlayerApiProvider();
+  final authorizationProvider = AuthorizationApiProvider();
   final _gameOnApiProvider = GameOnApiProvider();
 
   Future<Response> createMatch({
@@ -27,14 +29,16 @@ class Repository {
   Future<Response> getMatchesList(BuildContext context)
     => matchApiProvider.getMatchesList(context: context);
 
-  Future<Response> createPlayer(
-          {required BuildContext context,
+  Future<Response?> login({required String email, required String pw})
+  => authorizationProvider.login(email: email, password: pw);
+
+  Future<Response?> createUser(
+          {
             required String name,
             required String email,
             required String password,
           }) async =>
-      await playerApiProvider.createPlayer(
-        context: context,
+      await authorizationProvider.createUser(
         name: name,
         email: email,
         password: password
@@ -62,6 +66,8 @@ class Repository {
     Response response = await _gameOnApiProvider.finishMatch(matchId: matchId);
     return response;
   }
+
+  Future<Response?> testToken() => authorizationProvider.testToken();
 }
 
 final repository = Repository();

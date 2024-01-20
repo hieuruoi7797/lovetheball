@@ -21,11 +21,13 @@ const String REBOUND = 'rebound';
 const String ERROR_UNKNOWN = "UNKNOWN";
 const String ERROR_FAIL = "FAIL";
 
-Map<String, String> headerWithToken = {
+Map<String, String> headerWithToken(String token) => {
   'Content-Type': 'application/json; charset=UTF-8',
-  'Authorization': 'Bearer ${PublicValues().accessToken}',
+  'Authorization': 'Bearer $token',
 };
-Map<String, String> headerWithoutToken = {
+const Map<String, String> headerWithoutToken = {
   'Content-Type': 'application/json; charset=UTF-8',
-  // 'Authorization': 'Bearer ${PublicValues().accessToken}',
+};
+const Map<String, String> headerFormData = {
+  // 'Content-Type': 'application/json; charset=UTF-8',
 };

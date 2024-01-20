@@ -159,7 +159,7 @@ class GameOnBloc {
             "has_change": false,
             "stats": {
               "match_id": matchId,
-              "player_id": homeBloc.playerInfo!.id,
+              "player_id": homeBloc.nowUserInfo!.id,
               "lay_up": 0,
               "assit": 0,
               "two_points_shoot": 0,

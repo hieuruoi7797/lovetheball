@@ -65,7 +65,7 @@ class MatchBloc {
       listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
 
       ///CHECK USER IF THEY ARE IN ANY MATCH
-      if (homeBloc.playerInfo!.id == listPlayerRes[i]['id_']){
+      if (homeBloc.nowUserInfo!.id == listPlayerRes[i]['id_']){
         if (listPlayerRes[i]['in_match'] != null){
           matchRunningId = listPlayerRes[i]['in_match'];
           _matchIdBehavior.sink.add(matchRunningId);
@@ -83,7 +83,11 @@ class MatchBloc {
       if (isAdding == true) {
         ///get lasted players in the result list to add on More Players List
         List<PlayerModel> availableList = listPlayers;
-        _morePlayersPublish.sink.add(availableList.sublist(6,listPlayers.length));
+        if (availableList.length > 5) {
+          _morePlayersPublish.sink.add(availableList.sublist(6,listPlayers.length));
+        }else{
+          _morePlayersPublish.sink.add([]);
+        }
       }
       ///get ALL players of an Match (macthId) in the result list
       else if (matchId != null) {
@@ -94,8 +98,12 @@ class MatchBloc {
       ///get 5 players start of the result list to add on default added players
       else {
         listPlayerRes.removeWhere((element) => (element['in_match'] != null));
-        listPlayerRes.removeWhere((element) => (element['id_'] == homeBloc.playerInfo!.id));
-        _addedPlayersBehavior.sink.add(listPlayers.sublist(0,6));
+        listPlayerRes.removeWhere((element) => (element['id_'] == homeBloc.nowUserInfo!.id));
+        if (listPlayers.length > 5){
+          _addedPlayersBehavior.sink.add(listPlayers.sublist(0,6));
+        }else{
+          _addedPlayersBehavior.sink.add(listPlayers);
+        }
       }
     // }
   }
