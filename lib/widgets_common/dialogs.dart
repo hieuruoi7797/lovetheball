@@ -37,9 +37,13 @@ class DialogWidget {
     );
   }
 
-  showFailDialog(BuildContext context, String massage) {
+  dismissLoader() {
+    Navigator.pop(navigatorKey.currentContext!);
+  }
+
+  showFailDialog(String massage) {
     showDialog(
-        context: context,
+        context: navigatorKey.currentContext!,
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
             content: Text(massage),
@@ -185,8 +189,7 @@ class DialogWidget {
                               }),
                         );
                       } else if (snapshot.hasError) {
-                        return DialogWidget().showFailDialog(
-                            context, "PLAYERS GETTING FAIL");
+                        return DialogWidget().showFailDialog("PLAYERS GETTING FAIL");
                       } else {
                         return ListView(
                           padding: const EdgeInsets.symmetric(vertical: 16),

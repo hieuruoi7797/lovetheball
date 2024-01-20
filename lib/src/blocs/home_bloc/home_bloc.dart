@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:splat_record/constants/public_values.dart';
 import 'package:splat_record/public/public_methods.dart';
 import 'package:splat_record/src/app.dart';
 import 'package:splat_record/src/blocs/match/match_bloc.dart';
@@ -8,7 +9,7 @@ import 'package:splat_record/widgets_common/dialogs.dart';
 
 class HomeBloc {
   int _pageIndexInt = 1;
-  PlayerModel? playerInfo;
+  PlayerModel? nowUserInfo;
 
 
   final _pageIndexBehavior = BehaviorSubject<int>();
@@ -34,19 +35,11 @@ class HomeBloc {
   }
 
   Future<void> getUserSaved(BuildContext context) async {
-    PlayerModel? userSaved;
-    dynamic savedPlayerFile = await PublicMethod().readContentPlayer();
-    if (savedPlayerFile is PlayerModel) {
-      userSaved = savedPlayerFile;
-      playerInfo = userSaved;
-      _userInfoBehavior.sink.add(playerInfo ?? userSaved);
+    PlayerModel userSaved = publicValues.userNow;
+      nowUserInfo = userSaved;
+      _userInfoBehavior.sink.add(userSaved);
       return;
-    } else if (savedPlayerFile == "Error") {
-      if (context.mounted) {
-        DialogWidget().showFailDialog(context, "LOADING FILE FAIL");
-      }
-      return;
-    }
+
   }
 
 }

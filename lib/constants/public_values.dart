@@ -1,3 +1,6 @@
+import 'package:splat_record/src/models/player_model.dart';
+
 class PublicValues {
-  String? accessToken = '';
+  PlayerModel userNow = PlayerModel(id: '', name: '');
 }
+PublicValues publicValues = PublicValues();

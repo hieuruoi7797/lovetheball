@@ -255,13 +255,13 @@ class CreatingMatchUI extends StatelessWidget{
                                                         .name,
                                                     suffixIcon: snapshot
                                                         .data?[index].id ==
-                                                        homeBloc.playerInfo
+                                                        homeBloc.nowUserInfo
                                                             ?.id
                                                         ? const SizedBox()
                                                         : null,
                                                     onTapSuffix: snapshot
                                                         .data?[index].id ==
-                                                        homeBloc.playerInfo
+                                                        homeBloc.nowUserInfo
                                                             ?.id
                                                         ? () => {}
                                                         : () =>
@@ -276,8 +276,7 @@ class CreatingMatchUI extends StatelessWidget{
                                             );
                                           });
                                     } else if (snapshot.hasError) {
-                                      return DialogWidget().showFailDialog(
-                                          context, "PLAYERS GETTING FAIL");
+                                      return DialogWidget().showFailDialog("PLAYERS GETTING FAIL");
                                     } else {
                                       return Container();
                                     }
