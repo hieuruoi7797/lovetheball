@@ -1,4 +1,5 @@
 import 'package:splat_record/constants/public_values.dart';
+import 'package:splat_record/src/blocs/player/user_bloc.dart';
 
 const String SVG_SETTING_HOME = "assets/svg_pictures/setting_orange.svg";
 const String SVG_SETTING_HOME_DISABLE = "assets/svg_pictures/SETTING.svg";
@@ -25,9 +26,6 @@ Map<String, String> headerWithToken(String token) => {
   'Content-Type': 'application/json; charset=UTF-8',
   'Authorization': 'Bearer $token',
 };
-const Map<String, String> headerWithoutToken = {
-  'Content-Type': 'application/json; charset=UTF-8',
-};
-const Map<String, String> headerFormData = {
-  // 'Content-Type': 'application/json; charset=UTF-8',
+Map<String, String> headerWithTokenFormData(String token) => {
+  'Authorization': 'Bearer $token',
 };
