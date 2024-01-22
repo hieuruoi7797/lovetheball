@@ -5,6 +5,7 @@ import 'package:http/http.dart';
 import 'package:splat_record/constants/api_paths.dart';
 import 'package:splat_record/constants/constant_values.dart';
 import 'package:splat_record/constants/public_values.dart';
+import 'package:splat_record/public/public_methods.dart';
 import 'package:splat_record/src/blocs/player/user_bloc.dart';
 import 'package:splat_record/widgets_common/dialogs.dart';
 
@@ -20,14 +21,21 @@ class AuthorizationApiProvider {
     var map = <String, dynamic>{};
     map['username'] = email;
     map['password'] = password;
-
-    DialogWidget().showLoaderDialog();
-    response = await client.post(
-      Uri.parse(_baseUrl + LOGIN),
-      body: map,
-      headers: headerFormData,
+    response = await PublicMethods().post(
+        body: map,
+        subUri: LOGIN,
+        // headers: headerFormDataWithoutToken,
+        showLoader: true,
+        isFormData: true,
     );
-    Future.delayed(Duration.zero, () => DialogWidget().dismissLoader());
+
+    // DialogWidget().showLoaderDialog();
+    // response = await client.post(
+    //   Uri.parse(_baseUrl + LOGIN),
+    //   body: map,
+    //   headers: headerFormData,
+    // );
+    // Future.delayed(Duration.zero, () => DialogWidget().dismissLoader());
     if (response.statusCode == 200) {
       return response;
     } else {
@@ -39,14 +47,13 @@ class AuthorizationApiProvider {
 
   Future<Response?> testToken() async {
     Response response;
-    String token = userBloc.accessTokenBehavior.stream.value;
-    DialogWidget().showLoaderDialog();
-    response = await client.post(
-      Uri.parse(_baseUrl + TEST_TOKEN),
-      // body: {},
-      headers: headerWithToken(token),
+    // DialogWidget().showLoaderDialog();
+    response = await PublicMethods().post(
+        body: {},
+        subUri: TEST_TOKEN,
+        showLoader: false,
+        isFormData: false
     );
-    DialogWidget().dismissLoader();
     if (response.statusCode == 200) {
       return response;
     }else{
@@ -62,21 +69,21 @@ class AuthorizationApiProvider {
     required String password,
   }) async {
     Response response;
-    DialogWidget().showLoaderDialog();
-    response = await client.post(
-      Uri.parse(_baseUrl + PLAYERS),
-      body: jsonEncode(<String, dynamic>{
-        "name": name,
-        "gender": 0,
-        "birth_date": "07/07/1997",
-        "email": email,
-        "phone": "",
-        "avartar": "",
-        "password": password
-      }),
-      headers: headerWithoutToken,
+    response = await PublicMethods().post(
+        body: {
+            "name": name,
+            "gender": 0,
+            "birth_date": "07/07/1997",
+            "email": email,
+            "phone": "",
+            "avartar": "",
+            "password": password
+          },
+        subUri: USERS,
+        // headers: headerJsonWithoutToken,
+        showLoader: true,
+        isFormData: false,
     );
-    Future.delayed(Duration.zero, () => DialogWidget().dismissLoader());
     if (response.statusCode == 201) {
       return response;
     } else {

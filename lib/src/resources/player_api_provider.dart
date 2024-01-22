@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' show Client, Response;
+import 'package:splat_record/constants/public_values.dart';
 import 'package:splat_record/src/app.dart';
 import 'package:splat_record/src/blocs/player/user_bloc.dart';
 import 'package:splat_record/widgets_common/dialogs.dart';
@@ -19,10 +20,10 @@ class PlayerApiProvider {
     String? matchId,
   }) async {
     Response response;
-    String token = userBloc.accessTokenBehavior.stream.value;
     DialogWidget().showLoaderDialog();
+    String token = await storage.read(key: "access_token") ?? '';
     response = await client.get(
-      Uri.parse(_baseUrl + PLAYERS)
+      Uri.parse(_baseUrl + USERS)
           .replace(queryParameters: {'match_id': matchId ?? ""}),
       headers: headerWithToken(token),
     );

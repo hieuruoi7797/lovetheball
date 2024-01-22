@@ -23,14 +23,12 @@ class GameOnApiProvider {
     required String matchId,
   }) async {
     Response response;
-    String token = userBloc.accessTokenBehavior.stream.value;
     DialogWidget().showLoaderDialog();
     response = await httpClient.post(
       Uri.parse(_baseUrl + FINISH_MATCH),
       body: jsonEncode(<String, dynamic>{
         "match_id": matchId,
       }),
-      headers: headerWithToken(token),
     );
     Navigator.pop(navigatorKey.currentContext!);
     if (response.statusCode == 200) {

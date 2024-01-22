@@ -12,9 +12,7 @@ import '../../../constants/public_values.dart';
 
 class UserBloc {
 
-  final accessTokenBehavior = BehaviorSubject<String>();
 
-  Stream<String> get accessToken => accessTokenBehavior.stream;
 
 
   ///Create a player and save user info in storage
@@ -45,8 +43,8 @@ class UserBloc {
   Future<void> login({required String email, required String pw}) async{
     Response? response = await repository.login(email: email, pw: pw);
     if (response != null){
-      String token = jsonDecode( response.body)["access_token"];
-      accessTokenBehavior.sink.add(token);
+      String accessToken = jsonDecode( response.body)["access_token"];
+      await storage.write(key: 'access_token', value: accessToken);
       Response? checkingTokenRes = await repository.testToken();
       if (checkingTokenRes != null){
         publicValues.userNow = PlayerModel.fromJson(jsonDecode(checkingTokenRes.body));

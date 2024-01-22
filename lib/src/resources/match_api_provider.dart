@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' show Client, Response;
 import 'package:splat_record/constants/constant_values.dart';
+import 'package:splat_record/constants/public_values.dart';
 import 'package:splat_record/src/blocs/player/user_bloc.dart';
 import 'package:splat_record/widgets_common/dialogs.dart';
 
@@ -30,9 +31,8 @@ class MatchApiProvider {
           "type_": type,
           "players": players
         }),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },);
+        // headers: headerWithToken,
+    );
     Navigator.pop(context);
     return response;
   }
@@ -41,13 +41,14 @@ class MatchApiProvider {
     required BuildContext context,
   }) async {
     Response response;
-    String token = userBloc.accessTokenBehavior.stream.value;
+    String token = await storage.read(key: "access_token") ?? '';
     // DialogWidget().showLoaderDialog();
     response = await client.get(Uri.parse('$_baseUrl$MATCHES').replace(queryParameters: {
       'limit':'500',
       'offset':'0'
     }),
-      headers: headerWithToken(token),);
+      headers: headerWithToken(token),
+    );
     // Navigator.pop(context);
     return response;
   }
