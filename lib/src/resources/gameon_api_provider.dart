@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:splat_record/public/public_methods.dart';
 import 'package:splat_record/src/blocs/game_on/game_on_bloc.dart';
 import 'package:splat_record/src/blocs/player/user_bloc.dart';
 
@@ -23,14 +24,13 @@ class GameOnApiProvider {
     required String matchId,
   }) async {
     Response response;
-    DialogWidget().showLoaderDialog();
-    response = await httpClient.post(
-      Uri.parse(_baseUrl + FINISH_MATCH),
-      body: jsonEncode(<String, dynamic>{
-        "match_id": matchId,
-      }),
-    );
-    Navigator.pop(navigatorKey.currentContext!);
+    response = await PublicMethods().post(
+        body: {
+          "match_id": matchId,
+        },
+        subUri: FINISH_MATCH,
+        showLoader: true,
+        isFormData: false);
     if (response.statusCode == 200) {
       return response;
     } else {

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' show Client, Response;
 import 'package:splat_record/constants/constant_values.dart';
 import 'package:splat_record/constants/public_values.dart';
+import 'package:splat_record/public/public_methods.dart';
 import 'package:splat_record/src/blocs/player/user_bloc.dart';
 import 'package:splat_record/widgets_common/dialogs.dart';
 
@@ -23,17 +24,23 @@ class MatchApiProvider {
     required List<String> players,
   }) async {
     Response response;
-    DialogWidget().showLoaderDialog();
-    response = await client.post(Uri.parse(_baseUrl + MATCHES),
-        body: jsonEncode({
-          "name": name,
-          "location": location,
-          "type_": type,
-          "players": players
-        }),
-        // headers: headerWithToken,
-    );
-    Navigator.pop(context);
+    // DialogWidget().showLoaderDialog();
+    response = await PublicMethods().post(body:{
+      "name": name,
+      "location": location,
+      "type_": type,
+      "players": players
+    }, subUri: MATCHES, showLoader: true, isFormData: false);
+    // response = await client.post(Uri.parse(_baseUrl + MATCHES),
+    //     body: jsonEncode({
+    //       "name": name,
+    //       "location": location,
+    //       "type_": type,
+    //       "players": players
+    //     }),
+    //     // headers: headerWithToken,
+    // );
+    // Navigator.pop(context);
     return response;
   }
 
@@ -41,15 +48,13 @@ class MatchApiProvider {
     required BuildContext context,
   }) async {
     Response response;
-    String token = await storage.read(key: "access_token") ?? '';
-    // DialogWidget().showLoaderDialog();
-    response = await client.get(Uri.parse('$_baseUrl$MATCHES').replace(queryParameters: {
+    response = await PublicMethods().get(
+        subUri: MATCHES,
+        showLoader: false,
+        queryParameters:  {
       'limit':'500',
       'offset':'0'
-    }),
-      headers: headerWithToken(token),
-    );
-    // Navigator.pop(context);
+    });
     return response;
   }
 }

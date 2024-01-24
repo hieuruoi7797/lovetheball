@@ -61,4 +61,21 @@ class PublicMethods {
     showLoader ? DialogWidget().dismissLoader() : null;
     return response;
   }
+
+  Future<Response> get({
+    required String subUri,
+    required bool showLoader,
+    required Map<String, dynamic> queryParameters,
+  }) async {
+    Client client = Client();
+    Response response;
+    showLoader ? DialogWidget().showLoaderDialog() : null;
+    String token = await storage.read(key: "access_token") ?? '';
+    response = await client.get(
+      Uri.parse(BASEURL + subUri).replace(queryParameters: queryParameters),
+      headers: headerWithToken(token),
+    );
+    showLoader ? DialogWidget().dismissLoader() : null;
+    return response;
+  }
 }
