@@ -1,17 +1,13 @@
-import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:splat_record/public/public_methods.dart';
 import 'package:splat_record/src/blocs/game_on/game_on_bloc.dart';
-import 'package:splat_record/src/blocs/player/user_bloc.dart';
 
 import '../../constants/api_paths.dart';
 import '../../constants/constant_values.dart';
 import '../../widgets_common/dialogs.dart';
-import '../app.dart';
 
 class GameOnApiProvider {
   Client httpClient = Client();

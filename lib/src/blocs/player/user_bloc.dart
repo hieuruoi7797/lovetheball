@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:splat_record/constants/constant_values.dart';
 import 'package:splat_record/src/app.dart';
 import 'package:splat_record/src/models/player_model.dart';
 import 'package:splat_record/src/resources/repository.dart';
@@ -44,7 +44,7 @@ class UserBloc {
     Response? response = await repository.login(email: email, pw: pw);
     if (response != null){
       String accessToken = jsonDecode( response.body)["access_token"];
-      await storage.write(key: 'access_token', value: accessToken);
+      await storage.write(key: local_token_key, value: accessToken);
       Response? checkingTokenRes = await repository.testToken();
       if (checkingTokenRes != null){
         publicValues.userNow = PlayerModel.fromJson(jsonDecode(checkingTokenRes.body));
