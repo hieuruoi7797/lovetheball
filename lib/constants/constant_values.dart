@@ -1,5 +1,3 @@
-import 'package:splat_record/constants/public_values.dart';
-import 'package:splat_record/src/blocs/player/user_bloc.dart';
 
 const String SVG_SETTING_HOME = "assets/svg_pictures/setting_orange.svg";
 const String SVG_SETTING_HOME_DISABLE = "assets/svg_pictures/SETTING.svg";
@@ -21,6 +19,8 @@ const String REBOUND = 'rebound';
 
 const String ERROR_UNKNOWN = "UNKNOWN";
 const String ERROR_FAIL = "FAIL";
+
+const String local_token_key = 'access_token';
 
 Map<String, String> headerWithToken(String token) => {
   'Content-Type': 'application/json; charset=UTF-8',

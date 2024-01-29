@@ -51,7 +51,7 @@ class PublicMethods {
     Client client = Client();
     Response response;
     const baseUrl = BASEURL;
-    String? token = await storage.read(key: "access_token");
+    String? token = await storage.read(key: local_token_key);
     showLoader ? DialogWidget().showLoaderDialog() : null;
     response = await client.post(Uri.parse(baseUrl + subUri),
         body: isFormData ? body : jsonEncode(body),
@@ -70,7 +70,7 @@ class PublicMethods {
     Client client = Client();
     Response response;
     showLoader ? DialogWidget().showLoaderDialog() : null;
-    String token = await storage.read(key: "access_token") ?? '';
+    String token = await storage.read(key: local_token_key) ?? '';
     response = await client.get(
       Uri.parse(BASEURL + subUri).replace(queryParameters: queryParameters),
       headers: headerWithToken(token),
