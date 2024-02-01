@@ -50,19 +50,27 @@ class OverviewHistoryScreen extends StatelessWidget {
               child: Column(
                 verticalDirection: VerticalDirection.down,
                 children: [
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios_outlined)),
-                        SizedBox(
-                            width: MediaQuery.of(parentContext).size.width*0.7,
-                            child: Text('title', textAlign: TextAlign.center,)
-                        ),
-                        const Spacer()
-                      ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_ios_outlined)),
+                          SizedBox(
+                              width: MediaQuery.of(parentContext).size.width*0.7,
+                              child: Text(
+                                'Name Game',
+                                style: title_black_color,
+                                textAlign: TextAlign.center,
+                              )
+                          ),
+                          const Spacer()
+                        ],
+                      ),
                     ),
                   ),
+                  gap_2,
                   Expanded(
                     flex: 1,
                     child: ListView.builder(
@@ -70,8 +78,10 @@ class OverviewHistoryScreen extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index){
                           return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 0),
+                            padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
                             child: SizedBox(
+                                  height: 30,
+                                  width: 30,
                                   child:Column(
                                     children: [
                                       SvgPicture.asset( historyGame.listIconMatch[index]),
@@ -85,9 +95,9 @@ class OverviewHistoryScreen extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    flex: 3,
+                    flex: 8,
                     child: ListView.builder(
-                        itemCount: 10,
+                        itemCount: 6,
                         shrinkWrap: true,
                         itemBuilder: (context,index){
                           return Container(
@@ -98,13 +108,15 @@ class OverviewHistoryScreen extends StatelessWidget {
                                 child: userNameCard(
                                     userName: 'xinh',
                                     parentContext: parentContext,
-                                    suffixIcon: Icon(Icons.expand_more, color: Colors.black,)
+                                    onTapSuffix: ()=> historyGame.checkSelectToggle(index),
+                                    suffixIcon: Icon(historyGame.selectToggle? Icons.expand_less:Icons.expand_more, color: Colors.black,)
                                 ),
                               )
                           );
                         }
                     ),
                   ),
+                  gap_24
                 ],
               ),
             ),
@@ -115,3 +127,12 @@ class OverviewHistoryScreen extends StatelessWidget {
     );
   }
 }
+class DetailPersonMatchHistory extends StatelessWidget {
+  const DetailPersonMatchHistory({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
