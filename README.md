@@ -1,4 +1,4 @@
-# splat_record
+# splat_mobile
 
 A new Flutter project.
 

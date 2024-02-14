@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:splat_record/constants/ui_styles.dart';
-import 'package:splat_record/src/blocs/game_on/game_on_bloc.dart';
-import 'package:splat_record/src/blocs/match/match_bloc.dart';
-import 'package:splat_record/src/models/player_model.dart';
-import 'package:splat_record/widgets_common/container_common.dart';
+import 'package:splat_mobile/constants/ui_styles.dart';
+import 'package:splat_mobile/src/blocs/game_on/game_on_bloc.dart';
+import 'package:splat_mobile/src/blocs/match/match_bloc.dart';
+import 'package:splat_mobile/src/models/player_model.dart';
+import 'package:splat_mobile/widgets_common/container_common.dart';
 
 import '../../constants/constant_values.dart';
 import '../models/stat_model.dart';

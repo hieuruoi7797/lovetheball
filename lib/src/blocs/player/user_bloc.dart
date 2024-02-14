@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:splat_record/constants/constant_values.dart';
-import 'package:splat_record/src/app.dart';
-import 'package:splat_record/src/models/player_model.dart';
-import 'package:splat_record/src/resources/repository.dart';
+import 'package:splat_mobile/constants/constant_values.dart';
+import 'package:splat_mobile/src/app.dart';
+import 'package:splat_mobile/src/models/player_model.dart';
+import 'package:splat_mobile/src/resources/repository.dart';
 
 import '../../../constants/public_values.dart';
 

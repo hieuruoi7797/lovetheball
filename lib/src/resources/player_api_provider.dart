@@ -1,19 +1,12 @@
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' show Client, Response;
-import 'package:splat_record/constants/public_values.dart';
-import 'package:splat_record/public/public_methods.dart';
-import 'package:splat_record/src/app.dart';
-import 'package:splat_record/src/blocs/player/user_bloc.dart';
-import 'package:splat_record/widgets_common/dialogs.dart';
+import 'package:splat_mobile/public/public_methods.dart';
+import 'package:splat_mobile/widgets_common/dialogs.dart';
 
 import '../../constants/api_paths.dart';
 import '../../constants/constant_values.dart';
 
 class PlayerApiProvider {
   Client client = Client();
-  final _baseUrl = BASEURL;
 
 
 

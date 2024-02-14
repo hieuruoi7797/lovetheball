@@ -1,6 +1,6 @@
 {
-    "name": "splat_record",
-    "short_name": "splat_record",
+    "name": "splat_mobile",
+    "short_name": "splat_mobile",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

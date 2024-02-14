@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:splat_record/constants/constant_values.dart';
-import 'package:splat_record/constants/ui_styles.dart';
-import 'package:splat_record/src/blocs/match/match_bloc.dart';
-import 'package:splat_record/src/models/match_model.dart';
+import 'package:splat_mobile/constants/constant_values.dart';
+import 'package:splat_mobile/constants/ui_styles.dart';
+import 'package:splat_mobile/src/blocs/match/match_bloc.dart';
+import 'package:splat_mobile/src/models/match_model.dart';
 
 class ListingMatchesScreen extends StatelessWidget {
   const ListingMatchesScreen({super.key});
