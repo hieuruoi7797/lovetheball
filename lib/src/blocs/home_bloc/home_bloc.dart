@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:splat_record/constants/public_values.dart';
-import 'package:splat_record/public/public_methods.dart';
-import 'package:splat_record/src/app.dart';
-import 'package:splat_record/src/blocs/match/match_bloc.dart';
-import 'package:splat_record/src/models/player_model.dart';
-import 'package:splat_record/widgets_common/dialogs.dart';
+import 'package:splat_mobile/constants/public_values.dart';
+import 'package:splat_mobile/src/app.dart';
+import 'package:splat_mobile/src/blocs/match/match_bloc.dart';
+import 'package:splat_mobile/src/models/player_model.dart';
 
 class HomeBloc {
   int _pageIndexInt = 1;

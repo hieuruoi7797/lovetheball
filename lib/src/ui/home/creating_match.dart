@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:splat_record/constants/constant_values.dart';
-import 'package:splat_record/constants/ui_styles.dart';
-import 'package:splat_record/src/app.dart';
-import 'package:splat_record/src/blocs/home_bloc/home_bloc.dart';
-import 'package:splat_record/src/blocs/match/match_bloc.dart';
-import 'package:splat_record/src/models/player_model.dart';
-import 'package:splat_record/widgets_common/container_common.dart';
-import 'package:splat_record/widgets_common/dialogs.dart';
-import 'package:splat_record/widgets_common/user_name_card.dart';
+import 'package:splat_mobile/constants/constant_values.dart';
+import 'package:splat_mobile/constants/ui_styles.dart';
+import 'package:splat_mobile/src/app.dart';
+import 'package:splat_mobile/src/blocs/home_bloc/home_bloc.dart';
+import 'package:splat_mobile/src/blocs/match/match_bloc.dart';
+import 'package:splat_mobile/src/models/player_model.dart';
+import 'package:splat_mobile/widgets_common/container_common.dart';
+import 'package:splat_mobile/widgets_common/dialogs.dart';
+import 'package:splat_mobile/widgets_common/user_name_card.dart';
 
 class CreatingMatchUI extends StatelessWidget{
   const CreatingMatchUI({super.key});

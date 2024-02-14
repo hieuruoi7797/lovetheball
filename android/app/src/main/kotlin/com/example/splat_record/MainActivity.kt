@@ -1,4 +1,4 @@
-package com.example.splat_record
+package com.splat.splat_mobile
 
 import io.flutter.embedding.android.FlutterActivity
 

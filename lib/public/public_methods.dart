@@ -3,11 +3,10 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:splat_record/constants/api_paths.dart';
-import 'package:splat_record/constants/constant_values.dart';
-import 'package:splat_record/constants/public_values.dart';
-import 'package:splat_record/src/blocs/player/user_bloc.dart';
-import 'package:splat_record/src/models/player_model.dart';
+import 'package:splat_mobile/constants/api_paths.dart';
+import 'package:splat_mobile/constants/constant_values.dart';
+import 'package:splat_mobile/constants/public_values.dart';
+import 'package:splat_mobile/src/models/player_model.dart';
 
 import '../widgets_common/dialogs.dart';
 

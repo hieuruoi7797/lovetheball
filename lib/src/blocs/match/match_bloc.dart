@@ -2,16 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
-import 'package:splat_record/src/app.dart';
-import 'package:splat_record/src/blocs/game_on/game_on_bloc.dart';
-import 'package:splat_record/src/blocs/home_bloc/home_bloc.dart';
-import 'package:splat_record/src/models/match_model.dart';
-import 'package:splat_record/src/models/player_model.dart';
-import 'package:splat_record/src/resources/repository.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:splat_record/widgets_common/dialogs.dart';
+import 'package:splat_mobile/src/app.dart';
+import 'package:splat_mobile/src/blocs/game_on/game_on_bloc.dart';
+import 'package:splat_mobile/src/blocs/home_bloc/home_bloc.dart';
+import 'package:splat_mobile/src/models/match_model.dart';
+import 'package:splat_mobile/src/models/player_model.dart';
+import 'package:splat_mobile/src/resources/repository.dart';
+import 'package:splat_mobile/widgets_common/dialogs.dart';
 
-import '../../../public/public_methods.dart';
 
 class MatchBloc {
   final _matchCreatorPublish = BehaviorSubject<Response>();

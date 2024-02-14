@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:splat_record/src/blocs/home_bloc/home_bloc.dart';
-import 'package:splat_record/src/blocs/match/match_bloc.dart';
-import 'package:splat_record/src/ui/home/creating_match.dart';
-import 'package:splat_record/src/ui/home/listing_matches.dart';
+import 'package:splat_mobile/src/blocs/home_bloc/home_bloc.dart';
+import 'package:splat_mobile/src/blocs/match/match_bloc.dart';
+import 'package:splat_mobile/src/ui/home/creating_match.dart';
+import 'package:splat_mobile/src/ui/home/listing_matches.dart';
 import '../../../constants/constant_values.dart';
 import '../../../constants/ui_styles.dart';
 import 'setting_screen.dart';

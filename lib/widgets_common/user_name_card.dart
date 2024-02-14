@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:splat_record/src/app.dart';
 
 import '../constants/constant_values.dart';
 import '../constants/ui_styles.dart';

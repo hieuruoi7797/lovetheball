@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:splat_record/src/blocs/player/user_bloc.dart';
+import 'package:splat_mobile/src/blocs/player/user_bloc.dart';
 
 import '../../../constants/ui_styles.dart';
 

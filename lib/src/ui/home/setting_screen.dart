@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:splat_record/constants/ui_styles.dart';
-import 'package:splat_record/src/blocs/home_bloc/home_bloc.dart';
-import 'package:splat_record/src/blocs/match/match_bloc.dart';
-import 'package:splat_record/src/models/player_model.dart';
+import 'package:splat_mobile/constants/ui_styles.dart';
+import 'package:splat_mobile/src/blocs/home_bloc/home_bloc.dart';
+import 'package:splat_mobile/src/models/player_model.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
