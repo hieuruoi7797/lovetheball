@@ -24,7 +24,7 @@ class GameOnScreen extends StatelessWidget {
                 image: DecorationImage(
                     opacity: 0.25,
                     fit: BoxFit.cover,
-                    image: AssetImage(PNG_BACKGROUND_HOME))),
+                    image: AssetImage(svg_background_home))),
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -106,7 +106,7 @@ class GameOnScreen extends StatelessWidget {
                                       style: title_black_color,
                                     );
                                   } else {
-                                    return const Text(ERROR_UNKNOWN);
+                                    return const Text(error_unknown);
                                   }
                                 }),
                           ),
@@ -126,34 +126,34 @@ class GameOnScreen extends StatelessWidget {
                                       mainAxisSpacing: 10,),
                                     children: [
                                       statContainer(
-                                          onTap:() => gameOnBloc.pickStat(LAYUP),
+                                          onTap:() => gameOnBloc.pickStat(layup),
                                           context: context,
                                           quantity: snapshot.data?.layUp != null ? snapshot.data!.layUp.toString() :"0",
-                                          statType: LAYUP,
+                                          statType: layup,
                                           svgPicture: SvgPicture.asset("assets/svg_pictures/layup.svg"),
                                           svgPicturePicked: SvgPicture.asset("assets/svg_pictures/layup_picked.svg"),
                                           isPicked: statIndex.data == 0  ? true : false),
                                       statContainer(
                                           context: context,
-                                          onTap:() => gameOnBloc.pickStat(ASSIST),
-                                          statType: ASSIST,
+                                          onTap:() => gameOnBloc.pickStat(assist),
+                                          statType: assist,
                                           quantity: snapshot.data?.assit != null ? snapshot.data!.assit.toString() :"0",
                                           isPicked: statIndex.data == 1  ? true : false,
                                           svgPicture: SvgPicture.asset("assets/svg_pictures/assist.svg"),
                                           svgPicturePicked: SvgPicture.asset("assets/svg_pictures/assist_picked.svg")),
                                       statContainer(
-                                          onTap:() => gameOnBloc.pickStat(TWO),
+                                          onTap:() => gameOnBloc.pickStat(mid_range),
                                           context: context,
                                           quantity: snapshot.data?.twoPointsShoot != null ? snapshot.data!.twoPointsShoot.toString() :"0",
-                                          statType: TWO,
+                                          statType: mid_range,
                                           svgPicture: SvgPicture.asset("assets/svg_pictures/2point.svg"),
                                           svgPicturePicked: SvgPicture.asset("assets/svg_pictures/2point_picked.svg"),
                                           isPicked: statIndex.data == 2  ? true : false),
                                       statContainer(
-                                          onTap:() => gameOnBloc.pickStat(THREE),
+                                          onTap:() => gameOnBloc.pickStat(three_points),
                                           context: context,
                                           quantity: snapshot.data?.threePointsShoot != null ? snapshot.data!.threePointsShoot.toString() :"0",
-                                          statType: THREE,
+                                          statType: three_points,
                                           svgPicture: SvgPicture.asset("assets/svg_pictures/3point.svg"),
                                           svgPicturePicked: SvgPicture.asset("assets/svg_pictures/3point_picked.svg"),
                                           isPicked: statIndex.data == 3  ? true : false),
@@ -207,14 +207,14 @@ class GameOnScreen extends StatelessWidget {
                       const Spacer(),
                       GestureDetector(
                           onTap: () => gameOnBloc.decrease(),
-                          child: SvgPicture.asset(SUBTRACTING)),
+                          child: SvgPicture.asset(subtracting)),
                       Container(),
                       const Spacer(),
                       const Spacer(),
                       const Spacer(),
                       GestureDetector(
                           onTap: () => gameOnBloc.increase(),
-                          child: SvgPicture.asset(ADDING)),
+                          child: SvgPicture.asset(svg_adding)),
                       const Spacer(),
 
                     ],

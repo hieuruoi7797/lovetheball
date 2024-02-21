@@ -10,28 +10,20 @@ class AuthorizationApiProvider {
   Client client = Client();
 
   Future<Response?> login({
-    required String email,
-    required String password,
+    required String inputEmail,
+    required String inputPasswords,
   }) async {
     Response response;
     var map = <String, dynamic>{};
-    map['username'] = email;
-    map['password'] = password;
+    map['username'] = inputEmail;
+    map['password'] = inputPasswords;
     response = await PublicMethods().post(
         body: map,
         subUri: LOGIN,
-        // headers: headerFormDataWithoutToken,
         showLoader: true,
         isFormData: true,
     );
 
-    // DialogWidget().showLoaderDialog();
-    // response = await client.post(
-    //   Uri.parse(_baseUrl + LOGIN),
-    //   body: map,
-    //   headers: headerFormData,
-    // );
-    // Future.delayed(Duration.zero, () => DialogWidget().dismissLoader());
     if (response.statusCode == 200) {
       return response;
     } else {
@@ -43,7 +35,6 @@ class AuthorizationApiProvider {
 
   Future<Response?> testToken() async {
     Response response;
-    // DialogWidget().showLoaderDialog();
     response = await PublicMethods().post(
         body: {},
         subUri: TEST_TOKEN,
@@ -76,7 +67,6 @@ class AuthorizationApiProvider {
             "password": password
           },
         subUri: USERS,
-        // headers: headerJsonWithoutToken,
         showLoader: true,
         isFormData: false,
     );
@@ -84,7 +74,7 @@ class AuthorizationApiProvider {
       return response;
     } else {
       await Future.delayed(
-          Duration.zero, () => DialogWidget().showFailDialog(ERROR_FAIL));
+          Duration.zero, () => DialogWidget().showFailDialog(error_fail));
       return null;
     }
   }

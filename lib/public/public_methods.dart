@@ -43,7 +43,6 @@ class PublicMethods {
   Future<Response> post({
     required Map body,
     required String subUri,
-    // required Map<String, String> headers,
     required bool showLoader,
     required bool isFormData,
   }) async {

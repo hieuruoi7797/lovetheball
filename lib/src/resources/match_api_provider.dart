@@ -18,23 +18,12 @@ class MatchApiProvider {
     required List<String> players,
   }) async {
     Response response;
-    // DialogWidget().showLoaderDialog();
     response = await PublicMethods().post(body:{
       "name": name,
       "location": location,
       "type_": type,
       "players": players
     }, subUri: MATCHES, showLoader: true, isFormData: false);
-    // response = await client.post(Uri.parse(_baseUrl + MATCHES),
-    //     body: jsonEncode({
-    //       "name": name,
-    //       "location": location,
-    //       "type_": type,
-    //       "players": players
-    //     }),
-    //     // headers: headerWithToken,
-    // );
-    // Navigator.pop(context);
     return response;
   }
 

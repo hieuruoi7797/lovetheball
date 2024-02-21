@@ -44,7 +44,7 @@ StatelessWidget userNameCard({
         SizedBox(
           width: width ?? MediaQuery.of(parentContext).size.width * 0.4,
           child: Text(
-            userName ?? ERROR_UNKNOWN,
+            userName ?? error_unknown,
             style: const TextStyle(
                 fontWeight: FontWeight.w600, fontSize: 16),
             maxLines: 2,

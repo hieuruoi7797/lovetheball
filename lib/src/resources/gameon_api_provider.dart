@@ -30,7 +30,7 @@ class GameOnApiProvider {
       return response;
     } else {
       await Future.delayed(
-          Duration.zero, () => DialogWidget().showFailDialog(ERROR_FAIL));
+          Duration.zero, () => DialogWidget().showFailDialog(error_fail));
       return response;
     }
   }

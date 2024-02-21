@@ -30,7 +30,7 @@ class Repository {
     => matchApiProvider.getMatchesList(context: context);
 
   Future<Response?> login({required String email, required String pw})
-  => authorizationProvider.login(email: email, password: pw);
+  => authorizationProvider.login(inputEmail: email, inputPasswords: pw);
 
   Future<Response?> createUser(
           {

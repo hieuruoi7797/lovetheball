@@ -26,7 +26,7 @@ class CreatingMatchUI extends StatelessWidget{
           image: DecorationImage(
               opacity: 0.25,
               fit: BoxFit.cover,
-              image: AssetImage(PNG_BACKGROUND_HOME))),
+              image: AssetImage(svg_background_home))),
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -54,7 +54,7 @@ class CreatingMatchUI extends StatelessWidget{
                             }else{
                               return Container(
                                 margin: const EdgeInsets.only(top: 66),
-                                child: const Text(ERROR_UNKNOWN,
+                                child: const Text(error_unknown,
                                     style: name_big_size),
                               );
                             }

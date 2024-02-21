@@ -216,20 +216,20 @@ class GameOnBloc {
 
   pickStat(String s) {
     switch(s) {
-      case LAYUP:
+      case layup:
         {
           _pickedStatIndex.sink.add(0);
           pickedStatInt = 0;
         }
-      case ASSIST: {
+      case assist: {
         _pickedStatIndex.sink.add(1);
         pickedStatInt = 1;
       }
-      case TWO: {
+      case mid_range: {
         _pickedStatIndex.sink.add(2);
         pickedStatInt = 2;
       }
-      case THREE:  {
+      case three_points:  {
         _pickedStatIndex.sink.add(3);
         pickedStatInt = 3;
       }
