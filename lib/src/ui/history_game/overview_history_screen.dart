@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:splat_record/constants/ui_styles.dart';
-import 'package:splat_record/src/blocs/overview_history_game/overview_history_game.dart';
-import 'package:splat_record/widgets_common/user_name_card.dart';
+import 'package:splat_mobile/constants/ui_styles.dart';
+import 'package:splat_mobile/src/blocs/overview_history_game/overview_history_game.dart';
+import 'package:splat_mobile/widgets_common/user_name_card.dart';
 
 import '../../../constants/constant_values.dart';
 import '../../app.dart';
@@ -29,7 +29,7 @@ class OverviewHistoryScreen extends StatelessWidget {
                 image: DecorationImage(
                     opacity: 0.25,
                     fit: BoxFit.cover,
-                    image: AssetImage(PNG_BACKGROUND_HOME))),
+                    image: AssetImage(png_background_home))),
           ),
           Center(
             child: Padding(
