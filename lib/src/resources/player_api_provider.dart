@@ -15,7 +15,7 @@ class PlayerApiProvider {
   }) async {
     Response response;
     response = await PublicMethods().get(
-        subUri: USERS,
+        subUri: user_path,
         showLoader: true,
         queryParameters: {'match_id': matchId ?? ""});
     if (response.statusCode == 200) {

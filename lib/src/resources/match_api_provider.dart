@@ -23,7 +23,7 @@ class MatchApiProvider {
       "location": location,
       "type_": type,
       "players": players
-    }, subUri: MATCHES, showLoader: true, isFormData: false);
+    }, subUri: matches_path, showLoader: true, isFormData: false);
     return response;
   }
 
@@ -32,7 +32,7 @@ class MatchApiProvider {
   }) async {
     Response response;
     response = await PublicMethods().get(
-        subUri: MATCHES,
+        subUri: matches_path,
         showLoader: false,
         queryParameters:  {
       'limit':'500',

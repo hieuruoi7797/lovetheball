@@ -23,7 +23,7 @@ class GameOnApiProvider {
         body: {
           "match_id": matchId,
         },
-        subUri: FINISH_MATCH,
+        subUri: finish_match_path,
         showLoader: true,
         isFormData: false);
     if (response.statusCode == 200) {

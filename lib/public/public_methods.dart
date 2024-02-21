@@ -48,7 +48,7 @@ class PublicMethods {
   }) async {
     Client client = Client();
     Response response;
-    const baseUrl = BASEURL;
+    const baseUrl = base_url;
     String? token = await storage.read(key: local_token_key);
     showLoader ? DialogWidget().showLoaderDialog() : null;
     response = await client.post(Uri.parse(baseUrl + subUri),
@@ -70,7 +70,7 @@ class PublicMethods {
     showLoader ? DialogWidget().showLoaderDialog() : null;
     String token = await storage.read(key: local_token_key) ?? '';
     response = await client.get(
-      Uri.parse(BASEURL + subUri).replace(queryParameters: queryParameters),
+      Uri.parse(base_url + subUri).replace(queryParameters: queryParameters),
       headers: headerWithToken(token),
     );
     showLoader ? DialogWidget().dismissLoader() : null;

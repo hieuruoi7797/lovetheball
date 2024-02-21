@@ -19,7 +19,7 @@ class AuthorizationApiProvider {
     map['password'] = inputPasswords;
     response = await PublicMethods().post(
         body: map,
-        subUri: LOGIN,
+        subUri: login_path,
         showLoader: true,
         isFormData: true,
     );
@@ -37,7 +37,7 @@ class AuthorizationApiProvider {
     Response response;
     response = await PublicMethods().post(
         body: {},
-        subUri: TEST_TOKEN,
+        subUri: test_token_path,
         showLoader: false,
         isFormData: false
     );
@@ -66,7 +66,7 @@ class AuthorizationApiProvider {
             "avartar": "",
             "password": password
           },
-        subUri: USERS,
+        subUri: user_path,
         showLoader: true,
         isFormData: false,
     );
