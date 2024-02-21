@@ -1,24 +1,24 @@
 
-const String SVG_SETTING_HOME = "assets/svg_pictures/setting_orange.svg";
-const String SVG_SETTING_HOME_DISABLE = "assets/svg_pictures/SETTING.svg";
-const String SVG_BASKETBALL_HOME = "assets/svg_pictures/BASKETBALL.svg";
-const String SVG_BASKETBALL_HOME_DISABLE = "assets/svg_pictures/basketball_grey.svg";
-const String SVG_CHART_HOME = "assets/svg_pictures/matches_orange.svg";
-const String SVG_CHART_HOME_DISABLE = "assets/svg_pictures/CHART.svg";
-const String PNG_BACKGROUND_HOME = "assets/png_images/bg_home.png";
-const String SUBTRACTING = "assets/svg_pictures/SUBTRACTING.svg";
-const String ADDING = "assets/svg_pictures/ADD_PLAYER.svg";
-const String LISTING_MATCHES_ICON = "assets/svg_pictures/listing_matches_icon.svg";
+const String svg_home_setting = "assets/svg_pictures/setting_orange.svg";
+const String svg_home_setting_disable = "assets/svg_pictures/SETTING.svg";
+const String svg_basket_home = "assets/svg_pictures/BASKETBALL.svg";
+const String svg_basket_home_disable = "assets/svg_pictures/basketball_grey.svg";
+const String svg_chart_home = "assets/svg_pictures/matches_orange.svg";
+const String svg_chart_home_disable = "assets/svg_pictures/CHART.svg";
+const String svg_background_home = "assets/png_images/bg_home.png";
+const String subtracting = "assets/svg_pictures/SUBTRACTING.svg";
+const String svg_adding = "assets/svg_pictures/ADD_PLAYER.svg";
+const String svg_matches_list = "assets/svg_pictures/listing_matches_icon.svg";
 
 
-const String TWO = 'Mid-Range Shot';
-const String LAYUP = 'Lay-Up';
-const String THREE = '3-Pointer';
-const String ASSIST = 'Assist';
-const String REBOUND = 'rebound';
+const String mid_range = 'Mid-Range Shot';
+const String layup = 'Lay-Up';
+const String three_points = '3-Pointer';
+const String assist = 'Assist';
+const String rebound = 'rebound';
 
-const String ERROR_UNKNOWN = "UNKNOWN";
-const String ERROR_FAIL = "FAIL";
+const String error_unknown = "UNKNOWN";
+const String error_fail = "FAIL";
 
 const String local_token_key = 'access_token';
 

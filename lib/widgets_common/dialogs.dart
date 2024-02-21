@@ -276,7 +276,7 @@ class DialogWidget {
                     margin: const EdgeInsets.only(top: 20),
                     width: MediaQuery.of(context).size.width,
                     child: Text(
-                      content ?? ERROR_UNKNOWN,
+                      content ?? error_unknown,
                       textAlign: TextAlign.center,
                       style: title_black_color,
                     ),
@@ -338,7 +338,7 @@ class DialogWidget {
                     margin: EdgeInsets.only(top: 20),
                     width: MediaQuery.of(context).size.width,
                     child: Text(
-                      content ?? ERROR_UNKNOWN,
+                      content ?? error_unknown,
                       textAlign: TextAlign.center,
                       style: name_big_size,
                     ),

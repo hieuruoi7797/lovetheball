@@ -56,7 +56,7 @@ class ListingMatchesScreen extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsets.only(right: 10),
-            child: SvgPicture.asset(LISTING_MATCHES_ICON),
+            child: SvgPicture.asset(svg_matches_list),
           ),
           const Text('Lịch sử trận đấu',
             style: TextStyle(
@@ -102,7 +102,7 @@ Widget matchCard(BuildContext context, {required MatchModel match}) {
             children: [
               const Spacer(),
               const Spacer(),
-              Text(match.name ?? ERROR_UNKNOWN,
+              Text(match.name ?? error_unknown,
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16

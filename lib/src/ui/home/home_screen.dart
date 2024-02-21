@@ -58,16 +58,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 items: [
                   BottomNavigationBarItem(
                       icon: pageIndexSnap.data == 0 ?
-                      SvgPicture.asset(SVG_SETTING_HOME) :
-                      SvgPicture.asset(SVG_SETTING_HOME_DISABLE), label: ''),
+                      SvgPicture.asset(svg_home_setting) :
+                      SvgPicture.asset(svg_home_setting_disable), label: ''),
                   BottomNavigationBarItem(
                       icon:  pageIndexSnap.data == 1 ?
-                      SvgPicture.asset(SVG_BASKETBALL_HOME) :
-                      SvgPicture.asset(SVG_BASKETBALL_HOME_DISABLE), label: ''),
+                      SvgPicture.asset(svg_basket_home) :
+                      SvgPicture.asset(svg_basket_home_disable), label: ''),
                   BottomNavigationBarItem(
                       icon:  pageIndexSnap.data == 2 ?
-                      SvgPicture.asset(SVG_CHART_HOME) :
-                      SvgPicture.asset(SVG_CHART_HOME_DISABLE), label: ''),
+                      SvgPicture.asset(svg_chart_home) :
+                      SvgPicture.asset(svg_chart_home_disable), label: ''),
                 ],
               ),
               body: _widgetOptions.elementAt(pageIndexSnap.data ?? 1));

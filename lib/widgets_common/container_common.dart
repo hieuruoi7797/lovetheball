@@ -71,7 +71,7 @@ Widget statInfoEdittingContainer({
                     color: Colors.white),
                 child: Center(
                   child: SvgPicture.asset(
-                    SUBTRACTING,
+                    subtracting,
                     width: 14,
                     height: 14,
                     fit: BoxFit.none,
@@ -114,7 +114,7 @@ Widget statInfoEdittingContainer({
                     color: Colors.white),
                 child: Center(
                   child: SvgPicture.asset(
-                    ADDING,
+                    svg_adding,
                     width: 14,
                     height: 14,
                   ),
