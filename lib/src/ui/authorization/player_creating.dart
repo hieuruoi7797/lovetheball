@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:splat_mobile/src/blocs/player/user_bloc.dart';
 
 import '../../../constants/ui_styles.dart';
+import '../../../widgets_common/pop_up_builder.dart';
 
 class PlayerCreatingScreen extends StatefulWidget {
   const PlayerCreatingScreen({super.key});
@@ -157,12 +158,35 @@ class _PlayerCreatorState extends State<PlayerCreatingScreen> {
                           ),
                           Center(
                             child: GestureDetector(
-                              onTap: () {
-                                userBloc.createPlayer(
-                                    name: playerNameController.text,
-                                    email: playerEmailController.text,
-                                    password: passwordController.text,
-                                );
+                              onTap: () async {
+                                if(playerNameController.text.isEmpty|| playerNameController ==null){
+                                  await showDialog(context: context, builder: (context){
+                                    return DialogBuilder.BaseDialogOneButton(title: 'Thông báo', content: "Không được để trống name", onCancel: (){Navigator.pop(context);});
+                                  });
+                                }
+                                if(playerEmailController.text.isEmpty || playerEmailController == null){
+                                  await showDialog(context: context, builder: (context){
+                                    return DialogBuilder.BaseDialogOneButton(title: 'Thông báo', content: "Không được để trống email", onCancel: (){Navigator.pop(context);});
+                                  });
+                                }
+                                if(playerEmailController.text.isNotEmpty && playerNameController.text.isNotEmpty&& passwordController.text.isNotEmpty){
+                                  await showDialog(context: context, builder: (context){
+                                    return DialogBuilder.BaseDialog(
+                                        title: 'Thông báo',
+                                        content: "Hãy kiểm tra kỹ thông tin đăng ký nhé!",
+                                        onCancel: (){Navigator.pop(context);},
+                                        onSuccess: (){
+                                          userBloc.createPlayer(
+                                            name: playerNameController.text,
+                                            email: playerEmailController.text,
+                                            password: passwordController.text,
+                                          );
+                                        }
+                                    );
+                                  });
+
+                                }
+
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 0.47,
