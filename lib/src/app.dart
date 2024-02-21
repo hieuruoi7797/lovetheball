@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:splat_mobile/src/ui/authorization/login.dart';
 import 'package:splat_mobile/src/ui/game_on.dart';
 import 'package:splat_mobile/src/ui/authorization/player_creating.dart';
+
 import 'ui/home/home_screen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       navigatorKey: navigatorKey,
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
 
       theme: ThemeData(
         primaryColor: const Color(0xFFE55807),
@@ -28,7 +30,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => LoginScreen(),
         '/sign_up': (context) => const PlayerCreatingScreen(),
         '/home': (context) => const HomeScreen(),
-        '/game_on': (context) => const GameOnScreen()
+        '/game_on': (context) => const GameOnScreen(),
+        '/overview_history_game': (context) => OverviewHistoryScreen(),
       },
       // home: const MyHomePage(),
     );
