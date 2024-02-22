@@ -26,7 +26,7 @@ class CreatingMatchUI extends StatelessWidget{
           image: DecorationImage(
               opacity: 0.25,
               fit: BoxFit.cover,
-              image: AssetImage(svg_background_home))),
+              image: AssetImage(png_background_home))),
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

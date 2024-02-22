@@ -6,11 +6,14 @@ import 'package:flutter/material.dart';
 ///COLORS
 const Color color_main = Color(0xFFE55807);
 const Color color_loading_background = Colors.blueGrey;
+const Color color_button_cancel = Colors.grey;
 
 
 ///Widgets
 const Widget gap_default = SizedBox(height: 16,);
 const Widget gap_24 = SizedBox(height: 16,);
+const Widget gap_2 = SizedBox(height: 10,);
+
 
 //TextStyle
 const TextStyle title_main_color = TextStyle(

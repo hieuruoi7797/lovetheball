@@ -8,9 +8,12 @@ import 'package:splat_mobile/src/app.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 import 'package:splat_mobile/src/resources/repository.dart';
 
+
 import '../../../constants/public_values.dart';
 
 class UserBloc {
+
+  late BuildContext context;
 
 
 
@@ -21,13 +24,15 @@ class UserBloc {
     required String email,
     required String password,
   }) async {
-    Response? response =
-    await repository.createUser(name: name, email: email, password: password);
-    if (response != null) {
-     _playerCreatedSuccess(response);
-    } else {
-    }
-    }
+
+      Response? response =
+      await repository.createUser(name: name, email: email, password: password);
+      if (response != null) {
+        _playerCreatedSuccess(response);
+      } else {
+      }
+
+  }
 
   dispose() {
   }

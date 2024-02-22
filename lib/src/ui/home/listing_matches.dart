@@ -3,7 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/constants/ui_styles.dart';
 import 'package:splat_mobile/src/blocs/match/match_bloc.dart';
+import 'package:splat_mobile/src/blocs/overview_history_game/overview_history_game.dart';
 import 'package:splat_mobile/src/models/match_model.dart';
+
 
 class ListingMatchesScreen extends StatelessWidget {
   const ListingMatchesScreen({super.key});
@@ -76,7 +78,7 @@ class ListingMatchesScreen extends StatelessWidget {
 
 Widget matchCard(BuildContext context, {required MatchModel match}) {
   return GestureDetector(
-    onTap: () => matchBloc.goToMatch(match),
+    onTap: () => historyGame.goToDetail(),
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       margin: const EdgeInsets.only(top: 20),

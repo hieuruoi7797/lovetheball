@@ -10,13 +10,14 @@ StatelessWidget userNameCard({
   double? height,
   String? userName,
   Widget? suffixIcon,
+  Color?  cardColor,
   Function()? onTapSuffix,
 }) {
   return Container(
     width: width ?? MediaQuery.of(parentContext).size.width,
     height: height ?? 70,
     decoration: BoxDecoration(
-      color: const Color(0xFFF1F1F1),
+      color: cardColor??const Color(0xFFF1F1F1),
       borderRadius: BorderRadius.circular(10),
     ),
     child: Row(
