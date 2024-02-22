@@ -43,4 +43,7 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /android/
-/ios/
+/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
+/ios/Runner.xcodeproj/project.pbxpro
+/pubspec.lock
+
