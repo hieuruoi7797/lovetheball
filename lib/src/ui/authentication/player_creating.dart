@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:splat_mobile/src/blocs/player/user_bloc.dart';
+import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
 
 import '../../../constants/ui_styles.dart';
 import '../../../widgets_common/pop_up_builder.dart';
@@ -30,7 +30,7 @@ class _PlayerCreatorState extends State<PlayerCreatingScreen> {
 
   @override
   void dispose() {
-    userBloc.dispose();
+    authenticationBloc.dispose();
     super.dispose();
   }
 
@@ -176,7 +176,7 @@ class _PlayerCreatorState extends State<PlayerCreatingScreen> {
                                         content: "Hãy kiểm tra kỹ thông tin đăng ký nhé!",
                                         onCancel: (){Navigator.pop(context);},
                                         onSuccess: (){
-                                          userBloc.createPlayer(
+                                          authenticationBloc.createUser(
                                             name: playerNameController.text,
                                             email: playerEmailController.text,
                                             password: passwordController.text,

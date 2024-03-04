@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
-import 'package:splat_mobile/src/resources/authorization_api_provider.dart';
+import 'package:splat_mobile/src/resources/authentication_api_provider.dart';
 import 'package:splat_mobile/src/resources/gameon_api_provider.dart';
 import 'package:splat_mobile/src/resources/match_api_provider.dart';
 import 'package:splat_mobile/src/resources/player_api_provider.dart';
 
 class Repository {
-  final matchApiProvider = MatchApiProvider();
-  final playerApiProvider = PlayerApiProvider();
-  final authorizationProvider = AuthorizationApiProvider();
+  final _matchApiProvider = MatchApiProvider();
+  final _playerApiProvider = PlayerApiProvider();
+  final _authenticationProvider = AuthenticationiApiProvider();
   final _gameOnApiProvider = GameOnApiProvider();
 
   Future<Response> createMatch({
@@ -18,7 +18,7 @@ class Repository {
     required int type,
     required List<String> players,
   }) =>
-      matchApiProvider.createMatch(
+      _matchApiProvider.createMatch(
         context: context,
         name: name,
         location: location,
@@ -27,10 +27,10 @@ class Repository {
       );
 
   Future<Response> getMatchesList(BuildContext context)
-    => matchApiProvider.getMatchesList(context: context);
+    => _matchApiProvider.getMatchesList(context: context);
 
   Future<Response?> login({required String email, required String pw})
-  => authorizationProvider.login(inputEmail: email, inputPasswords: pw);
+  => _authenticationProvider.login(inputEmail: email, inputPasswords: pw);
 
   Future<Response?> createUser(
           {
@@ -38,13 +38,13 @@ class Repository {
             required String email,
             required String password,
           }) async =>
-      await authorizationProvider.createUser(
+      await _authenticationProvider.createUser(
         name: name,
         email: email,
         password: password
       );
   Future<Response> getPlayers({String? matchId}) async =>
-      await playerApiProvider.getPlayer(matchId:  matchId);
+      await _playerApiProvider.getPlayer(matchId:  matchId);
 
   void socketConnect() {
     _gameOnApiProvider.socketConnect();
@@ -67,7 +67,11 @@ class Repository {
     return response;
   }
 
-  Future<Response?> testToken() => authorizationProvider.testToken();
+  Future<Response?> testToken() => _authenticationProvider.testToken();
+
+  Future<Response?> refreshToken() =>  _authenticationProvider.refreshToken();
+
+  Future<Response?> logout() => _authenticationProvider.logout();
 }
 
 final repository = Repository();

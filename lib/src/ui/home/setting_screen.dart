@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_mobile/constants/ui_styles.dart';
+import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:splat_mobile/src/blocs/home_bloc/home_bloc.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 
@@ -114,7 +115,22 @@ class SettingScreen extends StatelessWidget {
                                 style: name_big_size,
                               ),
                             )
-                          : Container()
+                          : Container(),
+                      Container(
+                        width: 100,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black)
+                        ),
+                        child: GestureDetector(
+                          onTap: () => authenticationBloc.logout(),
+                          child: Center(
+                            child: Text(
+                              "QUIT"
+                            ),
+                          ),
+                        ),
+                      )
                     ],
                   );
                 }),

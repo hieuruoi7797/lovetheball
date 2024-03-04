@@ -21,7 +21,8 @@ const String rebound = 'rebound';
 const String error_unknown = "UNKNOWN";
 const String error_fail = "FAIL";
 
-const String local_token_key = 'access_token';
+const String access_token_key = 'access_token';
+const String refresh_token_key = 'refresh_token';
 
 Map<String, String> headerWithToken(String token) => {
   'Content-Type': 'application/json; charset=UTF-8',
