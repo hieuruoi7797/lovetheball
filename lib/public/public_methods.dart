@@ -49,7 +49,15 @@ class PublicMethods {
     Client client = Client();
     Response response;
     const baseUrl = base_url;
-    String? token = await storage.read(key: local_token_key);
+    String? token = '';
+   switch(subUri){
+     case refresh_token_url:
+       token = await storage.read(key: refresh_token_key);
+       break;
+     default:
+       token = await storage.read(key: access_token_key);
+       break;
+   }
     showLoader ? DialogWidget().showLoaderDialog() : null;
     response = await client.post(Uri.parse(baseUrl + subUri),
         body: isFormData ? body : jsonEncode(body),
@@ -68,9 +76,25 @@ class PublicMethods {
     Client client = Client();
     Response response;
     showLoader ? DialogWidget().showLoaderDialog() : null;
-    String token = await storage.read(key: local_token_key) ?? '';
+    String token = await storage.read(key: access_token_key) ?? '';
     response = await client.get(
       Uri.parse(base_url + subUri).replace(queryParameters: queryParameters),
+      headers: headerWithToken(token),
+    );
+    showLoader ? DialogWidget().dismissLoader() : null;
+    return response;
+  }
+
+  Future<Response> delete({
+    required String subUri,
+    required bool showLoader,
+  }) async {
+    Client client = Client();
+    Response response;
+    showLoader ? DialogWidget().showLoaderDialog() : null;
+    String token = await storage.read(key: access_token_key) ?? '';
+    response = await client.delete(
+      Uri.parse(base_url + subUri),
       headers: headerWithToken(token),
     );
     showLoader ? DialogWidget().dismissLoader() : null;

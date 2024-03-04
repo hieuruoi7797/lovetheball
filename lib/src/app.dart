@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:splat_mobile/src/ui/authorization/login.dart';
+import 'package:splat_mobile/src/ui/authentication/login.dart';
+import 'package:splat_mobile/src/ui/authentication/player_creating.dart';
 import 'package:splat_mobile/src/ui/game_on.dart';
-import 'package:splat_mobile/src/ui/authorization/player_creating.dart';
 import 'package:splat_mobile/src/ui/history_game/overview_history_screen.dart';
 
 import 'ui/home/home_screen.dart';
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         '/sign_up': (context) => const PlayerCreatingScreen(),
         '/home': (context) => const HomeScreen(),
         '/game_on': (context) => const GameOnScreen(),
-        '/overview_history_game': (context) => OverviewHistoryScreen(),
+        '/overview_history_game': (context) => const OverviewHistoryScreen(),
       },
       // home: const MyHomePage(),
     );

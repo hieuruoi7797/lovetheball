@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:splat_mobile/src/blocs/player/user_bloc.dart';
+import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
 
 import '../../../constants/ui_styles.dart';
 
@@ -106,7 +106,7 @@ class LoginScreen extends StatelessWidget {
                     Center(
                       child: GestureDetector(
                         onTap: () {
-                          userBloc.login(email: userEmailController.text,pw: passwordController.text);
+                          authenticationBloc.login(email: userEmailController.text,pw: passwordController.text);
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.47,
