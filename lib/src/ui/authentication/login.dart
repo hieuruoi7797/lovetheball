@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
 
 import '../../../constants/ui_styles.dart';
@@ -14,12 +16,10 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
         bottomSheet: BottomSheet(
             onClosing: () => {},
-            enableDrag: false,
-            backgroundColor: Colors.transparent,
             builder: (BuildContext context) {
               return Container(
                 height:MediaQuery.viewInsetsOf(context).bottom == 0 ?
-                MediaQuery.of(context).size.height * 0.6 :
+                MediaQuery.of(context).size.height * 0.45 :
                 MediaQuery.of(context).size.height * 0.3,
                 width: MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.only(
@@ -28,104 +28,105 @@ class LoginScreen extends StatelessWidget {
                   right: 40,
                 ),
                 decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: Color(0xFFECF3FB),
                   borderRadius: BorderRadius.only(
                       topRight: Radius.circular(30),
                       topLeft: Radius.circular(30)),
                 ),
                 child: Column(
                   children: [
-                    const Text(
-                      "Nhập email:",
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Color(0xFF818181),
-                          fontWeight: FontWeight.w600),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 25, bottom: 25),
-                      height: 36,
-                      child: TextField(
-                        controller: userEmailController,
-                        style: const TextStyle(fontSize: 14),
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 16),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50.0),
-                            borderSide: const BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
+                    Center(
+                      child: buttonGen1(
+                          parentContext: context,
+                          buttonName: "Đăng nhập",
+                          nameStyle: TextStyle(
+                            color: Color(0xFF62737A),
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600
                           ),
-                          suffixIconConstraints: const BoxConstraints(
-                            maxWidth: 50,
-                            maxHeight: 50,
-                          ),
-                          filled: true,
-                          fillColor: const Color(0xFFF1F1F1),
-                        ),
-                      ),
+                          height: 56,
+                          width: MediaQuery.sizeOf(context).width * 0.775,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Colors.white
+                          )),
+
                     ),
-                    const Text(
-                      "Nhập password:",
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Color(0xFF818181),
-                          fontWeight: FontWeight.w600),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 25, bottom: 25),
-                      height: 36,
-                      child: TextField(
-                        controller: passwordController,
-                        style: const TextStyle(fontSize: 14),
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 16),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(50.0),
-                            borderSide: const BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
+                    const SizedBox(height: 16,),
+
+                    Center(
+                      child: buttonGen1(
+                          parentContext: context,
+                          buttonName: "Đăng ký với Google",
+                          leftIconPath: 'assets/svg_pictures/google_icon.svg',
+                          nameStyle: const TextStyle(
+                              color: Color(0xFF62737A),
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600
                           ),
-                          suffixIconConstraints: const BoxConstraints(
-                            maxWidth: 50,
-                            maxHeight: 50,
-                          ),
-                          filled: true,
-                          fillColor: const Color(0xFFF1F1F1),
-                        ),
-                      ),
+                          height: 56,
+                          width: MediaQuery.sizeOf(context).width * 0.775,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Colors.white
+                          )),
+
                     ),
-                    GestureDetector(
-                        onTap: () => Navigator.of(context).pushNamed('/sign_up'),
-                        child: const Text("Tạo tài khoản mới",style: TextStyle(fontSize: 18, color: Colors.blue,decoration: TextDecoration.underline),)),
+                    const SizedBox(height: 16,),
+                    const Text("hoặc",style: TextStyle(
+                        fontSize: 13,
+                        color: Color(0xFFB3BBC4),),),
                     const SizedBox(height: 16,),
                     Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          authenticationBloc.login(email: userEmailController.text,pw: passwordController.text);
-                        },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.47,
-                          height: 48,
-                          decoration: BoxDecoration(
-                              color: color_main,
-                              borderRadius: BorderRadius.circular(50)),
-                          child: const Center(
-                            child: Text(
-                              "Hoàn tất",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                        ),
+                      child: buttonGen1(
+                          onTap: () => Navigator.of(context).pushNamed('/sign_up'),
+                          parentContext: context,
+                          buttonName: "Tạo tài khoản mới",
+                          height: 56,
+                          width: MediaQuery.sizeOf(context).width * 0.775,
                       ),
                     ),
+                    const SizedBox(height: 37),
+                    Center(
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: const TextSpan(
+                          text: "Bằng cách chọn \"Đăng nhập\" hoặc \"Đăng ký/Tạo tài khoản\", bạn đồng ý với ",
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xFF62737A),
+                                fontWeight: FontWeight.w400
+                            ),
+                          children: [
+                            TextSpan(
+                              text: "Điều khoản",
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Color(0xFF007AFF),
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.w400
+                              ),
+                            ),
+                            TextSpan(
+                              text: " của Splat",
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400
+                              ),
+                            )
+                          ]
+                        ),
+
+                        // child: Text(
+                        //    Điều khoản của Splat",
+                        //   textAlign: TextAlign.center,
+                        //   style: TextStyle(
+                        //     fontSize: 12,
+                        //     fontWeight: FontWeight.w400
+                        //   ),
+                        // ),
+                      ),
+                    )
                   ],
                 ),
               );
@@ -137,21 +138,65 @@ class LoginScreen extends StatelessWidget {
               image: DecorationImage(
                   fit: BoxFit.fitWidth,
                   image: AssetImage(
-                      'assets/png_images/background_player_creator.png'),
+                      'assets/png_images/background_login.png'),
                   alignment: Alignment.topCenter)),
-          // child: Align(
-          //   alignment: Alignment.topCenter,
-          //   child: SizedBox(
-          //     width: 200,
-          //     height: 200,
-          //       child: Container(
-          //         color: Colors.blue,
-          //           child: SvgPicture.asset(
-          //               "assets/svg_pictures/SPLAT.svg",
-          //           ))),
-          // ),
+          child: Center(
+            child: Container(
+                margin: const EdgeInsets.only(bottom: 300),
+                child: SvgPicture.asset('assets/svg_pictures/splat_white_text.svg')),
+          ),
         ));
 
   }
 
+}
+
+Widget buttonGen1(
+{
+  required BuildContext parentContext,
+  String? buttonName,
+  TextStyle? nameStyle,
+  double? width,
+  double? height,
+  BoxDecoration? decoration,
+  String leftIconPath = '',
+  Function()? onTap,
+}
+    ) {
+  return GestureDetector(
+    onTap: onTap ?? () {},
+    child: Container(
+      width: width ?? MediaQuery.of(parentContext).size.width * 0.47,
+      height: height ?? 48,
+      decoration: decoration ?? BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          gradient: LinearGradient(
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+            colors: <Color>[
+              Color(0xffE55807),
+              Color(0xffFF8A4C),
+            ], // Gradient from https://learnui.design/tools/gradient-generator.html
+            tileMode: TileMode.mirror,
+          )
+      ),
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            leftIconPath.isNotEmpty ? Container(
+                margin: EdgeInsets.only(right: 8),
+                child: SvgPicture.asset(leftIconPath)) :const SizedBox(),
+            Text(
+              buttonName ?? "Hoàn tất",
+              style: nameStyle ?? const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }
