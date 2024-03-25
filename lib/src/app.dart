@@ -1,10 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:splat_mobile/src/ui/authentication/login.dart';
-import 'package:splat_mobile/src/ui/authentication/player_creating.dart';
-import 'package:splat_mobile/src/ui/game_on.dart';
-import 'package:splat_mobile/src/ui/history_game/overview_history_screen.dart';
-
-import 'ui/home/home_screen.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:splat_mobile/src/ui/authentication/authentication_screen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -18,7 +15,15 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-
+      onGenerateRoute: (RouteSettings settings){
+        switch (settings.name) {
+          case '/':
+            return MaterialWithModalsPageRoute(
+                builder: (_) => LoginScreen(),
+                settings: settings);
+        }
+        return null;
+      },
       theme: ThemeData(
         primaryColor: const Color(0xFFE55807),
         primaryColorLight: const Color(0xFFE55807),
@@ -27,13 +32,13 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.black.withOpacity(0),
         ),
       ),
-      routes: {
-        '/': (context) => LoginScreen(),
-        '/sign_up': (context) => const PlayerCreatingScreen(),
-        '/home': (context) => const HomeScreen(),
-        '/game_on': (context) => const GameOnScreen(),
-        '/overview_history_game': (context) => const OverviewHistoryScreen(),
-      },
+      // routes: {
+      //   '/': (context) => LoginScreen(),
+      //   '/sign_up': (context) => const PlayerCreatingScreen(),
+      //   '/home': (context) => const HomeScreen(),
+      //   '/game_on': (context) => const GameOnScreen(),
+      //   '/overview_history_game': (context) => const OverviewHistoryScreen(),
+      // },
       // home: const MyHomePage(),
     );
   }
