@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:splat_mobile/src/ui/authentication/modal_login_ui.dart';
 
-import '../../../constants/ui_styles.dart';
+import '../../../i18n/app_localization.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController userEmailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
   LoginScreen({super.key});
   @override
   Widget build(BuildContext context) {
+    // final localizations = AppLocalizations.of(context);
     return Scaffold(
         bottomSheet: BottomSheet(
             onClosing: () => {},
@@ -37,6 +37,11 @@ class LoginScreen extends StatelessWidget {
                   children: [
                     Center(
                       child: buttonGen1(
+                          onTap: () => showCupertinoModalBottomSheet(
+                expand: true,
+                context: context,
+                backgroundColor: Colors.transparent,
+                builder: (context) => ModalFit(),),
                           parentContext: context,
                           buttonName: "Đăng nhập",
                           nameStyle: TextStyle(
@@ -131,19 +136,23 @@ class LoginScreen extends StatelessWidget {
                 ),
               );
             }),
-        body: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  fit: BoxFit.fitWidth,
-                  image: AssetImage(
-                      'assets/png_images/background_login.png'),
-                  alignment: Alignment.topCenter)),
-          child: Center(
+        body: CupertinoPageScaffold(
+          child: SizedBox.expand(
             child: Container(
-                margin: const EdgeInsets.only(bottom: 300),
-                child: SvgPicture.asset('assets/svg_pictures/splat_white_text.svg')),
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      fit: BoxFit.fitWidth,
+                      image: AssetImage(
+                          'assets/png_images/background_login.png'),
+                      alignment: Alignment.topCenter)),
+              child: Center(
+                child: Container(
+                    margin: const EdgeInsets.only(bottom: 300),
+                    child: SvgPicture.asset('assets/svg_pictures/splat_white_text.svg')),
+              ),
+            ),
           ),
         ));
 
