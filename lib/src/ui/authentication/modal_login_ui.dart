@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_mobile/src/ui/authentication/authentication_screen.dart';
 
 import '../../../constants/ui_styles.dart';
+import '../../blocs/authentication/authentication_bloc.dart';
 
 class ModalFit extends StatelessWidget {
   const ModalFit({super.key});
@@ -10,13 +11,8 @@ class ModalFit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-    bool passwordVisible=false;
-
-    @override
-    void initState(){
-      // super.initState();
-      passwordVisible=true;
-    }
+    var _controllerEmail = TextEditingController();
+    var _controllerPassword = TextEditingController();
     return Material(
         child: SafeArea(
       top: false,
@@ -51,100 +47,140 @@ class ModalFit extends StatelessWidget {
           SizedBox(height: size.height*0.02,),
           Container(
             padding: EdgeInsets.symmetric(vertical:  size.height*0.01, horizontal: size.width*0.04),
-            child: TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: const BorderSide(
-                    width: 1,
-                    style: BorderStyle.none,
-                    color: color_main,
+            child: StreamBuilder<Object>(
+              stream: authenticationBloc.emailValidateBehavior,
+              builder: (context, snapshot) {
+                return TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: const BorderSide(
+                        width: 2,
+                        style: BorderStyle.none,
+                        color: color_main,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: const BorderSide(
+                          width: 1,
+                          style: BorderStyle.none,
+                          color: color_main
+                      ),
+                    ),
+                    focusedBorder:OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: const BorderSide(
+                        width: 1,
+                        style: BorderStyle.none,
+                        color: color_main,
+                      ),
+                    ),
+                    hintText: "Email",
+
+                    errorText:snapshot.error?.toString(),
+                    // helperText:"Username must contain special character",
+                    // helperStyle:TextStyle(color:Colors.black,fontSize: 16,fontWeight: FontWeight.w600),
+                    suffixIcon: _controllerEmail.text !=""
+                        ? IconButton(
+                        icon: Icon(Icons.clear),
+                        onPressed: () {
+                          _controllerEmail.clear();
+                        })
+                        : null,
+                    alignLabelWithHint: false,
+                    filled: true,
                   ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: const BorderSide(
-                      width: 1,
-                      style: BorderStyle.none,
-                      color: color_main
-                  ),
-                ),
-                focusedBorder:OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: const BorderSide(
-                    width: 1,
-                    style: BorderStyle.none,
-                    color: color_main,
-                  ),
-                ),
-                hintText: "Username",
-                labelText: "Username",
-                labelStyle: TextStyle(color: Colors.deepOrange),
-                // helperText:"Username must contain special character",
-                // helperStyle:TextStyle(color:Colors.black,fontSize: 16,fontWeight: FontWeight.w600),
-                alignLabelWithHint: false,
-                filled: true,
-              ),
-              keyboardType: TextInputType.visiblePassword,
-              textInputAction: TextInputAction.done,
+                  onChanged: (value){
+                    authenticationBloc.setEmail(value);
+
+                  },
+                  controller: _controllerEmail,
+                  keyboardType: TextInputType.visiblePassword,
+                  textInputAction: TextInputAction.done,
+                );
+              }
             )
           ),
           Container(
             padding: EdgeInsets.symmetric(vertical:  size.height*0.01, horizontal: size.width*0.04),
-            child: TextField(
-              obscureText: passwordVisible,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: const BorderSide(
-                    width: 0,
-                    style: BorderStyle.none,
+            child: StreamBuilder<Object>(
+              stream: authenticationBloc.passwordVisibleBehavior,
+              builder: (context, snapshot) {
+                return TextField(
+                  obscureText: authenticationBloc.passwordVisible,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: const BorderSide(
+                        width: 0,
+                        style: BorderStyle.none,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: const BorderSide(
+                        width: 1,
+                        style: BorderStyle.none,
+                        color: color_main
+                      ),
+                    ),
+                    focusedBorder:OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: const BorderSide(
+                        width: 1,
+                        style: BorderStyle.none,
+                        color: color_main,
+                      ),
+                    ),
+                    hintText: "Password",
+                    helperStyle:TextStyle(color:Colors.red.shade700,fontSize: 16,fontWeight: FontWeight.w600),
+                    suffixIcon: IconButton(
+                      icon: Icon(authenticationBloc.passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      color: Colors.black45,
+                      onPressed: () {
+                        authenticationBloc.setPassword();
+                      },
+                    ),
+                    alignLabelWithHint: false,
+                    filled: true,
                   ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: const BorderSide(
-                    width: 1,
-                    style: BorderStyle.none,
-                    color: color_main
-                  ),
-                ),
-                focusedBorder:OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: const BorderSide(
-                    width: 1,
-                    style: BorderStyle.none,
-                    color: color_main,
-                  ),
-                ),
-                hintText: "Password",
-                labelText: "Password",
-                labelStyle: TextStyle(color: Colors.deepOrange),
-                helperText:"Password must contain special character",
-                helperStyle:TextStyle(color:Colors.red.shade700,fontSize: 16,fontWeight: FontWeight.w600),
-                suffixIcon: IconButton(
-                  icon: Icon(passwordVisible
-                      ? Icons.visibility
-                      : Icons.visibility_off),
-                  color: Colors.black45,
-                  onPressed: () {
-                    // setState(() {passwordVisible = !passwordVisible;},);
-                  },
-                ),
-                alignLabelWithHint: false,
-                filled: true,
-              ),
-              keyboardType: TextInputType.visiblePassword,
-              textInputAction: TextInputAction.done,
+                  controller: _controllerPassword,
+                  keyboardType: TextInputType.visiblePassword,
+                  textInputAction: TextInputAction.done,
+                );
+              }
             ),
           ),
+
           SizedBox(height: size.height*0.02,),
+
+          StreamBuilder<Object>(
+            stream: authenticationBloc.checkRememberPassBehavior,
+            builder: (context, snapshot) {
+              return Row(
+                children: [
+                  Checkbox(
+                    checkColor: Colors.white,
+                    activeColor: Colors.blue,
+                    value: authenticationBloc.checkRememberPass,
+                    onChanged: (bool? value) {
+                     authenticationBloc.setCheckRememberPass(value);
+                    },
+                  ),
+                  Text("Ghi nhớ mật khẩu"),
+                ],
+              );
+            }
+          ),
           buttonGen1(
             onTap: () => Navigator.of(context).pushNamed('/login'),
             parentContext: context,
             buttonName: "Đăng nhập",
             height: 56,
-            width: MediaQuery.sizeOf(context).width * 0.775,)
+            width: MediaQuery.sizeOf(context).width * 0.92,)
 
         ],
       ),
