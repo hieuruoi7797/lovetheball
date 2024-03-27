@@ -1,19 +1,41 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/src/app.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 import 'package:splat_mobile/src/resources/repository.dart';
+import 'package:splat_mobile/src/ui/authentication/validate.dart';
 
 
 import '../../../constants/public_values.dart';
 
-class AuthenticationBloc {
+class AuthenticationBloc with Validation{
 
   late BuildContext context;
+  bool _passwordVisible=false;
+  bool _checkRememberPass = false;
+  final _emailBehavior = BehaviorSubject<String>();
+
+  final _passwordVisibleBehavior = BehaviorSubject<bool>();
+  final _checkRememberPassBehavior = BehaviorSubject<bool>();
+  Stream<bool> get passwordVisibleBehavior => _passwordVisibleBehavior.stream;
+  Stream<bool> get checkRememberPassBehavior => _checkRememberPassBehavior.stream;
+  Stream<String> get emailBehavior => _emailBehavior.stream;
+  Stream<String> get emailValidateBehavior => _emailBehavior.stream.transform(eMailValidate);
+  bool get passwordVisible => _passwordVisible;
+  bool get checkRememberPass => _checkRememberPass;
+  String get geEmailTxt => _emailBehavior.value;
+
+  /// show/hide password
+  void setPassword() =>{
+    _passwordVisibleBehavior.sink.add(_passwordVisible=!_passwordVisible)
+  };
+  void setCheckRememberPass(bool? value)=> _checkRememberPassBehavior.sink.add(_checkRememberPass=value!);
+  void clearEmail() => _emailBehavior.sink.add("");
+  void setEmail(String value) => _emailBehavior.sink.add(value);
 
   ///Create a player and save user info in storage
   createUser({
@@ -32,6 +54,7 @@ class AuthenticationBloc {
   }
 
   dispose() {
+    _emailBehavior.close();
   }
 
   _playerCreatedSuccess(Response response) {
@@ -77,7 +100,7 @@ class AuthenticationBloc {
       Navigator.pushNamed(navigatorKey.currentContext!, '/');
     }
   }
-}
 
+}
 
   final authenticationBloc = AuthenticationBloc();
