@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 const Color color_main = Color(0xFFE55807);
 const Color color_loading_background = Colors.blueGrey;
 const Color color_button_cancel = Colors.grey;
+const Color color_checkbox_remember = Color(0xff30b0c7);
+const Color color_62737A = Color(0xff62737a);
+const Color color_E4EBF2 = Color(0xffe4ebf2);
+const Color color_313A3E = Color(0xff313a3e);
 
 
 ///Widgets

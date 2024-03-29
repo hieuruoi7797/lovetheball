@@ -7,9 +7,8 @@ import 'package:splat_mobile/src/ui/authentication/modal_login_ui.dart';
 import '../../../i18n/app_localization.dart';
 
 class LoginScreen extends StatelessWidget {
-  final TextEditingController userEmailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  LoginScreen({super.key});
+
+  LoginScreen({Key? key}):super(key: key);
   @override
   Widget build(BuildContext context) {
     // final localizations = AppLocalizations.of(context);
@@ -38,13 +37,14 @@ class LoginScreen extends StatelessWidget {
                     Center(
                       child: buttonGen1(
                           onTap: () => showCupertinoModalBottomSheet(
-                expand: true,
-                context: context,
-                backgroundColor: Colors.transparent,
-                builder: (context) => ModalFit(),),
+                          expand: true,
+                          context: context,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => ModalLoginContent(context)
+                          ),
                           parentContext: context,
                           buttonName: "Đăng nhập",
-                          nameStyle: TextStyle(
+                          nameStyle: const TextStyle(
                             color: Color(0xFF62737A),
                             fontSize: 17,
                             fontWeight: FontWeight.w600
