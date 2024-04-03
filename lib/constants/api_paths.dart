@@ -1,4 +1,4 @@
-const String base_url = 'http://34.82.100.205:8080/v1';
+const String base_url = 'https://ample-crawdad-kind.ngrok-free.app';
 const String matches_path = '/matches';
 const String user_path = '/users';
 const String login_path = '/authentication/access_token';
