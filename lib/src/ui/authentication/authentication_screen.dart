@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:splat_mobile/src/ui/authentication/modal_login_ui.dart';
+import 'package:splat_mobile/src/ui/authentication/modal_register_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../i18n/app_localization.dart';
+
 
 class LoginScreen extends StatelessWidget {
 
@@ -43,7 +45,7 @@ class LoginScreen extends StatelessWidget {
                           builder: (context) => ModalLoginContent(context)
                           ),
                           parentContext: context,
-                          buttonName: "Đăng nhập",
+                          buttonName: AppLocalizations.of(context)!.login,
                           nameStyle: const TextStyle(
                             color: Color(0xFF62737A),
                             fontSize: 17,
@@ -84,7 +86,12 @@ class LoginScreen extends StatelessWidget {
                     const SizedBox(height: 16,),
                     Center(
                       child: buttonGen1(
-                          onTap: () => Navigator.of(context).pushNamed('/sign_up'),
+                          onTap: () => showCupertinoModalBottomSheet(
+                                expand: true,
+                                context: context,
+                                backgroundColor: Colors.transparent,
+                                builder: (context) => ModalRegisterContent(context)
+                                ),
                           parentContext: context,
                           buttonName: "Tạo tài khoản mới",
                           height: 56,
