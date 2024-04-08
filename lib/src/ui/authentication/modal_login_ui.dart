@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:splat_mobile/public/modal/modal_fit.dart';
 import '../../../constants/ui_styles.dart';
 import '../../blocs/authentication/authentication_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Widget ModalLoginContent(BuildContext context){
   final size = MediaQuery.sizeOf(context);
   final _controllerEmail = TextEditingController();
   final _controllerPassword = TextEditingController();
+  final localizations = AppLocalizations.of(context);
+
   return ModalFit(
-    title: "ĐĂNG NHẬP",
+    title: localizations!.login.toUpperCase(),
     widget: Column(
       children: [
         Container(
@@ -62,7 +65,7 @@ Widget ModalLoginContent(BuildContext context){
 
                     },
                     controller: _controllerEmail,
-                    keyboardType: TextInputType.visiblePassword,
+                    keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.done,
                   );
                 }
@@ -99,7 +102,7 @@ Widget ModalLoginContent(BuildContext context){
                         color: color_main,
                       ),
                     ),
-                    hintText: "Password",
+                    hintText: localizations.pass,
                     helperStyle:TextStyle(color:Colors.red.shade700,fontSize: 16,fontWeight: FontWeight.w600),
                     suffixIcon: IconButton(
                       icon: Icon(authenticationBloc.passwordVisible
@@ -135,14 +138,14 @@ Widget ModalLoginContent(BuildContext context){
                       authenticationBloc.setCheckRememberPass(value);
                     },
                   ),
-                  Text("Ghi nhớ mật khẩu"),
+                  Text(localizations.rememberPass),
                 ],
               );
             }
         ),
       ],
     ),
-    buttonName: "Đăng nhập",
+    buttonName: localizations.login,
     widget2: GestureDetector(
       onTap: (){
 
@@ -151,7 +154,7 @@ Widget ModalLoginContent(BuildContext context){
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(vertical: 16),
         child: Text(
-          "Quên mật khẩu?"
+          localizations.forgotPass
         ),
       ),
     ),

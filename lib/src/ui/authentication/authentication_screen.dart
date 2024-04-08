@@ -13,7 +13,7 @@ class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}):super(key: key);
   @override
   Widget build(BuildContext context) {
-    // final localizations = AppLocalizations.of(context);
+    final localizations = AppLocalizations.of(context);
     return Scaffold(
         bottomSheet: BottomSheet(
             onClosing: () => {},
@@ -87,11 +87,11 @@ class LoginScreen extends StatelessWidget {
                     Center(
                       child: buttonGen1(
                           onTap: () => showCupertinoModalBottomSheet(
-                                expand: true,
-                                context: context,
-                                backgroundColor: Colors.transparent,
-                                builder: (context) => ModalRegisterContent(context)
-                                ),
+                            expand: true,
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => ModalRegisterAccount(context)
+                          ),
                           parentContext: context,
                           buttonName: "Tạo tài khoản mới",
                           height: 56,
