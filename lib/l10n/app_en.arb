@@ -1,6 +1,9 @@
 {
   "helloWorld": "Hello World!",
   "login": "Login",
+  "pass": "Password",
+  "rememberPass": "Remember password",
+  "forgotPass": "Forgot password?",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
   }
