@@ -3,7 +3,10 @@
   "login": "Login",
   "pass": "Password",
   "rememberPass": "Remember password",
+
   "forgotPass": "Forgot password?",
+  "or":"or",
+  "sign_up_gg":"Sign-up with Google",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
   }

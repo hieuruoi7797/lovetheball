@@ -3,5 +3,7 @@
     "login": "Đăng nhập",
     "pass": "Mật khẩu",
     "rememberPass": "Ghi nhớ mật khẩu",
-    "forgotPass": "Quên mật khẩu?"
+    "forgotPass": "Quên mật khẩu?",
+    "or":"hoặc",
+    "sign_up_gg":"Đăng ký với Google"
 }

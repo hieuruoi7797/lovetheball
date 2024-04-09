@@ -13,7 +13,7 @@ class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}):super(key: key);
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context);
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
         bottomSheet: BottomSheet(
             onClosing: () => {},
@@ -45,7 +45,7 @@ class LoginScreen extends StatelessWidget {
                           builder: (context) => ModalLoginContent(context)
                           ),
                           parentContext: context,
-                          buttonName: AppLocalizations.of(context)!.login,
+                          buttonName: localizations.login,
                           nameStyle: const TextStyle(
                             color: Color(0xFF62737A),
                             fontSize: 17,
@@ -64,7 +64,7 @@ class LoginScreen extends StatelessWidget {
                     Center(
                       child: buttonGen1(
                           parentContext: context,
-                          buttonName: "Đăng ký với Google",
+                          buttonName: localizations.sign_up_gg,
                           leftIconPath: 'assets/svg_pictures/google_icon.svg',
                           nameStyle: const TextStyle(
                               color: Color(0xFF62737A),
@@ -80,7 +80,7 @@ class LoginScreen extends StatelessWidget {
 
                     ),
                     const SizedBox(height: 16,),
-                    const Text("hoặc",style: TextStyle(
+                    Text(localizations.or,style: const TextStyle(
                         fontSize: 13,
                         color: Color(0xFFB3BBC4),),),
                     const SizedBox(height: 16,),
