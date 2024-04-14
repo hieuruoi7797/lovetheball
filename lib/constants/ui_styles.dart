@@ -11,8 +11,8 @@ const Color color_checkbox_remember = Color(0xff30b0c7);
 const Color color_62737A = Color(0xff62737a);
 const Color color_E4EBF2 = Color(0xffe4ebf2);
 const Color color_313A3E = Color(0xff313a3e);
-
-
+const Color color_ECF3FB = Color(0xffecf3fb);
+const Color color_B3BBC4 = Color(0xffb3bbc4);
 ///Widgets
 const Widget gap_default = SizedBox(height: 16,);
 const Widget gap_24 = SizedBox(height: 16,);

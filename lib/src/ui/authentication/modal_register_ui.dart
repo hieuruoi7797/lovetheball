@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:splat_mobile/public/modal/modal_fit.dart';
+import 'package:splat_mobile/src/ui/authentication/modal_input_otp.dart';
 
 import '../../../constants/ui_styles.dart';
 
@@ -84,6 +86,12 @@ Widget ModalRegisterAccount(BuildContext context) {
           )
         ],
       ),
+    ),
+    onClickButton:()=> showCupertinoModalBottomSheet(
+        expand: true,
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (context) => ModalInputOtp(context)
     ),
   );
 }
