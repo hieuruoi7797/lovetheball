@@ -11,8 +11,9 @@ class ModalFit extends StatelessWidget {
   final String? buttonName;
   final Widget? footerWidget;
   final Widget? widget2;
+  final Function()? onClickButton;
 
-  const ModalFit({super.key,  this.title,  this.widget,  this.buttonName, this.footerWidget, this.widget2});
+  const ModalFit({super.key,  this.title,  this.widget,  this.buttonName, this.footerWidget, this.widget2, this.onClickButton});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +62,7 @@ class ModalFit extends StatelessWidget {
               widget??Container(),
               SizedBox(height: size.height*0.02,),
               buttonGen1(
-                onTap: () => Navigator.of(context).pushNamed('/login'),
+                onTap: onClickButton??(){},
                 parentContext: context,
                 buttonName: buttonName??"Đăng nhập",
                 height: 56,
