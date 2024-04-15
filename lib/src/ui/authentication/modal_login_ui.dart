@@ -147,9 +147,7 @@ Widget ModalLoginContent(BuildContext context){
     ),
     buttonName: localizations.login,
     widget2: GestureDetector(
-      onTap: (){
-
-      },
+      onTap: (){},
       child: Container(
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(vertical: 16),
@@ -158,6 +156,7 @@ Widget ModalLoginContent(BuildContext context){
         ),
       ),
     ),
+    onClickButton: () => authenticationBloc.login(email: _controllerEmail.text, pw: _controllerPassword.text),
   );
 }
 
