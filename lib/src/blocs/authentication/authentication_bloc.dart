@@ -75,7 +75,7 @@ class AuthenticationBloc with Validation{
       Response? checkingTokenRes = await repository.testToken();
       if (checkingTokenRes != null){
         publicValues.userNow = PlayerModel.fromJson(jsonDecode(checkingTokenRes.body));
-        Navigator.pushNamed(navigatorKey.currentContext!, '/home');
+        // Navigator.pushNamed(navigatorKey.currentContext!, '/home');
       }
     }
   }

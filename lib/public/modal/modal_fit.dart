@@ -7,13 +7,13 @@ import '../widget_item/svg_icon.dart';
 
 class ModalFit extends StatelessWidget {
   final String? title;
-  final dynamic? widget;
+  final dynamic widget;
   final String? buttonName;
   final Widget? footerWidget;
   final Widget? widget2;
   final Function()? onClickButton;
-
   const ModalFit({super.key,  this.title,  this.widget,  this.buttonName, this.footerWidget, this.widget2, this.onClickButton});
+
 
   @override
   Widget build(BuildContext context) {
