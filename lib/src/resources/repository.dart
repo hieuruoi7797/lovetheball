@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
+import 'package:splat_mobile/src/models/base_api_model.dart';
 import 'package:splat_mobile/src/resources/authentication_api_provider.dart';
 import 'package:splat_mobile/src/resources/gameon_api_provider.dart';
 import 'package:splat_mobile/src/resources/match_api_provider.dart';
@@ -32,17 +33,21 @@ class Repository {
   Future<Response?> login({required String email, required String pw})
   => _authenticationProvider.login(inputEmail: email, inputPasswords: pw);
 
-  Future<Response?> createUser(
+  Future<BaseApiModel?> createUser(
           {
-            required String name,
             required String email,
-            required String password,
           }) async =>
       await _authenticationProvider.createUser(
-        name: name,
         email: email,
-        password: password
       );
+  //xac thuc otp email
+  Future<BaseApiModel?> verifiCreateUser(
+  {
+    required String email,
+    required String otp,
+
+  }) async => await _authenticationProvider.verifiCreateUser(email: email, otp: otp);
+
   Future<Response> getPlayers({String? matchId}) async =>
       await _playerApiProvider.getPlayer(matchId:  matchId);
 

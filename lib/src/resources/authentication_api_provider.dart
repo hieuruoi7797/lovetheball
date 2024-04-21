@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:splat_mobile/constants/api_paths.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/public/public_methods.dart';
 import 'package:splat_mobile/src/app.dart';
+import 'package:splat_mobile/src/models/base_api_model.dart';
 import 'package:splat_mobile/widgets_common/dialogs.dart';
 
 class AuthenticationiApiProvider {
@@ -69,32 +71,55 @@ class AuthenticationiApiProvider {
     }
   }
 
-  Future<Response?> createUser({
-    required String name,
+  Future<BaseApiModel?> createUser({
     required String email,
-    required String password,
   }) async {
     Response response;
     response = await PublicMethods().post(
         body: {
-            "name": name,
-            "gender": 0,
-            "birth_date": "07/07/1997",
             "email": email,
-            "phone": "",
-            "avartar": "",
-            "password": password
           },
-        subUri: user_path,
+        subUri: API_REGISTER_EMAIL,
         showLoader: true,
         isFormData: false,
     );
-    if (response.statusCode == 201) {
-      return response;
+    print("xinhcheck ${response.body}");
+    BaseApiModel _res = BaseApiModel.fromJson(jsonDecode(response.body));
+    if (_res.message["status_code"] == 200) {
+      if (kDebugMode) {
+        print(_res);
+      }
+      return _res;
     } else {
       await Future.delayed(
           Duration.zero, () => DialogWidget().showFailDialog(error_fail));
-      return null;
+      return _res;
+    }
+  }
+  Future<BaseApiModel?> verifiCreateUser({
+    required String email,
+    required String otp,
+  }) async {
+    Response response;
+    response = await PublicMethods().post(
+      body: {
+        "email": email,
+        "otp":otp
+      },
+      subUri: API_REGISTER_VERIFI,
+      showLoader: true,
+      isFormData: false,
+    );
+    BaseApiModel _res = BaseApiModel.fromJson(jsonDecode(response.body));
+    if (_res.message["status_code"] == 200) {
+      if (kDebugMode) {
+        print(_res);
+      }
+      return _res;
+    } else {
+      await Future.delayed(
+          Duration.zero, () => DialogWidget().showFailDialog(error_fail));
+      return _res;
     }
   }
 
