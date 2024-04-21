@@ -2,3 +2,4 @@
 ///Authentication
 const LOGOUT_SUCCESS = "S001";
 const UPDATE_PW_SUCCESS = "S002";
+const MSG_SUCCESS_REGISTER_S605= "S605";

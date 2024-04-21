@@ -1,19 +1,12 @@
 
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:splat_mobile/public/modal/modal_fit.dart';
-import 'package:splat_mobile/src/ui/authentication/modal_input_otp.dart';
-
 import '../../../constants/ui_styles.dart';
+import '../../blocs/authentication/authentication_bloc.dart';
 
 
-Widget ModalRegisterAccount(BuildContext context) {
-  final size = MediaQuery.sizeOf(context);
-  final _controllerEmail = TextEditingController();
-  return ModalFit(
-    title: "ĐĂNG KÝ",
-    buttonName: "Tiếp tục",
-    widget:Padding(
+Widget TabRegisterAccount(BuildContext context) {
+  return Container(
+    child:Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,11 +20,11 @@ Widget ModalRegisterAccount(BuildContext context) {
           const SizedBox(height: 10,),
           const Text("Đăng ký tài khoản Splat mới bằng email của bạn",
             style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color:color_62737A,
-              letterSpacing: -0.4,
-              wordSpacing: -0.4
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color:color_62737A,
+                letterSpacing: -0.4,
+                wordSpacing: -0.4
             ),
           ),
           const SizedBox(height: 30,),
@@ -66,11 +59,11 @@ Widget ModalRegisterAccount(BuildContext context) {
               // errorText:snapshot.error?.toString(),
               // helperText:"Username must contain special character",
               // helperStyle:TextStyle(color:Colors.black,fontSize: 16,fontWeight: FontWeight.w600),
-              suffixIcon: _controllerEmail.text !=""
+              suffixIcon: authenticationBloc.emailController.text !=""
                   ? IconButton(
                   icon: Icon(Icons.clear),
                   onPressed: () {
-                    _controllerEmail.clear();
+                    authenticationBloc.emailController.clear();
                   })
                   : null,
               alignLabelWithHint: false,
@@ -80,18 +73,19 @@ Widget ModalRegisterAccount(BuildContext context) {
               // authenticationBloc.setEmail(value);
 
             },
-            controller: _controllerEmail,
+            controller: authenticationBloc.emailController,
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.done,
-          )
+          ),
+
         ],
       ),
     ),
-    onClickButton:()=> showCupertinoModalBottomSheet(
-        expand: true,
-        context: context,
-        backgroundColor: Colors.transparent,
-        builder: (context) => ModalInputOtp(context)
-    ),
+    // onClickButton:(){
+    //   authenticationBloc.createUser(
+    //     context,
+    //     email: authenticationBloc.emailController.text,
+    //   );
+    // }
   );
 }

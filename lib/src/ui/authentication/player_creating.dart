@@ -177,9 +177,8 @@ class _PlayerCreatorState extends State<PlayerCreatingScreen> {
                                         onCancel: (){Navigator.pop(context);},
                                         onSuccess: (){
                                           authenticationBloc.createUser(
-                                            name: playerNameController.text,
+                                            context,
                                             email: playerEmailController.text,
-                                            password: passwordController.text,
                                           );
                                         }
                                     );

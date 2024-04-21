@@ -12,7 +12,18 @@ class ModalFit extends StatelessWidget {
   final Widget? footerWidget;
   final Widget? widget2;
   final Function()? onClickButton;
-  const ModalFit({super.key,  this.title,  this.widget,  this.buttonName, this.footerWidget, this.widget2, this.onClickButton});
+  final bool? isShowBack;
+  final Function()? onTapBack;
+
+  const ModalFit({super.key,
+    this.title,
+    this.widget,
+    this.buttonName,
+    this.footerWidget,
+    this.widget2,
+    this.onClickButton,
+    this.isShowBack,
+    this.onTapBack});
 
 
   @override
@@ -32,9 +43,23 @@ class ModalFit extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(width: size.width*0.1,),
+                    isShowBack==true?
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: GestureDetector(
+                          onTap: onTapBack,
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  color: color_E4EBF2,
+                                  borderRadius: BorderRadius.circular(10)
+                              ),
+                              padding: EdgeInsets.all(10),
+                              child:SvgIcon(icon:CustomIcon.back_arrow_ios, size: 12,)
+                          )
+                      ),
+                    ):Container(),
                     Text(
-                      title??'ĐĂNG NHẬP',
+                      title??'',
                       style: const TextStyle(
                         fontWeight: FontWeight.w700,
                         color: color_313A3E,
@@ -61,13 +86,14 @@ class ModalFit extends StatelessWidget {
               SizedBox(height: size.height*0.02,),
               widget??Container(),
               SizedBox(height: size.height*0.02,),
+              buttonName!=null?
               buttonGen1(
                 onTap: onClickButton??(){},
                 parentContext: context,
-                buttonName: buttonName??"Đăng nhập",
+                buttonName: buttonName??"",
                 height: 56,
                 width: MediaQuery.sizeOf(context).width * 0.92,
-              ),
+              ):Container(),
               widget2??Container()
 
             ],

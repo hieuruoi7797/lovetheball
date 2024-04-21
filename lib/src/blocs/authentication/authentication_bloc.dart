@@ -1,23 +1,39 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/src/app.dart';
+import 'package:splat_mobile/src/models/base_api_model.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 import 'package:splat_mobile/src/resources/repository.dart';
 import 'package:splat_mobile/src/ui/authentication/validate.dart';
 
 
+import '../../../constants/api_response_codes.dart';
 import '../../../constants/public_values.dart';
+import '../../ui/authentication/modal_input_otp.dart';
 
 class AuthenticationBloc with Validation{
 
   late BuildContext context;
   bool _passwordVisible=false;
   bool _checkRememberPass = false;
+
   final _emailBehavior = BehaviorSubject<String>();
+  TextEditingController _controllerEmail = TextEditingController();
+  TextEditingController _controllerPassword = TextEditingController();
+  TextEditingController _controllerOTP = TextEditingController();
+  TextEditingController get emailController => _controllerEmail;
+  TextEditingController get passController => _controllerPassword;
+
+  final _otpBehavior = BehaviorSubject<String>();
+  Stream<String> get otpBehavior => _otpBehavior.stream;
+  TextEditingController get _otpController => _controllerOTP;
+
 
   final _passwordVisibleBehavior = BehaviorSubject<bool>();
   final _checkRememberPassBehavior = BehaviorSubject<bool>();
@@ -29,6 +45,51 @@ class AuthenticationBloc with Validation{
   bool get checkRememberPass => _checkRememberPass;
   String get geEmailTxt => _emailBehavior.value;
 
+
+  int _currentStep = 0;
+  final _currentStepBehavior = BehaviorSubject<int>();
+  Stream<int> get currentStepBehavior => _currentStepBehavior.stream;
+  int get currentStep => _currentStep;
+  bool _isShowBack =false;
+  bool get isShowBack => _isShowBack;
+  final _isShowBackBehavior = BehaviorSubject<bool>();
+  Stream<bool> get isShowBackBehavior => _isShowBackBehavior.stream;
+  bool _resSuccess =false;
+  bool get resSuccess => _resSuccess;
+  final _resSuccessBehavior = BehaviorSubject<bool>();
+  Stream<bool> get resSuccessBehavior => _resSuccessBehavior.stream;
+  void setIconBack()=>{
+    if(_currentStep>=0){
+      _isShowBackBehavior.sink.add(_isShowBack=!_isShowBack)
+    }
+    else{
+      _isShowBackBehavior.sink.add(_isShowBack=!_isShowBack)
+    }
+  };
+  Future<void> onTapContinue(BuildContext context) async {
+    if(_currentStep==0){
+      await createUser(context, email: _controllerEmail.text);
+    }
+    if(_currentStep==1){
+      await verifiCreateUser(context, otp: _otpController.text);
+    }
+
+    if(_resSuccess==true){
+      if (_currentStep <= 1) {
+        _currentStepBehavior.sink.add(_currentStep += 1);
+      }
+    }
+
+  }
+  void onTapCancel()=>{
+    if (_currentStep > 0) {
+        _currentStepBehavior.sink.add(_currentStep -= 1),
+
+    }
+  };
+  void onStepTapped(step) =>{
+    _currentStepBehavior.sink.add(_currentStep = step)
+  };
   /// show/hide password
   void setPassword() =>{
     _passwordVisibleBehavior.sink.add(_passwordVisible=!_passwordVisible)
@@ -36,33 +97,46 @@ class AuthenticationBloc with Validation{
   void setCheckRememberPass(bool? value)=> _checkRememberPassBehavior.sink.add(_checkRememberPass=value!);
   void clearEmail() => _emailBehavior.sink.add("");
   void setEmail(String value) => _emailBehavior.sink.add(value);
+  void setOTP(String value) => _otpBehavior.sink.add(_otpController.text=value);
 
   ///Create a player and save user info in storage
-  createUser({
-    required String name,
+  createUser(BuildContext context,{
     required String email,
-    required String password,
   }) async {
 
-      Response? response =
-      await repository.createUser(name: name, email: email, password: password);
-      if (response != null) {
-        _playerCreatedSuccess(response);
+      BaseApiModel? response =
+      await repository.createUser( email: email);
+      if (response!.message["msg_code"]== MSG_SUCCESS_REGISTER_S605) {
+          _resSuccessBehavior.sink.add(_resSuccess=true);
       } else {
+        _resSuccessBehavior.sink.add(_resSuccess=false);
       }
 
+  }
+  verifiCreateUser(BuildContext context, {
+    String? email,
+    required String otp
+  }) async {
+    BaseApiModel? response =
+        await repository.verifiCreateUser(email: _controllerEmail.text, otp: otp);
+    if (response!.message["status_code"]== 200) {
+      _resSuccessBehavior.sink.add(_resSuccess=true);
+    } else {
+      _resSuccessBehavior.sink.add(_resSuccess=false);
+    }
   }
 
   dispose() {
     _emailBehavior.close();
   }
 
-  _playerCreatedSuccess(Response response) {
-    // Response? checkingTokenRes = await repository.testToken();
-    // if (checkingTokenRes != null) {
-    //
-    // }
-      Navigator.pop(navigatorKey.currentContext!);
+  _playerCreatedSuccess(BaseApiModel response, BuildContext context,) {
+      showCupertinoModalBottomSheet(
+          expand: true,
+          context: context,
+          backgroundColor: Colors.transparent,
+          builder: (context) => TabInputOtp(context)
+      );
   }
 
   Future<void> login({required String email, required String pw}) async{
@@ -102,5 +176,4 @@ class AuthenticationBloc with Validation{
   }
 
 }
-
   final authenticationBloc = AuthenticationBloc();
