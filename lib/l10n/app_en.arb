@@ -3,7 +3,7 @@
   "login": "Login",
   "pass": "Password",
   "rememberPass": "Remember password",
-
+  "email":"Email",
   "forgotPass": "Forgot password?",
   "or":"or",
   "sign_up_gg":"Sign-up with Google",
