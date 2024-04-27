@@ -5,5 +5,6 @@
     "rememberPass": "Ghi nhớ mật khẩu",
     "forgotPass": "Quên mật khẩu?",
     "or":"hoặc",
-    "sign_up_gg":"Đăng ký với Google"
+    "sign_up_gg":"Đăng ký với Google",
+    "email":"Email"
 }

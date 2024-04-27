@@ -4,7 +4,7 @@ mixin Validation{
   final eMailValidate =
   StreamTransformer<String, String>.fromHandlers(handleData: (value, sink) {
 
-    if (value != "" &&!value.contains('@')) {
+    if (value.isNotEmpty && !value.contains('@')) {
       sink.addError('The e-mail is invalid!');
     }
     else {
@@ -14,7 +14,7 @@ mixin Validation{
 
   final passwordValidate =
   StreamTransformer<String, String>.fromHandlers(handleData: (value, sink) {
-    if (value.length == 0) {
+    if (value.isEmpty) {
       sink.addError('Enter the password');
     } else if (value.length < 6) {
       sink.addError('The password must have at least 6 characters');

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:splat_mobile/public/modal/modal_fit.dart';
+import 'package:splat_mobile/public/widget_item/common_text_field.dart';
 import '../../../constants/ui_styles.dart';
 import '../../blocs/authentication/authentication_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,112 +17,68 @@ Widget ModalLoginContent(BuildContext context){
       children: [
         Container(
             padding: EdgeInsets.symmetric(vertical:  size.height*0.01, horizontal: size.width*0.04),
-            child: StreamBuilder<Object>(
-                stream: authenticationBloc.emailValidateBehavior,
-                builder: (context, snapshot) {
-                  return TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(
-                          width: 2,
-                          style: BorderStyle.none,
-                          color: color_main,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(
-                            width: 1,
-                            style: BorderStyle.none,
-                            color: color_main
-                        ),
-                      ),
-                      focusedBorder:OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(
-                          width: 1,
-                          style: BorderStyle.none,
-                          color: color_main,
-                        ),
-                      ),
-                      hintText: "Email",
-
-                      errorText:snapshot.error?.toString(),
-                      // helperText:"Username must contain special character",
-                      // helperStyle:TextStyle(color:Colors.black,fontSize: 16,fontWeight: FontWeight.w600),
-                      suffixIcon: _controllerEmail.text !=""
-                          ? IconButton(
-                          icon: Icon(Icons.clear),
-                          onPressed: () {
-                            _controllerEmail.clear();
-                          })
-                          : null,
-                      alignLabelWithHint: false,
-                      filled: true,
-                    ),
-                    onChanged: (value){
-                      authenticationBloc.setEmail(value);
-
-                    },
-                    controller: _controllerEmail,
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.done,
-                  );
-                }
-            )
+            child: CommonTextField(
+                context,
+                labelText: localizations.email,
+                type: TextFieldTypeEnum.email,
+                enableEmailValidator: true)
         ),
         Container(
           padding: EdgeInsets.symmetric(vertical:  size.height*0.01, horizontal: size.width*0.04),
-          child: StreamBuilder<Object>(
-              stream: authenticationBloc.passwordVisibleBehavior,
-              builder: (context, snapshot) {
-                return TextField(
-                  obscureText: authenticationBloc.passwordVisible,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(
-                        width: 0,
-                        style: BorderStyle.none,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(
-                          width: 1,
-                          style: BorderStyle.none,
-                          color: color_main
-                      ),
-                    ),
-                    focusedBorder:OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(
-                        width: 1,
-                        style: BorderStyle.none,
-                        color: color_main,
-                      ),
-                    ),
-                    hintText: localizations.pass,
-                    helperStyle:TextStyle(color:Colors.red.shade700,fontSize: 16,fontWeight: FontWeight.w600),
-                    suffixIcon: IconButton(
-                      icon: Icon(authenticationBloc.passwordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                      color: Colors.black45,
-                      onPressed: () {
-                        authenticationBloc.setPassword();
-                      },
-                    ),
-                    alignLabelWithHint: false,
-                    filled: true,
-                  ),
-                  controller: _controllerPassword,
-                  keyboardType: TextInputType.visiblePassword,
-                  textInputAction: TextInputAction.done,
-                );
-              }
-          ),
+          child: CommonTextField(
+              context,
+              labelText: localizations.pass,
+              type: TextFieldTypeEnum.password,
+              enablePassWordValidator:true)
+          // StreamBuilder<Object>(
+          //     stream: authenticationBloc.passwordVisibleBehavior,
+          //     builder: (context, snapshot) {
+          //       return TextField(
+          //         obscureText: authenticationBloc.passwordVisible,
+          //         decoration: InputDecoration(
+          //           border: OutlineInputBorder(
+          //             borderRadius: BorderRadius.circular(16),
+          //             borderSide: const BorderSide(
+          //               width: 0,
+          //               style: BorderStyle.none,
+          //             ),
+          //           ),
+          //           enabledBorder: OutlineInputBorder(
+          //             borderRadius: BorderRadius.circular(16),
+          //             borderSide: const BorderSide(
+          //                 width: 1,
+          //                 style: BorderStyle.none,
+          //                 color: color_main
+          //             ),
+          //           ),
+          //           focusedBorder:OutlineInputBorder(
+          //             borderRadius: BorderRadius.circular(16),
+          //             borderSide: const BorderSide(
+          //               width: 1,
+          //               style: BorderStyle.none,
+          //               color: color_main,
+          //             ),
+          //           ),
+          //           hintText: localizations.pass,
+          //           helperStyle:TextStyle(color:Colors.red.shade700,fontSize: 16,fontWeight: FontWeight.w600),
+          //           suffixIcon: IconButton(
+          //             icon: Icon(authenticationBloc.passwordVisible
+          //                 ? Icons.visibility
+          //                 : Icons.visibility_off),
+          //             color: Colors.black45,
+          //             onPressed: () {
+          //               authenticationBloc.visiblePassword();
+          //             },
+          //           ),
+          //           alignLabelWithHint: false,
+          //           filled: true,
+          //         ),
+          //         controller: _controllerPassword,
+          //         keyboardType: TextInputType.visiblePassword,
+          //         textInputAction: TextInputAction.done,
+          //       );
+          //     }
+          // ),
         ),
         StreamBuilder<Object>(
             stream: authenticationBloc.checkRememberPassBehavior,
