@@ -53,7 +53,6 @@ Widget CommonTextField(
                               : Icons.visibility_off),
                           color: Colors.black45,
                           onPressed: () {
-                            print('hieuttchecking: ${snapshotObscure.data}');
                             commonTextFieldBloc.changeVisiblePassword(
                                 !(snapshotObscure.data == true));
                           },

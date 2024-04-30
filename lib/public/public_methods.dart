@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
+// import 'package:dio/dio.dart';
+import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:splat_mobile/constants/api_paths.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
@@ -11,7 +12,8 @@ import 'package:splat_mobile/src/models/player_model.dart';
 import '../widgets_common/dialogs.dart';
 
 class PublicMethods {
-  final dio = Dio();
+  Client client = Client();
+  // final dio = Dio();
 
   Future<String> get localPath async {
     final directory = await getApplicationDocumentsDirectory();
@@ -60,19 +62,10 @@ class PublicMethods {
        token = await storage.read(key: access_token_key);
        break;
    }
-    // String encodedData = Uri.encodeQueryComponent(body.toString());
-    // final formData = FormData.fromMap(isFormData? body:{});
-    // showLoader ? DialogWidget().showLoaderDialog() : null;
-   response = await dio.post(baseUrl + subUri,
-        data: isFormData ? body : jsonEncode(body),
-        options: Options(
-          contentType: isFormData ?
-                        Headers.formUrlEncodedContentType :
-                          Headers.jsonContentType,
-          headers: headerWithToken(token ?? ''),
-        )
-        );
-    // showLoader ? DialogWidget().dismissLoader() : null;
+      response = await client.post(Uri.parse(baseUrl + subUri),
+          body: isFormData ? body : jsonEncode(body),
+          headers: isFormData ? headerWithTokenFormData(token??''):headerWithToken(token??''),
+          );
     return response;
   }
 
@@ -85,12 +78,9 @@ class PublicMethods {
     Response response;
     showLoader ? DialogWidget().showLoaderDialog() : null;
     String token = await storage.read(key: access_token_key) ?? '';
-    response = await dio.get(
-      base_url + subUri,
-      queryParameters: queryParameters,
-      options: Options(
-        headers:  headerWithToken(token)
-      ),
+    response = await client.get(
+      // Uri.parse(base_url + subUri),
+      Uri.parse(base_url + subUri).replace(queryParameters: queryParameters),
     );
     showLoader ? DialogWidget().dismissLoader() : null;
     return response;
@@ -103,10 +93,8 @@ class PublicMethods {
     Response response;
     showLoader ? DialogWidget().showLoaderDialog() : null;
     String token = await storage.read(key: access_token_key) ?? '';
-    response = await dio.delete(base_url + subUri,
-      options: Options(
-          headers:  headerWithToken(token)
-      ),
+    response = await client.delete(Uri.parse(base_url + subUri),
+      headers: headerWithToken(token),
     );
     showLoader ? DialogWidget().dismissLoader() : null;
     return response;

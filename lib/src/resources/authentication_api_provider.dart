@@ -1,8 +1,9 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
+// import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:splat_mobile/constants/api_paths.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/public/public_methods.dart';
@@ -29,7 +30,7 @@ class AuthenticationiApiProvider {
       return response;
     } else {
       await Future.delayed(
-          Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response.data)['error']));
+          Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response.body)['message']['msg_name']));
       return null;
     }
   }
@@ -46,7 +47,7 @@ class AuthenticationiApiProvider {
       return response;
     }else{
       await Future.delayed(
-          Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response.data)['detail']));
+          Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response.body)['detail']));
       return null;
     }
   }
@@ -63,7 +64,7 @@ class AuthenticationiApiProvider {
       return response;
     }else{
       await Future.delayed(
-          Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response.data)['detail']));
+          Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response.body)['detail']));
       return null;
     }
   }
@@ -80,7 +81,7 @@ class AuthenticationiApiProvider {
         showLoader: true,
         isFormData: false,
     );
-    BaseApiModel _res = BaseApiModel.fromJson(jsonDecode(response.data));
+    BaseApiModel _res = BaseApiModel.fromJson(jsonDecode(response.body));
     if (_res.message["status_code"] == 200) {
       if (kDebugMode) {
         print(_res);
@@ -106,7 +107,7 @@ class AuthenticationiApiProvider {
       showLoader: true,
       isFormData: false,
     );
-    BaseApiModel _res = BaseApiModel.fromJson(jsonDecode(response.data));
+    BaseApiModel _res = BaseApiModel.fromJson(jsonDecode(response.body));
     if (_res.message["status_code"] == 200) {
       if (kDebugMode) {
         print(_res);

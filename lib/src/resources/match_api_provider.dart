@@ -1,6 +1,7 @@
 
-import 'package:dio/dio.dart';
+// import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart';
 import 'package:splat_mobile/public/public_methods.dart';
 
 import '../../constants/api_paths.dart';

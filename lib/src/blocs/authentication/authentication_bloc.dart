@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:http/http.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
@@ -146,13 +146,13 @@ class AuthenticationBloc with Validation{
 
     Response? response = await repository.login(email: email, pw: password);
     if (response != null && response.statusCode == 200){
-      String accessToken = response.data["access_token"];
-      String refreshToken = response.data["refresh_token"];
+      String accessToken = jsonDecode(response.body)["access_token"];
+      String refreshToken = jsonDecode(response.body)["refresh_token"];
       await storage.write(key: access_token_key, value: accessToken);
       await storage.write(key: refresh_token_key, value: refreshToken);
       Response? checkingTokenRes = await repository.testToken();
       if (checkingTokenRes != null){
-        publicValues.userNow = PlayerModel.fromJson(checkingTokenRes.data);
+        publicValues.userNow = PlayerModel.fromJson(jsonDecode(checkingTokenRes.body));
         // Navigator.pushNamed(navigatorKey.currentContext!, '/home');
       }
     }else{
@@ -162,12 +162,12 @@ class AuthenticationBloc with Validation{
   Future<void> refreshToken() async {
     Response? response = await repository.refreshToken();
     if (response != null){
-      String accessToken = jsonDecode(response.data)["access_token"];
+      String accessToken = jsonDecode(response.body)["access_token"];
       await storage.write(key: access_token_key, value: accessToken);
       Response? checkingTokenRes = await repository.testToken();
       if (checkingTokenRes != null) {
         publicValues.userNow =
-            PlayerModel.fromJson(jsonDecode(checkingTokenRes.data));
+            PlayerModel.fromJson(jsonDecode(checkingTokenRes.body));
         Navigator.pushNamed(navigatorKey.currentContext!, '/home');
       }
     }
