@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:splat_mobile/constants/api_paths.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/public/public_methods.dart';
@@ -11,16 +11,13 @@ import 'package:splat_mobile/src/models/base_api_model.dart';
 import 'package:splat_mobile/widgets_common/dialogs.dart';
 
 class AuthenticationiApiProvider {
-  Client client = Client();
 
   Future<Response?> login({
     required String inputEmail,
     required String inputPasswords,
   }) async {
     Response response;
-    var map = <String, dynamic>{};
-    map['username'] = inputEmail;
-    map['password'] = inputPasswords;
+    var map = 'username=$inputEmail&password=$inputPasswords';
     response = await PublicMethods().post(
         body: map,
         subUri: login_path,
@@ -32,7 +29,7 @@ class AuthenticationiApiProvider {
       return response;
     } else {
       await Future.delayed(
-          Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response.body)['error']));
+          Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response.data)['error']));
       return null;
     }
   }
@@ -49,7 +46,7 @@ class AuthenticationiApiProvider {
       return response;
     }else{
       await Future.delayed(
-          Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response.body)['detail']));
+          Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response.data)['detail']));
       return null;
     }
   }
@@ -66,7 +63,7 @@ class AuthenticationiApiProvider {
       return response;
     }else{
       await Future.delayed(
-          Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response.body)['detail']));
+          Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response.data)['detail']));
       return null;
     }
   }
@@ -83,8 +80,7 @@ class AuthenticationiApiProvider {
         showLoader: true,
         isFormData: false,
     );
-    print("xinhcheck ${response.body}");
-    BaseApiModel _res = BaseApiModel.fromJson(jsonDecode(response.body));
+    BaseApiModel _res = BaseApiModel.fromJson(jsonDecode(response.data));
     if (_res.message["status_code"] == 200) {
       if (kDebugMode) {
         print(_res);
@@ -103,14 +99,14 @@ class AuthenticationiApiProvider {
     Response response;
     response = await PublicMethods().post(
       body: {
-        "email": email,
+        "email":email,
         "otp":otp
       },
       subUri: API_REGISTER_VERIFI,
       showLoader: true,
       isFormData: false,
     );
-    BaseApiModel _res = BaseApiModel.fromJson(jsonDecode(response.body));
+    BaseApiModel _res = BaseApiModel.fromJson(jsonDecode(response.data));
     if (_res.message["status_code"] == 200) {
       if (kDebugMode) {
         print(_res);

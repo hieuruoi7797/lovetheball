@@ -7,8 +7,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Widget ModalLoginContent(BuildContext context){
   final size = MediaQuery.sizeOf(context);
-  final _controllerEmail = TextEditingController();
-  final _controllerPassword = TextEditingController();
   final localizations = AppLocalizations.of(context);
 
   return ModalFit(
@@ -30,55 +28,6 @@ Widget ModalLoginContent(BuildContext context){
               labelText: localizations.pass,
               type: TextFieldTypeEnum.password,
               enablePassWordValidator:true)
-          // StreamBuilder<Object>(
-          //     stream: authenticationBloc.passwordVisibleBehavior,
-          //     builder: (context, snapshot) {
-          //       return TextField(
-          //         obscureText: authenticationBloc.passwordVisible,
-          //         decoration: InputDecoration(
-          //           border: OutlineInputBorder(
-          //             borderRadius: BorderRadius.circular(16),
-          //             borderSide: const BorderSide(
-          //               width: 0,
-          //               style: BorderStyle.none,
-          //             ),
-          //           ),
-          //           enabledBorder: OutlineInputBorder(
-          //             borderRadius: BorderRadius.circular(16),
-          //             borderSide: const BorderSide(
-          //                 width: 1,
-          //                 style: BorderStyle.none,
-          //                 color: color_main
-          //             ),
-          //           ),
-          //           focusedBorder:OutlineInputBorder(
-          //             borderRadius: BorderRadius.circular(16),
-          //             borderSide: const BorderSide(
-          //               width: 1,
-          //               style: BorderStyle.none,
-          //               color: color_main,
-          //             ),
-          //           ),
-          //           hintText: localizations.pass,
-          //           helperStyle:TextStyle(color:Colors.red.shade700,fontSize: 16,fontWeight: FontWeight.w600),
-          //           suffixIcon: IconButton(
-          //             icon: Icon(authenticationBloc.passwordVisible
-          //                 ? Icons.visibility
-          //                 : Icons.visibility_off),
-          //             color: Colors.black45,
-          //             onPressed: () {
-          //               authenticationBloc.visiblePassword();
-          //             },
-          //           ),
-          //           alignLabelWithHint: false,
-          //           filled: true,
-          //         ),
-          //         controller: _controllerPassword,
-          //         keyboardType: TextInputType.visiblePassword,
-          //         textInputAction: TextInputAction.done,
-          //       );
-          //     }
-          // ),
         ),
         StreamBuilder<Object>(
             stream: authenticationBloc.checkRememberPassBehavior,
@@ -113,7 +62,7 @@ Widget ModalLoginContent(BuildContext context){
         ),
       ),
     ),
-    onClickButton: () => authenticationBloc.login(email: _controllerEmail.text, pw: _controllerPassword.text),
+    onClickButton: () => authenticationBloc.login(),
   );
 }
 

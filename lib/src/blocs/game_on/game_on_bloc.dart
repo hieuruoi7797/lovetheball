@@ -1,8 +1,8 @@
 
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/src/blocs/home_bloc/home_bloc.dart';
 import 'package:splat_mobile/src/blocs/match/match_bloc.dart';
@@ -45,13 +45,13 @@ class GameOnBloc {
      async {
       if(value == 'Y'){
         await repository.finishMatch(matchId: matchId).then((Response response) {
-          if (jsonDecode(response.body)['status_code'] == 200){
+          if (jsonDecode(response.data)['status_code'] == 200){
             matchBloc.getMatchesList(context);
             Navigator.pushNamedAndRemoveUntil(context, '/home',
                 ModalRoute.withName('/'));
             dispose("");
           }else{
-            DialogWidget().showMessageDialog(context, content: (jsonDecode(response.body)['message']));
+            DialogWidget().showMessageDialog(context, content: (jsonDecode(response.data)['message']));
           }
         });
       }else{

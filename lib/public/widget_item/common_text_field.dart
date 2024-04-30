@@ -69,7 +69,9 @@ Widget CommonTextField(
                   filled: true,
                   errorText: snapshotValidate.error?.toString(),
                 ),
-                obscureText: !(snapshotObscure.data == true),
+                obscureText: type == TextFieldTypeEnum.password ?
+                              !(snapshotObscure.data == true):
+                              false,
                 onChanged: (value) {
                   type == TextFieldTypeEnum.email
                       ? commonTextFieldBloc.enterEmail(value)
