@@ -1,4 +1,5 @@
-import 'package:dio/dio.dart';
+// import 'package:dio/dio.dart';
+import 'package:http/http.dart';
 import 'package:splat_mobile/public/public_methods.dart';
 import 'package:splat_mobile/widgets_common/dialogs.dart';
 

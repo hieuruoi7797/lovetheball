@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
+// import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/src/app.dart';
 import 'package:splat_mobile/src/blocs/game_on/game_on_bloc.dart';
@@ -56,7 +57,7 @@ class MatchBloc {
        BuildContext context,{ bool? isAdding, String? matchId}) async {
     Response response;
     response = await repository.getPlayers(matchId: matchId);
-    List<dynamic> listPlayerRes = jsonDecode(response.data)['data'] as List;
+    List<dynamic> listPlayerRes = jsonDecode(response.body)['data'] as List;
     List<PlayerModel> listPlayers = [];
     for(int i = 0 ; i < listPlayerRes.length; i++){
 
@@ -125,9 +126,9 @@ class MatchBloc {
       _matchCreatorPublish.sink.add(response);
       if (response.statusCode == 201) {
         if (context.mounted) {
-          String matchId = jsonDecode(response.data)['data'][0]['id_'];
+          String matchId = jsonDecode(response.body)['data'][0]['id_'];
           await getPlayerList(context, matchId: matchId);
-          matchRunning = MatchModel.fromJson(jsonDecode(response.data)['data'][0]);
+          matchRunning = MatchModel.fromJson(jsonDecode(response.body)['data'][0]);
           _addedPlayersBehavior.sink.add(addingPlayersList);
           _matchNameBehavior.sink.add(name);
           _matchIdBehavior.sink.add(matchRunning.id??'');
@@ -155,7 +156,7 @@ class MatchBloc {
     matchRunning = MatchModel();
     Response matchesListRes = await repository.getMatchesList(context);
     if (matchesListRes.statusCode == 200){
-      Map bodyRes = jsonDecode(matchesListRes.data);
+      Map bodyRes = jsonDecode(matchesListRes.body);
       (bodyRes['data'] as List).forEach((element) {
         element['created_at'] = '${DateTime.parse(element['created_at']).day}/${DateTime.parse(element['created_at']).month}/${DateTime.parse(element['created_at']).year}';
         matchesListAll.add(MatchModel.fromJson(element));
