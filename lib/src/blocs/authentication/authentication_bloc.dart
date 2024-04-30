@@ -1,12 +1,13 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:http/http.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/src/app.dart';
+import 'package:splat_mobile/src/blocs/common_textfield_bloc/common_textfield_bloc.dart';
 import 'package:splat_mobile/src/models/base_api_model.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 import 'package:splat_mobile/src/resources/repository.dart';
@@ -139,30 +140,34 @@ class AuthenticationBloc with Validation{
       );
   }
 
-  Future<void> login({required String email, required String pw}) async{
-    Response? response = await repository.login(email: email, pw: pw);
-    if (response != null){
-      String accessToken = jsonDecode(response.body)["access_token"];
-      String refreshToken = jsonDecode(response.body)["refresh_token"];
+  Future<void> login() async{
+    String email = await commonTextFieldBloc.emailValidateBehavior.first;
+    String password = await commonTextFieldBloc.passwordValidateBehavior.first;
+
+    Response? response = await repository.login(email: email, pw: password);
+    if (response != null && response.statusCode == 200){
+      String accessToken = response.data["access_token"];
+      String refreshToken = response.data["refresh_token"];
       await storage.write(key: access_token_key, value: accessToken);
       await storage.write(key: refresh_token_key, value: refreshToken);
       Response? checkingTokenRes = await repository.testToken();
       if (checkingTokenRes != null){
-        publicValues.userNow = PlayerModel.fromJson(jsonDecode(checkingTokenRes.body));
+        publicValues.userNow = PlayerModel.fromJson(checkingTokenRes.data);
         // Navigator.pushNamed(navigatorKey.currentContext!, '/home');
       }
+    }else{
     }
   }
 
   Future<void> refreshToken() async {
     Response? response = await repository.refreshToken();
     if (response != null){
-      String accessToken = jsonDecode(response.body)["access_token"];
+      String accessToken = jsonDecode(response.data)["access_token"];
       await storage.write(key: access_token_key, value: accessToken);
       Response? checkingTokenRes = await repository.testToken();
       if (checkingTokenRes != null) {
         publicValues.userNow =
-            PlayerModel.fromJson(jsonDecode(checkingTokenRes.body));
+            PlayerModel.fromJson(jsonDecode(checkingTokenRes.data));
         Navigator.pushNamed(navigatorKey.currentContext!, '/home');
       }
     }

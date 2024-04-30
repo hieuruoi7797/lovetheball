@@ -1,5 +1,5 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart';
 import 'package:splat_mobile/src/models/base_api_model.dart';
 import 'package:splat_mobile/src/resources/authentication_api_provider.dart';
 import 'package:splat_mobile/src/resources/gameon_api_provider.dart';

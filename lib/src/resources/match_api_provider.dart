@@ -1,12 +1,11 @@
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' show Client, Response;
 import 'package:splat_mobile/public/public_methods.dart';
 
 import '../../constants/api_paths.dart';
 
 class MatchApiProvider {
-  Client client = Client();
 
   // final _apiKey = 'api-key';
 

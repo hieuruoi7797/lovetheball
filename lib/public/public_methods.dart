@@ -1,17 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:http/http.dart';
+import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:splat_mobile/constants/api_paths.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/constants/public_values.dart';
-import 'package:splat_mobile/src/blocs/services_bloc.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 
 import '../widgets_common/dialogs.dart';
 
 class PublicMethods {
+  final dio = Dio();
+
   Future<String> get localPath async {
     final directory = await getApplicationDocumentsDirectory();
     // For your reference print the AppDoc directory
@@ -42,12 +43,12 @@ class PublicMethods {
   }
 
   Future<Response> post({
-    required Map body,
+    required dynamic body,
     required String subUri,
     required bool showLoader,
     required bool isFormData,
   }) async {
-    Client client = Client();
+    // Client client = Client();
     Response response;
     const baseUrl = base_url;
     String? token = '';
@@ -59,13 +60,19 @@ class PublicMethods {
        token = await storage.read(key: access_token_key);
        break;
    }
-    showLoader ? DialogWidget().showLoaderDialog() : null;
-    response = await client.post(Uri.parse(baseUrl + subUri),
-        body: isFormData ? body : jsonEncode(body),
-        headers: isFormData
-            ? headerWithTokenFormData(token ?? '')
-            : headerWithToken(token ?? ''));
-    showLoader ? DialogWidget().dismissLoader() : null;
+    // String encodedData = Uri.encodeQueryComponent(body.toString());
+    // final formData = FormData.fromMap(isFormData? body:{});
+    // showLoader ? DialogWidget().showLoaderDialog() : null;
+   response = await dio.post(baseUrl + subUri,
+        data: isFormData ? body : jsonEncode(body),
+        options: Options(
+          contentType: isFormData ?
+                        Headers.formUrlEncodedContentType :
+                          Headers.jsonContentType,
+          headers: headerWithToken(token ?? ''),
+        )
+        );
+    // showLoader ? DialogWidget().dismissLoader() : null;
     return response;
   }
 
@@ -74,13 +81,16 @@ class PublicMethods {
     required bool showLoader,
     required Map<String, dynamic> queryParameters,
   }) async {
-    Client client = Client();
+    // Client client = Client();
     Response response;
     showLoader ? DialogWidget().showLoaderDialog() : null;
     String token = await storage.read(key: access_token_key) ?? '';
-    response = await client.get(
-      Uri.parse(base_url + subUri).replace(queryParameters: queryParameters),
-      headers: headerWithToken(token),
+    response = await dio.get(
+      base_url + subUri,
+      queryParameters: queryParameters,
+      options: Options(
+        headers:  headerWithToken(token)
+      ),
     );
     showLoader ? DialogWidget().dismissLoader() : null;
     return response;
@@ -90,13 +100,13 @@ class PublicMethods {
     required String subUri,
     required bool showLoader,
   }) async {
-    Client client = Client();
     Response response;
     showLoader ? DialogWidget().showLoaderDialog() : null;
     String token = await storage.read(key: access_token_key) ?? '';
-    response = await client.delete(
-      Uri.parse(base_url + subUri),
-      headers: headerWithToken(token),
+    response = await dio.delete(base_url + subUri,
+      options: Options(
+          headers:  headerWithToken(token)
+      ),
     );
     showLoader ? DialogWidget().dismissLoader() : null;
     return response;
