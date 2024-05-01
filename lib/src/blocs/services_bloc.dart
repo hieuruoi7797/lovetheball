@@ -2,7 +2,7 @@ import 'package:splat_mobile/public/public_methods.dart';
 import 'package:rxdart/rxdart.dart';
 
 
-class ServiceBloc{
+class ApplicationBloc{
   bool isLoading = false;
 
   final _isLoading = PublishSubject<bool>();
@@ -16,4 +16,4 @@ class ServiceBloc{
 
 }
 
-final serviceBloc = ServiceBloc();
+final applicationBloc = ApplicationBloc();

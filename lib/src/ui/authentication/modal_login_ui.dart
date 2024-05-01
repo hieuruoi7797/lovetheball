@@ -11,6 +11,7 @@ Widget ModalLoginContent(BuildContext context){
 
   return ModalFit(
     title: localizations!.login.toUpperCase(),
+    enableLoadingForMainButton: true,
     widget: Column(
       children: [
         Container(

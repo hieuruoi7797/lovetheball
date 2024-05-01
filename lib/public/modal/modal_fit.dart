@@ -14,6 +14,7 @@ class ModalFit extends StatelessWidget {
   final Function()? onClickButton;
   final bool? isShowBack;
   final Function()? onTapBack;
+  final bool? enableLoadingForMainButton;
 
   const ModalFit({super.key,
     this.title,
@@ -23,7 +24,8 @@ class ModalFit extends StatelessWidget {
     this.widget2,
     this.onClickButton,
     this.isShowBack,
-    this.onTapBack});
+    this.onTapBack,
+    this.enableLoadingForMainButton});
 
 
   @override
@@ -93,6 +95,7 @@ class ModalFit extends StatelessWidget {
                 buttonName: buttonName??"",
                 height: 56,
                 width: MediaQuery.sizeOf(context).width * 0.92,
+                enableLoadingAnimation: enableLoadingForMainButton,
               ):Container(),
               widget2??Container()
 

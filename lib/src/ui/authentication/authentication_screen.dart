@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:splat_mobile/public/modal/modal_tab_view.dart';
 import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
+import 'package:splat_mobile/src/blocs/services_bloc.dart';
 import 'package:splat_mobile/src/ui/authentication/modal_input_otp.dart';
 import 'package:splat_mobile/src/ui/authentication/modal_login_ui.dart';
 import 'package:splat_mobile/src/ui/authentication/modal_register_ui.dart';
@@ -359,6 +361,7 @@ Widget buttonGen1(
   double? height,
   BoxDecoration? decoration,
   String leftIconPath = '',
+  bool? enableLoadingAnimation = false,
   Function()? onTap,
 }
     ) {
@@ -393,6 +396,18 @@ Widget buttonGen1(
                   fontSize: 16,
                   fontWeight: FontWeight.w600),
             ),
+            enableLoadingAnimation == true ?
+                StreamBuilder<bool>(
+                  stream: applicationBloc.getLoadingStatus,
+                  builder: (context, snapshot) {
+                    if (snapshot.data == true){
+                      return Lottie.asset('assets/animations/dots_loading.json');
+                    } else {
+                      return const SizedBox();
+                    }
+                  }
+                ):
+                const SizedBox(),
           ],
         ),
       ),

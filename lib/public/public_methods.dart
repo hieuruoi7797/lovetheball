@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 // import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:splat_mobile/constants/api_paths.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/constants/public_values.dart';
+import 'package:splat_mobile/src/blocs/services_bloc.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 
 import '../widgets_common/dialogs.dart';
@@ -62,10 +64,27 @@ class PublicMethods {
        token = await storage.read(key: access_token_key);
        break;
    }
+    applicationBloc.changeLoadingStatus();
+    await Future.delayed(Duration(seconds: 3));
+    try{
       response = await client.post(Uri.parse(baseUrl + subUri),
-          body: isFormData ? body : jsonEncode(body),
-          headers: isFormData ? headerWithTokenFormData(token??''):headerWithToken(token??''),
-          );
+        body: isFormData ? body : jsonEncode(body),
+        headers: isFormData ? headerWithTokenFormData(token??''):headerWithToken(token??''),
+      );
+    } catch (e) {
+      if (applicationBloc.isLoading == true) applicationBloc.changeLoadingStatus();
+      response = Response(
+          {
+          "message": {
+          "msg_name":'Service error'
+          }
+          }['message']!['msg_name'].toString(), 400);
+      // if (kDebugMode) {
+        print('HieuttError: $e');
+      // }
+    }
+
+    if (applicationBloc.isLoading == true) applicationBloc.changeLoadingStatus();
     return response;
   }
 
