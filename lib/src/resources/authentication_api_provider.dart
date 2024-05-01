@@ -12,12 +12,13 @@ import 'package:splat_mobile/src/models/base_api_model.dart';
 import 'package:splat_mobile/widgets_common/dialogs.dart';
 
 class AuthenticationiApiProvider {
+  Response? response;
+
 
   Future<Response?> login({
     required String inputEmail,
     required String inputPasswords,
   }) async {
-    Response response;
     var map = 'username=$inputEmail&password=$inputPasswords';
     response = await PublicMethods().post(
         body: map,
@@ -25,46 +26,47 @@ class AuthenticationiApiProvider {
         showLoader: true,
         isFormData: true,
     );
-
-    if (response.statusCode == 200) {
-      return response;
-    } else {
-      await Future.delayed(
-          Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response.body)['message']['msg_name']));
-      return null;
+    if (response != null){
+      if (response!.statusCode == 200) {
+        return response;
+      } else {
+        await Future.delayed(
+            Duration.zero, () => DialogWidget().showFailDialog('Serice Error'));
+        return null;
+      }
     }
+
   }
 
   Future<Response?> testToken() async {
-    Response response;
     response = await PublicMethods().post(
         body: {},
         subUri: test_token_path,
         showLoader: false,
         isFormData: false
     );
-    if (response.statusCode == 200) {
-      return response;
-    }else{
-      await Future.delayed(
-          Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response.body)['detail']));
-      return null;
-    }
+      if (response!.statusCode == 200) {
+        return response;
+      }else{
+        await Future.delayed(
+            Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response!.body)['detail']));
+        return null;
+      }
+
   }
 
   Future<Response?> refreshToken() async {
-    Response response;
     response = await PublicMethods().post(
         body: {},
         subUri: refresh_token_url,
         showLoader: true,
         isFormData: false
     );
-    if (response.statusCode == 200) {
+    if (response!.statusCode == 200) {
       return response;
     }else{
       await Future.delayed(
-          Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response.body)['detail']));
+          Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response!.body)['detail']));
       return null;
     }
   }
