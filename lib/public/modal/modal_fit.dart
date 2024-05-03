@@ -38,9 +38,10 @@ class ModalFit extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: size.width*0.05,
-                    vertical: size.height*0.03
+                padding: EdgeInsets.only(
+                    left: size.width*0.05,
+                    right: size.width*0.05,
+                    top: size.height*0.03
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -25,7 +25,7 @@ class ModalTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-    return StreamBuilder<Object>(
+    return StreamBuilder<int>(
       stream: authenticationBloc.currentStepBehavior,
       builder: (context, snapshot) {
         return ModalFit(
@@ -46,77 +46,64 @@ class ModalTabView extends StatelessWidget {
                       primary: Colors.orangeAccent
                     ),
                   ),
-                  child: Stepper(
-                    type: StepperType.horizontal,
-                    currentStep: authenticationBloc.currentStep,
-                    onStepCancel: ()=>authenticationBloc.onTapCancel(),
-                    onStepContinue:()=> authenticationBloc.onTapContinue(context),
-                    // onStepTapped: (step)=> authenticationBloc.onStepTapped(step),
-                    connectorThickness:10,
-                    controlsBuilder: (BuildContext context, ControlsDetails details) {
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: Column(
-                          children: [
-                            buttonGen1(
-                              onTap: (){
-                                authenticationBloc.onTapContinue(context);
-                                authenticationBloc.setIconBack();
-
-                              },
-                              parentContext: context,
-                              buttonName: "Tiếp tục",
-                              height: 56,
-                              width: size.width * 0.80,
-                            ),
-                            authenticationBloc.currentStep==1?
-                            Container(
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                              child:  const Column(
-                                children: [
-                                  Text("Chưa nhận được email?",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        color:color_62737A,
-                                        letterSpacing: -0.4,
-                                        wordSpacing: -0.4
-                                    ),),
-                                    Text("Gửi lại mã",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700,
-                                          color:Colors.black,
-                                          letterSpacing: -0.4,
-                                          wordSpacing: -0.4
-                                      ),
-                                    ),
-                                ],
+                  child: Column(
+                    children: [
+                      ///Indicator
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(left: 16,bottom: size.height*0.03),
+                            height: 8,
+                            width: (snapshot.data == 0 || snapshot.data == null) ?
+                                      MediaQuery.sizeOf(context).width * 0.28 :
+                                    (snapshot.data == 1) ?
+                                        MediaQuery.sizeOf(context).width * 0.56 :
+                                          MediaQuery.sizeOf(context).width * 0.84
+                            ,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              gradient: LinearGradient(
+                                begin: Alignment.bottomLeft,
+                                end: Alignment.topRight,
+                                colors: <Color>[
+                                  Color(0xffE55807),
+                                  Color(0xffFF8A4C),
+                                ], // Gradient from https://learnui.design/tools/gradient-generator.html
+                                tileMode: TileMode.mirror,
                               ),
-                            ):Container(),
-                          ],
-                        ),
-                      );
-                    },
-                    steps: [
-                      Step(
-                          title: Text(''),
-                          content: TabRegisterAccount(context),
-                          isActive: authenticationBloc.currentStep>=0,
-                          state: authenticationBloc.currentStep>0?StepState.complete:StepState.indexed
+                            ),
+                          ),
+                          Spacer(),
+                          Container(
+                            margin: EdgeInsets.only(left: 16,right: 16,bottom: size.height*0.03),
+                            child: Text(
+                              "${snapshot.data??0}/3",
+                              style: TextStyle(
+                                color: Color(0xFF62737A)
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                      Step(
-                          title: Text(''),
-                          content: TabInputOtp(context),
-                          isActive: authenticationBloc.currentStep>=1,
-                          state: authenticationBloc.currentStep>1?StepState.complete:StepState.indexed
+                      ///Form by Step
+                      (snapshot.data == 0 || snapshot.data == null) ?
+                          TabRegisterAccount(context) :(snapshot.data == 1)?
+                              TabInputOtp(context):
+                                TabRegisterPass(context),
+                      SizedBox(height: 32,),
+                      ///Next button
+                      buttonGen1(
+                        onTap: (){
+                          authenticationBloc.onTapContinue(context);
+                          authenticationBloc.setIconBack();
+                        },
+                        enableLoadingAnimation: true,
+                        parentContext: context,
+                        buttonName: "Tiếp tục",
+                        height: 56,
+                        width: size.width * 0.80,
                       ),
-                      Step(
-                          title: Text(''),
-                          content: TabRegisterPass(context),
-                          isActive: authenticationBloc.currentStep>=2,
-                          state: authenticationBloc.currentStep>2?StepState.complete:StepState.indexed
-                      )
                     ],
                   ),
                 )
