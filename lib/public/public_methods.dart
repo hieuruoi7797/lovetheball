@@ -65,7 +65,7 @@ class PublicMethods {
        break;
    }
     applicationBloc.changeLoadingStatus();
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 2));
     try{
       response = await client.post(Uri.parse(baseUrl + subUri),
         body: isFormData ? body : jsonEncode(body),
