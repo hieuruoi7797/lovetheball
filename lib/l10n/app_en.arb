@@ -7,6 +7,10 @@
   "forgotPass": "Forgot password?",
   "or":"or",
   "sign_up_gg":"Sign-up with Google",
+  "noti": "Notification",
+  "register": "Registration",
+  "btn_continue": "Continue",
+  "close": "Close",
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
   }

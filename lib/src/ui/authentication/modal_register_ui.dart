@@ -2,9 +2,11 @@
 import 'package:flutter/material.dart';
 import '../../../constants/ui_styles.dart';
 import '../../blocs/authentication/authentication_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 Widget TabRegisterAccount(BuildContext context) {
+  final localizations = AppLocalizations.of(context)!;
   return Container(
     child:Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -38,14 +40,17 @@ Widget TabRegisterAccount(BuildContext context) {
                   color: color_main,
                 ),
               ),
+              fillColor: Color(0xffecf3fb).withOpacity(0.6),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: const BorderSide(
                     width: 1,
                     style: BorderStyle.none,
-                    color: color_main
+                    color: Color(0xffb3bbc4)
+
                 ),
               ),
+
               focusedBorder:OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: const BorderSide(
@@ -55,6 +60,7 @@ Widget TabRegisterAccount(BuildContext context) {
                 ),
               ),
               hintText: "Email",
+
 
               // errorText:snapshot.error?.toString(),
               // helperText:"Username must contain special character",
@@ -68,6 +74,9 @@ Widget TabRegisterAccount(BuildContext context) {
                   : null,
               alignLabelWithHint: false,
               filled: true,
+            ),
+            style: TextStyle(
+                color: Colors.black
             ),
             onChanged: (value){
               // authenticationBloc.setEmail(value);
