@@ -58,3 +58,10 @@ const TextStyle name_big_size =  TextStyle(
 const TextStyle typing_text = TextStyle(
     fontSize: 14
 );
+
+const TextStyle headerTextStyle = TextStyle(
+  fontSize: 15,
+  fontWeight: FontWeight.w600,
+  color: Colors.black,
+);
+

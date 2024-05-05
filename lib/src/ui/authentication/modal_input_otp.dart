@@ -25,6 +25,7 @@ Widget TabInputOtp(BuildContext context){
   return Container(
     // title: "ĐĂNG KÝ",
     // buttonName: "Tiếp tục",
+    padding: EdgeInsets.symmetric(horizontal: 10),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -56,6 +57,7 @@ Widget TabInputOtp(BuildContext context){
               borderRadius: BorderRadius.circular(10),
               fieldWidth: 44,
               filled: true,
+              keyboardType: TextInputType.phone,
               fillColor: color_ECF3FB,
               // enabledBorderColor: color_B3BBC4,
               //set to true to show as box or false to show as dash

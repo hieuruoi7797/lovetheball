@@ -6,6 +6,7 @@ import 'package:http/http.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
+import 'package:splat_mobile/public/dialog/dialog_notification.dart';
 import 'package:splat_mobile/src/app.dart';
 import 'package:splat_mobile/src/blocs/common_textfield_bloc/common_textfield_bloc.dart';
 import 'package:splat_mobile/src/models/base_api_model.dart';
@@ -111,6 +112,13 @@ class AuthenticationBloc with Validation{
           _resSuccessBehavior.sink.add(_resSuccess=true);
       } else {
         _resSuccessBehavior.sink.add(_resSuccess=false);
+        showDialog(context: context, builder: (context){
+          return AddDialog.AddDialogbuilder(
+              onclose: (){Navigator.of(context).pop();},
+              onApply: (){Navigator.of(context).pop();},
+              content: response!.message["msg_name"],
+              context: context);
+        });
       }
 
   }
@@ -124,6 +132,13 @@ class AuthenticationBloc with Validation{
       _resSuccessBehavior.sink.add(_resSuccess=true);
     } else {
       _resSuccessBehavior.sink.add(_resSuccess=false);
+      showDialog(context: context, builder: (context){
+        return AddDialog.AddDialogbuilder(
+            onclose: (){Navigator.of(context).pop();},
+            onApply: (){Navigator.of(context).pop();},
+            content: response!.message["msg_name"],
+            context: context);
+      });
     }
   }
 

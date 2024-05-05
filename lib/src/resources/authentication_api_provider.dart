@@ -90,8 +90,6 @@ class AuthenticationiApiProvider {
       }
       return _res;
     } else {
-      await Future.delayed(
-          Duration.zero, () => DialogWidget().showFailDialog(error_fail));
       return _res;
     }
   }
@@ -116,8 +114,8 @@ class AuthenticationiApiProvider {
       }
       return _res;
     } else {
-      await Future.delayed(
-          Duration.zero, () => DialogWidget().showFailDialog(error_fail));
+      // await Future.delayed(
+      //     Duration.zero, () => DialogWidget().showFailDialog(error_fail));
       return _res;
     }
   }
@@ -131,8 +129,8 @@ class AuthenticationiApiProvider {
     if (response.statusCode == 200) {
       return response;
     } else {
-      await Future.delayed(
-          Duration.zero, () => DialogWidget().showFailDialog(error_fail));
+      // await Future.delayed(
+      //     Duration.zero, () => DialogWidget().showFailDialog(error_fail));
       return null;
     }
   }

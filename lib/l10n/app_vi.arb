@@ -6,5 +6,9 @@
     "forgotPass": "Quên mật khẩu?",
     "or":"hoặc",
     "sign_up_gg":"Đăng ký với Google",
-    "email":"Email"
+    "email":"Email",
+    "noti": "Thông báo",
+    "close": "Đóng",
+    "register": "Đăng ký",
+    "btn_continue": "Tiếp tục"
 }

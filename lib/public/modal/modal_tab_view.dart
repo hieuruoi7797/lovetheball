@@ -6,7 +6,7 @@ import 'package:splat_mobile/public/modal/modal_fit.dart';
 import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:splat_mobile/src/ui/authentication/authentication_screen.dart';
 import 'package:splat_mobile/src/ui/authentication/modal_create_pass_ui.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../constants/ui_styles.dart';
 import '../../src/ui/authentication/modal_input_otp.dart';
 import '../../src/ui/authentication/modal_register_ui.dart';
@@ -25,11 +25,12 @@ class ModalTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
+    final localizations = AppLocalizations.of(context)!;
     return StreamBuilder<int>(
       stream: authenticationBloc.currentStepBehavior,
       builder: (context, snapshot) {
         return ModalFit(
-          title: "ĐĂNG KÝ",
+          title: localizations.register.toUpperCase(),
           isShowBack: authenticationBloc.currentStep>0?true:false,
           onTapBack: ()=>authenticationBloc.onTapCancel(),
           widget: Column(
@@ -39,12 +40,12 @@ class ModalTabView extends StatelessWidget {
                 height: size.width,
                 child: Theme(
                   data: ThemeData(
-                    colorScheme: ColorScheme.fromSeed(
-                      seedColor: Colors.orange,
-                      onSurface: Colors.grey,
-                      secondary: Colors.orangeAccent,
-                      primary: Colors.orangeAccent
-                    ),
+                    // colorScheme: ColorScheme.fromSeed(
+                    //   seedColor: Colors.orange,
+                    //   onSurface: Colors.grey,
+                    //   secondary: Colors.orangeAccent,
+                    //   primary: Colors.orangeAccent
+                    // ),
                   ),
                   child: Column(
                     children: [
@@ -100,7 +101,7 @@ class ModalTabView extends StatelessWidget {
                         },
                         enableLoadingAnimation: true,
                         parentContext: context,
-                        buttonName: "Tiếp tục",
+                        buttonName: localizations.btn_continue,
                         height: 56,
                         width: size.width * 0.80,
                       ),
