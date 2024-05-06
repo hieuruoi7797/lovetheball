@@ -60,7 +60,7 @@ class ModalTabView extends StatelessWidget {
                                       MediaQuery.sizeOf(context).width * 0.28 :
                                     (snapshot.data == 1) ?
                                         MediaQuery.sizeOf(context).width * 0.56 :
-                                          MediaQuery.sizeOf(context).width * 0.84
+                                          MediaQuery.sizeOf(context).width * 0.80
                             ,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(100),
@@ -79,7 +79,7 @@ class ModalTabView extends StatelessWidget {
                           Container(
                             margin: EdgeInsets.only(left: 16,right: 16,bottom: size.height*0.03),
                             child: Text(
-                              "${snapshot.data??0}/3",
+                              "${snapshot.data!+1}/3",
                               style: TextStyle(
                                 color: Color(0xFF62737A)
                               ),
