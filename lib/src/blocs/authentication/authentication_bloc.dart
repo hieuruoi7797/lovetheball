@@ -17,14 +17,15 @@ import 'package:splat_mobile/src/ui/authentication/validate.dart';
 
 import '../../../constants/api_response_codes.dart';
 import '../../../constants/public_values.dart';
+import '../../../constants/ui_styles.dart';
 import '../../ui/authentication/modal_input_otp.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthenticationBloc with Validation{
 
   late BuildContext context;
   bool _passwordVisible=false;
   bool _checkRememberPass = false;
-
   final _emailBehavior = BehaviorSubject<String>();
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
@@ -74,6 +75,57 @@ class AuthenticationBloc with Validation{
     }
     if(_currentStep==1){
       await verifiCreateUser(context, otp: _otpController.text);
+    }
+    if(_currentStep==2){
+      showDialog(context: context, builder: (context){
+        final localizations = AppLocalizations.of(context)!;
+        return AddDialog.AddDialogbuilder(
+            onclose: (){Navigator.of(context).pop();},
+            onApply: (){Navigator.of(context).pop();},
+            content: "",
+            title: "Chúc mừng! Tài khoản của bạn đã được thiết lập",
+            contentWidget: Container(
+              height: 300,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: color_62737A
+                      )
+                    ),
+                    width: 250,
+                    height: 250,
+                  ),
+                  StreamBuilder<Object>(
+                      stream: authenticationBloc.checkRememberPassBehavior,
+                      builder: (context, snapshot) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Checkbox(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)),
+                              checkColor: Colors.white,
+                              activeColor: color_checkbox_remember,
+                              value: authenticationBloc.checkRememberPass,
+                              onChanged: (bool? value) {
+                                authenticationBloc.setCheckRememberPass(value);
+                              },
+                            ),
+                            Text("Ghi nhớ thông tin tài khoản"),
+                          ],
+                        );
+                      }
+                  ),
+                ],
+              ),
+            ),
+            buttonName: "Đăng nhập",
+            context: context);
+      });
     }
 
     if(_resSuccess==true){

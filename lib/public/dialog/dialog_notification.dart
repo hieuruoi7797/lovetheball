@@ -9,31 +9,23 @@ class AddDialog {
     required VoidCallback onclose,
     required VoidCallback onApply,
     required String content,
-    String? title
+    Widget? contentWidget,
+    String? title,
+    String? buttonName,
   }) {
     final localizations = AppLocalizations.of(context)!;
     return AlertDialog(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(30))
         ),
-        insetPadding: EdgeInsets.zero,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // IconButton(
-            //   alignment: Alignment.centerLeft,
-            //   onPressed: onclose,
-            //   icon: Icon(Icons.close),
-            // ),
-            Container(
-              alignment: Alignment.topCenter,
-              child: Text(title??localizations.noti,
-                textAlign: TextAlign.center,
-              ),
-            )
-          ],
+        insetPadding: EdgeInsets.all(15),
+        title: Container(
+          alignment: Alignment.topCenter,
+          child: Text(title??localizations.noti,
+            textAlign: TextAlign.center,
+          ),
         ),
-        content: Padding(
+        content: contentWidget??Padding(
           padding: const EdgeInsets.all(10.0),
           child: Text(
             content, textAlign: TextAlign.center,
@@ -45,8 +37,9 @@ class AddDialog {
             child: Container(
               alignment: Alignment.center,
               child: AppButton.buildMaterialButton(
-                  context: context,
-                onTap: onApply
+                context: context,
+                onTap: onApply,
+                buttonName: buttonName
               )
             ),
           )
