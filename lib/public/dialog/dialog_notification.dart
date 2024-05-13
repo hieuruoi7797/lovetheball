@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class AddDialog {
   static AlertDialog AddDialogbuilder({
     required BuildContext context,
-    required VoidCallback onclose,
+    // required VoidCallback onclose,
     required VoidCallback onApply,
     required String content,
     Widget? contentWidget,
