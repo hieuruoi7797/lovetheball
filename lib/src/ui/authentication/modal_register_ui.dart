@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:splat_mobile/public/widget_item/common_text_field.dart';
 import '../../../constants/ui_styles.dart';
 import '../../blocs/authentication/authentication_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -40,7 +41,7 @@ Widget TabRegisterAccount(BuildContext context) {
                   color: color_main,
                 ),
               ),
-              fillColor: Color(0xffecf3fb).withOpacity(0.6),
+              fillColor: Color(0xffecf3fb).withOpacity(0.9),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: const BorderSide(

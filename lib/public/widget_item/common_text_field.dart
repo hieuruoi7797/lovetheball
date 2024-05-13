@@ -10,6 +10,7 @@ Widget CommonTextField(
   bool? enableEmailValidator,
   bool? enablePassWordValidator,
   TextFieldTypeEnum? type,
+  required TextEditingController controller,
 }) {
   final textController = TextEditingController();
   return StreamBuilder<String>(
@@ -24,6 +25,7 @@ Widget CommonTextField(
             builder: (context, snapshotObscure) {
               return TextField(
                 decoration: InputDecoration(
+                  fillColor: Color(0xffecf3fb).withOpacity(0.6),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: const BorderSide(
@@ -35,7 +37,11 @@ Widget CommonTextField(
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: const BorderSide(
-                        width: 1, style: BorderStyle.none, color: color_main),
+                        width: 1,
+                        style: BorderStyle.none,
+                        color: Color(0xffb3bbc4)
+
+                    ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -57,11 +63,11 @@ Widget CommonTextField(
                                 !(snapshotObscure.data == true));
                           },
                         )
-                      : textController.text != ""
+                      : controller.text!=''
                           ? IconButton(
                               icon: Icon(Icons.clear),
                               onPressed: () {
-                                textController.clear();
+                                controller.clear();
                               })
                           : null,
                   alignLabelWithHint: false,
@@ -78,7 +84,7 @@ Widget CommonTextField(
                           ? commonTextFieldBloc.enterPassword(value)
                           : null;
                 },
-                controller: textController,
+                controller: controller,
                 keyboardType: type == TextFieldTypeEnum.password
                     ? TextInputType.visiblePassword
                     : type == TextFieldTypeEnum.email

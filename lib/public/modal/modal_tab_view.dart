@@ -79,7 +79,7 @@ class ModalTabView extends StatelessWidget {
                           Container(
                             margin: EdgeInsets.only(left: 16,right: 16,bottom: size.height*0.03),
                             child: Text(
-                              "${snapshot.data!+1}/3",
+                              "${snapshot.data??0+1}/3",
                               style: TextStyle(
                                 color: Color(0xFF62737A)
                               ),
@@ -94,6 +94,7 @@ class ModalTabView extends StatelessWidget {
                                 TabRegisterPass(context),
                       SizedBox(height: 32,),
                       ///Next button
+                      // authenticationBloc.showButtonContinue==true ?
                       buttonGen1(
                         onTap: (){
                           authenticationBloc.onTapContinue(context);
@@ -104,7 +105,17 @@ class ModalTabView extends StatelessWidget {
                         buttonName: localizations.btn_continue,
                         height: 56,
                         width: size.width * 0.80,
-                      ),
+                      )
+                      // :buttonGen1(
+                      //   onTap: (){
+                      //   },
+                      //   decoration: BoxDecoration(),
+                      //   enableLoadingAnimation: true,
+                      //   parentContext: context,
+                      //   buttonName: localizations.btn_continue,
+                      //   height: 56,
+                      //   width: size.width * 0.80,
+                      // ),
                     ],
                   ),
                 )

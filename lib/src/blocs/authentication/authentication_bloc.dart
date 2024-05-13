@@ -46,7 +46,6 @@ class AuthenticationBloc with Validation{
   Stream<String> get emailValidateBehavior => _emailBehavior.stream.transform(eMailValidate);
   bool get passwordVisible => _passwordVisible;
   bool get checkRememberPass => _checkRememberPass;
-  String get geEmailTxt => _emailBehavior.value;
 
 
   int _currentStep = 0;
@@ -61,6 +60,11 @@ class AuthenticationBloc with Validation{
   bool get resSuccess => _resSuccess;
   final _resSuccessBehavior = BehaviorSubject<bool>();
   Stream<bool> get resSuccessBehavior => _resSuccessBehavior.stream;
+
+  bool _showButtonContinue = false;
+  bool get showButtonContinue => _showButtonContinue;
+  final _showButtonContinueBehavior = BehaviorSubject<bool>();
+  Stream<bool> get showButtonContinueBehavior => _showButtonContinueBehavior.stream;
   void setIconBack()=>{
     if(_currentStep>=0){
       _isShowBackBehavior.sink.add(_isShowBack=!_isShowBack)
@@ -80,7 +84,7 @@ class AuthenticationBloc with Validation{
       showDialog(context: context, builder: (context){
         final localizations = AppLocalizations.of(context)!;
         return AddDialog.AddDialogbuilder(
-            onclose: (){Navigator.of(context).pop();},
+            // onclose: (){Navigator.of(context).pop();},
             onApply: (){Navigator.of(context).pop();},
             content: "",
             title: "Chúc mừng! Tài khoản của bạn đã được thiết lập",
@@ -152,26 +156,45 @@ class AuthenticationBloc with Validation{
   void clearEmail() => _emailBehavior.sink.add("");
   void setEmail(String value) => _emailBehavior.sink.add(value);
   void setOTP(String value) => _otpBehavior.sink.add(_otpController.text=value);
+  void setShowButton()=> {
+    if(emailController.text!=''){
+      _showButtonContinueBehavior.sink.add(_showButtonContinue=true)
+    }
+    else{
+      _showButtonContinueBehavior.sink.add(_showButtonContinue=false)
+    }
+  };
 
   ///Create a player and save user info in storage
   createUser(BuildContext context,{
     required String email,
   }) async {
-
-      BaseApiModel? response =
-      await repository.createUser( email: email);
-      if (response!.message["msg_code"]== MSG_SUCCESS_REGISTER_S605) {
-          _resSuccessBehavior.sink.add(_resSuccess=true);
-      } else {
-        _resSuccessBehavior.sink.add(_resSuccess=false);
+      if(emailController.text==''){
         showDialog(context: context, builder: (context){
           return AddDialog.AddDialogbuilder(
-              onclose: (){Navigator.of(context).pop();},
               onApply: (){Navigator.of(context).pop();},
-              content: response!.message["msg_name"],
+              content: "Vui lòng nhập email",
               context: context);
         });
+        return;
       }
+      else{
+        BaseApiModel? response =
+        await repository.createUser( email: email);
+        if (response!.message["msg_code"]== MSG_SUCCESS_REGISTER_S605) {
+          _resSuccessBehavior.sink.add(_resSuccess=true);
+        } else {
+          _resSuccessBehavior.sink.add(_resSuccess=false);
+          showDialog(context: context, builder: (context){
+            return AddDialog.AddDialogbuilder(
+              // onclose: (){Navigator.of(context).pop();},
+                onApply: (){Navigator.of(context).pop();},
+                content: response!.message["msg_name"],
+                context: context);
+          });
+        }
+      }
+
 
   }
   verifiCreateUser(BuildContext context, {
@@ -186,7 +209,7 @@ class AuthenticationBloc with Validation{
       _resSuccessBehavior.sink.add(_resSuccess=false);
       showDialog(context: context, builder: (context){
         return AddDialog.AddDialogbuilder(
-            onclose: (){Navigator.of(context).pop();},
+            // onclose: (){Navigator.of(context).pop();},
             onApply: (){Navigator.of(context).pop();},
             content: response!.message["msg_name"],
             context: context);

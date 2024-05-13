@@ -20,7 +20,8 @@ Widget ModalLoginContent(BuildContext context){
                 context,
                 labelText: localizations.email,
                 type: TextFieldTypeEnum.email,
-                enableEmailValidator: true)
+                enableEmailValidator: true,
+                controller: authenticationBloc.emailController)
         ),
         Container(
           padding: EdgeInsets.symmetric(vertical:  size.height*0.01, horizontal: size.width*0.04),
@@ -28,7 +29,8 @@ Widget ModalLoginContent(BuildContext context){
               context,
               labelText: localizations.pass,
               type: TextFieldTypeEnum.password,
-              enablePassWordValidator:true)
+              enablePassWordValidator:true,
+              controller: authenticationBloc.passController)
         ),
         StreamBuilder<Object>(
             stream: authenticationBloc.checkRememberPassBehavior,
