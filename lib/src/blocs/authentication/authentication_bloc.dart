@@ -30,8 +30,10 @@ class AuthenticationBloc with Validation{
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
   TextEditingController _controllerOTP = TextEditingController();
+  TextEditingController _controllerNickName = TextEditingController();
   TextEditingController get emailController => _controllerEmail;
   TextEditingController get passController => _controllerPassword;
+  TextEditingController get nickNameController => _controllerNickName;
 
   final _otpBehavior = BehaviorSubject<String>();
   Stream<String> get otpBehavior => _otpBehavior.stream;
