@@ -1,19 +1,25 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:splat_mobile/public/widget_item/app_button.dart';
 import 'package:splat_mobile/src/ui/authentication/authentication_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../constants/ui_styles.dart';
+
 class AddDialog {
   static AlertDialog AddDialogbuilder({
     required BuildContext context,
-    // required VoidCallback onclose,
+    VoidCallback? onclose,
     required VoidCallback onApply,
     required String content,
     Widget? contentWidget,
     String? title,
     String? buttonName,
+    String? buttonNameClose,
   }) {
     final localizations = AppLocalizations.of(context)!;
+    final size = MediaQuery.of(context).size;
     return AlertDialog(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(30))
@@ -32,7 +38,29 @@ class AddDialog {
           ),
         ),
         actions: <Widget>[
-          Padding(
+          onclose!=null?Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  child: AppButton.buildMaterialButton(
+                      context: context,
+                      onTap: onclose,
+                      width: size.width*0.3,
+                      buttonName: buttonNameClose??"Đóng"
+                  )
+              ),
+              SizedBox(width: size.width*0.1,),
+              Container(
+                  child: AppButton.buildMaterialButton(
+                      context: context,
+                      onTap: onApply,
+                      width: size.width*0.3,
+                      buttonName: buttonName
+                  )
+              )
+            ],
+          )
+          :Padding(
             padding: const EdgeInsets.only(bottom: 10.0),
             child: Container(
               alignment: Alignment.center,
@@ -46,4 +74,30 @@ class AddDialog {
         ]
     );
   }
+
+  static showAlertDialog(
+      BuildContext context,
+      String content,
+      VoidCallback onPressed
+  )
+  => showCupertinoDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: Text(content),
+      actions: <CupertinoDialogAction>[
+        CupertinoDialogAction(
+          onPressed: () => Navigator.of(context).pop(),
+          textStyle: textButtonBlue,
+          child: const Text('Từ chối'),
+        ),
+        CupertinoDialogAction(
+          isDefaultAction: true,
+          textStyle: textButtonBlue,
+          onPressed: () => onPressed,
+          child: const Text('Xác nhận'),
+        ),
+      ],
+    ),
+  );
 }

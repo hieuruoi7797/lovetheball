@@ -1,12 +1,19 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'dart:typed_data';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
+import 'package:splat_mobile/public/app_global.dart';
+import 'package:splat_mobile/public/app_service.dart';
 import 'package:splat_mobile/public/dialog/dialog_notification.dart';
+import 'package:splat_mobile/public/widget_item/widget_register_success.dart';
 import 'package:splat_mobile/src/app.dart';
 import 'package:splat_mobile/src/blocs/common_textfield_bloc/common_textfield_bloc.dart';
 import 'package:splat_mobile/src/models/base_api_model.dart';
@@ -18,6 +25,7 @@ import 'package:splat_mobile/src/ui/authentication/validate.dart';
 import '../../../constants/api_response_codes.dart';
 import '../../../constants/public_values.dart';
 import '../../../constants/ui_styles.dart';
+import '../../../public/share_prefer.dart';
 import '../../ui/authentication/modal_input_otp.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -27,11 +35,18 @@ class AuthenticationBloc with Validation{
   bool _passwordVisible=false;
   bool _checkRememberPass = false;
   final _emailBehavior = BehaviorSubject<String>();
+  final  picker = ImagePicker();
+  File _avatarFile = File('');
+  final _imagePickerBehavior = BehaviorSubject<File>();
+  Stream<File> get imagePickerBehavior => _imagePickerBehavior.stream;
+  File get avatarFile => _avatarFile;
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
   TextEditingController _controllerOTP = TextEditingController();
+  TextEditingController _controllerNickName = TextEditingController();
   TextEditingController get emailController => _controllerEmail;
   TextEditingController get passController => _controllerPassword;
+  TextEditingController get nickNameController => _controllerNickName;
 
   final _otpBehavior = BehaviorSubject<String>();
   Stream<String> get otpBehavior => _otpBehavior.stream;
@@ -85,48 +100,10 @@ class AuthenticationBloc with Validation{
         final localizations = AppLocalizations.of(context)!;
         return AddDialog.AddDialogbuilder(
             // onclose: (){Navigator.of(context).pop();},
-            onApply: (){Navigator.of(context).pop();},
+            onApply: (){Navigator.pushNamed(context, "/registerInfoUser");},
             content: "",
             title: "Chúc mừng! Tài khoản của bạn đã được thiết lập",
-            contentWidget: Container(
-              height: 300,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: color_62737A
-                      )
-                    ),
-                    width: 250,
-                    height: 250,
-                  ),
-                  StreamBuilder<Object>(
-                      stream: authenticationBloc.checkRememberPassBehavior,
-                      builder: (context, snapshot) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Checkbox(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)),
-                              checkColor: Colors.white,
-                              activeColor: color_checkbox_remember,
-                              value: authenticationBloc.checkRememberPass,
-                              onChanged: (bool? value) {
-                                authenticationBloc.setCheckRememberPass(value);
-                              },
-                            ),
-                            Text("Ghi nhớ thông tin tài khoản"),
-                          ],
-                        );
-                      }
-                  ),
-                ],
-              ),
-            ),
+            contentWidget: WidgetRegisterSuccess(context),
             buttonName: "Đăng nhập",
             context: context);
       });
@@ -269,6 +246,64 @@ class AuthenticationBloc with Validation{
       Navigator.pushNamed(navigatorKey.currentContext!, '/');
     }
   }
+  Future<void> pickImageFromLib(BuildContext context) async{
+    Navigator.pop(context);
+    _imagePickerBehavior.sink.add(_avatarFile=File(''));
+    bool permission = await service.handlePhotosPermission(context);
+    if(permission){
+      final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        final Directory basePath = await getApplicationDocumentsDirectory();
+        String path = '/image_avatar' + "xinhcheck" + '.jpg';
+        XFile? imageFile = pickedFile != null ? XFile(pickedFile.path) : null;
+        final Uint8List uInt8 = await imageFile!.readAsBytes();
+        File pathAvartar = await File(basePath.path + path).writeAsBytes(uInt8, mode: FileMode.write);
+        imageCache.clear();
+        imageCache.clearLiveImages();
+        await SharePreferUtils.saveAvatar(pathAvartar.path, 'xinh');
+        appGlobal.setAvatarFile(pathAvartar);
+        await showDialog(context: context, builder: (context){
+          return AddDialog.AddDialogbuilder(
+              content: "Thanh cong",
+              context: context,
+              onApply: () {  Navigator.pop(context);}
+          );
+        });
+        _imagePickerBehavior.sink.add(_avatarFile=pathAvartar);
+      }
+    }
+  }
+
+  Future<void> pickImageFromCam(BuildContext context) async{
+    Navigator.pop(context);
+    _imagePickerBehavior.sink.add(_avatarFile=File(''));
+    bool permission = await service.handleCameraPermission(context);
+    if(permission){
+      final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
+      if (pickedFile != null) {
+        final Directory basePath = await getApplicationDocumentsDirectory();
+        String path = '/image_avatar' + "xinhcheck" + '.jpg';
+        XFile? imageFile = pickedFile != null ? XFile(pickedFile.path) : null;
+        final Uint8List uInt8 = await imageFile!.readAsBytes();
+        File pathAvartar = await File(basePath.path + path).writeAsBytes(uInt8, mode: FileMode.write);
+        imageCache.clear();
+        imageCache.clearLiveImages();
+        await SharePreferUtils.saveAvatar(pathAvartar.path, 'xinh');
+        appGlobal.setAvatarFile(pathAvartar);
+        await showDialog(context: context, builder: (context){
+          return AddDialog.AddDialogbuilder(
+              content: "Thanh cong",
+              context: context,
+              onApply: () {
+                Navigator.pop(context);
+              }
+          );
+        });
+        _imagePickerBehavior.sink.add(_avatarFile=pathAvartar);
+      }
+    }
+  }
+
 
 }
   final authenticationBloc = AuthenticationBloc();

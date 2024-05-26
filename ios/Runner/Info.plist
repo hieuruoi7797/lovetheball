@@ -32,6 +32,10 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>NSCameraUsageDescription</key>
+    <string>This app needs camera access to set avatar</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Need access to photo to set avatar</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
