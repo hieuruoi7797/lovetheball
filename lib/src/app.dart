@@ -4,6 +4,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:splat_mobile/src/ui/authentication/authentication_screen.dart';
+import 'package:splat_mobile/src/ui/authentication/registration_info_screen.dart';
+import 'package:splat_mobile/src/ui/authentication/setting_avatar_screen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -36,13 +38,16 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.black.withOpacity(0),
         ),
       ),
-      // routes: {
+
+      routes: {
       //   '/': (context) => LoginScreen(),
       //   '/sign_up': (context) => const PlayerCreatingScreen(),
       //   '/home': (context) => const HomeScreen(),
       //   '/game_on': (context) => const GameOnScreen(),
       //   '/overview_history_game': (context) => const OverviewHistoryScreen(),
-      // },
+        "/registerInfoUser" : (context) => const RegistrationInfoScreen(),
+        "/settingAvatar": (context) => const SettingAvatarScreen()
+      },
       // home: const MyHomePage(),
     );
   }

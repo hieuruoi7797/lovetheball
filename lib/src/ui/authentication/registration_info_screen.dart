@@ -12,22 +12,29 @@ class RegistrationInfoScreen extends StatelessWidget {
     return LayoutScreen(
         titleAppbar: "THÔNG TIN CÁ NHÂN",
         bodyLayout: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child:  Column(
             children: [
-              const Text("Tên của bạn là gì?",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text("Tên của bạn là gì?",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
                SizedBox(height: 10,),
-               const Text("Tên của bạn sẽ hiển thị trên trang cá nhân",
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color:color_62737A,
-                    letterSpacing: -0.4,
-                    wordSpacing: -0.4
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Text("Tên của bạn sẽ hiển thị trên trang cá nhân",
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color:color_62737A,
+                      letterSpacing: -0.4,
+                      wordSpacing: -0.4
+                  ),
                 ),
               ),
                SizedBox(height: 30,),
@@ -82,7 +89,12 @@ class RegistrationInfoScreen extends StatelessWidget {
             ],
           ),
         ),
-        onTapBack: (){}
+        onTapBack: (){
+          Navigator.pop(context);
+        },
+        onTapContinue: (){
+          Navigator.pushNamed(context, "/settingAvatar");
+        },
     );
   }
 }
