@@ -7,6 +7,23 @@ import '../../src/blocs/services_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AppButton {
+  static Widget btnTextCustom({
+    Function()? onTap,
+    required String buttonName,
+  }){
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        alignment: Alignment.center,
+        child: Text(
+          buttonName,
+          style: headerTextStyle,
+        ),
+      ),
+    );
+  }
+
+
   static Widget buildMaterialButton({
     required BuildContext context,
     String? buttonName,

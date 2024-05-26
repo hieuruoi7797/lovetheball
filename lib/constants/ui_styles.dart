@@ -8,6 +8,7 @@ const Color color_main = Color(0xFFE55807);
 const Color color_loading_background = Colors.blueGrey;
 const Color color_button_cancel = Colors.grey;
 const Color color_checkbox_remember = Color(0xff30b0c7);
+const Color color_007AFF = Color(0xff007aff);
 const Color color_FFFFFF = Color(0xFFFFFFFF);
 const Color color_62737A = Color(0xff62737a);
 const Color color_E4EBF2 = Color(0xffe4ebf2);
@@ -66,5 +67,12 @@ const TextStyle headerTextStyle = TextStyle(
   fontSize: 15,
   fontWeight: FontWeight.w600,
   color: Colors.black,
+);
+
+const TextStyle textButtonBlue = TextStyle(
+  fontSize: 14,
+  fontWeight: FontWeight.w400,
+  color: color_007AFF,
+  fontFamily: 'Inter',
 );
 

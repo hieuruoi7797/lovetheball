@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../constants/ui_styles.dart';
 import 'dialog/dialog_notification.dart';
 
 class AppService{
@@ -18,18 +20,10 @@ class AppService{
     PermissionStatus cameraPermissionStatus = await requestCameraPermission();
 
     if (cameraPermissionStatus != PermissionStatus.granted) {
-      await showDialog(context: context, builder: (context){
-        return AddDialog.AddDialogbuilder(
-            onApply: (){
-              openAppSettings();
-            },
-            onclose: (){
-              Navigator.pop(context);
-            },
-            content: "Splat muốn truy cập Máy ảnh của bạn",
-            context: context
-        );
-      });
+      AddDialog.showAlertDialog(
+          context,
+          "Splat muốn truy cập Máy ảnh của bạn",
+          () {openAppSettings();});
 
       return false;
     }
@@ -41,18 +35,10 @@ class AppService{
     PermissionStatus photosPermissionStatus = await requestPhotosPermission();
 
     if (photosPermissionStatus != PermissionStatus.granted) {
-      await showDialog(context: context, builder: (context){
-        return AddDialog.AddDialogbuilder(
-            onApply: (){
-              openAppSettings();
-            },
-            onclose: (){
-              Navigator.pop(context);
-            },
-            content: "Splat muốn truy Thư viện ảnh của bạn",
-            context: context
-        );
-      });
+      AddDialog.showAlertDialog(
+          context,
+          "Splat muốn truy Thư viện ảnh của bạn",
+          (){openAppSettings();});
 
       return false;
     }
