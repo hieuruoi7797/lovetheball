@@ -6,12 +6,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class AddDialog {
   static AlertDialog AddDialogbuilder({
     required BuildContext context,
-    // required VoidCallback onclose,
+    VoidCallback? onclose,
     required VoidCallback onApply,
     required String content,
     Widget? contentWidget,
     String? title,
     String? buttonName,
+    String? buttonNameClose,
   }) {
     final localizations = AppLocalizations.of(context)!;
     return AlertDialog(
@@ -32,6 +33,17 @@ class AddDialog {
           ),
         ),
         actions: <Widget>[
+          onclose!=null?Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: Container(
+                alignment: Alignment.center,
+                child: AppButton.buildMaterialButton(
+                    context: context,
+                    onTap: onclose,
+                    buttonName: buttonNameClose??"Đóng"
+                )
+            ),
+          ):Container(),
           Padding(
             padding: const EdgeInsets.only(bottom: 10.0),
             child: Container(

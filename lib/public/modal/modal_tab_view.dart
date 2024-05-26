@@ -79,7 +79,7 @@ class ModalTabView extends StatelessWidget {
                           Container(
                             margin: EdgeInsets.only(left: 16,right: 16,bottom: size.height*0.03),
                             child: Text(
-                              "${snapshot.data??0+1}/3",
+                              "${authenticationBloc.currentStep+1}/3",
                               style: TextStyle(
                                 color: Color(0xFF62737A)
                               ),

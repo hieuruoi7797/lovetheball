@@ -34,6 +34,7 @@ class LayoutScreen extends StatelessWidget {
         ),
         leading: Container(
           alignment: Alignment.centerLeft,
+          padding: EdgeInsets.symmetric(horizontal: 10),
           child: GestureDetector(
               onTap: onTapBack,
               child: Container(
@@ -51,7 +52,7 @@ class LayoutScreen extends StatelessWidget {
       floatingActionButton: floatingActionButton??buttonGen1(
         onTap: onTapContinue??(){},
         parentContext: context,
-        buttonName: titleBtnContinue??"Tiep tuc",
+        buttonName: titleBtnContinue??"Tiếp tục",
         height: 56,
         width: MediaQuery.sizeOf(context).width * 0.92,
         enableLoadingAnimation: enableLoadingForMainButton??false,

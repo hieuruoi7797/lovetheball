@@ -10,5 +10,6 @@
     "noti": "Thông báo",
     "close": "Đóng",
     "register": "Đăng ký",
-    "btn_continue": "Tiếp tục"
+    "btn_continue": "Tiếp tục",
+    "user_info_title": "Thông tin cá nhân",
 }
