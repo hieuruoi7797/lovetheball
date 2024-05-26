@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'dart:typed_data';
-import 'dart:ui' as ui;
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
@@ -37,6 +36,10 @@ class AuthenticationBloc with Validation{
   bool _checkRememberPass = false;
   final _emailBehavior = BehaviorSubject<String>();
   final  picker = ImagePicker();
+  File _avatarFile = File('');
+  final _imagePickerBehavior = BehaviorSubject<File>();
+  Stream<File> get imagePickerBehavior => _imagePickerBehavior.stream;
+  File get avatarFile => _avatarFile;
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
   TextEditingController _controllerOTP = TextEditingController();
@@ -243,18 +246,18 @@ class AuthenticationBloc with Validation{
       Navigator.pushNamed(navigatorKey.currentContext!, '/');
     }
   }
-
-  Future<void> pickImageFromCam(BuildContext context) async{
+  Future<void> pickImageFromLib(BuildContext context) async{
     Navigator.pop(context);
-    bool permission = await service.handleCameraPermission(context);
+    _imagePickerBehavior.sink.add(_avatarFile=File(''));
+    bool permission = await service.handlePhotosPermission(context);
     if(permission){
-      final XFile? pickedFile = picker.pickImage(source: ImageSource.camera) as XFile?;
+      final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         final Directory basePath = await getApplicationDocumentsDirectory();
-        final String _path = '/image_avatar' + "xinhcheck" + '.jpg';
+        String path = '/image_avatar' + "xinhcheck" + '.jpg';
         XFile? imageFile = pickedFile != null ? XFile(pickedFile.path) : null;
         final Uint8List uInt8 = await imageFile!.readAsBytes();
-        File pathAvartar = await File(basePath.path + _path).writeAsBytes(uInt8, mode: FileMode.write);
+        File pathAvartar = await File(basePath.path + path).writeAsBytes(uInt8, mode: FileMode.write);
         imageCache.clear();
         imageCache.clearLiveImages();
         await SharePreferUtils.saveAvatar(pathAvartar.path, 'xinh');
@@ -266,6 +269,37 @@ class AuthenticationBloc with Validation{
               onApply: () {  Navigator.pop(context);}
           );
         });
+        _imagePickerBehavior.sink.add(_avatarFile=pathAvartar);
+      }
+    }
+  }
+
+  Future<void> pickImageFromCam(BuildContext context) async{
+    Navigator.pop(context);
+    _imagePickerBehavior.sink.add(_avatarFile=File(''));
+    bool permission = await service.handleCameraPermission(context);
+    if(permission){
+      final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
+      if (pickedFile != null) {
+        final Directory basePath = await getApplicationDocumentsDirectory();
+        String path = '/image_avatar' + "xinhcheck" + '.jpg';
+        XFile? imageFile = pickedFile != null ? XFile(pickedFile.path) : null;
+        final Uint8List uInt8 = await imageFile!.readAsBytes();
+        File pathAvartar = await File(basePath.path + path).writeAsBytes(uInt8, mode: FileMode.write);
+        imageCache.clear();
+        imageCache.clearLiveImages();
+        await SharePreferUtils.saveAvatar(pathAvartar.path, 'xinh');
+        appGlobal.setAvatarFile(pathAvartar);
+        await showDialog(context: context, builder: (context){
+          return AddDialog.AddDialogbuilder(
+              content: "Thanh cong",
+              context: context,
+              onApply: () {
+                Navigator.pop(context);
+              }
+          );
+        });
+        _imagePickerBehavior.sink.add(_avatarFile=pathAvartar);
       }
     }
   }

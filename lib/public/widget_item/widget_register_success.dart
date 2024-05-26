@@ -5,8 +5,9 @@ import '../../constants/ui_styles.dart';
 import '../../src/blocs/authentication/authentication_bloc.dart';
 
 Widget WidgetRegisterSuccess(BuildContext context){
+  final size = MediaQuery.of(context).size;
   return Container(
-    height: 300,
+    height: size.height*0.35,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -17,8 +18,8 @@ Widget WidgetRegisterSuccess(BuildContext context){
                   color: color_62737A
               )
           ),
-          width: 250,
-          height: 250,
+          width: size.width*0.5,
+          height: size.height*0.25,
         ),
         StreamBuilder<Object>(
             stream: authenticationBloc.checkRememberPassBehavior,
