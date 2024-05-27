@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splat_mobile/public/modal/modal_fit.dart';
 import 'package:splat_mobile/public/widget_item/common_text_field.dart';
+import 'package:splat_mobile/src/blocs/common_textfield_bloc/common_textfield_bloc.dart';
 import '../../../constants/ui_styles.dart';
 import '../../blocs/authentication/authentication_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -25,12 +26,19 @@ Widget ModalLoginContent(BuildContext context){
         ),
         Container(
           padding: EdgeInsets.symmetric(vertical:  size.height*0.01, horizontal: size.width*0.04),
-          child: CommonTextField(
-              context,
-              labelText: localizations.pass,
-              type: TextFieldTypeEnum.password,
-              enablePassWordValidator:true,
-              controller: authenticationBloc.passController)
+          child: StreamBuilder<String>(
+            stream: commonTextFieldBloc.incorrectEmailPasswordStream,
+            builder: (context, AsyncSnapshot<String> snapshotError) {
+              print("hieuttUI: ${(snapshotError.error).toString()} ");
+              return CommonTextField(
+                  context,
+                  labelText: localizations.pass,
+                  type: TextFieldTypeEnum.password,
+                  enablePassWordValidator:true,
+                  errorText: snapshotError.hasError? snapshotError.error.toString() : null,
+                  controller: authenticationBloc.passController);
+            }
+          )
         ),
         StreamBuilder<Object>(
             stream: authenticationBloc.checkRememberPassBehavior,

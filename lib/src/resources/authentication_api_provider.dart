@@ -30,9 +30,7 @@ class AuthenticationiApiProvider {
       if (response!.statusCode == 200) {
         return response;
       } else {
-        await Future.delayed(
-            Duration.zero, () => DialogWidget().showFailDialog('Serice Error'));
-        return null;
+        return response;
       }
     }
 
