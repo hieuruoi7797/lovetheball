@@ -113,9 +113,12 @@ class SettingAvatarScreen extends StatelessWidget {
                 ],
               ),
             ),
-            onTapBack: (){
-              Navigator.pop(context);
-            },
+          onTapBack: (){
+            authenticationBloc.onBackScreenSetAvatar(context);
+          },
+          onTapContinue: (){
+            authenticationBloc.createUserLogin();
+          },
           floatingActionButton:authenticationBloc.avatarFile.path!=''?Padding(
             padding: EdgeInsets.only(left: 30),
             child: Column(
@@ -124,7 +127,9 @@ class SettingAvatarScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 buttonGen1(
-                  onTap: (){},
+                  onTap: (){
+                    authenticationBloc.createUserLogin();
+                  },
                   parentContext: context,
                   buttonName: "Hoàn thành",
                   height: 56,

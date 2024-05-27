@@ -49,6 +49,12 @@ class Repository {
 
   }) async => await _authenticationProvider.verifiCreateUser(email: email, otp: otp);
 
+  Future<BaseApiModel?> createUserLogin(
+      {
+        required Map body,
+      }) async =>
+      await _authenticationProvider.createUserLogin(body: body);
+
   Future<Response> getPlayers({String? matchId}) async =>
       await _playerApiProvider.getPlayer(matchId:  matchId);
 
