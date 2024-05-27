@@ -120,6 +120,27 @@ class AuthenticationiApiProvider {
     }
   }
 
+  Future<BaseApiModel?> createUserLogin({
+    required Map body,
+  }) async {
+    Response response;
+    response = await PublicMethods().post(
+      body: body,
+      subUri: API_CREATE_USER,
+      showLoader: true,
+      isFormData: false,
+    );
+    BaseApiModel _res = BaseApiModel.fromJson(jsonDecode(response.body));
+    if (_res.message["status_code"] == 200) {
+      if (kDebugMode) {
+        print(_res);
+      }
+      return _res;
+    } else {
+      return _res;
+    }
+  }
+
   Future<Response?> logout() async {
     Response response;
     response = await PublicMethods().delete(

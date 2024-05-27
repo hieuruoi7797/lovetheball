@@ -246,6 +246,7 @@ class AuthenticationBloc with Validation{
       Navigator.pushNamed(navigatorKey.currentContext!, '/');
     }
   }
+
   Future<void> pickImageFromLib(BuildContext context) async{
     Navigator.pop(context);
     _imagePickerBehavior.sink.add(_avatarFile=File(''));
@@ -253,23 +254,7 @@ class AuthenticationBloc with Validation{
     if(permission){
       final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
-        final Directory basePath = await getApplicationDocumentsDirectory();
-        String path = '/image_avatar' + "xinhcheck" + '.jpg';
-        XFile? imageFile = pickedFile != null ? XFile(pickedFile.path) : null;
-        final Uint8List uInt8 = await imageFile!.readAsBytes();
-        File pathAvartar = await File(basePath.path + path).writeAsBytes(uInt8, mode: FileMode.write);
-        imageCache.clear();
-        imageCache.clearLiveImages();
-        await SharePreferUtils.saveAvatar(pathAvartar.path, 'xinh');
-        appGlobal.setAvatarFile(pathAvartar);
-        await showDialog(context: context, builder: (context){
-          return AddDialog.AddDialogbuilder(
-              content: "Thanh cong",
-              context: context,
-              onApply: () {  Navigator.pop(context);}
-          );
-        });
-        _imagePickerBehavior.sink.add(_avatarFile=pathAvartar);
+        await setImageFile(pickedFile);
       }
     }
   }
@@ -281,29 +266,44 @@ class AuthenticationBloc with Validation{
     if(permission){
       final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
       if (pickedFile != null) {
-        final Directory basePath = await getApplicationDocumentsDirectory();
-        String path = '/image_avatar' + "xinhcheck" + '.jpg';
-        XFile? imageFile = pickedFile != null ? XFile(pickedFile.path) : null;
-        final Uint8List uInt8 = await imageFile!.readAsBytes();
-        File pathAvartar = await File(basePath.path + path).writeAsBytes(uInt8, mode: FileMode.write);
-        imageCache.clear();
-        imageCache.clearLiveImages();
-        await SharePreferUtils.saveAvatar(pathAvartar.path, 'xinh');
-        appGlobal.setAvatarFile(pathAvartar);
-        await showDialog(context: context, builder: (context){
-          return AddDialog.AddDialogbuilder(
-              content: "Thanh cong",
-              context: context,
-              onApply: () {
-                Navigator.pop(context);
-              }
-          );
-        });
-        _imagePickerBehavior.sink.add(_avatarFile=pathAvartar);
+        _imagePickerBehavior.sink.add(_avatarFile=File(''));
+        await  setImageFile(pickedFile);
       }
     }
   }
+  void onBackScreenSetAvatar(BuildContext context){
+    Navigator.pop(context);
+    _imagePickerBehavior.sink.add(_avatarFile=File(''));
+  }
 
+  Future<void> setImageFile(XFile? pickedFile) async{
+    final Directory basePath = await getApplicationDocumentsDirectory();
+    String path = '/image_avatar' + _controllerEmail.text + '.jpg';
+    XFile? imageFile = pickedFile != null ? XFile(pickedFile.path) : null;
+    final Uint8List uInt8 = await imageFile!.readAsBytes();
+    File pathAvartar = await File(basePath.path + path).writeAsBytes(uInt8, mode: FileMode.write);
+    imageCache.clear();
+    imageCache.clearLiveImages();
+    await SharePreferUtils.saveAvatar(pathAvartar.path, _controllerNickName.text);
+    appGlobal.setAvatarFile(pathAvartar);
+    _imagePickerBehavior.sink.add(_avatarFile=pathAvartar);
+  }
+
+  Future<void> createUserLogin() async{
+    BaseApiModel? response = await repository.createUserLogin(
+        body:{
+          "name": _controllerNickName.text,
+          "gender": 0,
+          "birth_date": "",
+          "email": emailController.text,
+          "phone": "",
+          "avatar": _avatarFile,
+          "role_ids": [ ],
+          "otp": _otpController.text,
+          "password": _controllerPassword.text
+        });
+    print('Tao tai khaon dang nhap thanh cong: ${jsonEncode(response)}');
+  }
 
 }
   final authenticationBloc = AuthenticationBloc();
