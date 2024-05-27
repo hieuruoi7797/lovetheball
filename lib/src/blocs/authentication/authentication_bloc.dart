@@ -266,7 +266,6 @@ class AuthenticationBloc with Validation{
     if(permission){
       final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
       if (pickedFile != null) {
-        _imagePickerBehavior.sink.add(_avatarFile=File(''));
         await  setImageFile(pickedFile);
       }
     }
@@ -297,7 +296,7 @@ class AuthenticationBloc with Validation{
           "birth_date": "",
           "email": emailController.text,
           "phone": "",
-          "avatar": _avatarFile,
+          "avatar": _avatarFile.path,
           "role_ids": [ ],
           "otp": _otpController.text,
           "password": _controllerPassword.text
