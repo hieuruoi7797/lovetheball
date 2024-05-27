@@ -7,6 +7,7 @@ import 'package:splat_mobile/src/blocs/common_textfield_bloc/common_textfield_bl
 Widget CommonTextField(
   BuildContext context, {
   String? labelText,
+  String? errorText,
   bool? enableEmailValidator,
   bool? enablePassWordValidator,
   TextFieldTypeEnum? type,
@@ -72,7 +73,7 @@ Widget CommonTextField(
                           : null,
                   alignLabelWithHint: false,
                   filled: true,
-                  errorText: snapshotValidate.error?.toString(),
+                  errorText: errorText ?? snapshotValidate.error?.toString(),
                 ),
                 obscureText: type == TextFieldTypeEnum.password ?
                               !(snapshotObscure.data == true):
