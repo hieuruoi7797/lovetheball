@@ -40,6 +40,7 @@ class AuthenticationBloc with Validation{
   final _imagePickerBehavior = BehaviorSubject<File>();
   Stream<File> get imagePickerBehavior => _imagePickerBehavior.stream;
   File get avatarFile => _avatarFile;
+  String _verifyOTP = '';
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
   TextEditingController _controllerOTP = TextEditingController();
@@ -182,6 +183,7 @@ class AuthenticationBloc with Validation{
         await repository.verifiCreateUser(email: _controllerEmail.text, otp: otp);
     if (response!.message["status_code"]== 200) {
       _resSuccessBehavior.sink.add(_resSuccess=true);
+      _verifyOTP = response.message['msg_name'];
     } else {
       _resSuccessBehavior.sink.add(_resSuccess=false);
       showDialog(context: context, builder: (context){
@@ -268,7 +270,6 @@ class AuthenticationBloc with Validation{
     if(permission){
       final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
       if (pickedFile != null) {
-        _imagePickerBehavior.sink.add(_avatarFile=File(''));
         await  setImageFile(pickedFile);
       }
     }
@@ -299,9 +300,9 @@ class AuthenticationBloc with Validation{
           "birth_date": "",
           "email": emailController.text,
           "phone": "",
-          "avatar": _avatarFile,
+          "avatar": _avatarFile.path,
           "role_ids": [ ],
-          "otp": _otpController.text,
+          "otp": _verifyOTP,
           "password": _controllerPassword.text
         });
     print('Tao tai khaon dang nhap thanh cong: ${jsonEncode(response)}');

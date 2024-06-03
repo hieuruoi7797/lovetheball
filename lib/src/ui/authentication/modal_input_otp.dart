@@ -70,15 +70,15 @@ Widget TabInputOtp(BuildContext context){
               //runs when every textfield is filled
               onSubmit: (String verificationCode){
                 authenticationBloc.setOTP(verificationCode);
-                showDialog(
-                    context: context,
-                    builder: (context){
-                      return AlertDialog(
-                        title: const Text("Verification Code"),
-                        content: Text('Code entered is $verificationCode'),
-                      );
-                    }
-                );
+                // showDialog(
+                //     context: context,
+                //     builder: (context){
+                //       return AlertDialog(
+                //         title: const Text("Verification Code"),
+                //         content: Text('Code entered is $verificationCode'),
+                //       );
+                //     }
+                // );
               }, // end onSubmit
             );
           }
