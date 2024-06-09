@@ -28,7 +28,7 @@ class HomeBloc {
     if (index == 2){
       matchBloc.getMatchesList(navigatorKey.currentContext!);
     }else if (index == 1){
-      matchBloc.getPlayerList(navigatorKey.currentContext!);
+      // matchBloc.getPlayerList(navigatorKey.currentContext!);
     }
   }
 

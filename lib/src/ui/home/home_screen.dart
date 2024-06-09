@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_mobile/src/blocs/home_bloc/home_bloc.dart';
 import 'package:splat_mobile/src/blocs/match/match_bloc.dart';
-import 'package:splat_mobile/src/ui/home/creating_match.dart';
-import 'package:splat_mobile/src/ui/home/listing_matches.dart';
-import '../../../constants/constant_values.dart';
-import '../../../constants/ui_styles.dart';
-import 'setting_screen.dart';
+import 'package:splat_mobile/src/ui/home/nav_bar.dart';
+import 'package:splat_mobile/src/ui/home/tap_home_page.dart';
+import 'nav_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,10 +13,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<NavModel> items = [];
+  int selectedTab = 0;
+  final homeNavKey = GlobalKey<NavigatorState>();
+  final searchNavKey = GlobalKey<NavigatorState>();
+  final notificationNavKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
-    homeBloc.getUserSaved(context).then((value) =>  matchBloc.getPlayerList(context));
+    items = [
+      NavModel(
+        page: const TabHomePage(tab: 1),
+        navKey: homeNavKey,
+      ),
+      NavModel(
+        page: const TabHomePage(tab: 2),
+        navKey: searchNavKey,
+      ),
+    ];
+    // homeBloc.getUserSaved(context).then((value) =>  matchBloc.getPlayerList(context));
     // TODO: implement initState
     super.initState();
   }
@@ -36,11 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  static final List<Widget> _widgetOptions = <Widget>[
-    const SettingScreen(),
-    const CreatingMatchUI(),
-    const ListingMatchesScreen(),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -49,28 +56,63 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context,AsyncSnapshot<int> pageIndexSnap) {
         if ( pageIndexSnap.hasData){
           return Scaffold(
-              bottomNavigationBar: BottomNavigationBar(
-                currentIndex: pageIndexSnap.data ?? 1,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
-                selectedIconTheme: const IconThemeData(color: color_main),
-                onTap:(index) => homeBloc.onTabPageIndex(index),
-                items: [
-                  BottomNavigationBarItem(
-                      icon: pageIndexSnap.data == 0 ?
-                      SvgPicture.asset(svg_home_setting) :
-                      SvgPicture.asset(svg_home_setting_disable), label: ''),
-                  BottomNavigationBarItem(
-                      icon:  pageIndexSnap.data == 1 ?
-                      SvgPicture.asset(svg_basket_home) :
-                      SvgPicture.asset(svg_basket_home_disable), label: ''),
-                  BottomNavigationBarItem(
-                      icon:  pageIndexSnap.data == 2 ?
-                      SvgPicture.asset(svg_chart_home) :
-                      SvgPicture.asset(svg_chart_home_disable), label: ''),
-                ],
+              // bottomNavigationBar: BottomNavigationBar(
+              //   currentIndex: pageIndexSnap.data ?? 1,
+              //   showSelectedLabels: false,
+              //   showUnselectedLabels: false,
+              //   selectedIconTheme: const IconThemeData(color: color_main),
+              //   onTap:(index) => homeBloc.onTabPageIndex(index),
+              //   items: [
+              //     BottomNavigationBarItem(
+              //         icon: pageIndexSnap.data == 0 ?
+              //         SvgPicture.asset(svg_home_setting) :
+              //         SvgPicture.asset(svg_home_setting_disable), label: ''),
+              //     BottomNavigationBarItem(
+              //         icon:  pageIndexSnap.data == 1 ?
+              //         SvgPicture.asset(svg_basket_home) :
+              //         SvgPicture.asset(svg_basket_home_disable), label: ''),
+              //     BottomNavigationBarItem(
+              //         icon:  pageIndexSnap.data == 2 ?
+              //         SvgPicture.asset(svg_chart_home) :
+              //         SvgPicture.asset(svg_chart_home_disable), label: ''),
+              //   ],
+              // ),
+              floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+              floatingActionButton: Container(
+                margin: const EdgeInsets.only(top: 10),
+                height: 64,
+                width: 64,
+                child: FloatingActionButton(
+                  backgroundColor: Color(0xFFF77C3C),
+                  elevation: 0,
+                  onPressed: () => debugPrint("Add Button pressed"),
+                  shape: RoundedRectangleBorder(
+                    // side: const BorderSide(width: 3, color: Colors.green),
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: const Icon(
+                    Icons.add_rounded,
+                    size: 50,
+                    color: Colors.white,
+                  ),
+                ),
               ),
-              body: _widgetOptions.elementAt(pageIndexSnap.data ?? 1));
+              bottomNavigationBar: NavBar(
+                pageIndex: selectedTab,
+                onTap: (index) {
+                  if (index == selectedTab) {
+                    items[index]
+                        .navKey
+                        .currentState
+                        ?.popUntil((route) => route.isFirst);
+                  } else {
+                    setState(() {
+                      selectedTab = index;
+                    });
+                  }
+                },
+              ),
+              body: items.elementAt(selectedTab).page);
         }else{
           return Container();
         }

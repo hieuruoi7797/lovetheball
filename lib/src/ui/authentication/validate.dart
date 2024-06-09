@@ -12,7 +12,7 @@ mixin Validation{
     }
   });
 
-  final incorrectEmailOrPassword=
+  final optionalError=
   StreamTransformer<String, String>.fromHandlers(handleData: (value, sink) {
 
     if (value.isNotEmpty) {

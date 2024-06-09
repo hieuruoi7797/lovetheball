@@ -6,6 +6,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:splat_mobile/src/ui/authentication/authentication_screen.dart';
 import 'package:splat_mobile/src/ui/authentication/registration_info_screen.dart';
 import 'package:splat_mobile/src/ui/authentication/setting_avatar_screen.dart';
+import 'package:splat_mobile/src/ui/home/home_screen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 

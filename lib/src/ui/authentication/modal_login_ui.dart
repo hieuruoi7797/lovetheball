@@ -27,15 +27,14 @@ Widget ModalLoginContent(BuildContext context){
         Container(
           padding: EdgeInsets.symmetric(vertical:  size.height*0.01, horizontal: size.width*0.04),
           child: StreamBuilder<String>(
-            stream: commonTextFieldBloc.incorrectEmailPasswordStream,
+            stream: commonTextFieldBloc.optionalErrorStream,
             builder: (context, AsyncSnapshot<String> snapshotError) {
-              print("hieuttUI: ${(snapshotError.error).toString()} ");
               return CommonTextField(
                   context,
                   labelText: localizations.pass,
                   type: TextFieldTypeEnum.password,
                   enablePassWordValidator:true,
-                  errorText: snapshotError.hasError? snapshotError.error.toString() : null,
+                  optionalErrorText: snapshotError.hasError? snapshotError.error.toString() : null,
                   controller: authenticationBloc.passController);
             }
           )

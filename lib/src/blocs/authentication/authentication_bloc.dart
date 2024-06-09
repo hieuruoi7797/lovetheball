@@ -225,8 +225,8 @@ class AuthenticationBloc with Validation{
         // Navigator.pushNamed(navigatorKey.currentContext!, '/home');
       }
     }else{
-      print('hieuttchecking: ${jsonDecode(response!.body)["message"]["msg_name"]}');
-      commonTextFieldBloc.incorrectEmailPass(jsonDecode(response!.body)["message"]["msg_name"]);
+      // print('hieuttchecking: ${jsonDecode(response!.body)["message"]["msg_name"]}');
+      commonTextFieldBloc.addOptionalError(jsonDecode(response!.body)["message"]["msg_name"]);
     }
   }
 
