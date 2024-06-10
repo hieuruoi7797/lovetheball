@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_mobile/widgets_common/tag_info.dart';
+import 'package:splat_mobile/widgets_common/win_rate.dart';
 
 import '../../../widgets_common/square_button.dart';
 
@@ -133,15 +134,25 @@ class TabHomePage extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text("60%",style: TextStyle(fontSize: 34),),
                       Container(
-                        height: 71,
-                        width: 16,
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(100), topRight: Radius.circular(100))
-                        ),
-                      )
+                          padding: EdgeInsets.only(bottom: 0), // Adjust the padding as needed
+                          child: Text("60%",style: TextStyle(fontSize: 34,height: 0.77),)),
+                      WinRate(percent: 60,),
+                      WinRate(percent: 50,),
+                      WinRate(percent: 30,),
+                      WinRate(percent: 100,),
+                      WinRate(percent: 20,),
+                      WinRate(percent: 80,),
+                      WinRate(percent: 70,color:Color(0xFF00C7BE),),
+                    ],
+                  ),
+                  SizedBox(height: 16,),
+                  Row(
+                    children: [
+                      Spacer(),
+                      Icon(Icons.arrow_upward_rounded, color: Color(0xFF00C7BE),size: 14,weight: 10,),
+                      Text("12% ",style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700,color: Color(0xFF00C7BE)),),
+                      Text("So với tháng trước", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700,color: Color(0xFFB3BBC4)),)
                     ],
                   )
                 ],
