@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:splat_mobile/constants/icon_custom.dart';
 import 'package:splat_mobile/public/app_global.dart';
 import 'package:splat_mobile/public/bottom_sheet/bottom_sheet.dart';
@@ -22,6 +23,7 @@ class SettingAvatarScreen extends StatelessWidget {
       builder: (context, snapshot) {
         return LayoutScreen(
             titleAppbar: "THÔNG TIN CÁ NHÂN",
+            resizeToAvoidBottomInset: true,
             bodyLayout: Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -109,23 +111,51 @@ class SettingAvatarScreen extends StatelessWidget {
                         :Container()
                       ],
                     ),
-                  )
+                  ),
+
                 ],
               ),
             ),
           onTapBack: (){
-            authenticationBloc.onBackScreenSetAvatar(context);
+            authenticationBloc.onBackTabScreen(context, '/settingAvatar');
           },
           onTapContinue: (){
             authenticationBloc.createUserLogin();
           },
-          floatingActionButton:authenticationBloc.avatarFile.path!=''?Padding(
+          floatingActionButton:Padding(
             padding: EdgeInsets.only(left: 30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Color(0xffecf3fb).withOpacity(0.9)
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: Row(
+                    children: [
+                      const SvgIcon(icon: CustomIcon.icon_hand_note, size: 40),
+                      const SizedBox(width: 10,),
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        width: size.width*0.7,
+                        child: const Text(
+                          'Tip: Sử dụng hình ảnh thật và rõ mặt sẽ giúp đồng đội dễ dàng nhận diện bạn',
+                          overflow: TextOverflow.visible,
+                          style: TextStyle(
+                            color: color_62737A,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10,),
                 buttonGen1(
                   onTap: (){
                     authenticationBloc.createUserLogin();
@@ -137,7 +167,7 @@ class SettingAvatarScreen extends StatelessWidget {
                   enableLoadingAnimation: true,
                 ),
                 SizedBox(height: 10,),
-                AppButton.btnTextCustom(
+                authenticationBloc.avatarFile.path!=''?AppButton.btnTextCustom(
                   buttonName: 'Thay đổi ảnh',
                   onTap: (){
                     BottomSheetCustom.showBottomSheetSelectImage(
@@ -150,10 +180,10 @@ class SettingAvatarScreen extends StatelessWidget {
                         }
                     );
                   }
-                )
+                ):Container()
               ],
             ),
-          ):null,
+          ),
         );
       }
     );

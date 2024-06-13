@@ -52,18 +52,15 @@ class RegistrationInfoScreen extends StatelessWidget {
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: const BorderSide(
-                        width: 1,
-                        style: BorderStyle.none,
-                        color: Color(0xffb3bbc4)
-
+                        width: 2,
+                        color: color_B3BBC4
                     ),
                   ),
                   focusedBorder:OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: const BorderSide(
-                      width: 1,
-                      style: BorderStyle.none,
-                      color: color_main,
+                      width: 2,
+                      color: color_B3BBC4,
                     ),
                   ),
                   hintText: "Họ và tên",
@@ -83,14 +80,14 @@ class RegistrationInfoScreen extends StatelessWidget {
                 onChanged: (value){
                 },
                 controller: authenticationBloc.nickNameController,
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.done,
               ),
             ],
           ),
         ),
         onTapBack: (){
-          Navigator.pop(context);
+          authenticationBloc.onBackTabScreen(context, '/registerInfoUser');
         },
         onTapContinue: (){
           Navigator.pushNamed(context, "/settingAvatar");

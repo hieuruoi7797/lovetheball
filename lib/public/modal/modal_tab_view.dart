@@ -37,7 +37,6 @@ class ModalTabView extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Container(
-                height: size.width,
                 child: Theme(
                   data: ThemeData(
                     // colorScheme: ColorScheme.fromSeed(
@@ -122,6 +121,36 @@ class ModalTabView extends StatelessWidget {
               ),
             ],
           ),
+          widgetUnderButton: snapshot.data == 1?Container(
+            child:  Column(
+              children: [
+                Container(
+                  child: Text("Chưa nhận được email?",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        color:color_62737A,
+                        letterSpacing: -0.4,
+                        wordSpacing: -0.4
+                    ),),
+                ),
+                TextButton(
+                  onPressed: (){
+                    authenticationBloc.createUser(context, email: authenticationBloc.emailController.text);
+                  },
+                  child: Text(
+                    "Gửi lại mã",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color:Colors.black,
+                      letterSpacing: -0.4,
+                      wordSpacing: -0.4),
+                  ),
+                )
+              ],
+            ),
+          ):Container(),
         );
       }
     );

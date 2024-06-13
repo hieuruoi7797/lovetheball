@@ -13,6 +13,7 @@ class LayoutScreen extends StatelessWidget {
   final Function()? onTapContinue;
   final String? titleBtnContinue;
   final bool? enableLoadingForMainButton;
+  final bool? resizeToAvoidBottomInset;
   const LayoutScreen({super.key,
     required this.titleAppbar,
     required this.bodyLayout,
@@ -20,7 +21,8 @@ class LayoutScreen extends StatelessWidget {
     this.floatingActionButton,
     this.onTapContinue,
     this.titleBtnContinue,
-    this.enableLoadingForMainButton}
+    this.enableLoadingForMainButton,
+    this.resizeToAvoidBottomInset}
   );
 
   @override
@@ -38,16 +40,13 @@ class LayoutScreen extends StatelessWidget {
           child: GestureDetector(
               onTap: onTapBack,
               child: Container(
-                  decoration: BoxDecoration(
-                      color: color_E4EBF2,
-                      borderRadius: BorderRadius.circular(10)
-                  ),
                   padding: EdgeInsets.all(10),
                   child:SvgIcon(icon:CustomIcon.back_arrow_ios, size: 12,)
               )
           ),
         ),
       ),
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       body: bodyLayout,
       floatingActionButton: floatingActionButton??buttonGen1(
         onTap: onTapContinue??(){},
