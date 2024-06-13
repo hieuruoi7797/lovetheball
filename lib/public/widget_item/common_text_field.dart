@@ -25,9 +25,24 @@ Widget CommonTextField(
             stream: commonTextFieldBloc.visiblePassword,
             builder: (context, snapshotObscure) {
               return TextField(
+                focusNode: FocusNode(),
                 decoration: InputDecoration(
                   fillColor: Color(0xffecf3fb).withOpacity(0.6),
                   border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(
+                      width: 2,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(
+                        width: 2,
+                        color: color_B3BBC4
+
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: const BorderSide(
                       width: 2,
@@ -35,23 +50,7 @@ Widget CommonTextField(
                       color: color_main,
                     ),
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(
-                        width: 1,
-                        style: BorderStyle.none,
-                        color: Color(0xffb3bbc4)
-
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(
-                      width: 1,
-                      style: BorderStyle.none,
-                      color: color_main,
-                    ),
-                  ),
+                  // focusColor: color_B3BBC4,
                   hintText: labelText ?? "Email",
                   suffixIcon: type == TextFieldTypeEnum.password
                       ? IconButton(
@@ -74,6 +73,20 @@ Widget CommonTextField(
                   alignLabelWithHint: false,
                   filled: true,
                   errorText: optionalErrorText ?? snapshotValidate.error?.toString(),
+                  errorStyle: TextStyle(
+                    color: Color(0xffff3b30),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13
+                  ),
+                  focusColor: color_B3BBC4,
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(
+                      width: 2,
+                      color: Color(0xffff3b30)
+                      ,
+                    ),
+                  ),
                 ),
                 obscureText: type == TextFieldTypeEnum.password ?
                               !(snapshotObscure.data == true):

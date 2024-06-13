@@ -17,6 +17,7 @@ import 'package:splat_mobile/public/widget_item/widget_register_success.dart';
 import 'package:splat_mobile/src/app.dart';
 import 'package:splat_mobile/src/blocs/common_textfield_bloc/common_textfield_bloc.dart';
 import 'package:splat_mobile/src/models/base_api_model.dart';
+import 'package:splat_mobile/src/models/info_login_model.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 import 'package:splat_mobile/src/resources/repository.dart';
 import 'package:splat_mobile/src/ui/authentication/validate.dart';
@@ -101,7 +102,13 @@ class AuthenticationBloc with Validation{
         final localizations = AppLocalizations.of(context)!;
         return AddDialog.AddDialogbuilder(
             // onclose: (){Navigator.of(context).pop();},
-            onApply: (){Navigator.pushNamed(context, "/registerInfoUser");},
+            onApply: () async{
+              Navigator.popAndPushNamed(context, "/registerInfoUser");
+              if(checkRememberPass==true){
+                InfoLoginModel infoLoginModel = InfoLoginModel(email: emailController.text, password: passController.text);
+                await SharePreferUtils.saveInfoRegister(infoLoginModel);
+              }
+            },
             content: "",
             title: "Chúc mừng! Tài khoản của bạn đã được thiết lập",
             contentWidget: WidgetRegisterSuccess(context),
@@ -117,12 +124,20 @@ class AuthenticationBloc with Validation{
     }
 
   }
-  void onTapCancel()=>{
+  
+  void onTapCancel(){
     if (_currentStep > 0) {
-        _currentStepBehavior.sink.add(_currentStep -= 1),
+        _currentStepBehavior.sink.add(_currentStep -= 1);
+        switch (_currentStep){
+          case 1:
+            _controllerOTP.clear();
+          case 2:
+            _controllerPassword.clear();
 
+        }
     }
-  };
+
+  }
   void onStepTapped(step) =>{
     _currentStepBehavior.sink.add(_currentStep = step)
   };
@@ -274,9 +289,27 @@ class AuthenticationBloc with Validation{
       }
     }
   }
-  void onBackScreenSetAvatar(BuildContext context){
+  Future<void> onBackTabScreen(BuildContext context, String router) async {
     Navigator.pop(context);
-    _imagePickerBehavior.sink.add(_avatarFile=File(''));
+    switch(router){
+      case '/settingAvatar':
+        _imagePickerBehavior.sink.add(_avatarFile=File(''));
+        await SharePreferUtils.removeInfoRegister();
+        break;
+      case '/registerInfoUser':
+        _controllerNickName.clear();
+        break;
+      case '/inputEmail':
+        _controllerEmail.clear();
+        break;
+      case '/inputOTP':
+        _otpController.clear();
+        break;
+      case '/inputPass':
+        _controllerPassword.clear();
+        break;
+    }
+
   }
 
   Future<void> setImageFile(XFile? pickedFile) async{
@@ -292,7 +325,9 @@ class AuthenticationBloc with Validation{
     _imagePickerBehavior.sink.add(_avatarFile=pathAvartar);
   }
 
-  Future<void> createUserLogin() async{
+  Future<void> createUserLogin(BuildContext context) async{
+    dynamic info = await SharePreferUtils.getInfoLogin();
+    print('xinhcheck${jsonEncode(info)}');
     BaseApiModel? response = await repository.createUserLogin(
         body:{
           "name": _controllerNickName.text,
@@ -300,12 +335,22 @@ class AuthenticationBloc with Validation{
           "birth_date": "",
           "email": emailController.text,
           "phone": "",
-          "avatar": _avatarFile.path,
+          "avatar": "",
           "role_ids": [ ],
           "otp": _verifyOTP,
           "password": _controllerPassword.text
         });
+      Navigator.pushNamed(context, '/home');
     print('Tao tai khaon dang nhap thanh cong: ${jsonEncode(response)}');
+  }
+
+  void clearAllController(){
+    emailController.clear();
+    _otpController.clear();
+    _controllerPassword.clear();
+    nickNameController.clear();
+    _currentStepBehavior.sink.add(_currentStep =0);
+    clearEmail();
   }
 
 }

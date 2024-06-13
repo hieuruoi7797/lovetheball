@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:splat_mobile/constants/icon_custom.dart';
 import 'package:splat_mobile/public/app_global.dart';
 import 'package:splat_mobile/public/bottom_sheet/bottom_sheet.dart';
@@ -22,6 +23,7 @@ class SettingAvatarScreen extends StatelessWidget {
       builder: (context, snapshot) {
         return LayoutScreen(
             titleAppbar: "THÔNG TIN CÁ NHÂN",
+            resizeToAvoidBottomInset: true,
             bodyLayout: Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -38,7 +40,7 @@ class SettingAvatarScreen extends StatelessWidget {
                   SizedBox(height: 10,),
                   Container(
                     alignment: Alignment.centerLeft,
-                    child: Text("Hình ảnh đại  cho trang cá nhân của bạn",
+                    child: Text("Hình ảnh đại diện cho trang cá nhân của bạn",
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -50,12 +52,12 @@ class SettingAvatarScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 100,),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    padding: const EdgeInsets.symmetric(horizontal: 70),
                     child: Stack(
                       children: [
                         Container(
-                          height: size.width*0.6,
-                          width: size.height*0.3,
+                          height: size.width*0.5,
+                          width: size.height*0.25,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: color_ECF3FB,
@@ -63,18 +65,19 @@ class SettingAvatarScreen extends StatelessWidget {
                               image: FileImage(authenticationBloc.avatarFile),
                               fit: BoxFit.cover
                             ):null,
-                            borderRadius: BorderRadius.circular(50),
+                            borderRadius: BorderRadius.circular(40),
                             boxShadow:const [
                                 BoxShadow(
                                   color: color_F3F7FE,
                                   blurRadius: 20,
                                   spreadRadius: 0,
                                   offset: Offset(0, 5,),
+                                  blurStyle: BlurStyle.solid
                                 ),
                                 BoxShadow(
                                   color: color_F3F7FE,
                                   blurRadius: 0,
-                                  spreadRadius: 15,
+                                  spreadRadius: 8,
                                 ),
                             ]
                           ),
@@ -84,7 +87,7 @@ class SettingAvatarScreen extends StatelessWidget {
                         Positioned(
                           left: 0,
                           right: 0,
-                          top: 85,
+                          top: 70,
                           child: GestureDetector(
                             onTap: (){
                               BottomSheetCustom.showBottomSheetSelectImage(
@@ -101,7 +104,7 @@ class SettingAvatarScreen extends StatelessWidget {
                               alignment: Alignment.center,
                               child: SvgIcon(
                                 icon:CustomIcon.icon_add,
-                                size: 50,
+                                size: 40,
                               ),
                             ),
                           ),
@@ -109,26 +112,54 @@ class SettingAvatarScreen extends StatelessWidget {
                         :Container()
                       ],
                     ),
-                  )
+                  ),
+
                 ],
               ),
             ),
           onTapBack: (){
-            authenticationBloc.onBackScreenSetAvatar(context);
+            authenticationBloc.onBackTabScreen(context, '/settingAvatar');
           },
-          onTapContinue: (){
-            authenticationBloc.createUserLogin();
-          },
-          floatingActionButton:authenticationBloc.avatarFile.path!=''?Padding(
+          // onTapContinue: (){
+          //   authenticationBloc.createUserLogin(context);
+          // },
+          floatingActionButton:Padding(
             padding: EdgeInsets.only(left: 30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Color(0xffecf3fb).withOpacity(0.9)
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: Row(
+                    children: [
+                      const SvgIcon(icon: CustomIcon.icon_hand_note, size: 40),
+                      const SizedBox(width: 10,),
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        width: size.width*0.7,
+                        child: const Text(
+                          'Tip: Sử dụng hình ảnh thật và rõ mặt sẽ giúp đồng đội dễ dàng nhận diện bạn',
+                          overflow: TextOverflow.visible,
+                          style: TextStyle(
+                            color: color_62737A,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20,),
                 buttonGen1(
                   onTap: (){
-                    authenticationBloc.createUserLogin();
+                    authenticationBloc.createUserLogin(context);
                   },
                   parentContext: context,
                   buttonName: "Hoàn thành",
@@ -137,7 +168,7 @@ class SettingAvatarScreen extends StatelessWidget {
                   enableLoadingAnimation: true,
                 ),
                 SizedBox(height: 10,),
-                AppButton.btnTextCustom(
+                authenticationBloc.avatarFile.path!=''?AppButton.btnTextCustom(
                   buttonName: 'Thay đổi ảnh',
                   onTap: (){
                     BottomSheetCustom.showBottomSheetSelectImage(
@@ -150,10 +181,10 @@ class SettingAvatarScreen extends StatelessWidget {
                         }
                     );
                   }
-                )
+                ):Container()
               ],
             ),
-          ):null,
+          ),
         );
       }
     );

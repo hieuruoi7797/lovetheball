@@ -62,7 +62,7 @@ Widget ModalLoginContent(BuildContext context){
       ],
     ),
     buttonName: localizations.login,
-    widget2: GestureDetector(
+    widgetUnderButton: GestureDetector(
       onTap: (){},
       child: Container(
         alignment: Alignment.center,

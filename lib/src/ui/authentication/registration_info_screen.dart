@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:splat_mobile/public/widget_item/layout_screen.dart';
 
+import '../../../constants/icon_custom.dart';
 import '../../../constants/ui_styles.dart';
+import '../../../public/widget_item/svg_icon.dart';
 import '../../blocs/authentication/authentication_bloc.dart';
+import 'authentication_screen.dart';
 
 class RegistrationInfoScreen extends StatelessWidget {
   const RegistrationInfoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return LayoutScreen(
         titleAppbar: "THÔNG TIN CÁ NHÂN",
         bodyLayout: Container(
@@ -52,18 +56,15 @@ class RegistrationInfoScreen extends StatelessWidget {
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: const BorderSide(
-                        width: 1,
-                        style: BorderStyle.none,
-                        color: Color(0xffb3bbc4)
-
+                        width: 2,
+                        color: color_B3BBC4
                     ),
                   ),
                   focusedBorder:OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: const BorderSide(
-                      width: 1,
-                      style: BorderStyle.none,
-                      color: color_main,
+                      width: 2,
+                      color: color_B3BBC4,
                     ),
                   ),
                   hintText: "Họ và tên",
@@ -83,18 +84,65 @@ class RegistrationInfoScreen extends StatelessWidget {
                 onChanged: (value){
                 },
                 controller: authenticationBloc.nickNameController,
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.done,
               ),
             ],
           ),
         ),
         onTapBack: (){
-          Navigator.pop(context);
+          authenticationBloc.onBackTabScreen(context, '/registerInfoUser');
         },
-        onTapContinue: (){
-          Navigator.pushNamed(context, "/settingAvatar");
-        },
+        // onTapContinue: (){
+        //   Navigator.pushNamed(context, "/settingAvatar");
+        // },
+      resizeToAvoidBottomInset: true,
+        floatingActionButton:Padding(
+          padding: EdgeInsets.only(left: 30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color(0xffecf3fb).withOpacity(0.9)
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Row(
+                  children: [
+                    const SvgIcon(icon: CustomIcon.icon_hand_note, size: 40),
+                    const SizedBox(width: 10,),
+                    Container(
+                      alignment: Alignment.bottomCenter,
+                      width: size.width*0.7,
+                      child: const Text(
+                        'Tip: Sử dụng tên gọi ở trên sân bóng sẽ giúp đồng đội dễ dàng nhận ra bạn hơn',
+                        overflow: TextOverflow.visible,
+                        style: TextStyle(
+                          color: color_62737A,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(height: 20,),
+              buttonGen1(
+                onTap: (){
+                  Navigator.pushNamed(context, "/settingAvatar");
+                },
+                height: size.height*0.065,
+                parentContext: context,
+                buttonName: "Tiếp tục",
+                width: MediaQuery.sizeOf(context).width * 0.92,
+                enableLoadingAnimation: true,
+              ),
+            ],
+          ),
+        ),
     );
   }
 }

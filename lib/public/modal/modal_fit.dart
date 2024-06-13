@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
 
 import '../../constants/icon_custom.dart';
 import '../../constants/ui_styles.dart';
@@ -10,7 +11,7 @@ class ModalFit extends StatelessWidget {
   final dynamic widget;
   final String? buttonName;
   final Widget? footerWidget;
-  final Widget? widget2;
+  final Widget? widgetUnderButton;
   final Function()? onClickButton;
   final bool? isShowBack;
   final Function()? onTapBack;
@@ -21,7 +22,7 @@ class ModalFit extends StatelessWidget {
     this.widget,
     this.buttonName,
     this.footerWidget,
-    this.widget2,
+    this.widgetUnderButton,
     this.onClickButton,
     this.isShowBack,
     this.onTapBack,
@@ -39,8 +40,8 @@ class ModalFit extends StatelessWidget {
             children: <Widget>[
               Container(
                 padding: EdgeInsets.only(
-                    left: size.width*0.05,
-                    right: size.width*0.05,
+                    left: size.width*0.03,
+                    right: size.width*0.03,
                     top: size.height*0.03
                 ),
                 child: Row(
@@ -48,39 +49,34 @@ class ModalFit extends StatelessWidget {
                   children: [
                     isShowBack==true?
                     Container(
-                      alignment: Alignment.centerLeft,
+                      alignment: Alignment.topLeft,
                       child: GestureDetector(
                           onTap: onTapBack,
                           child: Container(
-                              decoration: BoxDecoration(
-                                  color: color_E4EBF2,
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              padding: EdgeInsets.all(10),
-                              child:SvgIcon(icon:CustomIcon.back_arrow_ios, size: 12,)
+                              child:SvgIcon(icon:CustomIcon.back_arrow_ios, size: 18,)
                           )
                       ),
-                    ):Container(),
-                    Text(
-                      title??'',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        color: color_313A3E,
-                        fontSize: 17,
+                    ):SizedBox(width: size.width*0.1,),
+                    Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.symmetric(horizontal: size.width*0.2),
+                      child: Text(
+                        title??'',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: color_313A3E,
+                          fontSize: 17,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                     GestureDetector(
                         onTap: (){
                           Navigator.of(context).pop();
+                          authenticationBloc.clearAllController();
                         },
                         child: Container(
-                            decoration: BoxDecoration(
-                                color: color_E4EBF2,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            padding: EdgeInsets.all(10),
-                            child:SvgIcon(icon:CustomIcon.close, size: 12,)
+                            child:SvgIcon(icon:CustomIcon.close, size: 30,)
                         )
                     )
                   ],
@@ -95,10 +91,10 @@ class ModalFit extends StatelessWidget {
                 parentContext: context,
                 buttonName: buttonName??"",
                 height: 56,
-                width: MediaQuery.sizeOf(context).width * 0.92,
+                width: MediaQuery.sizeOf(context).width,
                 enableLoadingAnimation: enableLoadingForMainButton,
               ):Container(),
-              widget2??Container()
+              widgetUnderButton??Container()
 
             ],
           ),
