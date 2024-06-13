@@ -103,7 +103,7 @@ class AuthenticationBloc with Validation{
         return AddDialog.AddDialogbuilder(
             // onclose: (){Navigator.of(context).pop();},
             onApply: () async{
-              Navigator.pushNamed(context, "/registerInfoUser");
+              Navigator.popAndPushNamed(context, "/registerInfoUser");
               if(checkRememberPass==true){
                 InfoLoginModel infoLoginModel = InfoLoginModel(email: emailController.text, password: passController.text);
                 await SharePreferUtils.saveInfoRegister(infoLoginModel);
