@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
       routes: {
       //   '/': (context) => LoginScreen(),
       //   '/sign_up': (context) => const PlayerCreatingScreen(),
-      //   '/home': (context) => const HomeScreen(),
+        '/home': (context) => const HomeScreen(),
       //   '/game_on': (context) => const GameOnScreen(),
       //   '/overview_history_game': (context) => const OverviewHistoryScreen(),
         "/registerInfoUser" : (context) => const RegistrationInfoScreen(),

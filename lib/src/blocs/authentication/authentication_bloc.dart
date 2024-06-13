@@ -289,11 +289,12 @@ class AuthenticationBloc with Validation{
       }
     }
   }
-  void onBackTabScreen(BuildContext context, String router){
+  Future<void> onBackTabScreen(BuildContext context, String router) async {
     Navigator.pop(context);
     switch(router){
       case '/settingAvatar':
         _imagePickerBehavior.sink.add(_avatarFile=File(''));
+        await SharePreferUtils.removeInfoRegister();
         break;
       case '/registerInfoUser':
         _controllerNickName.clear();
@@ -324,7 +325,7 @@ class AuthenticationBloc with Validation{
     _imagePickerBehavior.sink.add(_avatarFile=pathAvartar);
   }
 
-  Future<void> createUserLogin() async{
+  Future<void> createUserLogin(BuildContext context) async{
     dynamic info = await SharePreferUtils.getInfoLogin();
     print('xinhcheck${jsonEncode(info)}');
     BaseApiModel? response = await repository.createUserLogin(
@@ -339,6 +340,7 @@ class AuthenticationBloc with Validation{
           "otp": _verifyOTP,
           "password": _controllerPassword.text
         });
+      Navigator.pushNamed(context, '/home');
     print('Tao tai khaon dang nhap thanh cong: ${jsonEncode(response)}');
   }
 

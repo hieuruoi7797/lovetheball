@@ -40,7 +40,7 @@ class SettingAvatarScreen extends StatelessWidget {
                   SizedBox(height: 10,),
                   Container(
                     alignment: Alignment.centerLeft,
-                    child: Text("Hình ảnh đại  cho trang cá nhân của bạn",
+                    child: Text("Hình ảnh đại diện cho trang cá nhân của bạn",
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -52,12 +52,12 @@ class SettingAvatarScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 100,),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    padding: const EdgeInsets.symmetric(horizontal: 70),
                     child: Stack(
                       children: [
                         Container(
-                          height: size.width*0.6,
-                          width: size.height*0.3,
+                          height: size.width*0.5,
+                          width: size.height*0.25,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: color_ECF3FB,
@@ -65,18 +65,19 @@ class SettingAvatarScreen extends StatelessWidget {
                               image: FileImage(authenticationBloc.avatarFile),
                               fit: BoxFit.cover
                             ):null,
-                            borderRadius: BorderRadius.circular(50),
+                            borderRadius: BorderRadius.circular(40),
                             boxShadow:const [
                                 BoxShadow(
                                   color: color_F3F7FE,
                                   blurRadius: 20,
                                   spreadRadius: 0,
                                   offset: Offset(0, 5,),
+                                  blurStyle: BlurStyle.solid
                                 ),
                                 BoxShadow(
                                   color: color_F3F7FE,
                                   blurRadius: 0,
-                                  spreadRadius: 15,
+                                  spreadRadius: 8,
                                 ),
                             ]
                           ),
@@ -86,7 +87,7 @@ class SettingAvatarScreen extends StatelessWidget {
                         Positioned(
                           left: 0,
                           right: 0,
-                          top: 85,
+                          top: 70,
                           child: GestureDetector(
                             onTap: (){
                               BottomSheetCustom.showBottomSheetSelectImage(
@@ -103,7 +104,7 @@ class SettingAvatarScreen extends StatelessWidget {
                               alignment: Alignment.center,
                               child: SvgIcon(
                                 icon:CustomIcon.icon_add,
-                                size: 50,
+                                size: 40,
                               ),
                             ),
                           ),
@@ -119,9 +120,9 @@ class SettingAvatarScreen extends StatelessWidget {
           onTapBack: (){
             authenticationBloc.onBackTabScreen(context, '/settingAvatar');
           },
-          onTapContinue: (){
-            authenticationBloc.createUserLogin();
-          },
+          // onTapContinue: (){
+          //   authenticationBloc.createUserLogin(context);
+          // },
           floatingActionButton:Padding(
             padding: EdgeInsets.only(left: 30),
             child: Column(
@@ -155,10 +156,10 @@ class SettingAvatarScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(height: 20,),
                 buttonGen1(
                   onTap: (){
-                    authenticationBloc.createUserLogin();
+                    authenticationBloc.createUserLogin(context);
                   },
                   parentContext: context,
                   buttonName: "Hoàn thành",
