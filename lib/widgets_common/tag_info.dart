@@ -16,8 +16,14 @@ class TagInfo extends StatelessWidget {
      child: Row(
          mainAxisSize: MainAxisSize.min,
          children: [
-           Text(value??"12"),
-           Text(label??" Danh hiệu")
+           Text(value??"12",
+             style: const TextStyle(
+                 fontWeight: FontWeight.w700,
+                 color: Color(0xFF313A3E)),),
+           Text(label??" Danh hiệu",
+              style: const TextStyle(
+                color: Color(0xFF62737A)
+              ),)
          ]
      ),
    );

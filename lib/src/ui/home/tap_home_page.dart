@@ -19,7 +19,7 @@ class TabHomePage extends StatelessWidget {
         width: MediaQuery.sizeOf(context).width,
         decoration: const BoxDecoration(
             image: DecorationImage(
-                fit: BoxFit.fitWidth,
+                fit: BoxFit.cover,
                 // opacity: 0.2,
                 image: AssetImage(
                     'assets/png_images/image_home_bg.png',),
@@ -80,9 +80,9 @@ class TabHomePage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      TagInfo(value: 17.toString(),label: "Trận đấu",),
-                      TagInfo(value: 15.toString(),label: "Thành tích",),
-                      TagInfo(value: 5.toString(),label: "MVP",),
+                      TagInfo(value: 17.toString(),label: " Trận đấu",),
+                      TagInfo(value: 15.toString(),label: " Thành tích",),
+                      TagInfo(value: 5.toString(),label: " MVP",),
                     ],
                   ),
                 ],
@@ -101,6 +101,16 @@ class TabHomePage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.white
                     ),
+                    child: Column(
+                      children: [
+                        RoundedImage(),
+                        Text(
+                          "HNOG",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF313A3E)),)
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(width: 20,),
@@ -111,6 +121,19 @@ class TabHomePage extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         color: Colors.white
+                    ),
+                    child: Column(
+                      children: [
+                        RoundedImage(
+                          assetImage: "assets/png_images/rookie.png",
+                          fit: BoxFit.none,
+                        ),
+                        Text(
+                          "Rookie",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF313A3E)),)
+                      ],
                     ),
                   ),
                 ),
@@ -130,7 +153,11 @@ class TabHomePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("TỈ LỆ THẮNG", style: TextStyle(fontWeight: FontWeight.w500),),
+                  Text(
+                      "TỶ LỆ THẮNG",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF62737A))),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -159,21 +186,87 @@ class TabHomePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20,),
+
+            ///Wining Percentage
             Container(
+              padding: EdgeInsets.all(12),
               width: MediaQuery.sizeOf(context).width,
-              height: 150,
+              // height: 150,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 color: Colors.white,
               ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("TỶ LỆ GHI ĐIỂM",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF62737A)),),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Container(
+                          padding: EdgeInsets.only(bottom: 0), // Adjust the padding as needed
+                          child: Text("25%",style: TextStyle(fontSize: 34,height: 0.77),)),
+                      WinRate(percent: 60,),
+                      WinRate(percent: 50,),
+                      WinRate(percent: 30,),
+                      WinRate(percent: 100,),
+                      WinRate(percent: 20,),
+                      WinRate(percent: 80,),
+                      WinRate(percent: 70,color:Color(0xFFFF453A),),
+                    ],
+                  ),
+                  SizedBox(height: 16,),
+                  Row(
+                    children: [
+                      Spacer(),
+                      Icon(Icons.arrow_downward_rounded, color: Color(0xFFFF453A),size: 14,weight: 10,),
+                      Text("12% ",style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700,color: Color(0xFFFF453A)),),
+                      Text("So với tháng trước", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700,color: Color(0xFFB3BBC4)),)
+                    ],
+                  )
+                ],
+              ),
             ),
             const SizedBox(height: 20,),
+
+            ///Match History
             Container(
               width: MediaQuery.sizeOf(context).width,
-              height: 150,
+              padding: EdgeInsets.all(12),
+              // height: 150,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 color: Colors.white,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("LỊCH SỬ TRẬN ĐẤU",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF62737A)),),
+                  ListView(
+                    shrinkWrap: true,
+                    children: [
+                      MatchHistoryTypeItem(),
+                      MatchHistoryTypeItem(
+                        title: "Đấu giao hữu",
+                        date: "12/02/2024",
+                        tagValue: "THUA",
+                        tagColor: const Color(0xFFFF3B30),
+                      ),
+                      MatchHistoryTypeItem(
+                        title: "Đấu giao hữu #2",
+                        date: "12/02/2024",
+                        tagValue: "THẮNG",
+                        tagColor: const Color(0xFF00C7BE),
+                      ),
+                    ],
+                  )
+                ],
               ),
             ),
           ],
@@ -195,4 +288,119 @@ class Page extends StatelessWidget {
       body: Center(child: Text('Tab $tab')),
     );
   }
+}
+
+class RoundedImage extends StatelessWidget {
+  String? assetImage;
+  BoxFit? fit;
+  Color? color;
+  double? width;
+  double? height;
+  bool? usingSvg;
+  RoundedImage({
+    super.key,
+    this.assetImage,
+    this.fit,
+    this.color,
+    this.width,
+    this.height,
+    this.usingSvg});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width ?? 49,
+      height: height ?? 49,
+      margin: const EdgeInsets.only(top: 16,bottom: 16),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          color: color??const Color(0xFFE9F0F9),
+          image: usingSvg != true ? DecorationImage(
+            fit: fit ?? BoxFit.cover,
+              image: AssetImage(assetImage??"assets/png_images/dumb_team_avt.png")
+          ):null
+      ),
+      child: usingSvg == true ?
+          SvgPicture.asset(
+              assetImage??"",
+          ):
+              const SizedBox(),
+    );
+  }
+}
+
+class MatchHistoryTypeItem extends StatelessWidget {
+  MatchHistoryTypeItem({
+    super.key,
+    this.title,
+    this.assetSvg,
+    this.date,
+    this.tagColor,
+    this.tagValue,
+  });
+
+  String? assetSvg;
+  String? title;
+  String? date;
+  String? tagValue;
+  Color? tagColor;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        RoundedImage(
+          width: 43.33,
+          height: 43.33,
+          usingSvg: true,
+          assetImage: assetSvg ?? "assets/svg_pictures/quick_match.svg",),
+        const SizedBox(width: 12.33,),
+        Expanded(
+          child: Container(
+            decoration: const BoxDecoration(
+                border: Border(bottom: BorderSide(color: Color(0xFFE4EBF2)))
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title??"Buổi đấu tự do",style:
+                    const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 17,
+                      color: Color(0xFF313A3E),
+                    ),),
+                    Text(date??"11/01/2024",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 13,
+                        color: Color(0xFFB3BBC4),
+                      ),),
+                  ],
+                ),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 4),
+                  decoration: BoxDecoration(
+                      color: tagColor?.withOpacity(0.2) ?? const Color(0xFFE5601A).withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12)
+                  ),
+                  child: Text(
+                    tagValue ?? "12 TRẬN",
+                    style: TextStyle(
+                        color: tagColor ?? const Color(0xFFE5601A),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
 }
