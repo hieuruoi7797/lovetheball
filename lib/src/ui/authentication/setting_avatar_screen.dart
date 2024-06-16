@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:splat_mobile/constants/icon_custom.dart';
-import 'package:splat_mobile/public/app_global.dart';
 import 'package:splat_mobile/public/bottom_sheet/bottom_sheet.dart';
 import 'package:splat_mobile/public/widget_item/app_button.dart';
 import 'package:splat_mobile/public/widget_item/layout_screen.dart';
@@ -10,7 +9,7 @@ import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
 
 import '../../../constants/ui_styles.dart';
 import '../../../public/widget_item/svg_icon.dart';
-import 'authentication_screen.dart';
+import '../../../widgets_common/button_gen1.dart';
 
 class SettingAvatarScreen extends StatelessWidget {
   const SettingAvatarScreen({super.key});
@@ -157,11 +156,10 @@ class SettingAvatarScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20,),
-                buttonGen1(
+                ButtonGen1(
                   onTap: (){
                     authenticationBloc.createUserLogin(context);
                   },
-                  parentContext: context,
                   buttonName: "Hoàn thành",
                   height: 56,
                   width: MediaQuery.sizeOf(context).width * 0.92,

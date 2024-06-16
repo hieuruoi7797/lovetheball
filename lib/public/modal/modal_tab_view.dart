@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:splat_mobile/public/modal/modal_fit.dart';
 import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
-import 'package:splat_mobile/src/ui/authentication/authentication_screen.dart';
 import 'package:splat_mobile/src/ui/authentication/modal_create_pass_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../constants/ui_styles.dart';
 import '../../src/ui/authentication/modal_input_otp.dart';
 import '../../src/ui/authentication/modal_register_ui.dart';
+import '../../widgets_common/button_gen1.dart';
 class ModalTabView extends StatelessWidget {
   final int? index ;
   final Function()? onStepCancel;
@@ -94,13 +93,12 @@ class ModalTabView extends StatelessWidget {
                       SizedBox(height: 32,),
                       ///Next button
                       // authenticationBloc.showButtonContinue==true ?
-                      buttonGen1(
+                      ButtonGen1(
                         onTap: (){
                           authenticationBloc.onTapContinue(context);
                           authenticationBloc.setIconBack();
                         },
                         enableLoadingAnimation: true,
-                        parentContext: context,
                         buttonName: localizations.btn_continue,
                         height: 56,
                         width: size.width * 0.80,

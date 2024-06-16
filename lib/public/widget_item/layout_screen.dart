@@ -4,6 +4,7 @@ import 'package:splat_mobile/public/widget_item/svg_icon.dart';
 import '../../constants/icon_custom.dart';
 import '../../constants/ui_styles.dart';
 import '../../src/ui/authentication/authentication_screen.dart';
+import '../../widgets_common/button_gen1.dart';
 
 class LayoutScreen extends StatelessWidget {
   final String titleAppbar;
@@ -48,9 +49,8 @@ class LayoutScreen extends StatelessWidget {
       ),
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       body: bodyLayout,
-      floatingActionButton: floatingActionButton??buttonGen1(
+      floatingActionButton: floatingActionButton??ButtonGen1(
         onTap: onTapContinue??(){},
-        parentContext: context,
         buttonName: titleBtnContinue??"Tiếp tục",
         height: 56,
         width: MediaQuery.sizeOf(context).width * 0.92,
