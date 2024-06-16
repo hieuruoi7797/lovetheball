@@ -4,8 +4,8 @@ import 'package:splat_mobile/public/widget_item/layout_screen.dart';
 import '../../../constants/icon_custom.dart';
 import '../../../constants/ui_styles.dart';
 import '../../../public/widget_item/svg_icon.dart';
+import '../../../widgets_common/button_gen1.dart';
 import '../../blocs/authentication/authentication_bloc.dart';
-import 'authentication_screen.dart';
 
 class RegistrationInfoScreen extends StatelessWidget {
   const RegistrationInfoScreen({super.key});
@@ -130,12 +130,11 @@ class RegistrationInfoScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20,),
-              buttonGen1(
+              ButtonGen1(
                 onTap: (){
                   Navigator.pushNamed(context, "/settingAvatar");
                 },
                 height: size.height*0.065,
-                parentContext: context,
                 buttonName: "Tiếp tục",
                 width: MediaQuery.sizeOf(context).width * 0.92,
                 enableLoadingAnimation: true,

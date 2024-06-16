@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lottie/lottie.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:splat_mobile/public/modal/modal_tab_view.dart';
-import 'package:splat_mobile/src/blocs/services_bloc.dart';
 import 'package:splat_mobile/src/ui/authentication/modal_login_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:splat_mobile/widgets_common/button_gen1.dart';
 
 
 
@@ -39,14 +38,13 @@ class LoginScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Center(
-                      child: buttonGen1(
+                      child: ButtonGen1(
                           onTap: () => showCupertinoModalBottomSheet(
                               expand: true,
                               context: context,
                               backgroundColor: Colors.transparent,
                               builder: (context) => ModalLoginContent(context)
                           ),
-                          parentContext: context,
                           buttonName: localizations.login,
                           nameStyle: const TextStyle(
                               color: Color(0xFF62737A),
@@ -64,8 +62,7 @@ class LoginScreen extends StatelessWidget {
                     const SizedBox(height: 16,),
 
                     Center(
-                      child: buttonGen1(
-                          parentContext: context,
+                      child: ButtonGen1(
                           buttonName: localizations.sign_up_gg,
                           leftIconPath: 'assets/svg_pictures/google_icon.svg',
                           nameStyle: const TextStyle(
@@ -87,7 +84,7 @@ class LoginScreen extends StatelessWidget {
                       color: Color(0xFFB3BBC4),),),
                     const SizedBox(height: 16,),
                     Center(
-                      child:  buttonGen1(
+                      child:  ButtonGen1(
                         onTap: () => showCupertinoModalBottomSheet(
                             expand: true,
                             context: context,
@@ -96,7 +93,6 @@ class LoginScreen extends StatelessWidget {
                               return ModalTabView();
                             }
                         ),
-                        parentContext: context,
                         buttonName: "Tạo tài khoản mới",
                         height: 56,
                         width: MediaQuery.sizeOf(context).width * 0.775,
@@ -169,65 +165,3 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-Widget buttonGen1(
-{
-  required BuildContext parentContext,
-  String? buttonName,
-  TextStyle? nameStyle,
-  double? width,
-  double? height,
-  BoxDecoration? decoration,
-  String leftIconPath = '',
-  bool? enableLoadingAnimation = false,
-  Function()? onTap,
-}
-    ) {
-  return GestureDetector(
-    onTap: onTap ?? () {},
-    child: Container(
-      width: width ?? MediaQuery.of(parentContext).size.width * 0.47,
-      height: height ?? 48,
-      decoration: decoration ?? BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          gradient: LinearGradient(
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-            colors: <Color>[
-              Color(0xffE55807),
-              Color(0xffFF8A4C),
-            ], // Gradient from https://learnui.design/tools/gradient-generator.html
-            tileMode: TileMode.mirror,
-          )
-      ),
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            leftIconPath.isNotEmpty ? Container(
-                margin: EdgeInsets.only(right: 8),
-                child: SvgPicture.asset(leftIconPath)) :const SizedBox(),
-            Text(
-              buttonName ?? "Hoàn tất",
-              style: nameStyle ?? const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600),
-            ),
-            enableLoadingAnimation == true ?
-                StreamBuilder<bool>(
-                  stream: applicationBloc.getLoadingStatus,
-                  builder: (context, snapshot) {
-                    if (snapshot.data == true){
-                      return Lottie.asset('assets/animations/dots_loading.json');
-                    } else {
-                      return const SizedBox();
-                    }
-                  }
-                ):
-                const SizedBox(),
-          ],
-        ),
-      ),
-    ),
-  );
-}

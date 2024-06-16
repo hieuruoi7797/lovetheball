@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_mobile/widgets_common/tag_info.dart';
 import 'package:splat_mobile/widgets_common/win_rate.dart';
 
+import '../../../widgets_common/button_gen1.dart';
 import '../../../widgets_common/square_button.dart';
 
 class TabHomePage extends StatelessWidget {
@@ -12,11 +13,8 @@ class TabHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // appBar: AppBar(title: Text('Tab $tab')),
-      body: Container(
+    return Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        width: MediaQuery.sizeOf(context).width,
         decoration: const BoxDecoration(
             image: DecorationImage(
                 fit: BoxFit.cover,
@@ -94,7 +92,6 @@ class TabHomePage extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  flex: 1,
                   child: Container(
                     height: 117,
                     decoration: BoxDecoration(
@@ -104,7 +101,7 @@ class TabHomePage extends StatelessWidget {
                     child: Column(
                       children: [
                         RoundedImage(),
-                        Text(
+                        const Text(
                           "HNOG",
                           style: TextStyle(
                               fontWeight: FontWeight.w700,
@@ -113,9 +110,8 @@ class TabHomePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(width: 20,),
+                const SizedBox(width: 20,),
                 Expanded(
-                  flex: 1,
                   child: Container(
                     height: 117,
                     decoration: BoxDecoration(
@@ -128,7 +124,7 @@ class TabHomePage extends StatelessWidget {
                           assetImage: "assets/png_images/rookie.png",
                           fit: BoxFit.none,
                         ),
-                        Text(
+                        const Text(
                           "Rookie",
                           style: TextStyle(
                               fontWeight: FontWeight.w700,
@@ -233,46 +229,99 @@ class TabHomePage extends StatelessWidget {
             const SizedBox(height: 20,),
 
             ///Match History
-            Container(
-              width: MediaQuery.sizeOf(context).width,
-              padding: EdgeInsets.all(12),
-              // height: 150,
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: MediaQuery.sizeOf(context).width,
+                  padding: EdgeInsets.all(12),
+                  // height: 150,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        topRight: Radius.circular(12)),
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("LỊCH SỬ TRẬN ĐẤU",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF62737A)),),
+                      SizedBox(height: 16,),
+                      ListView(
+                        shrinkWrap: true,
+                        children: [
+                          MatchHistoryTypeItem(),
+                          MatchHistoryTypeItem(
+                            title: "Đấu giao hữu",
+                            date: "12/02/2024",
+                            tagValue: "THUA",
+                            tagColor: const Color(0xFFFF3B30),
+                          ),
+                          MatchHistoryTypeItem(
+                            title: "Đấu giao hữu #2",
+                            date: "12/02/2024",
+                            tagValue: "THẮNG",
+                            tagColor: const Color(0xFF00C7BE),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  height: 40,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFF3F7FE),
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(12),
+                        bottomRight: Radius.circular(12))
+                  ),
+                  child: const Row(
+                    children: [
+                      Text(
+                        "Xem tất cả",
+                        style: TextStyle(
+                          color:  Color(0xFF62737A),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600
+                        ),
+                      ),
+                      Spacer(),
+                      Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 17,
+                        color: Color(0xFF62737A),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+
+            ButtonGen1(
+              onTap: (){},
+              buttonName: "Chỉnh sửa trang cá nhân",
+              nameStyle: const TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.w600
+              ),
+              height: 40,
+              width: MediaQuery.sizeOf(context).width * 0.7 ,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: Colors.white,
+                color: Colors.white
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("LỊCH SỬ TRẬN ĐẤU",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF62737A)),),
-                  ListView(
-                    shrinkWrap: true,
-                    children: [
-                      MatchHistoryTypeItem(),
-                      MatchHistoryTypeItem(
-                        title: "Đấu giao hữu",
-                        date: "12/02/2024",
-                        tagValue: "THUA",
-                        tagColor: const Color(0xFFFF3B30),
-                      ),
-                      MatchHistoryTypeItem(
-                        title: "Đấu giao hữu #2",
-                        date: "12/02/2024",
-                        tagValue: "THẮNG",
-                        tagColor: const Color(0xFF00C7BE),
-                      ),
-                    ],
-                  )
-                ],
-              ),
+              // enableLoadingAnimation: enableLoadingForMainButton,
             ),
+            const SizedBox(height: 20,),
           ],
         ),
-      ),
-    );
+      );
   }
 }
 

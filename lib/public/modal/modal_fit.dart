@@ -3,7 +3,7 @@ import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
 
 import '../../constants/icon_custom.dart';
 import '../../constants/ui_styles.dart';
-import '../../src/ui/authentication/authentication_screen.dart';
+import '../../widgets_common/button_gen1.dart';
 import '../widget_item/svg_icon.dart';
 
 class ModalFit extends StatelessWidget {
@@ -86,9 +86,8 @@ class ModalFit extends StatelessWidget {
               widget??Container(),
               SizedBox(height: size.height*0.02,),
               buttonName!=null?
-              buttonGen1(
+              ButtonGen1(
                 onTap: onClickButton??(){},
-                parentContext: context,
                 buttonName: buttonName??"",
                 height: 56,
                 width: MediaQuery.sizeOf(context).width,
