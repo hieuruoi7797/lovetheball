@@ -13,6 +13,7 @@ class CommonTextFieldBloc with Validation {
   final _passwordBehavior = BehaviorSubject<String>();
   final _optionalErrorBehavior = BehaviorSubject<String>();
   final _visiblePasswordBehavior = BehaviorSubject<bool>();
+  final _otpBehavior = BehaviorSubject<String>();
 
 
   ///Getter
