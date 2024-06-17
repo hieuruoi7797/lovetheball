@@ -30,12 +30,24 @@ class ModalTabView extends StatelessWidget {
       builder: (context, snapshot) {
         return ModalFit(
           title: localizations.register.toUpperCase(),
+          widgetUnderTitle: Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(left: 16,right: 16,bottom: size.height*0.03),
+            child: Text(
+              "BƯỚC ${authenticationBloc.currentStep+1}/3",
+              style: TextStyle(
+                  color: Color(0xFF62737A)
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
           isShowBack: authenticationBloc.currentStep>0?true:false,
           onTapBack: ()=>authenticationBloc.onTapCancel(),
           widget: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Container(
+                padding: EdgeInsets.zero,
                 child: Theme(
                   data: ThemeData(
                     // colorScheme: ColorScheme.fromSeed(
@@ -55,10 +67,10 @@ class ModalTabView extends StatelessWidget {
                             margin: EdgeInsets.only(left: 16,bottom: size.height*0.03),
                             height: 8,
                             width: (snapshot.data == 0 || snapshot.data == null) ?
-                                      MediaQuery.sizeOf(context).width * 0.28 :
+                                      MediaQuery.sizeOf(context).width * 0.3 :
                                     (snapshot.data == 1) ?
-                                        MediaQuery.sizeOf(context).width * 0.56 :
-                                          MediaQuery.sizeOf(context).width * 0.80
+                                        MediaQuery.sizeOf(context).width * 0.6 :
+                                          MediaQuery.sizeOf(context).width * 0.9
                             ,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(100),
@@ -73,16 +85,16 @@ class ModalTabView extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Spacer(),
-                          Container(
-                            margin: EdgeInsets.only(left: 16,right: 16,bottom: size.height*0.03),
-                            child: Text(
-                              "${authenticationBloc.currentStep+1}/3",
-                              style: TextStyle(
-                                color: Color(0xFF62737A)
-                              ),
-                            ),
-                          )
+                          // Spacer(),
+                          // Container(
+                          //   margin: EdgeInsets.only(left: 16,right: 16,bottom: size.height*0.03),
+                          //   child: Text(
+                          //     "${authenticationBloc.currentStep+1}/3",
+                          //     style: TextStyle(
+                          //       color: Color(0xFF62737A)
+                          //     ),
+                          //   ),
+                          // )
                         ],
                       ),
                       ///Form by Step
@@ -90,35 +102,32 @@ class ModalTabView extends StatelessWidget {
                           TabRegisterAccount(context) :(snapshot.data == 1)?
                               TabInputOtp(context):
                                 TabRegisterPass(context),
-                      SizedBox(height: 32,),
+                      // SizedBox(height: 10,),
                       ///Next button
                       // authenticationBloc.showButtonContinue==true ?
-                      ButtonGen1(
-                        onTap: (){
-                          authenticationBloc.onTapContinue(context);
-                          authenticationBloc.setIconBack();
-                        },
-                        enableLoadingAnimation: true,
-                        buttonName: localizations.btn_continue,
-                        height: 56,
-                        width: size.width * 0.80,
-                      )
-                      // :buttonGen1(
+                      // buttonGen1(
                       //   onTap: (){
+                      //     authenticationBloc.onTapContinue(context);
+                      //     authenticationBloc.setIconBack();
                       //   },
-                      //   decoration: BoxDecoration(),
                       //   enableLoadingAnimation: true,
                       //   parentContext: context,
                       //   buttonName: localizations.btn_continue,
                       //   height: 56,
                       //   width: size.width * 0.80,
-                      // ),
+                      // )
                     ],
                   ),
                 )
               ),
             ],
           ),
+          buttonName: localizations.btn_continue,
+          enableLoadingForMainButton: true,
+          onClickButton: (){
+            authenticationBloc.onTapContinue(context);
+            authenticationBloc.setIconBack();
+          },
           widgetUnderButton: snapshot.data == 1?Container(
             child:  Column(
               children: [
@@ -134,7 +143,7 @@ class ModalTabView extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: (){
-                    authenticationBloc.createUser(context, email: authenticationBloc.emailController.text);
+                    authenticationBloc.resendPin(context);
                   },
                   child: Text(
                     "Gửi lại mã",

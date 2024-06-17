@@ -17,7 +17,7 @@ Widget ModalLoginContent(BuildContext context){
       children: [
         Container(
             padding: EdgeInsets.symmetric(vertical:  size.height*0.01, horizontal: size.width*0.04),
-            child: CommonTextField(
+            child: Common.CommonTextField(
                 context,
                 labelText: localizations.email,
                 type: TextFieldTypeEnum.email,
@@ -29,7 +29,7 @@ Widget ModalLoginContent(BuildContext context){
           child: StreamBuilder<String>(
             stream: commonTextFieldBloc.optionalErrorStream,
             builder: (context, AsyncSnapshot<String> snapshotError) {
-              return CommonTextField(
+              return Common.CommonTextField(
                   context,
                   labelText: localizations.pass,
                   type: TextFieldTypeEnum.password,

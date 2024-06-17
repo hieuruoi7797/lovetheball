@@ -35,7 +35,7 @@ Widget TabRegisterPass(BuildContext context) {
               child: StreamBuilder<String>(
                   stream: commonTextFieldBloc.optionalErrorStream,
                   builder: (context, AsyncSnapshot<String> snapshotError) {
-                    return CommonTextField(
+                    return Common.CommonTextField(
                         context,
                         labelText: "Mật khẩu mới",
                         type: TextFieldTypeEnum.password,

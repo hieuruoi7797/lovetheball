@@ -33,4 +33,15 @@ mixin Validation{
       sink.add(value);
     }
   });
+  final otpValidate =
+  StreamTransformer<String, String>.fromHandlers(handleData: (value, sink,) {
+    if (value=='E610') {
+      sink.addError('Mã xác thực không chính xác');
+    }else if(value=='E611'){
+      sink.addError('Email verification fail');
+    }
+    else{
+      sink.add(value);
+    }
+  });
 }
