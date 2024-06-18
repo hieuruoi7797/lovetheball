@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../constants/icon_custom.dart';
 import '../../../constants/ui_styles.dart';
 import '../../../public/widget_item/common_text_field.dart';
+import '../../../public/widget_item/svg_icon.dart';
 import '../../blocs/authentication/authentication_bloc.dart';
 import '../../blocs/common_textfield_bloc/common_textfield_bloc.dart';
 
@@ -44,6 +46,48 @@ Widget TabRegisterPass(BuildContext context) {
                         controller: authenticationBloc.passController);
                   }
               )
+          ),
+          SizedBox(height: 20,),
+          Container(
+            child: Row(
+              children: [
+                const SvgIcon(icon: CustomIcon.icon_warning, size: 13),
+                const SizedBox(width: 10,),
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  child: const Text(
+                    'Mật khẩu phải có ít nhất 8 ký tự',
+                    overflow: TextOverflow.visible,
+                    style: TextStyle(
+                      color: color_62737A,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(height: 10,),
+          Container(
+            child: Row(
+              children: [
+                const SvgIcon(icon: CustomIcon.icon_warning, size: 13),
+                const SizedBox(width: 10,),
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  child: const Text(
+                    'Mật khẩu phải có ít nhất 1 chữ số',
+                    overflow: TextOverflow.visible,
+                    style: TextStyle(
+                      color: color_62737A,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ],
       ),

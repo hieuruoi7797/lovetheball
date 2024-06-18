@@ -132,12 +132,12 @@ class SettingAvatarScreen extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Color(0xffecf3fb).withOpacity(0.9)
+                      color: Color(0xffe5601a).withOpacity(0.1)
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: Row(
                     children: [
-                      const SvgIcon(icon: CustomIcon.icon_hand_note, size: 40),
+                      const SvgIcon(icon: CustomIcon.icon_light_bulb, size: 40),
                       const SizedBox(width: 10,),
                       Container(
                         alignment: Alignment.bottomCenter,
@@ -146,7 +146,7 @@ class SettingAvatarScreen extends StatelessWidget {
                           'Tip: Sử dụng hình ảnh thật và rõ mặt sẽ giúp đồng đội dễ dàng nhận diện bạn',
                           overflow: TextOverflow.visible,
                           style: TextStyle(
-                            color: color_62737A,
+                            color: color_313A3E,
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                           ),

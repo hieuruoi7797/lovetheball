@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:splat_mobile/public/widget_item/app_button.dart';
 import 'package:splat_mobile/public/widget_item/layout_screen.dart';
 
 import '../../../constants/icon_custom.dart';
@@ -87,37 +88,16 @@ class RegistrationInfoScreen extends StatelessWidget {
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.done,
               ),
-            ],
-          ),
-        ),
-        onTapBack: (){
-          authenticationBloc.onBackTabScreen(context, '/registerInfoUser');
-        },
-        // onTapContinue: (){
-        //   Navigator.pushNamed(context, "/settingAvatar");
-        // },
-      resizeToAvoidBottomInset: true,
-        floatingActionButton:Padding(
-          padding: EdgeInsets.only(left: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+              SizedBox(height: 20,),
               Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xffecf3fb).withOpacity(0.9)
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: Row(
                   children: [
-                    const SvgIcon(icon: CustomIcon.icon_hand_note, size: 40),
+                    const SvgIcon(icon: CustomIcon.icon_warning, size: 13),
                     const SizedBox(width: 10,),
                     Container(
                       alignment: Alignment.bottomCenter,
-                      width: size.width*0.7,
                       child: const Text(
-                        'Tip: Sử dụng tên gọi ở trên sân bóng sẽ giúp đồng đội dễ dàng nhận ra bạn hơn',
+                        'Bao gồm cả họ và tên',
                         overflow: TextOverflow.visible,
                         style: TextStyle(
                           color: color_62737A,
@@ -129,8 +109,72 @@ class RegistrationInfoScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              SizedBox(height: 10,),
+              Container(
+                child: Row(
+                  children: [
+                    const SvgIcon(icon: CustomIcon.icon_warning, size: 13),
+                    const SizedBox(width: 10,),
+                    Container(
+                      alignment: Alignment.bottomCenter,
+                      child: const Text(
+                        'Không có ký tự đặc biệt',
+                        overflow: TextOverflow.visible,
+                        style: TextStyle(
+                          color: color_62737A,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        onTapBack: (){
+          authenticationBloc.onBackTabScreen(context, '/registerInfoUser');
+        },
+        // onTapContinue: (){
+        //   Navigator.pushNamed(context, "/settingAvatar");
+        // },
+      resizeToAvoidBottomInset: true,
+        floatingActionButton:Padding(
+          padding: EdgeInsets.only(left: 30, top: 100),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color(0xffe5601a).withOpacity(0.1)
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Row(
+                  children: [
+                    const SvgIcon(icon: CustomIcon.icon_light_bulb, size: 40),
+                    const SizedBox(width: 10,),
+                    Container(
+                      alignment: Alignment.bottomCenter,
+                      width: size.width*0.7,
+                      child: const Text(
+                        'Tip: Sử dụng tên gọi ở trên sân bóng sẽ giúp đồng đội dễ dàng nhận ra bạn hơn',
+                        overflow: TextOverflow.visible,
+                        style: TextStyle(
+                          color: color_313A3E,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
               SizedBox(height: 20,),
-              ButtonGen1(
+              AppButton.buttonGen1(
+                context: context,
                 onTap: (){
                   Navigator.pushNamed(context, "/settingAvatar");
                 },
