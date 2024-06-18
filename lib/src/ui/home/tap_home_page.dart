@@ -301,6 +301,7 @@ class TabHomePage extends StatelessWidget {
                 )
               ],
             ),
+            const SizedBox(height: 20,),
 
             ButtonGen1(
               onTap: (){},
