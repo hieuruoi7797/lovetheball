@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         switch (settings.name) {
           case '/':
             return MaterialWithModalsPageRoute(
-                builder: (_) => HomeScreen(),
+                builder: (_) => LoginScreen(),
                 settings: settings);
         }
         return null;
