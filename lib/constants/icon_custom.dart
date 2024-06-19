@@ -5,4 +5,7 @@ class CustomIcon{
   static const String icon_camera = "svg_pictures/camera.svg";
   static const String icon_library_image = "svg_pictures/library_image.svg";
   static const String icon_hand_note = "svg_pictures/icon_hand_note.svg";
+  static const String icon_light_bulb = "svg_pictures/icon_light_bulb.svg";
+  static const String icon_warning = 'svg_pictures/icon_warning.svg';
+  static const String icon_check = "svg-pictures/icon_check.svg";
 }

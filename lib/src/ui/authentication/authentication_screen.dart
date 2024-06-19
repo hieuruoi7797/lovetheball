@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:splat_mobile/public/modal/modal_tab_view.dart';
+import 'package:splat_mobile/public/widget_item/app_button.dart';
 import 'package:splat_mobile/src/ui/authentication/modal_login_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:splat_mobile/widgets_common/button_gen1.dart';
@@ -38,7 +39,8 @@ class LoginScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Center(
-                      child: ButtonGen1(
+                      child: AppButton.buttonGen1(
+                          context: context,
                           onTap: () => showCupertinoModalBottomSheet(
                               expand: true,
                               context: context,
@@ -84,7 +86,8 @@ class LoginScreen extends StatelessWidget {
                       color: Color(0xFFB3BBC4),),),
                     const SizedBox(height: 16,),
                     Center(
-                      child:  ButtonGen1(
+                      child:  AppButton.buttonGen1(
+                        context: context,
                         onTap: () => showCupertinoModalBottomSheet(
                             expand: true,
                             context: context,

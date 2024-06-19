@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:splat_mobile/public/widget_item/app_button.dart';
 import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
 
 import '../../constants/icon_custom.dart';
@@ -91,12 +92,16 @@ class ModalFit extends StatelessWidget {
               widget??Container(),
               SizedBox(height: size.height*0.02,),
               buttonName!=null?
-              ButtonGen1(
-                onTap: onClickButton??(){},
-                buttonName: buttonName??"",
-                height: 56,
-                width: MediaQuery.sizeOf(context).width*0.92,
-                enableLoadingAnimation: enableLoadingForMainButton,
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+                child: AppButton.buttonGen1(
+                  context: context,
+                  onTap: onClickButton??(){},
+                  buttonName: buttonName??"",
+                  height: 56,
+                  width: MediaQuery.sizeOf(context).width*0.92,
+                  enableLoadingAnimation: enableLoadingForMainButton,
+                ),
               ):Container(),
               SizedBox(height: size.height*0.01,),
               widgetUnderButton??Container()

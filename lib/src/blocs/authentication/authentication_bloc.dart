@@ -309,6 +309,7 @@ class AuthenticationBloc with Validation{
       case '/settingAvatar':
         _imagePickerBehavior.sink.add(_avatarFile=File(''));
         await SharePreferUtils.removeInfoRegister();
+        clearAllController();
         break;
       case '/registerInfoUser':
         _controllerNickName.clear();

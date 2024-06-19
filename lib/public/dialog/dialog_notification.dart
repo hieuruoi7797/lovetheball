@@ -22,13 +22,18 @@ class AddDialog {
     final size = MediaQuery.of(context).size;
     return AlertDialog(
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30))
+            borderRadius: BorderRadius.all(Radius.circular(20))
         ),
         insetPadding: EdgeInsets.all(15),
         title: Container(
           alignment: Alignment.topCenter,
           child: Text(title??localizations.noti,
             textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.4,
+            ),
           ),
         ),
         content: contentWidget??Padding(
