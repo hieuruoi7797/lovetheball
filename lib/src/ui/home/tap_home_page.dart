@@ -15,6 +15,7 @@ class TabHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
+        // width: 100,
         decoration: const BoxDecoration(
             image: DecorationImage(
                 fit: BoxFit.cover,
@@ -43,11 +44,10 @@ class TabHomePage extends StatelessWidget {
                   ],
                 )),
             const SizedBox(height: 20,),
-
-            ///Identified Info
+            ///Identifier Info
             Container(
-              width: MediaQuery.sizeOf(context).width,
-              height: 200,
+              width: 100,
+              padding: EdgeInsets.only(bottom: 16, top: 16),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 color: Colors.white,
@@ -55,7 +55,6 @@ class TabHomePage extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(top: 16),
                     width: 72,
                     height: 72,
                     decoration: BoxDecoration(
@@ -140,7 +139,6 @@ class TabHomePage extends StatelessWidget {
             ///Wining Percentage
             Container(
               padding: EdgeInsets.all(12),
-              width: MediaQuery.sizeOf(context).width,
               // height: 150,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -186,7 +184,6 @@ class TabHomePage extends StatelessWidget {
             ///Wining Percentage
             Container(
               padding: EdgeInsets.all(12),
-              width: MediaQuery.sizeOf(context).width,
               // height: 150,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -233,7 +230,6 @@ class TabHomePage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  width: MediaQuery.sizeOf(context).width,
                   padding: EdgeInsets.all(12),
                   // height: 150,
                   decoration: BoxDecoration(
@@ -303,21 +299,28 @@ class TabHomePage extends StatelessWidget {
             ),
             const SizedBox(height: 20,),
 
-            ButtonGen1(
-              onTap: (){},
-              buttonName: "Chỉnh sửa trang cá nhân",
-              nameStyle: const TextStyle(
-                color: Colors.black,
-                fontSize: 15,
-                fontWeight: FontWeight.w600
-              ),
-              height: 40,
-              width: MediaQuery.sizeOf(context).width * 0.7 ,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.white
-              ),
-              // enableLoadingAnimation: enableLoadingForMainButton,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width *0.7,
+                  child: ButtonGen1(
+                    onTap: (){},
+                    buttonName: "Chỉnh sửa trang cá nhân",
+                    nameStyle: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600
+                    ),
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white
+                    ),
+                    // enableLoadingAnimation: enableLoadingForMainButton,
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 20,),
           ],

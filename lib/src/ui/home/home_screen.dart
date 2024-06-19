@@ -56,27 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context,AsyncSnapshot<int> pageIndexSnap) {
         if ( pageIndexSnap.hasData){
           return Scaffold(
-              // bottomNavigationBar: BottomNavigationBar(
-              //   currentIndex: pageIndexSnap.data ?? 1,
-              //   showSelectedLabels: false,
-              //   showUnselectedLabels: false,
-              //   selectedIconTheme: const IconThemeData(color: color_main),
-              //   onTap:(index) => homeBloc.onTabPageIndex(index),
-              //   items: [
-              //     BottomNavigationBarItem(
-              //         icon: pageIndexSnap.data == 0 ?
-              //         SvgPicture.asset(svg_home_setting) :
-              //         SvgPicture.asset(svg_home_setting_disable), label: ''),
-              //     BottomNavigationBarItem(
-              //         icon:  pageIndexSnap.data == 1 ?
-              //         SvgPicture.asset(svg_basket_home) :
-              //         SvgPicture.asset(svg_basket_home_disable), label: ''),
-              //     BottomNavigationBarItem(
-              //         icon:  pageIndexSnap.data == 2 ?
-              //         SvgPicture.asset(svg_chart_home) :
-              //         SvgPicture.asset(svg_chart_home_disable), label: ''),
-              //   ],
-              // ),
               floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
               floatingActionButton: Container(
                 margin: const EdgeInsets.only(top: 10),
