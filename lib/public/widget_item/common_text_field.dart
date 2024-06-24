@@ -117,9 +117,22 @@ class Common{
                                 commonTextFieldBloc.changeVisiblePassword(
                                     !(snapshotObscure.data == true));
                               },
+                            ):
+                            enableOtpValidator==true?
+                            TextButton(
+                                onPressed: (){
+                                  commonTextFieldBloc.pasteText();
+                                },
+                                child: Text('Paste',
+                                  style: TextStyle(
+                                      color: color_E5601A,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600
+                                  ),
+                                )
                             )
-                                : controller.text!=''
-                                ? IconButton(
+                                :controller.text!=''
+                                ?IconButton(
                                   padding: EdgeInsets.symmetric(vertical: 20),
                                   icon: SvgIcon(icon: CustomIcon.icon_delete_textfield, size: 20),
                                   onPressed: () {
@@ -127,7 +140,7 @@ class Common{
                                     commonTextFieldBloc.enterMsgCode('');
                                   }
                                 )
-                                : null,
+                            :null,
                             // errorText: optionalErrorText ?? snapshotValidate.error?.toString(),
                             // errorStyle: TextStyle(
                             //     color: Color(0xffff3b30),

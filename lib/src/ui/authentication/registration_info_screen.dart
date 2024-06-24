@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:splat_mobile/public/widget_item/app_button.dart';
+import 'package:splat_mobile/public/widget_item/common_text_field.dart';
 import 'package:splat_mobile/public/widget_item/layout_screen.dart';
 
 import '../../../constants/icon_custom.dart';
@@ -43,51 +44,55 @@ class RegistrationInfoScreen extends StatelessWidget {
                 ),
               ),
                SizedBox(height: 30,),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide:  const BorderSide(
-                      width: 2,
-                      style: BorderStyle.none,
-                      color: color_main,
-                    ),
-                  ),
-                  fillColor: Color(0xffecf3fb).withOpacity(0.9),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(
-                        width: 2,
-                        color: color_B3BBC4
-                    ),
-                  ),
-                  focusedBorder:OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(
-                      width: 2,
-                      color: color_B3BBC4,
-                    ),
-                  ),
-                  hintText: "Họ và tên",
-                  suffixIcon: authenticationBloc.nickNameController.text !=""
-                      ? IconButton(
-                      icon: Icon(Icons.clear),
-                      onPressed: () {
-                        authenticationBloc.nickNameController.clear();
-                      })
-                      : null,
-                  alignLabelWithHint: false,
-                  filled: true,
-                ),
-                style: TextStyle(
-                    color: Colors.black
-                ),
-                onChanged: (value){
-                },
-                controller: authenticationBloc.nickNameController,
-                keyboardType: TextInputType.name,
-                textInputAction: TextInputAction.done,
-              ),
+              Common.CommonTextField(context,
+                  controller: authenticationBloc.nickNameController,
+                  labelText: 'Họ và tên',
+                  focusNode: authenticationBloc.focusNodeNickName),
+              // TextField(
+              //   decoration: InputDecoration(
+              //     border: OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(16),
+              //       borderSide:  const BorderSide(
+              //         width: 2,
+              //         style: BorderStyle.none,
+              //         color: color_main,
+              //       ),
+              //     ),
+              //     fillColor: Color(0xffecf3fb).withOpacity(0.9),
+              //     enabledBorder: OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(16),
+              //       borderSide: const BorderSide(
+              //           width: 2,
+              //           color: color_B3BBC4
+              //       ),
+              //     ),
+              //     focusedBorder:OutlineInputBorder(
+              //       borderRadius: BorderRadius.circular(16),
+              //       borderSide: const BorderSide(
+              //         width: 2,
+              //         color: color_B3BBC4,
+              //       ),
+              //     ),
+              //     hintText: "Họ và tên",
+              //     suffixIcon: authenticationBloc.nickNameController.text !=""
+              //         ? IconButton(
+              //         icon: Icon(Icons.clear),
+              //         onPressed: () {
+              //           authenticationBloc.nickNameController.clear();
+              //         })
+              //         : null,
+              //     alignLabelWithHint: false,
+              //     filled: true,
+              //   ),
+              //   style: TextStyle(
+              //       color: Colors.black
+              //   ),
+              //   onChanged: (value){
+              //   },
+              //   controller: authenticationBloc.nickNameController,
+              //   keyboardType: TextInputType.name,
+              //   textInputAction: TextInputAction.done,
+              // ),
               SizedBox(height: 20,),
               Container(
                 child: Row(
