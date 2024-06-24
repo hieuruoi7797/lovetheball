@@ -22,6 +22,7 @@ Widget ModalLoginContent(BuildContext context){
                 labelText: localizations.email,
                 type: TextFieldTypeEnum.email,
                 enableEmailValidator: true,
+                focusNode: authenticationBloc.focusNodeEmail,
                 controller: authenticationBloc.emailController)
         ),
         Container(
@@ -35,6 +36,7 @@ Widget ModalLoginContent(BuildContext context){
                   type: TextFieldTypeEnum.password,
                   enablePassWordValidator:true,
                   optionalErrorText: snapshotError.hasError? snapshotError.error.toString() : null,
+                  focusNode: authenticationBloc.focusNodePass,
                   controller: authenticationBloc.passController);
             }
           )
@@ -48,7 +50,7 @@ Widget ModalLoginContent(BuildContext context){
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5)),
                     checkColor: Colors.white,
-                    activeColor: color_checkbox_remember,
+                    activeColor: color_E5601A,
                     value: authenticationBloc.checkRememberPass,
                     onChanged: (bool? value) {
                       authenticationBloc.setCheckRememberPass(value);

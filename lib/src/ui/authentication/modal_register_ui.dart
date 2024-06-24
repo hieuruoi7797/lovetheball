@@ -37,13 +37,20 @@ Widget TabRegisterAccount(BuildContext context) {
               ),
               const SizedBox(height: 30,),
               Container(
-                  child: Common.CommonTextField(
-                      context,
-                      labelText: localizations.email,
-                      type: TextFieldTypeEnum.email,
-                      enableEmailValidator: true,
-                      optionalErrorText: snapshot.hasError? snapshot.error.toString() : null,
-                      controller: authenticationBloc.emailController)
+                  child: StreamBuilder<String>(
+                    stream: commonTextFieldBloc.responseErrorStream,
+                    builder: (context, AsyncSnapshot<String> snapshotError) {
+                      return Common.CommonTextField(
+                          context,
+                          labelText: localizations.email,
+                          type: TextFieldTypeEnum.email,
+                          enableEmailValidator: snapshotError.hasError?false:true,
+                          enableResposeValidator: snapshotError.hasError,
+                          optionalErrorText: snapshotError.hasError? snapshotError.error.toString() : null,
+                          focusNode: authenticationBloc.focusNodeReE,
+                          controller: authenticationBloc.emailController);
+                    }
+                  )
               ),
             ],
           ),

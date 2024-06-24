@@ -7,5 +7,7 @@ class CustomIcon{
   static const String icon_hand_note = "svg_pictures/icon_hand_note.svg";
   static const String icon_light_bulb = "svg_pictures/icon_light_bulb.svg";
   static const String icon_warning = 'svg_pictures/icon_warning.svg';
-  static const String icon_check = "svg-pictures/icon_check.svg";
+  static const String icon_check = "svg_pictures/icon_check.svg";
+  static const String icon_error_input = "svg_pictures/icon_error_input.svg";
+  static const String icon_delete_textfield = "svg_pictures/icon_delete_textfield.svg";
 }

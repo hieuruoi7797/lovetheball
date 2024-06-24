@@ -129,12 +129,13 @@ class ModalTabView extends StatelessWidget {
             authenticationBloc.setIconBack();
           },
           widgetUnderButton: snapshot.data == 1?Container(
-            child:  Column(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child:  Row(
               children: [
                 Container(
                   child: Text("Chưa nhận được email?",
                     style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.w400,
                         color:color_62737A,
                         letterSpacing: -0.4,
@@ -145,14 +146,27 @@ class ModalTabView extends StatelessWidget {
                   onPressed: (){
                     authenticationBloc.resendPin(context);
                   },
-                  child: Text(
-                    "Gửi lại mã",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color:Colors.black,
-                      letterSpacing: -0.4,
-                      wordSpacing: -0.4),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Gửi lại mã",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color:color_313A3E,
+                          letterSpacing: -0.4,
+                          wordSpacing: -0.4),
+                      ),
+                      Text(
+                        " (${60}s)",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: color_B3BBC4,
+                            letterSpacing: -0.4,
+                            wordSpacing: -0.4),
+                      ),
+                    ],
                   ),
                 )
               ],
