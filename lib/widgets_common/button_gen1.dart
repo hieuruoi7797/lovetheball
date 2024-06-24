@@ -12,7 +12,7 @@ class ButtonGen1 extends StatelessWidget {
     this.decoration,
     this.leftIconPath = '',
     this.enableLoadingAnimation = false,
-    Function()? onTap,});
+    this.onTap,});
 
   String? buttonName;
   TextStyle? nameStyle;

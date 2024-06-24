@@ -251,7 +251,7 @@ class AuthenticationBloc with Validation{
       Response? checkingTokenRes = await repository.testToken();
       if (checkingTokenRes != null){
         publicValues.userNow = PlayerModel.fromJson(jsonDecode(checkingTokenRes.body));
-        // Navigator.pushNamed(navigatorKey.currentContext!, '/home');
+        Navigator.pushNamed(navigatorKey.currentContext!, '/home');
       }
     }else{
       // print('hieuttchecking: ${jsonDecode(response!.body)["message"]["msg_name"]}');
@@ -266,8 +266,7 @@ class AuthenticationBloc with Validation{
       await storage.write(key: access_token_key, value: accessToken);
       Response? checkingTokenRes = await repository.testToken();
       if (checkingTokenRes != null) {
-        publicValues.userNow =
-            PlayerModel.fromJson(jsonDecode(checkingTokenRes.body));
+        publicValues.userNow = PlayerModel.fromJson(jsonDecode(checkingTokenRes.body));
         Navigator.pushNamed(navigatorKey.currentContext!, '/home');
       }
     }
