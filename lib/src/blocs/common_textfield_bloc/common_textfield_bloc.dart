@@ -1,5 +1,7 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:splat_mobile/src/ui/authentication/validate.dart';
 
 class CommonTextFieldBloc with Validation {
@@ -35,6 +37,11 @@ class CommonTextFieldBloc with Validation {
   void changeVisiblePassword(bool value) => _visiblePasswordBehavior.sink.add(value);
   String get emailTxt => _emailBehavior.value;
   void clearEmail() => _emailBehavior.sink.add("");
+  void pasteText(){
+    FlutterClipboard.paste().then((value) {
+      authenticationBloc.otpController.text=value;
+    });
+  }
 
   enteringPassword(String value) {
     _passwordBehavior.sink.add(value);
