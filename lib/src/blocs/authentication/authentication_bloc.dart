@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:path_provider/path_provider.dart';
@@ -47,15 +48,31 @@ class AuthenticationBloc with Validation{
   TextEditingController _controllerPassword = TextEditingController();
   TextEditingController _controllerOTP = TextEditingController();
   TextEditingController _controllerNickName = TextEditingController();
+  TextEditingController _controllerRegisterEmail = TextEditingController();
+  TextEditingController _controllerRegisterPass = TextEditingController();
   TextEditingController get emailController => _controllerEmail;
   TextEditingController get passController => _controllerPassword;
   TextEditingController get nickNameController => _controllerNickName;
+  TextEditingController get otpController => _controllerOTP;
+  TextEditingController get registerEmailController => _controllerRegisterEmail;
+  TextEditingController get registerPassController => _controllerRegisterPass;
+
+  FocusNode _focusNodeEmail = FocusNode();
+  FocusNode _focusNodePass = FocusNode();
+  FocusNode _focusNodeOtp = FocusNode();
+  FocusNode _focusNodeReE = FocusNode();
+  FocusNode _focusNodeReP = FocusNode();
+
+  FocusNode get focusNodeEmail => _focusNodeEmail;
+  FocusNode get focusNodePass => _focusNodePass;
+  FocusNode get focusNodeOtp=> _focusNodeOtp;
+  FocusNode get focusNodeReE=> _focusNodeReE;
+  FocusNode get focusNodeReP=> _focusNodeReP;
 
   final _otpBehavior = BehaviorSubject<String>();
   final _sendOTPBehavior = BehaviorSubject<String>();
   Stream<String> get sendOTPBehavior => _sendOTPBehavior;
   Stream<String> get otpBehavior => _otpBehavior.stream;
-  TextEditingController get _otpController => _controllerOTP;
 
 
   final _passwordVisibleBehavior = BehaviorSubject<bool>();
@@ -100,7 +117,7 @@ class AuthenticationBloc with Validation{
       await createUser(context, email: _controllerEmail.text);
     }
     if(_currentStep==1){
-      await verifiCreateUser(context, otp: _otpController.text);
+      await verifiCreateUser(context, otp: otpController.text);
     }
     if(_currentStep==2){
       showDialog(context: context, builder: (context){
@@ -156,7 +173,7 @@ class AuthenticationBloc with Validation{
   void setCheckRememberPass(bool? value)=> _checkRememberPassBehavior.sink.add(_checkRememberPass=value!);
   void clearEmail() => _emailBehavior.sink.add("");
   void setEmail(String value) => _emailBehavior.sink.add(value);
-  void setOTP(String value) => _otpBehavior.sink.add(_otpController.text=value);
+  void setOTP(String value) => _otpBehavior.sink.add(otpController.text=value);
   void setShowButton()=> {
     if(emailController.text!=''){
       _showButtonContinueBehavior.sink.add(_showButtonContinue=true)
@@ -171,12 +188,13 @@ class AuthenticationBloc with Validation{
     required String email,
   }) async {
       if(emailController.text==''){
-        showDialog(context: context, builder: (context){
-          return AddDialog.AddDialogbuilder(
-              onApply: (){Navigator.of(context).pop();},
-              content: "Vui lòng nhập email",
-              context: context);
-        });
+        commonTextFieldBloc.addOptionalError("Vui lòng nhập email");
+        // showDialog(context: context, builder: (context){
+        //   return AddDialog.AddDialogbuilder(
+        //       onApply: (){Navigator.of(context).pop();},
+        //       content: "Vui lòng nhập email",
+        //       context: context);
+        // });
         return;
       }
       else{
@@ -185,8 +203,9 @@ class AuthenticationBloc with Validation{
         if (response!.message["msg_code"]== MSG_SUCCESS_REGISTER_S605) {
           _resSuccessBehavior.sink.add(_resSuccess=true);
         } else {
+          commonTextFieldBloc.enterMsgCode(response!.message["msg_code"].toString());
           _resSuccessBehavior.sink.add(_resSuccess=false);
-          commonTextFieldBloc.addOptionalError(response!.message["msg_name"]);
+          // commonTextFieldBloc.addOptionalError(response!.message["msg_name"]);
           // showDialog(context: context, builder: (context){
           //   return AddDialog.AddDialogbuilder(
           //     // onclose: (){Navigator.of(context).pop();},
@@ -213,8 +232,7 @@ class AuthenticationBloc with Validation{
     } else {
       _resSuccessBehavior.sink.add(_resSuccess=false);
       _msgCode = response.message['msg_code'].toString();
-      _sendOTPBehavior.sink.add(_msgCode);
-      print("xinhcheckmsg ${_msgCode}");
+      commonTextFieldBloc.enterResVerifyOtp(_msgCode);
       // showDialog(context: context, builder: (context){
       //   return AddDialog.AddDialogbuilder(
       //       // onclose: (){Navigator.of(context).pop();},
@@ -238,11 +256,11 @@ class AuthenticationBloc with Validation{
       );
   }
 
-  Future<void> login() async{
+  Future<void> login({String? emailRegister, String? passRegister}) async{
     String email = await commonTextFieldBloc.emailValidateBehavior.first;
     String password = await commonTextFieldBloc.passwordValidateBehavior.first;
 
-    Response? response = await repository.login(email: email, pw: password);
+    Response? response = await repository.login(email: emailRegister??email, pw: passRegister??password);
     if (response != null && response.statusCode == 200){
       String accessToken = jsonDecode(response.body)["access_token"];
       String refreshToken = jsonDecode(response.body)["refresh_token"];
@@ -285,8 +303,10 @@ class AuthenticationBloc with Validation{
     bool permission = await service.handlePhotosPermission(context);
     if(permission){
       final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        await setImageFile(pickedFile);
+      XFile? imageFile = pickedFile != null ? XFile(pickedFile.path) : null;
+      if (imageFile != null) {
+        XFile? croppedImage = await _cropImage(imageFile);
+        await setImageFile(croppedImage);
       }
     }
   }
@@ -296,9 +316,11 @@ class AuthenticationBloc with Validation{
     _imagePickerBehavior.sink.add(_avatarFile=File(''));
     bool permission = await service.handleCameraPermission(context);
     if(permission){
-      final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera);
-      if (pickedFile != null) {
-        await  setImageFile(pickedFile);
+      final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera,preferredCameraDevice: CameraDevice.front);
+      XFile? imageFile = pickedFile != null ? XFile(pickedFile.path) : null;
+      if (imageFile != null) {
+        XFile? croppedImage = await _cropImage(imageFile);
+        await setImageFile(croppedImage);
       }
     }
   }
@@ -318,13 +340,49 @@ class AuthenticationBloc with Validation{
         _sendOTPBehavior.sink.add('');
         break;
       case '/inputOTP':
-        _otpController.clear();
+        otpController.clear();
         break;
       case '/inputPass':
         _controllerPassword.clear();
         break;
     }
 
+  }
+  //Cat anh
+  Future<XFile?> _cropImage(XFile? _pickedFile) async {
+    if (_pickedFile != null) {
+      CroppedFile? croppedFile = await ImageCropper().cropImage(
+        sourcePath: _pickedFile.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9
+        ],
+        uiSettings: [
+          AndroidUiSettings(
+              toolbarTitle: 'Cropper',
+              backgroundColor: Colors.black,
+              cropFrameColor: Colors.black,
+              toolbarColor: Colors.black,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false),
+          IOSUiSettings(
+            title: 'Cropper',
+          ),
+          // WebUiSettings(
+          //   context: ApplicationService.materialKey.currentContext!,
+          // ),
+        ],
+      );
+      if (croppedFile != null) {
+        XFile myImage = XFile(croppedFile.path);
+        return myImage;
+      }
+      return null;
+    }
   }
 
   Future<void> setImageFile(XFile? pickedFile) async{
@@ -351,14 +409,14 @@ class AuthenticationBloc with Validation{
           "birth_date": "12/02/2000",//type timestamp: "" lỗi format trên backend khi truyền rỗng
           "email": _controllerEmail.text,
           "phone": "",
-          "avatar": "",
+          "avatar": _avatarFile,
           "role_ids": [],
           "otp": _verifyOTP,
           "password": _controllerPassword.text
         });
     if (response!.message["status_code"]== 200) {
-        await login();
-        Navigator.pushNamed(context, '/home');
+        await login(emailRegister: _controllerEmail.text, passRegister: _controllerPassword.text);
+
     } else {
 
     }
@@ -367,7 +425,7 @@ class AuthenticationBloc with Validation{
 
   void clearAllController(){
     emailController.clear();
-    _otpController.clear();
+    otpController.clear();
     _controllerPassword.clear();
     nickNameController.clear();
     _currentStepBehavior.sink.add(_currentStep =0);
@@ -378,7 +436,7 @@ class AuthenticationBloc with Validation{
 
   Future<void> resendPin(BuildContext context) async {
     await createUser(context, email: emailController.text);
-    _otpController.clear();
+    otpController.clear();
   }
 
   void loginWithGoogle(){

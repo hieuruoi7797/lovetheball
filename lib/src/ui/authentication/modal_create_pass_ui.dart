@@ -34,18 +34,13 @@ Widget TabRegisterPass(BuildContext context) {
           const SizedBox(height: 30,),
           Container(
               // padding: EdgeInsets.symmetric(vertical:  size.height*0.01, horizontal: size.width*0.04),
-              child: StreamBuilder<String>(
-                  stream: commonTextFieldBloc.optionalErrorStream,
-                  builder: (context, AsyncSnapshot<String> snapshotError) {
-                    return Common.CommonTextField(
-                        context,
-                        labelText: "Mật khẩu mới",
-                        type: TextFieldTypeEnum.password,
-                        enablePassWordValidator:true,
-                        optionalErrorText: snapshotError.hasError? snapshotError.error.toString() : null,
-                        controller: authenticationBloc.passController);
-                  }
-              )
+              child: Common.CommonTextField(
+                  context,
+                  labelText: "Mật khẩu mới",
+                  type: TextFieldTypeEnum.password,
+                  // enablePassWordValidator:true,
+                  // optionalErrorText: snapshotError.hasError? snapshotError.error.toString() : null,
+                  controller: authenticationBloc.passController, focusNode: FocusNode())
           ),
           SizedBox(height: 20,),
           Container(

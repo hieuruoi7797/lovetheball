@@ -93,7 +93,7 @@ class ModalFit extends StatelessWidget {
               SizedBox(height: size.height*0.02,),
               buttonName!=null?
               Container(
-                padding: EdgeInsets.symmetric(horizontal: size.width*0.03),
+                padding: EdgeInsets.symmetric(horizontal: size.width*0.04),
                 child: AppButton.buttonGen1(
                   context: context,
                   onTap: onClickButton??(){},

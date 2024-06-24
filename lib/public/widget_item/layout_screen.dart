@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:splat_mobile/public/widget_item/app_button.dart';
 import 'package:splat_mobile/public/widget_item/svg_icon.dart';
 
 import '../../constants/icon_custom.dart';
@@ -49,12 +50,13 @@ class LayoutScreen extends StatelessWidget {
       ),
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       body: bodyLayout,
-      floatingActionButton: floatingActionButton??ButtonGen1(
+      floatingActionButton: floatingActionButton??AppButton.buttonGen1(
         onTap: onTapContinue??(){},
         buttonName: titleBtnContinue??"Tiếp tục",
         height: 56,
         width: MediaQuery.sizeOf(context).width * 0.92,
         enableLoadingAnimation: enableLoadingForMainButton??false,
+        context: context,
       ),
     );
   }
