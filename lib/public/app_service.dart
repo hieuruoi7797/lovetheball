@@ -37,7 +37,7 @@ class AppService{
     if (photosPermissionStatus != PermissionStatus.granted) {
       AddDialog.showAlertDialog(
           context,
-          "Splat muốn truy Thư viện ảnh của bạn",
+          "Splat muốn truy cập Thư viện ảnh của bạn",
           (){openAppSettings();});
 
       return false;
