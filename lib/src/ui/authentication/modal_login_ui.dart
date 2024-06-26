@@ -26,7 +26,7 @@ Widget ModalLoginContent(BuildContext context){
                     type: TextFieldTypeEnum.email,
                     typeEnableValidate:snapshotError.hasError?TypeEnableValidateEnum.response:TypeEnableValidateEnum.email,
                     // enableEmailValidator: true,
-                    hideErrorText: true,
+                    hideErrorText: snapshotError.hasError?true:false,
                     focusNode: authenticationBloc.focusNodeEmail,
                     controller: authenticationBloc.emailController);
               }
