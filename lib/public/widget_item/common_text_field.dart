@@ -171,55 +171,7 @@ class Common{
               });
         });
   }
-  static Widget CommonOtpTextField(
-   BuildContext context,{
-      Function(String)? onSubmit,
-      Function(String)? onCodeChanged,
-      required List<TextStyle?> otpTextStyles,
-      required TextEditingController controller,
-   }){
-    return StreamBuilder<Object>(
-        stream: authenticationBloc.otpBehavior,
-        builder: (context, snapshot) {
-          return OtpTextField(
-            numberOfFields: 6,
-            focusedBorderColor: color_B3BBC4,
-            styles: otpTextStyles,
-            borderRadius: BorderRadius.circular(10),
-            fieldWidth: 44,
-            filled: true,
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp("[0-9]", unicode: true)),
-            ],
-            decoration: InputDecoration(
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  borderSide: const BorderSide(
-                    width: 2,
-                    color: Color(0xffff3b30)
-                    ,
-                  ),
-                ),
-                errorStyle: TextStyle(
-                    color: Color(0xffff3b30),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13
-                ),
-                errorText: 'ddd'
-            ),
-            keyboardType: TextInputType.phone,
-            fillColor: color_ECF3FB,
-            enabledBorderColor: color_ECF3FB,
-            //set to true to show as box or false to show as dash
-            showFieldAsBox: true,
-            //runs when a code is typed in
-            onCodeChanged: onCodeChanged,
-            //runs when every textfield is filled
-            onSubmit: onSubmit // end onSubmit
-          );
-        }
-    );
-  }
+
 }
 
 enum TextFieldTypeEnum { password, email, nonSpecial, numberOtp }
