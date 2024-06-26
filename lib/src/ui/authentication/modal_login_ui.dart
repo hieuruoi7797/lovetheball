@@ -17,24 +17,32 @@ Widget ModalLoginContent(BuildContext context){
       children: [
         Container(
             padding: EdgeInsets.symmetric(vertical:  size.height*0.01, horizontal: size.width*0.04),
-            child: Common.CommonTextField(
-                context,
-                labelText: localizations.email,
-                type: TextFieldTypeEnum.email,
-                enableEmailValidator: true,
-                focusNode: authenticationBloc.focusNodeEmail,
-                controller: authenticationBloc.emailController)
+            child: StreamBuilder<String>(
+              stream: commonTextFieldBloc.responseErrorStream,
+              builder: (context, AsyncSnapshot<String> snapshotError) {
+                return Common.CommonTextField(
+                    context,
+                    labelText: localizations.email,
+                    type: TextFieldTypeEnum.email,
+                    typeEnableValidate:snapshotError.hasError?TypeEnableValidateEnum.response:TypeEnableValidateEnum.email,
+                    // enableEmailValidator: true,
+                    hideErrorText: true,
+                    focusNode: authenticationBloc.focusNodeEmail,
+                    controller: authenticationBloc.emailController);
+              }
+            )
         ),
         Container(
           padding: EdgeInsets.symmetric(vertical:  size.height*0.01, horizontal: size.width*0.04),
           child: StreamBuilder<String>(
-            stream: commonTextFieldBloc.optionalErrorStream,
+            stream: commonTextFieldBloc.responseErrorStream,
             builder: (context, AsyncSnapshot<String> snapshotError) {
               return Common.CommonTextField(
                   context,
                   labelText: localizations.pass,
                   type: TextFieldTypeEnum.password,
-                  enablePassWordValidator:true,
+                  typeEnableValidate:snapshotError.hasError?TypeEnableValidateEnum.response:null,
+
                   optionalErrorText: snapshotError.hasError? snapshotError.error.toString() : null,
                   focusNode: authenticationBloc.focusNodePass,
                   controller: authenticationBloc.passController);

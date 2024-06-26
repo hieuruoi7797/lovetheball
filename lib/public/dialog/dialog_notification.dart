@@ -83,7 +83,7 @@ class AddDialog {
   static showAlertDialog(
       BuildContext context,
       String content,
-      VoidCallback onPressed
+      Function() onPressedOK
   )
   => showCupertinoDialog<void>(
     context: context,
@@ -99,7 +99,7 @@ class AddDialog {
         CupertinoDialogAction(
           isDefaultAction: true,
           textStyle: textButtonBlue,
-          onPressed: () => onPressed,
+          onPressed: onPressedOK,
           child: const Text('Xác nhận'),
         ),
       ],

@@ -64,20 +64,21 @@ class SettingAvatarScreen extends StatelessWidget {
                               image: FileImage(authenticationBloc.avatarFile),
                               fit: BoxFit.cover
                             ):null,
-                            borderRadius: BorderRadius.circular(40),
+                            borderRadius: BorderRadius.circular(25),
                             boxShadow:const [
                                 BoxShadow(
                                   color: color_F3F7FE,
-                                  blurRadius: 20,
+                                  blurRadius: 5,
                                   spreadRadius: 0,
-                                  offset: Offset(0, 5,),
+                                  // offset: Offset(5, 5,),
                                   blurStyle: BlurStyle.solid
                                 ),
                                 BoxShadow(
                                   color: color_F3F7FE,
                                   blurRadius: 0,
-                                  spreadRadius: 8,
+                                  spreadRadius: 7,
                                 ),
+
                             ]
                           ),
                         ),

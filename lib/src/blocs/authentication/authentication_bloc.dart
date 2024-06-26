@@ -18,6 +18,7 @@ import 'package:splat_mobile/public/widget_item/widget_register_success.dart';
 import 'package:splat_mobile/src/app.dart';
 import 'package:splat_mobile/src/blocs/common_textfield_bloc/common_textfield_bloc.dart';
 import 'package:splat_mobile/src/models/base_api_model.dart';
+import 'package:splat_mobile/src/models/check_input_model.dart';
 import 'package:splat_mobile/src/models/info_login_model.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 import 'package:splat_mobile/src/resources/repository.dart';
@@ -63,6 +64,7 @@ class AuthenticationBloc with Validation{
   FocusNode _focusNodeReE = FocusNode();
   FocusNode _focusNodeReP = FocusNode();
   FocusNode _focusNodeNickName = FocusNode();
+  FocusNode _focusNodeRePass = FocusNode();
 
   FocusNode get focusNodeEmail => _focusNodeEmail;
   FocusNode get focusNodePass => _focusNodePass;
@@ -70,11 +72,14 @@ class AuthenticationBloc with Validation{
   FocusNode get focusNodeReE=> _focusNodeReE;
   FocusNode get focusNodeReP=> _focusNodeReP;
   FocusNode get focusNodeNickName=> _focusNodeNickName;
+  FocusNode get focusNodeRePass => _focusNodeRePass;
+
 
   final _otpBehavior = BehaviorSubject<String>();
   final _sendOTPBehavior = BehaviorSubject<String>();
   Stream<String> get sendOTPBehavior => _sendOTPBehavior;
   Stream<String> get otpBehavior => _otpBehavior.stream;
+
 
 
   final _passwordVisibleBehavior = BehaviorSubject<bool>();
@@ -106,6 +111,9 @@ class AuthenticationBloc with Validation{
   bool get showButtonContinue => _showButtonContinue;
   final _showButtonContinueBehavior = BehaviorSubject<bool>();
   Stream<bool> get showButtonContinueBehavior => _showButtonContinueBehavior.stream;
+
+  bool _checkRePass = false;
+
   void setIconBack()=>{
     if(_currentStep>=0){
       _isShowBackBehavior.sink.add(_isShowBack=!_isShowBack)
@@ -274,8 +282,10 @@ class AuthenticationBloc with Validation{
         Navigator.pushNamed(navigatorKey.currentContext!, '/home');
       }
     }else{
+      commonTextFieldBloc.enterMsgCode(jsonDecode(response!.body)["message"]["msg_code"].toString());
       // print('hieuttchecking: ${jsonDecode(response!.body)["message"]["msg_name"]}');
       commonTextFieldBloc.addOptionalError(jsonDecode(response!.body)["message"]["msg_name"]);
+
     }
   }
 
@@ -343,6 +353,7 @@ class AuthenticationBloc with Validation{
         break;
       case '/inputOTP':
         otpController.clear();
+
         break;
       case '/inputPass':
         _controllerPassword.clear();
@@ -411,7 +422,7 @@ class AuthenticationBloc with Validation{
           "birth_date": "12/02/2000",//type timestamp: "" lỗi format trên backend khi truyền rỗng
           "email": _controllerEmail.text,
           "phone": "",
-          "avatar": _avatarFile,
+          "avatar": '',
           "role_ids": [],
           "otp": _verifyOTP,
           "password": _controllerPassword.text
@@ -422,7 +433,6 @@ class AuthenticationBloc with Validation{
     } else {
 
     }
-    print('Tao tai khaon dang nhap thanh cong: ${jsonEncode(response)}');
   }
 
   void clearAllController(){
@@ -433,6 +443,9 @@ class AuthenticationBloc with Validation{
     _currentStepBehavior.sink.add(_currentStep =0);
     _resSuccess=false;
     _sendOTPBehavior.sink.add('');
+    commonTextFieldBloc.enterMsgCode('');
+    commonTextFieldBloc.enterEmail('');
+    commonTextFieldBloc.enterPassword("");
     clearEmail();
   }
 

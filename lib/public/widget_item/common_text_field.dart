@@ -15,26 +15,25 @@ class Common{
       BuildContext context, {
         String? labelText,
         String? optionalErrorText,
-        bool? enableEmailValidator,
-        bool? enablePassWordValidator,
-        bool? enableOtpValidator,
-       bool? enableResposeValidator,
-        TextFieldTypeEnum? type,
+        TypeEnableValidateEnum? typeEnableValidate,
+        bool? hideErrorText,
+        required TextFieldTypeEnum type,
         required TextEditingController controller,
         required FocusNode focusNode,
+        Function(String)? onChange,
       }) {
     final textController = TextEditingController();
     return StreamBuilder<String>(
-        stream: enableEmailValidator == true
-            ? commonTextFieldBloc.emailValidateBehavior
-            : enablePassWordValidator == true
-            ? commonTextFieldBloc.passwordValidateBehavior
-            : enableOtpValidator == true
-            ? commonTextFieldBloc.otpValidateBehavior
-            : enableResposeValidator == true
-            ? commonTextFieldBloc.responseErrorStream
-            : null
-        ,
+        stream:
+        typeEnableValidate == TypeEnableValidateEnum.email
+        ? commonTextFieldBloc.emailValidateBehavior
+        : typeEnableValidate == TypeEnableValidateEnum.password
+        ? commonTextFieldBloc.passwordValidateBehavior
+        : typeEnableValidate == TypeEnableValidateEnum.otp
+        ? commonTextFieldBloc.otpValidateBehavior
+        : typeEnableValidate == TypeEnableValidateEnum.response
+        ? commonTextFieldBloc.responseErrorStream
+        : null,
         builder: (context, snapshotValidate) {
           return StreamBuilder<bool>(
               stream: commonTextFieldBloc.visiblePassword,
@@ -66,30 +65,6 @@ class Common{
                             fillColor: Colors.transparent,
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.only(left: 10,right: 10, top: 12, bottom: 1),
-                            // border: InputBorder.none,
-                            // border: OutlineInputBorder(
-                            //   borderRadius: BorderRadius.circular(16),
-                            //   borderSide: const BorderSide(
-                            //     width: 2,
-                            //   ),
-                            // ),
-                            // enabledBorder: OutlineInputBorder(
-                            //   borderRadius: BorderRadius.circular(16),
-                            //   borderSide: const BorderSide(
-                            //       width: 2,
-                            //       color: color_B3BBC4
-                            //
-                            //   ),
-                            // ),
-                            // focusedBorder: OutlineInputBorder(
-                            //   borderRadius: BorderRadius.circular(16),
-                            //   borderSide: const BorderSide(
-                            //     width: 2,
-                            //     style: BorderStyle.none,
-                            //     color: color_main,
-                            //   ),
-                            // ),
-                            // focusColor: color_B3BBC4,
                             labelText:focusNode.hasFocus ?labelText ?? "Email":null,
                             labelStyle: TextStyle(
                               color: Color(0xff677986),
@@ -118,12 +93,12 @@ class Common{
                                     !(snapshotObscure.data == true));
                               },
                             ):
-                            enableOtpValidator==true?
+                          type == TextFieldTypeEnum.numberOtp?
                             TextButton(
                                 onPressed: (){
                                   commonTextFieldBloc.pasteText();
                                 },
-                                child: Text('Paste',
+                                child: const Text('Paste',
                                   style: TextStyle(
                                       color: color_E5601A,
                                       fontSize: 15,
@@ -136,34 +111,22 @@ class Common{
                                   padding: EdgeInsets.symmetric(vertical: 20),
                                   icon: SvgIcon(icon: CustomIcon.icon_delete_textfield, size: 20),
                                   onPressed: () {
-                                    controller.clear();
+                                    commonTextFieldBloc.clearTextField(type, controller);
                                     commonTextFieldBloc.enterMsgCode('');
                                   }
                                 )
                             :null,
-                            // errorText: optionalErrorText ?? snapshotValidate.error?.toString(),
-                            // errorStyle: TextStyle(
-                            //     color: Color(0xffff3b30),
-                            //     fontWeight: FontWeight.w600,
-                            //     fontSize: 13
-                            // ),
-                            // errorBorder: OutlineInputBorder(
-                            //   borderRadius: BorderRadius.circular(16),
-                            //   borderSide: const BorderSide(
-                            //     width: 2,
-                            //     color: Color(0xffff3b30)
-                            //     ,
-                            //   ),
-                            // ),
                           ),
                           obscureText: type == TextFieldTypeEnum.password ?
                           !(snapshotObscure.data == true):
                           false,
-                          onChanged: (value) {
+                          onChanged: onChange??(value) {
                             type == TextFieldTypeEnum.email
                                 ? commonTextFieldBloc.enterEmail(value)
                                 : type == TextFieldTypeEnum.password
                                 ? commonTextFieldBloc.enterPassword(value)
+                                : type == TextFieldTypeEnum.numberOtp
+                                ? commonTextFieldBloc.enterResVerifyOtp("")
                                 : null;
                           },
                           controller: controller,
@@ -171,7 +134,7 @@ class Common{
                               ? TextInputType.visiblePassword
                               : type == TextFieldTypeEnum.email
                               ? TextInputType.emailAddress
-                              : type == TextInputType.number
+                              : type == TextFieldTypeEnum.numberOtp
                               ? TextInputType.number
                               : TextInputType.text,
                           textInputAction: TextInputAction.done,
@@ -179,18 +142,25 @@ class Common{
 
                       ],
                     ),
-                    snapshotValidate.error?.toString()!=null?
+                    hideErrorText==true?Container()
+                    :snapshotValidate.error?.toString()!=null?
                     Container(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SvgIcon(icon: CustomIcon.icon_error_input, size: 12),
                           SizedBox(width: 6,),
-                          Text('${optionalErrorText??snapshotValidate.error?.toString()}',
-                            style: TextStyle(
-                                color: Color(0xffff3b30),
-                                fontWeight: FontWeight.w600,
-                                fontSize: 13
+                          Container(
+                            width: 340,
+                            child: Text('${optionalErrorText??snapshotValidate.error?.toString()}',
+                              style: TextStyle(
+                                  color: Color(0xffff3b30),
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13,
+                                  overflow: TextOverflow.visible
+                              ),
                             ),
                           ),
                         ],
@@ -252,4 +222,5 @@ class Common{
   }
 }
 
-enum TextFieldTypeEnum { password, email, nonSpecial, number }
+enum TextFieldTypeEnum { password, email, nonSpecial, numberOtp }
+enum TypeEnableValidateEnum { email, password, otp, rePass, reNickname, response,}
