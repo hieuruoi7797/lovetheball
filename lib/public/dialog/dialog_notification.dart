@@ -51,6 +51,10 @@ class AddDialog {
                       context: context,
                       onTap: onclose,
                       width: size.width*0.3,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        color: Colors.grey
+                      ),
                       buttonName: buttonNameClose??"Đóng"
                   )
               ),

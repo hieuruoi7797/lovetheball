@@ -35,6 +35,7 @@ class Common{
         ? commonTextFieldBloc.responseErrorStream
         : null,
         builder: (context, snapshotValidate) {
+          final size = MediaQuery.of(context).size;
           return StreamBuilder<bool>(
               stream: commonTextFieldBloc.visiblePassword,
               builder: (context, snapshotObscure) {
@@ -148,12 +149,12 @@ class Common{
                       padding: EdgeInsets.symmetric(vertical: 10),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SvgIcon(icon: CustomIcon.icon_error_input, size: 12),
                           SizedBox(width: 6,),
                           Container(
-                            width: 340,
+                            width: size.width*0.85,
                             child: Text('${optionalErrorText??snapshotValidate.error?.toString()}',
                               style: TextStyle(
                                   color: Color(0xffff3b30),
@@ -161,6 +162,7 @@ class Common{
                                   fontSize: 13,
                                   overflow: TextOverflow.visible
                               ),
+                              textAlign: TextAlign.start,
                             ),
                           ),
                         ],

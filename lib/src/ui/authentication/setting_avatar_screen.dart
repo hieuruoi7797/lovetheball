@@ -6,8 +6,11 @@ import 'package:splat_mobile/public/bottom_sheet/bottom_sheet.dart';
 import 'package:splat_mobile/public/widget_item/app_button.dart';
 import 'package:splat_mobile/public/widget_item/layout_screen.dart';
 import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
+import 'package:splat_mobile/src/blocs/setting/setting_avatar_bloc.dart';
+import 'package:splat_mobile/src/resources/show_dialog.dart';
 
 import '../../../constants/ui_styles.dart';
+import '../../../public/dialog/dialog_notification.dart';
 import '../../../public/widget_item/svg_icon.dart';
 import '../../../widgets_common/button_gen1.dart';
 
@@ -18,7 +21,7 @@ class SettingAvatarScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return StreamBuilder<Object>(
-      stream: authenticationBloc.imagePickerBehavior,
+      stream: settingAvatarBloc.imagePickerBehavior,
       builder: (context, snapshot) {
         return LayoutScreen(
             titleAppbar: "THÔNG TIN CÁ NHÂN",
@@ -60,8 +63,8 @@ class SettingAvatarScreen extends StatelessWidget {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: color_ECF3FB,
-                            image: authenticationBloc.avatarFile.path!=''?DecorationImage(
-                              image: FileImage(authenticationBloc.avatarFile),
+                            image: settingAvatarBloc.avatarFile.path!=''?DecorationImage(
+                              image: FileImage(settingAvatarBloc.avatarFile),
                               fit: BoxFit.cover
                             ):null,
                             borderRadius: BorderRadius.circular(25),
@@ -83,7 +86,7 @@ class SettingAvatarScreen extends StatelessWidget {
                           ),
                         ),
                         //check ko co anh moi hien thi
-                        authenticationBloc.avatarFile.path==''?
+                        settingAvatarBloc.avatarFile.path==''?
                         Positioned(
                           left: 0,
                           right: 0,
@@ -93,10 +96,10 @@ class SettingAvatarScreen extends StatelessWidget {
                               BottomSheetCustom.showBottomSheetSelectImage(
                                   context: context,
                                   onTapCam: () {
-                                    authenticationBloc.pickImageFromCam(context);
+                                    settingAvatarBloc.pickImageFromCam(context);
                                   },
                                   onTapLib: () {
-                                    authenticationBloc.pickImageFromLib(context);
+                                    settingAvatarBloc.pickImageFromLib(context);
                                   }
                               );
                             },
@@ -158,29 +161,64 @@ class SettingAvatarScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20,),
                 ButtonGen1(
-                  onTap: (){
+                  onTap: settingAvatarBloc.avatarFile.path!=''?(){
                     authenticationBloc.createUserLogin(context);
-                  },
-                  buttonName: "Hoàn thành",
+                  }:(){},
+                  buttonName: "Nhìn ổn đây",
+                  decoration: settingAvatarBloc.avatarFile.path==''?BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color:Color(0xffe5601a).withOpacity(0.3)
+                  ):null,
                   height: 56,
                   width: MediaQuery.sizeOf(context).width * 0.92,
                   enableLoadingAnimation: true,
                 ),
                 SizedBox(height: 10,),
-                authenticationBloc.avatarFile.path!=''?AppButton.btnTextCustom(
-                  buttonName: 'Thay đổi ảnh',
+                settingAvatarBloc.avatarFile.path!=''?AppButton.btnTextCustom(
+                  buttonName: 'Chọn ảnh khác',
+                  styleTextBtn: const TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
                   onTap: (){
                     BottomSheetCustom.showBottomSheetSelectImage(
                         context: context,
                         onTapCam: () {
-                          authenticationBloc.pickImageFromCam(context);
+                          settingAvatarBloc.pickImageFromCam(context);
                         },
                         onTapLib: () {
-                          authenticationBloc.pickImageFromLib(context);
+                          settingAvatarBloc.pickImageFromLib(context);
                         }
                     );
                   }
-                ):Container()
+                )
+                :AppButton.btnTextCustom(
+                  buttonName: 'Để sau',
+                  styleTextBtn: const TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                  onTap: (){
+                    show.dialog(context,
+                      dialogWidget:AddDialog.AddDialogbuilder(
+                        onApply: () async{
+                          authenticationBloc.createUserLogin(context);
+                        },
+                        content: "Bạn chưa có ảnh đại diện, có chắc muốn hoàn thành đăng ký!",
+                        buttonName: "Đồng ý",
+                        onclose:(){
+                        Navigator.pop(context);
+                        },
+                        context: context
+                      ),
+                    );
+
+                  }
+                )
               ],
             ),
           ),
