@@ -14,9 +14,11 @@ import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/public/app_global.dart';
 import 'package:splat_mobile/public/app_service.dart';
 import 'package:splat_mobile/public/dialog/dialog_notification.dart';
+import 'package:splat_mobile/src/resources/show_dialog.dart';
 import 'package:splat_mobile/public/widget_item/widget_register_success.dart';
 import 'package:splat_mobile/src/app.dart';
 import 'package:splat_mobile/src/blocs/common_textfield_bloc/common_textfield_bloc.dart';
+import 'package:splat_mobile/src/blocs/setting/setting_avatar_bloc.dart';
 import 'package:splat_mobile/src/models/base_api_model.dart';
 import 'package:splat_mobile/src/models/info_login_model.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
@@ -36,11 +38,6 @@ class AuthenticationBloc with Validation{
   bool _passwordVisible=false;
   bool _checkRememberPass = false;
   final _emailBehavior = BehaviorSubject<String>();
-  final  picker = ImagePicker();
-  File _avatarFile = File('');
-  final _imagePickerBehavior = BehaviorSubject<File>();
-  Stream<File> get imagePickerBehavior => _imagePickerBehavior.stream;
-  File get avatarFile => _avatarFile;
   String _verifyOTP = '';
   String _msgCode = '';
 
@@ -119,30 +116,36 @@ class AuthenticationBloc with Validation{
   }
   Future<void> onTapContinue(BuildContext context) async {
     if(_currentStep==0){
-      await createUser(context, email: _controllerEmail.text);
+      await createUser(context, email: _controllerRegisterEmail.text);
     }
     if(_currentStep==1){
       await verifiCreateUser(context, otp: otpController.text);
     }
     if(_currentStep==2){
-      showDialog(context: context, builder: (context){
-        final localizations = AppLocalizations.of(context)!;
-        return AddDialog.AddDialogbuilder(
-            onApply: () async{
-              Navigator.popAndPushNamed(context, "/registerInfoUser");
-              if(checkRememberPass==true){
-                InfoLoginModel infoLoginModel = InfoLoginModel(email: emailController.text, password: passController.text);
-                await SharePreferUtils.saveInfoRegister(infoLoginModel);
-                _currentStepBehavior.sink.add(_currentStep =0);
-                _resSuccess=false;
-              }
-            },
-            content: "",
-            title: "Chúc mừng! Tài khoản của bạn đã được thiết lập",
-            contentWidget: WidgetRegisterSuccess(context),
-            buttonName: "Đăng nhập",
-            context: context);
-      });
+      if(_controllerRegisterPass.text==''){
+        commonTextFieldBloc.enterMsgCode('P000');
+      }
+      else{
+        await SharePreferUtils.removeInfoRegister();
+        showDialog(context: context, builder: (context){
+          final localizations = AppLocalizations.of(context)!;
+          return AddDialog.AddDialogbuilder(
+              onApply: () async{
+                Navigator.popAndPushNamed(context, "/registerInfoUser");
+                if(checkRememberPass==true){
+                  InfoLoginModel infoLoginModel = InfoLoginModel(email: _controllerRegisterEmail.text, password: _controllerRegisterPass.text);
+                  await SharePreferUtils.saveInfoRegister(infoLoginModel);
+                  _currentStepBehavior.sink.add(_currentStep =0);
+                  _resSuccess=false;
+                }
+              },
+              content: "",
+              title: "Chúc mừng! Tài khoản của bạn đã được thiết lập",
+              contentWidget: WidgetRegisterSuccess(context),
+              buttonName: "Đăng nhập",
+              context: context);
+        });
+      }
     }
 
     if(_resSuccess==true){
@@ -193,7 +196,7 @@ class AuthenticationBloc with Validation{
   createUser(BuildContext context,{
     required String email,
   }) async {
-      if(emailController.text==''){
+      if(_controllerRegisterEmail.text==''){
         commonTextFieldBloc.enterMsgCode("E000");
         return;
       }
@@ -207,13 +210,6 @@ class AuthenticationBloc with Validation{
           commonTextFieldBloc.enterMsgCode(response!.message["msg_code"].toString());
           _resSuccessBehavior.sink.add(_resSuccess=false);
           // commonTextFieldBloc.addOptionalError(response!.message["msg_name"]);
-          // showDialog(context: context, builder: (context){
-          //   return AddDialog.AddDialogbuilder(
-          //     // onclose: (){Navigator.of(context).pop();},
-          //       onApply: (){Navigator.of(context).pop();},
-          //       content: response!.message["msg_name"],
-          //       context: context);
-          // });
         }
       }
 
@@ -229,7 +225,7 @@ class AuthenticationBloc with Validation{
     }
     else{
       BaseApiModel? response =
-      await repository.verifiCreateUser(email: _controllerEmail.text, otp: otp);
+      await repository.verifiCreateUser(email: _controllerRegisterEmail.text, otp: otp);
       if (response!.message["status_code"]== 200) {
         _resSuccessBehavior.sink.add(_resSuccess=true);
         _verifyOTP = response.message['msg_name'].toString();
@@ -257,12 +253,12 @@ class AuthenticationBloc with Validation{
       );
   }
 
-  Future<void> login({String? emailRegister, String? passRegister}) async{
-    if(_controllerEmail.text==''){
+  Future<void> login(String router,{String? emailRegister, String? passRegister}) async{
+    if(router=='/login'&& _controllerEmail.text==''){
       commonTextFieldBloc.enterMsgCode("E000");
       return;
     }
-    else if( _controllerPassword.text ==''){
+    else if( router=='/login' && _controllerPassword.text ==''){
       commonTextFieldBloc.enterMsgCode("P000");
       return;
     }
@@ -283,9 +279,26 @@ class AuthenticationBloc with Validation{
           Navigator.pushNamed(navigatorKey.currentContext!, '/home');
         }
       }else{
-        commonTextFieldBloc.enterMsgCode(jsonDecode(response!.body)["message"]["msg_code"].toString());
+        if (router=='/login') {
+          commonTextFieldBloc.enterMsgCode(
+              jsonDecode(response!.body)["message"]["msg_code"].toString());
+        }else{
+          show.dialog(context,
+              dialogWidget:AddDialog.AddDialogbuilder(
+              onApply: (){Navigator.popAndPushNamed(context, "/");},
+              content: jsonDecode(response!.body)["message"]["msg_name"],
+              context: context));
+          // showDialog(
+          //     barrierDismissible: false,
+          //     context: context, builder: (context){
+          //   return AddDialog.AddDialogbuilder(
+          //       onApply: (){Navigator.popAndPushNamed(context, "/");},
+          //       content: jsonDecode(response!.body)["message"]["msg_name"],
+          //       context: context);
+          // });
+        }
         // print('hieuttchecking: ${jsonDecode(response!.body)["message"]["msg_name"]}');
-        commonTextFieldBloc.addOptionalError(jsonDecode(response!.body)["message"]["msg_name"]);
+        // commonTextFieldBloc.addOptionalError(jsonDecode(response!.body)["message"]["msg_name"]);
 
       }
     }
@@ -311,37 +324,11 @@ class AuthenticationBloc with Validation{
     }
   }
 
-  Future<void> pickImageFromLib(BuildContext context) async{
-    Navigator.pop(context);
-    _imagePickerBehavior.sink.add(_avatarFile=File(''));
-    bool permission = await service.handlePhotosPermission(context);
-    if(permission){
-      final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
-      XFile? imageFile = pickedFile != null ? XFile(pickedFile.path) : null;
-      if (imageFile != null) {
-        XFile? croppedImage = await _cropImage(imageFile);
-        await setImageFile(croppedImage);
-      }
-    }
-  }
 
-  Future<void> pickImageFromCam(BuildContext context) async{
-    Navigator.pop(context);
-    _imagePickerBehavior.sink.add(_avatarFile=File(''));
-    bool permission = await service.handleCameraPermission(context);
-    if(permission){
-      final XFile? pickedFile = await picker.pickImage(source: ImageSource.camera,preferredCameraDevice: CameraDevice.front);
-      XFile? imageFile = pickedFile != null ? XFile(pickedFile.path) : null;
-      if (imageFile != null) {
-        XFile? croppedImage = await _cropImage(imageFile);
-        await setImageFile(croppedImage);
-      }
-    }
-  }
   Future<void> onBackTabScreen(BuildContext context, String router) async {
     switch(router){
       case '/settingAvatar':
-        _imagePickerBehavior.sink.add(_avatarFile=File(''));
+        settingAvatarBloc.setAvatarFile('');
         await SharePreferUtils.removeInfoRegister();
         clearAllController();
         Navigator.pop(context);
@@ -364,84 +351,42 @@ class AuthenticationBloc with Validation{
     }
 
   }
-  //Cat anh
-  Future<XFile?> _cropImage(XFile? _pickedFile) async {
-    if (_pickedFile != null) {
-      CroppedFile? croppedFile = await ImageCropper().cropImage(
-        sourcePath: _pickedFile.path,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-          CropAspectRatioPreset.ratio3x2,
-          CropAspectRatioPreset.original,
-          CropAspectRatioPreset.ratio4x3,
-          CropAspectRatioPreset.ratio16x9
-        ],
-        uiSettings: [
-          AndroidUiSettings(
-              toolbarTitle: 'Cropper',
-              backgroundColor: Colors.black,
-              cropFrameColor: Colors.black,
-              toolbarColor: Colors.black,
-              toolbarWidgetColor: Colors.white,
-              initAspectRatio: CropAspectRatioPreset.original,
-              lockAspectRatio: false),
-          IOSUiSettings(
-            title: 'Cropper',
-          ),
-          // WebUiSettings(
-          //   context: ApplicationService.materialKey.currentContext!,
-          // ),
-        ],
-      );
-      if (croppedFile != null) {
-        XFile myImage = XFile(croppedFile.path);
-        return myImage;
-      }
-      return null;
-    }
-  }
-
-  Future<void> setImageFile(XFile? pickedFile) async{
-    final Directory basePath = await getApplicationDocumentsDirectory();
-    String path = '/image_avatar' + _controllerEmail.text + '.jpg';
-    XFile? imageFile = pickedFile != null ? XFile(pickedFile.path) : null;
-    final Uint8List uInt8 = await imageFile!.readAsBytes();
-    File pathAvartar = await File(basePath.path + path).writeAsBytes(uInt8, mode: FileMode.write);
-    imageCache.clear();
-    imageCache.clearLiveImages();
-    await SharePreferUtils.saveAvatar(pathAvartar.path, _controllerNickName.text);
-    appGlobal.setAvatarFile(pathAvartar);
-    _imagePickerBehavior.sink.add(_avatarFile=pathAvartar);
-  }
 
   Future<void> createUserLogin(BuildContext context) async{
-    dynamic info = await SharePreferUtils.getInfoLogin();
-    DateTime birthdate = DateTime.now();
-    print('xinhcheck${jsonEncode(info)}');
+    InfoLoginModel info = await SharePreferUtils.getInfoLogin();
     BaseApiModel? response = await repository.createUserLogin(
         body:{
           "name": _controllerNickName.text,
           "gender": 0,
           "birth_date": "12/02/2000",//type timestamp: "" lỗi format trên backend khi truyền rỗng
-          "email": _controllerEmail.text,
+          "email": info.email,
           "phone": "",
           "avatar": '',
           "role_ids": [],
           "otp": _verifyOTP,
-          "password": _controllerPassword.text
+          "password": info.password
         });
     if (response!.message["status_code"]== 200) {
-        await login(emailRegister: _controllerEmail.text, passRegister: _controllerPassword.text);
-
+        await login('/register' ,emailRegister: info.email, passRegister: info.password);
+        Navigator.pop(context);
     } else {
-
+      show.dialog(context,
+          dialogWidget:AddDialog.AddDialogbuilder(
+          onApply: (){
+            Navigator.popAndPushNamed(context, "/");
+            clearAllController();
+          },
+          content: response!.message["msg_name"],
+          context: context));
     }
   }
 
   void clearAllController(){
-    emailController.clear();
-    otpController.clear();
+    _controllerEmail.clear();
     _controllerPassword.clear();
+    _controllerRegisterEmail.clear();
+    otpController.clear();
+    _controllerRegisterPass.clear();
     nickNameController.clear();
     _currentStepBehavior.sink.add(_currentStep =0);
     _resSuccess=false;
@@ -453,7 +398,7 @@ class AuthenticationBloc with Validation{
   }
 
   Future<void> resendPin(BuildContext context) async {
-    await createUser(context, email: emailController.text);
+    await createUser(context, email: _controllerRegisterEmail.text);
     otpController.clear();
   }
 

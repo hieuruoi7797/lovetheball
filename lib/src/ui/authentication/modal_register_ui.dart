@@ -44,7 +44,7 @@ Widget TabRegisterAccount(BuildContext context) {
                         typeEnableValidate: snapshotError.hasError?TypeEnableValidateEnum.response:TypeEnableValidateEnum.email,
                         optionalErrorText: snapshotError.hasError? snapshotError.error.toString() : null,
                         focusNode: authenticationBloc.focusNodeReE,
-                        controller: authenticationBloc.emailController);
+                        controller: authenticationBloc.registerEmailController);
                   }
               )
           ),

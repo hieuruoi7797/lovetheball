@@ -20,6 +20,9 @@ mixin Validation{
     else if(value == 'P000'){
       sink.addError("Vui lòng nhập mật khẩu");
     }
+    else if(value == 'N000'){
+      sink.addError("Vui lòng nhập tên của bạn");
+    }
     else if(value=='E607'){
       sink.addError('Tài khoản email này đã tồn tại');
     }

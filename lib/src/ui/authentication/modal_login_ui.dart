@@ -81,7 +81,7 @@ Widget ModalLoginContent(BuildContext context){
         ),
       ),
     ),
-    onClickButton: () => authenticationBloc.login(),
+    onClickButton: () => authenticationBloc.login('/login'),
   );
 }
 

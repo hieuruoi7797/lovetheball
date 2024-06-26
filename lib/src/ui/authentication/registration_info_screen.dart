@@ -48,15 +48,24 @@ class RegistrationInfoScreen extends StatelessWidget {
                     ),
                   ),
                  SizedBox(height: 30,),
-                  Common.CommonTextField(context,
-                      controller: authenticationBloc.nickNameController,
-                      labelText: 'Họ và tên',
-                      type: TextFieldTypeEnum.nonSpecial,
-                      onChange: (value){
-                        commonTextFieldBloc.checkInputReNickName(value);
-                        print('${snapshot.error}');
-                      },
-                      focusNode: authenticationBloc.focusNodeNickName),
+                  StreamBuilder<String>(
+                    stream: commonTextFieldBloc.responseErrorStream,
+                    builder: (context, AsyncSnapshot<String> snapshotError) {
+                      return Container(
+                        child: Common.CommonTextField(context,
+                            controller: authenticationBloc.nickNameController,
+                            labelText: 'Họ và tên',
+                            type: TextFieldTypeEnum.nonSpecial,
+                            typeEnableValidate:snapshotError.hasError?TypeEnableValidateEnum.response:null,
+                            optionalErrorText: snapshotError.hasError? snapshotError.error.toString() : null,
+                            onChange: (value){
+                              commonTextFieldBloc.checkInputReNickName(value);
+                              commonTextFieldBloc.enterMsgCode('');
+                            },
+                            focusNode: authenticationBloc.focusNodeNickName),
+                      );
+                    }
+                  ),
                   SizedBox(height: 20,),
                   Container(
                     child: Row(
@@ -142,7 +151,13 @@ class RegistrationInfoScreen extends StatelessWidget {
                   AppButton.buttonGen1(
                     context: context,
                     onTap: (){
-                      Navigator.pushNamed(context, "/settingAvatar");
+                      if(authenticationBloc.nickNameController.text==''){
+                        commonTextFieldBloc.enterMsgCode('N000');
+                        return;
+                      }
+                      else{
+                        Navigator.pushNamed(context, "/settingAvatar");
+                      }
                     },
                     height: size.height*0.065,
                     buttonName: "Tiếp tục",
