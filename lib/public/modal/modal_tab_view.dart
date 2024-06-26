@@ -42,7 +42,7 @@ class ModalTabView extends StatelessWidget {
             ),
           ),
           isShowBack: authenticationBloc.currentStep>0?true:false,
-          onTapBack: ()=>authenticationBloc.onTapCancel(),
+          onTapBack: ()=>authenticationBloc.onTapCancel(context),
           widget: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[

@@ -48,10 +48,12 @@ class CommonTextFieldBloc with Validation {
     switch(type){
       case TextFieldTypeEnum.email:
         _emailBehavior.sink.add("");
+        enterEmail('');
         controller.clear();
         break;
       case TextFieldTypeEnum.password:
         _passwordBehavior.sink.add("");
+        enterPassword('');
         controller.clear();
         break;
       case TextFieldTypeEnum.numberOtp:

@@ -18,7 +18,6 @@ import 'package:splat_mobile/public/widget_item/widget_register_success.dart';
 import 'package:splat_mobile/src/app.dart';
 import 'package:splat_mobile/src/blocs/common_textfield_bloc/common_textfield_bloc.dart';
 import 'package:splat_mobile/src/models/base_api_model.dart';
-import 'package:splat_mobile/src/models/check_input_model.dart';
 import 'package:splat_mobile/src/models/info_login_model.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 import 'package:splat_mobile/src/resources/repository.dart';
@@ -27,7 +26,6 @@ import 'package:splat_mobile/src/ui/authentication/validate.dart';
 
 import '../../../constants/api_response_codes.dart';
 import '../../../constants/public_values.dart';
-import '../../../constants/ui_styles.dart';
 import '../../../public/share_prefer.dart';
 import '../../ui/authentication/modal_input_otp.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -45,12 +43,14 @@ class AuthenticationBloc with Validation{
   File get avatarFile => _avatarFile;
   String _verifyOTP = '';
   String _msgCode = '';
+
   TextEditingController _controllerEmail = TextEditingController();
   TextEditingController _controllerPassword = TextEditingController();
   TextEditingController _controllerOTP = TextEditingController();
   TextEditingController _controllerNickName = TextEditingController();
   TextEditingController _controllerRegisterEmail = TextEditingController();
   TextEditingController _controllerRegisterPass = TextEditingController();
+
   TextEditingController get emailController => _controllerEmail;
   TextEditingController get passController => _controllerPassword;
   TextEditingController get nickNameController => _controllerNickName;
@@ -77,8 +77,6 @@ class AuthenticationBloc with Validation{
 
   final _otpBehavior = BehaviorSubject<String>();
   final _sendOTPBehavior = BehaviorSubject<String>();
-  Stream<String> get sendOTPBehavior => _sendOTPBehavior;
-  Stream<String> get otpBehavior => _otpBehavior.stream;
 
 
 
@@ -87,9 +85,6 @@ class AuthenticationBloc with Validation{
   Stream<bool> get passwordVisibleBehavior => _passwordVisibleBehavior.stream;
   Stream<bool> get checkRememberPassBehavior => _checkRememberPassBehavior.stream;
   Stream<String> get emailBehavior => _emailBehavior.stream;
-  Stream<String> get emailValidateBehavior => _emailBehavior.stream.transform(eMailValidate);
-  Stream<String> get otpValidateBehavior => _sendOTPBehavior.stream.transform(otpValidate);
-
   bool get passwordVisible => _passwordVisible;
   bool get checkRememberPass => _checkRememberPass;
 
@@ -112,16 +107,16 @@ class AuthenticationBloc with Validation{
   final _showButtonContinueBehavior = BehaviorSubject<bool>();
   Stream<bool> get showButtonContinueBehavior => _showButtonContinueBehavior.stream;
 
-  bool _checkRePass = false;
-
-  void setIconBack()=>{
+  void setIconBack(){
     if(_currentStep>=0){
-      _isShowBackBehavior.sink.add(_isShowBack=!_isShowBack)
+      _isShowBackBehavior.sink.add(_isShowBack=!_isShowBack);
+      _resSuccess = false;
     }
     else{
-      _isShowBackBehavior.sink.add(_isShowBack=!_isShowBack)
+      _isShowBackBehavior.sink.add(_isShowBack=!_isShowBack);
+      _resSuccess = false;
     }
-  };
+  }
   Future<void> onTapContinue(BuildContext context) async {
     if(_currentStep==0){
       await createUser(context, email: _controllerEmail.text);
@@ -133,7 +128,6 @@ class AuthenticationBloc with Validation{
       showDialog(context: context, builder: (context){
         final localizations = AppLocalizations.of(context)!;
         return AddDialog.AddDialogbuilder(
-            // onclose: (){Navigator.of(context).pop();},
             onApply: () async{
               Navigator.popAndPushNamed(context, "/registerInfoUser");
               if(checkRememberPass==true){
@@ -154,14 +148,16 @@ class AuthenticationBloc with Validation{
     if(_resSuccess==true){
       if (_currentStep <= 1) {
         _currentStepBehavior.sink.add(_currentStep += 1);
+        _resSuccess==false;
       }
     }
 
   }
   
-  void onTapCancel(){
+  void onTapCancel(BuildContext context){
     if (_currentStep > 0) {
         _currentStepBehavior.sink.add(_currentStep -= 1);
+        _resSuccess==false;
         switch (_currentStep){
           case 1:
             onBackTabScreen(context, '/inputOTP');
@@ -198,19 +194,14 @@ class AuthenticationBloc with Validation{
     required String email,
   }) async {
       if(emailController.text==''){
-        commonTextFieldBloc.addOptionalError("Vui lòng nhập email");
-        // showDialog(context: context, builder: (context){
-        //   return AddDialog.AddDialogbuilder(
-        //       onApply: (){Navigator.of(context).pop();},
-        //       content: "Vui lòng nhập email",
-        //       context: context);
-        // });
+        commonTextFieldBloc.enterMsgCode("E000");
         return;
       }
       else{
         BaseApiModel? response =
         await repository.createUser( email: email);
         if (response!.message["msg_code"]== MSG_SUCCESS_REGISTER_S605) {
+          commonTextFieldBloc.enterMsgCode("");
           _resSuccessBehavior.sink.add(_resSuccess=true);
         } else {
           commonTextFieldBloc.enterMsgCode(response!.message["msg_code"].toString());
@@ -232,24 +223,24 @@ class AuthenticationBloc with Validation{
     String? email,
     required String otp
   }) async {
-    BaseApiModel? response =
-        await repository.verifiCreateUser(email: _controllerEmail.text, otp: otp);
-    if (response!.message["status_code"]== 200) {
-      _resSuccessBehavior.sink.add(_resSuccess=true);
-      _verifyOTP = response.message['msg_name'].toString();
-      _msgCode = response.message['msg_code'].toString();
-      _sendOTPBehavior.sink.add(_msgCode);
-    } else {
-      _resSuccessBehavior.sink.add(_resSuccess=false);
-      _msgCode = response.message['msg_code'].toString();
-      commonTextFieldBloc.enterResVerifyOtp(_msgCode);
-      // showDialog(context: context, builder: (context){
-      //   return AddDialog.AddDialogbuilder(
-      //       // onclose: (){Navigator.of(context).pop();},
-      //       onApply: (){Navigator.of(context).pop();},
-      //       content: response!.message["msg_name"],
-      //       context: context);
-      // });
+    if(_controllerOTP.text==''){
+      commonTextFieldBloc.enterResVerifyOtp("M000");
+      return;
+    }
+    else{
+      BaseApiModel? response =
+      await repository.verifiCreateUser(email: _controllerEmail.text, otp: otp);
+      if (response!.message["status_code"]== 200) {
+        _resSuccessBehavior.sink.add(_resSuccess=true);
+        _verifyOTP = response.message['msg_name'].toString();
+        _msgCode = response.message['msg_code'].toString();
+        _sendOTPBehavior.sink.add(_msgCode);
+        commonTextFieldBloc.enterResVerifyOtp("");
+      } else {
+        _resSuccessBehavior.sink.add(_resSuccess=false);
+        _msgCode = response.message['msg_code'].toString();
+        commonTextFieldBloc.enterResVerifyOtp(_msgCode);
+      }
     }
   }
 
@@ -267,25 +258,36 @@ class AuthenticationBloc with Validation{
   }
 
   Future<void> login({String? emailRegister, String? passRegister}) async{
-    String email = await commonTextFieldBloc.emailValidateBehavior.first;
-    String password = await commonTextFieldBloc.passwordValidateBehavior.first;
+    if(_controllerEmail.text==''){
+      commonTextFieldBloc.enterMsgCode("E000");
+      return;
+    }
+    else if( _controllerPassword.text ==''){
+      commonTextFieldBloc.enterMsgCode("P000");
+      return;
+    }
+    else{
+      // String email = await commonTextFieldBloc.emailValidateBehavior.first;
+      // String password = await commonTextFieldBloc.passwordValidateBehavior.first;
 
-    Response? response = await repository.login(email: emailRegister??email, pw: passRegister??password);
-    if (response != null && response.statusCode == 200){
-      String accessToken = jsonDecode(response.body)["access_token"];
-      String refreshToken = jsonDecode(response.body)["refresh_token"];
-      await storage.write(key: access_token_key, value: accessToken);
-      await storage.write(key: refresh_token_key, value: refreshToken);
-      Response? checkingTokenRes = await repository.testToken();
-      if (checkingTokenRes != null){
-        publicValues.userNow = PlayerModel.fromJson(jsonDecode(checkingTokenRes.body));
-        Navigator.pushNamed(navigatorKey.currentContext!, '/home');
+      Response? response = await repository.login(email: emailRegister??_controllerEmail.text, pw: passRegister??_controllerPassword.text);
+      if (response != null && response.statusCode == 200){
+        String accessToken = jsonDecode(response.body)["access_token"];
+        String refreshToken = jsonDecode(response.body)["refresh_token"];
+        await storage.write(key: access_token_key, value: accessToken);
+        await storage.write(key: refresh_token_key, value: refreshToken);
+        Response? checkingTokenRes = await repository.testToken();
+        commonTextFieldBloc.enterMsgCode("");
+        if (checkingTokenRes != null){
+          publicValues.userNow = PlayerModel.fromJson(jsonDecode(checkingTokenRes.body));
+          Navigator.pushNamed(navigatorKey.currentContext!, '/home');
+        }
+      }else{
+        commonTextFieldBloc.enterMsgCode(jsonDecode(response!.body)["message"]["msg_code"].toString());
+        // print('hieuttchecking: ${jsonDecode(response!.body)["message"]["msg_name"]}');
+        commonTextFieldBloc.addOptionalError(jsonDecode(response!.body)["message"]["msg_name"]);
+
       }
-    }else{
-      commonTextFieldBloc.enterMsgCode(jsonDecode(response!.body)["message"]["msg_code"].toString());
-      // print('hieuttchecking: ${jsonDecode(response!.body)["message"]["msg_name"]}');
-      commonTextFieldBloc.addOptionalError(jsonDecode(response!.body)["message"]["msg_name"]);
-
     }
   }
 
@@ -337,15 +339,16 @@ class AuthenticationBloc with Validation{
     }
   }
   Future<void> onBackTabScreen(BuildContext context, String router) async {
-    Navigator.pop(context);
     switch(router){
       case '/settingAvatar':
         _imagePickerBehavior.sink.add(_avatarFile=File(''));
         await SharePreferUtils.removeInfoRegister();
         clearAllController();
+        Navigator.pop(context);
         break;
       case '/registerInfoUser':
         _controllerNickName.clear();
+        Navigator.pop(context);
         break;
       case '/inputEmail':
         _controllerEmail.clear();
