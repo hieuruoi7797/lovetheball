@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:splat_mobile/src/blocs/home_bloc/home_bloc.dart';
 import 'package:splat_mobile/widgets_common/tag_info.dart';
 import 'package:splat_mobile/widgets_common/win_rate.dart';
 
@@ -67,7 +68,7 @@ class TabHomePage extends StatelessWidget {
                   ),
                   Container(
                     margin: const EdgeInsets.only(top: 12),
-                    child: Text("Nguyen Hoang",
+                    child: Text(homeBloc.nowUserInfo?.name??'',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w600

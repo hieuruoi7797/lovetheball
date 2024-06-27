@@ -118,4 +118,12 @@ class PublicMethods {
     showLoader ? DialogWidget().dismissLoader() : null;
     return response;
   }
+
+  static Future<PlayerModel?> getNowUser() async {
+    String? stringUserNow = await storage.read(
+        key: user_info);
+    PlayerModel? userNow = PlayerModel.fromJson(jsonDecode(stringUserNow??''));
+    return userNow;
+  }
 }
+
