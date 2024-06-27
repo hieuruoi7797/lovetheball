@@ -10,6 +10,7 @@ import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/constants/public_values.dart';
 import 'package:splat_mobile/src/blocs/services_bloc.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
+import 'package:splat_mobile/src/resources/show_dialog.dart';
 
 import '../widgets_common/dialogs.dart';
 
@@ -78,7 +79,7 @@ class PublicMethods {
           "message": {
           "msg_name":'Service error'
           }
-          }['message']!['msg_name'].toString(), 400);
+          }['message']!['msg_name'].toString(), 505);
       // if (kDebugMode) {
         print('HieuttError: $e');
       // }
