@@ -36,20 +36,23 @@ Widget TabRegisterPass(BuildContext context) {
               ),
               const SizedBox(height: 30,),
               Container(
-                  // padding: EdgeInsets.symmetric(vertical:  size.height*0.01, horizontal: size.width*0.04),
-                  child:Common.CommonTextField(
-                      context,
-                      labelText: "Mật khẩu mới",
-                      type: TextFieldTypeEnum.password,
-                      // typeEnableValidate: TypeEnableValidateEnum.password,
-                      onChange: (value){
-                        commonTextFieldBloc.checkInputRePass(value);
-                      },
-                      // enablePassWordValidator:true,
-                      // optionalErrorText: snapshotError.hasError? snapshotError.error.toString() : null,
-                      controller: authenticationBloc.registerPassController,
-                      focusNode: authenticationBloc.focusNodeRePass)
-
+                  child:StreamBuilder<String>(
+                    stream: commonTextFieldBloc.responseErrorStream,
+                    builder: (context, AsyncSnapshot<String> snapshotError) {
+                      return Common.CommonTextField(
+                          context,
+                          labelText: "Mật khẩu mới",
+                          type: TextFieldTypeEnum.password,
+                          typeEnableValidate:snapshotError.hasError?TypeEnableValidateEnum.response:null,
+                          optionalErrorText: snapshotError.hasError? snapshotError.error.toString() : null,
+                          onChange: (value){
+                            commonTextFieldBloc.checkInputRePass(value);
+                            commonTextFieldBloc.enterMsgCode('');
+                          },
+                          controller: authenticationBloc.registerPassController,
+                          focusNode: authenticationBloc.focusNodeRePass);
+                    }
+                  )
               ),
               SizedBox(height: 20,),
               Container(

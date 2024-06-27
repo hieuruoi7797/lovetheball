@@ -14,7 +14,16 @@ mixin Validation{
   });
 
   final responseValidate = StreamTransformer<String, String>.fromHandlers(handleData: (value,sink){
-    if(value=='E607'){
+    if(value == 'E000'){
+      sink.addError("Vui lòng nhập email");
+    }
+    else if(value == 'P000'){
+      sink.addError("Vui lòng nhập mật khẩu");
+    }
+    else if(value == 'N000'){
+      sink.addError("Vui lòng nhập tên của bạn");
+    }
+    else if(value=='E607'){
       sink.addError('Tài khoản email này đã tồn tại');
     }
     else if(value =='E611'){
@@ -57,7 +66,10 @@ mixin Validation{
   });
   final otpValidate =
   StreamTransformer<String, String>.fromHandlers(handleData: (value, sink,) {
-    if (value=='E610') {
+    if(value == 'M000'){
+      sink.addError('Vui lòng nhập mã xác thực');
+    }
+    else if (value=='E610') {
       sink.addError('Mã xác thực không chính xác');
     }else if(value=='E611'){
       sink.addError('Xác thực email thất bại, vui lòng thử lại!');

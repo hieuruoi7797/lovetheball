@@ -10,6 +10,7 @@ class AppButton {
   static Widget btnTextCustom({
     Function()? onTap,
     required String buttonName,
+    TextStyle? styleTextBtn,
   }){
     return GestureDetector(
       onTap: onTap,
@@ -17,7 +18,7 @@ class AppButton {
         alignment: Alignment.center,
         child: Text(
           buttonName,
-          style: headerTextStyle,
+          style: styleTextBtn??headerTextStyle,
         ),
       ),
     );

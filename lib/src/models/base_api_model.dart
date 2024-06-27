@@ -15,7 +15,7 @@ class BaseApiModel {
     message = json['message'] ?? {};
   }
 
-  String? data = '';
+  dynamic data;
   dynamic count;
   dynamic message;
 

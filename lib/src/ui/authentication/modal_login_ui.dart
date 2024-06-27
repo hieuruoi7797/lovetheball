@@ -42,7 +42,6 @@ Widget ModalLoginContent(BuildContext context){
                   labelText: localizations.pass,
                   type: TextFieldTypeEnum.password,
                   typeEnableValidate:snapshotError.hasError?TypeEnableValidateEnum.response:null,
-
                   optionalErrorText: snapshotError.hasError? snapshotError.error.toString() : null,
                   focusNode: authenticationBloc.focusNodePass,
                   controller: authenticationBloc.passController);
@@ -82,7 +81,7 @@ Widget ModalLoginContent(BuildContext context){
         ),
       ),
     ),
-    onClickButton: () => authenticationBloc.login(),
+    onClickButton: () => authenticationBloc.login('/login'),
   );
 }
 

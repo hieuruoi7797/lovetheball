@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:splat_mobile/public/modal/modal_fit.dart';
 import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
+import 'package:splat_mobile/src/resources/timer_counter_bloc.dart';
 import 'package:splat_mobile/src/ui/authentication/modal_create_pass_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../constants/ui_styles.dart';
@@ -42,7 +43,7 @@ class ModalTabView extends StatelessWidget {
             ),
           ),
           isShowBack: authenticationBloc.currentStep>0?true:false,
-          onTapBack: ()=>authenticationBloc.onTapCancel(),
+          onTapBack: ()=>authenticationBloc.onTapCancel(context),
           widget: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -142,32 +143,48 @@ class ModalTabView extends StatelessWidget {
                         wordSpacing: -0.4
                     ),),
                 ),
-                TextButton(
-                  onPressed: (){
-                    authenticationBloc.resendPin(context);
-                  },
-                  child: Row(
-                    children: [
-                      Text(
-                        "Gửi lại mã",
-                        style: TextStyle(
+                StreamBuilder<Object>(
+                  stream: timerBloc.timerCounterBehavior,
+                  builder: (context, snapshot) {
+                    return 
+                    timerBloc.secondCount==0
+                    ?TextButton(
+                      onPressed: (){authenticationBloc.resendPin(context);},
+                      child: Text(
+                      "Gửi lại mã",
+                      style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
                           color:color_313A3E,
                           letterSpacing: -0.4,
                           wordSpacing: -0.4),
+                    ),)
+                    :Container(
+                      padding: EdgeInsets.symmetric(horizontal: size.width*0.01),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Gửi lại mã",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color:color_313A3E.withOpacity(0.1),
+                              letterSpacing: -0.4,
+                              wordSpacing: -0.4),
+                          ),
+                          Text(
+                            " (${timerBloc.secondCount}s)",
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: color_B3BBC4,
+                                letterSpacing: -0.4,
+                                wordSpacing: -0.4),
+                          ),
+                        ],
                       ),
-                      Text(
-                        " (${60}s)",
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: color_B3BBC4,
-                            letterSpacing: -0.4,
-                            wordSpacing: -0.4),
-                      ),
-                    ],
-                  ),
+                    );
+                  }
                 )
               ],
             ),
@@ -177,70 +194,3 @@ class ModalTabView extends StatelessWidget {
     );
   }
 }
-
-// Widget ModalTabView(BuildContext context,
-//      int index ,
-//     Function()? onStepCancel,
-//     Function()? onStepContinue,
-//     Function(int)? onStepTapped
-//   ){
-//   return Scaffold(
-//     body: Column(
-//       mainAxisSize: MainAxisSize.min,
-//       children: <Widget>[
-//         Container(
-//           height: 10,
-//           decoration: BoxDecoration(
-//             borderRadius: BorderRadius.circular(
-//               10,
-//             ),
-//             color: Colors.grey[200],
-//           ),
-//           child: Expanded(
-//             child: Stepper(
-//               type: StepperType.horizontal,
-//               currentStep: index,
-//               onStepCancel: onStepCancel,
-//               onStepContinue: onStepContinue,
-//               onStepTapped: onStepTapped,
-//               steps: [
-//                 Step(
-//                     title: Text(''),
-//                     content: TabRegisterAccount(context),
-//                   isActive: index>=0,
-//                   state: index>0?StepState.complete:StepState.indexed
-//                 ),
-//                 Step(
-//                     title: Text(''),
-//                     content: TabInputOtp(context),
-//                     isActive: index >=1,
-//                     state: index>1?StepState.complete:StepState.indexed
-//                 )
-//               ],
-//             ),
-//           ),
-//           // child: TabBar(
-//           //   indicator: BoxDecoration(
-//           //     borderRadius: BorderRadius.circular(
-//           //       10,
-//           //     ),
-//           //     color: Colors.pink,
-//           //   ),
-//           //   tabs: const [
-//           //     Tab(text: "",),
-//           //     Tab(text: "",),
-//           //   ],
-//           //   controller: _tabController,
-//           //   indicatorSize: TabBarIndicatorSize.tab,
-//           // ),
-//         ),
-//         // Expanded(
-//         //     child: TabBarView(
-//         //       children: [TabRegisterAccount(context),TabInputOtp(context)],
-//         //       controller: _tabController,
-//         //     )
-//         // )
-//       ],
-//     ),
-//   );
-// }

@@ -8,7 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../constants/ui_styles.dart';
 
 class AddDialog {
-  static AlertDialog AddDialogbuilder({
+  static AlertDialog dialogCustom({
     required BuildContext context,
     VoidCallback? onclose,
     required VoidCallback onApply,
@@ -51,6 +51,10 @@ class AddDialog {
                       context: context,
                       onTap: onclose,
                       width: size.width*0.3,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        color: Colors.grey
+                      ),
                       buttonName: buttonNameClose??"Đóng"
                   )
               ),
@@ -105,4 +109,43 @@ class AddDialog {
       ],
     ),
   );
+
+  static CupertinoAlertDialog cupertinoDialogTwoBtn({
+    required BuildContext context,
+    required String content,
+    required Function() onPressedOK
+  }){
+    return CupertinoAlertDialog(
+      title: Text(content),
+      actions: <CupertinoDialogAction>[
+        CupertinoDialogAction(
+          onPressed: () => Navigator.of(context).pop(),
+          textStyle: textButtonBlue,
+          child: const Text('Từ chối'),
+        ),
+        CupertinoDialogAction(
+          isDefaultAction: true,
+          textStyle: textButtonBlue,
+          onPressed: onPressedOK,
+          child: const Text('Xác nhận'),
+        ),
+      ],
+    );
+  }
+  static CupertinoAlertDialog cupertinoDialogOneBtn({
+    required BuildContext context,
+    required String content,
+  }){
+    return CupertinoAlertDialog(
+      title: Text(content),
+      actions: <CupertinoDialogAction>[
+        CupertinoDialogAction(
+          isDefaultAction: true,
+          textStyle: textButtonBlue,
+          onPressed: (){Navigator.pop(context);},
+          child: const Text('Đóng'),
+        ),
+      ],
+    );
+  }
 }

@@ -25,43 +25,37 @@ Widget TabInputOtp(BuildContext context){
     createStyle(Colors.black),
   ];
 
-  return StreamBuilder<Object>(
-    stream: authenticationBloc.otpValidateBehavior,
-    builder: (context, snapshot) {
-      return Container(
-        // title: "ĐĂNG KÝ",
-        // buttonName: "Tiếp tục",
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text("Nhập mã xác thực",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 10,),
-            const Text("Mã xác thực đã được gửi đến email của bạn",
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color:color_62737A,
-                  letterSpacing: -0.4,
-                  wordSpacing: -0.4
-              ),
-            ),
-            const SizedBox(height: 30,),
-          Common.CommonTextField(context,
-              controller: authenticationBloc.otpController,
-              labelText: 'Mã xác thực',
-              type: TextFieldTypeEnum.numberOtp,
-              typeEnableValidate: TypeEnableValidateEnum.otp,
-              // enableOtpValidator: true,
-              focusNode: authenticationBloc.focusNodeOtp),
-          ],
+  return Container(
+    // title: "ĐĂNG KÝ",
+    // buttonName: "Tiếp tục",
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text("Nhập mã xác thực",
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+          ),
         ),
-      );
-    }
+        const SizedBox(height: 10,),
+        const Text("Mã xác thực đã được gửi đến email của bạn",
+          style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color:color_62737A,
+              letterSpacing: -0.4,
+              wordSpacing: -0.4
+          ),
+        ),
+        const SizedBox(height: 30,),
+        Common.CommonTextField(context,
+            controller: authenticationBloc.otpController,
+            labelText: 'Mã xác thực',
+            type: TextFieldTypeEnum.numberOtp,
+            typeEnableValidate: TypeEnableValidateEnum.otp,
+            focusNode: authenticationBloc.focusNodeOtp),
+      ],
+    ),
   );
 }
