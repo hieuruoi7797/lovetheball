@@ -278,7 +278,10 @@ class AuthenticationBloc with Validation{
       await storage.write(key: refresh_token_key, value: refreshToken);
       Response? checkingTokenRes = await repository.testToken();
       if (checkingTokenRes != null){
-        publicValues.userNow = PlayerModel.fromJson(jsonDecode(checkingTokenRes.body));
+        await storage.write(
+            key: user_info,
+            value: jsonEncode(PlayerModel.fromJson(
+                jsonDecode(checkingTokenRes.body)).toJson()));
         Navigator.pushNamed(navigatorKey.currentContext!, '/home');
       }
     }else{
@@ -296,7 +299,10 @@ class AuthenticationBloc with Validation{
       await storage.write(key: access_token_key, value: accessToken);
       Response? checkingTokenRes = await repository.testToken();
       if (checkingTokenRes != null) {
-        publicValues.userNow = PlayerModel.fromJson(jsonDecode(checkingTokenRes.body));
+        await storage.write(
+            key: user_info,
+            value: jsonEncode(PlayerModel.fromJson(
+                jsonDecode(checkingTokenRes.body)).toJson()));
         Navigator.pushNamed(navigatorKey.currentContext!, '/home');
       }
     }

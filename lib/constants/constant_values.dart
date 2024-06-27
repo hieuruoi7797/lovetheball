@@ -23,6 +23,7 @@ const String error_fail = "FAIL";
 
 const String access_token_key = 'access_token';
 const String refresh_token_key = 'refresh_token';
+const String user_info = 'user_info';
 
 const String USER_LOGIN = 'USER_LOGIN';
 

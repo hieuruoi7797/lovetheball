@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
         navKey: searchNavKey,
       ),
     ];
-    // homeBloc.getUserSaved(context).then((value) =>  matchBloc.getPlayerList(context));
+    homeBloc.getUserSaved(context);
     // TODO: implement initState
     super.initState();
   }

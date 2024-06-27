@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/constants/public_values.dart';
+import 'package:splat_mobile/public/public_methods.dart';
 import 'package:splat_mobile/src/app.dart';
 import 'package:splat_mobile/src/blocs/match/match_bloc.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
@@ -32,12 +33,8 @@ class HomeBloc {
     }
   }
 
-  Future<void> getUserSaved(BuildContext context) async {
-    PlayerModel userSaved = publicValues.userNow;
-      nowUserInfo = userSaved;
-      _userInfoBehavior.sink.add(userSaved);
-      return;
-
+  void getUserSaved(BuildContext context) async {
+    nowUserInfo = await PublicMethods.getNowUser();
   }
 
 }
