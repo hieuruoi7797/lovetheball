@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../app.dart';
+
 class ShowDialogBloc{
-  Future<void> dialog(BuildContext context, {required Widget dialogWidget}) async {
+  Future<void> dialog({required Widget dialogWidget}) async {
     await showDialog(barrierDismissible: false,
-    context: context, builder: (context){
+    context: navigatorKey.currentContext!, builder: (context){
       return dialogWidget;
     });
   }

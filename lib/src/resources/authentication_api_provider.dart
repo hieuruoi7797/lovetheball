@@ -1,15 +1,12 @@
 import 'dart:convert';
-
-// import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:splat_mobile/constants/api_paths.dart';
-import 'package:splat_mobile/constants/constant_values.dart';
+import 'package:splat_mobile/public/dialog/dialog_notification.dart';
 import 'package:splat_mobile/public/public_methods.dart';
 import 'package:splat_mobile/src/app.dart';
 import 'package:splat_mobile/src/models/base_api_model.dart';
-import 'package:splat_mobile/widgets_common/dialogs.dart';
+import 'package:splat_mobile/src/resources/show_dialog.dart';
 
 class AuthenticationiApiProvider {
   Response? response;
@@ -27,10 +24,17 @@ class AuthenticationiApiProvider {
         isFormData: true,
     );
     if (response != null){
-      if (response!.statusCode == 200) {
+      if (response!.statusCode != 505) {
         return response;
       } else {
-        return response;
+        await Future.delayed(
+            Duration.zero, () => show.dialog(
+            dialogWidget: AddDialog.cupertinoDialogOneBtn(
+              context: navigatorKey.currentContext!,
+              content: 'Hệ thông gián đoạn vui lòng quay lại sau!',
+            )
+        ));
+        return null;
       }
     }
 
@@ -43,11 +47,16 @@ class AuthenticationiApiProvider {
         showLoader: false,
         isFormData: false
     );
-      if (response!.statusCode == 200) {
+      if (response!.statusCode != 505) {
         return response;
       }else{
         await Future.delayed(
-            Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response!.body)['detail']));
+            Duration.zero, () => show.dialog(
+            dialogWidget: AddDialog.cupertinoDialogOneBtn(
+              context: navigatorKey.currentContext!,
+              content: 'Hệ thông gián đoạn vui lòng quay lại sau!',
+            )
+        ));
         return null;
       }
 
@@ -60,11 +69,16 @@ class AuthenticationiApiProvider {
         showLoader: true,
         isFormData: false
     );
-    if (response!.statusCode == 200) {
+    if (response!.statusCode != 505) {
       return response;
     }else{
       await Future.delayed(
-          Duration.zero, () => DialogWidget().showFailDialog(jsonDecode(response!.body)['detail']));
+          Duration.zero, () => show.dialog(
+          dialogWidget: AddDialog.cupertinoDialogOneBtn(
+            context: navigatorKey.currentContext!,
+            content: 'Hệ thông gián đoạn vui lòng quay lại sau!',
+          )
+      ));
       return null;
     }
   }
@@ -81,14 +95,24 @@ class AuthenticationiApiProvider {
         showLoader: true,
         isFormData: false,
     );
-    BaseApiModel _res = BaseApiModel.fromJson(jsonDecode(response.body));
-    if (_res.message["status_code"] == 200) {
-      if (kDebugMode) {
-        print(_res);
+    if(response!.statusCode != 505) {
+      BaseApiModel _res = BaseApiModel.fromJson(jsonDecode(response.body));
+      if (_res.message["status_code"] != null) {
+        if (kDebugMode) {
+          print(_res);
+        }
+        return _res;
       }
-      return _res;
-    } else {
-      return _res;
+    }
+    else {
+      await Future.delayed(
+          Duration.zero, () => show.dialog(
+          dialogWidget: AddDialog.cupertinoDialogOneBtn(
+            context: navigatorKey.currentContext!,
+            content: 'Hệ thông gián đoạn vui lòng quay lại sau!',
+          )
+      ));
+      return null;
     }
   }
   Future<BaseApiModel?> verifiCreateUser({
@@ -105,16 +129,24 @@ class AuthenticationiApiProvider {
       showLoader: true,
       isFormData: false,
     );
-    BaseApiModel _res = BaseApiModel.fromJson(jsonDecode(response.body));
-    if (_res.message["status_code"] == 200) {
-      if (kDebugMode) {
-        print(_res);
+    if(response!.statusCode != 505) {
+      BaseApiModel _res = BaseApiModel.fromJson(jsonDecode(response.body));
+      if (_res.message["status_code"] != null) {
+        if (kDebugMode) {
+          print(_res);
+        }
+        return _res;
       }
-      return _res;
-    } else {
-      // await Future.delayed(
-      //     Duration.zero, () => DialogWidget().showFailDialog(error_fail));
-      return _res;
+    }
+    else {
+      await Future.delayed(
+          Duration.zero, () => show.dialog(
+          dialogWidget: AddDialog.cupertinoDialogOneBtn(
+            context: navigatorKey.currentContext!,
+            content: 'Hệ thông gián đoạn vui lòng quay lại sau!',
+          )
+      ));
+      return null;
     }
   }
 
@@ -128,14 +160,24 @@ class AuthenticationiApiProvider {
       showLoader: true,
       isFormData: false,
     );
-    BaseApiModel _res = BaseApiModel.fromJson(jsonDecode(response.body));
-    if (_res.message["status_code"] == 200) {
-      if (kDebugMode) {
-        print(_res);
+    if(response!.statusCode != 505) {
+      BaseApiModel _res = BaseApiModel.fromJson(jsonDecode(response.body));
+      if (_res.message["status_code"] != null) {
+        if (kDebugMode) {
+          print(_res);
+        }
+        return _res;
       }
-      return _res;
-    } else {
-      return _res;
+    }
+    else {
+      await Future.delayed(
+          Duration.zero, () => show.dialog(
+          dialogWidget: AddDialog.cupertinoDialogOneBtn(
+            context: navigatorKey.currentContext!,
+            content: 'Hệ thông gián đoạn vui lòng quay lại sau!',
+          )
+      ));
+      return null;
     }
   }
 
@@ -145,7 +187,7 @@ class AuthenticationiApiProvider {
       subUri: logout_path,
       showLoader: true,
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode != 505) {
       return response;
     } else {
       // await Future.delayed(

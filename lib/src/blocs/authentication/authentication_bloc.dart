@@ -1,17 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
-import 'dart:typed_data';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
-import 'package:splat_mobile/public/app_global.dart';
 import 'package:splat_mobile/public/app_service.dart';
 import 'package:splat_mobile/public/dialog/dialog_notification.dart';
 import 'package:splat_mobile/src/resources/show_dialog.dart';
@@ -23,9 +18,8 @@ import 'package:splat_mobile/src/models/base_api_model.dart';
 import 'package:splat_mobile/src/models/info_login_model.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 import 'package:splat_mobile/src/resources/repository.dart';
+import 'package:splat_mobile/src/resources/timer_counter_bloc.dart';
 import 'package:splat_mobile/src/ui/authentication/validate.dart';
-
-
 import '../../../constants/api_response_codes.dart';
 import '../../../constants/public_values.dart';
 import '../../../public/share_prefer.dart';
@@ -117,6 +111,7 @@ class AuthenticationBloc with Validation{
   Future<void> onTapContinue(BuildContext context) async {
     if(_currentStep==0){
       await createUser(context, email: _controllerRegisterEmail.text);
+      timerBloc.setCountDown();
     }
     if(_currentStep==1){
       await verifiCreateUser(context, otp: otpController.text);
@@ -127,24 +122,21 @@ class AuthenticationBloc with Validation{
       }
       else{
         await SharePreferUtils.removeInfoRegister();
-        showDialog(context: context, builder: (context){
-          final localizations = AppLocalizations.of(context)!;
-          return AddDialog.AddDialogbuilder(
-              onApply: () async{
-                Navigator.popAndPushNamed(context, "/registerInfoUser");
-                if(checkRememberPass==true){
-                  InfoLoginModel infoLoginModel = InfoLoginModel(email: _controllerRegisterEmail.text, password: _controllerRegisterPass.text);
-                  await SharePreferUtils.saveInfoRegister(infoLoginModel);
-                  _currentStepBehavior.sink.add(_currentStep =0);
-                  _resSuccess=false;
-                }
-              },
-              content: "",
-              title: "Chúc mừng! Tài khoản của bạn đã được thiết lập",
-              contentWidget: WidgetRegisterSuccess(context),
-              buttonName: "Đăng nhập",
-              context: context);
-        });
+        show.dialog(dialogWidget: AddDialog.dialogCustom(
+            onApply: () async{
+              Navigator.popAndPushNamed(context, "/registerInfoUser");
+              if(checkRememberPass==true){
+                InfoLoginModel infoLoginModel = InfoLoginModel(email: _controllerRegisterEmail.text, password: _controllerRegisterPass.text);
+                await SharePreferUtils.saveInfoRegister(infoLoginModel);
+                _currentStepBehavior.sink.add(_currentStep =0);
+                _resSuccess=false;
+              }
+            },
+            content: "",
+            title: "Chúc mừng! Tài khoản của bạn đã được thiết lập",
+            contentWidget: WidgetRegisterSuccess(context),
+            buttonName: "Đăng nhập",
+            context: navigatorKey.currentContext!));
       }
     }
 
@@ -203,13 +195,16 @@ class AuthenticationBloc with Validation{
       else{
         BaseApiModel? response =
         await repository.createUser( email: email);
-        if (response!.message["msg_code"]== MSG_SUCCESS_REGISTER_S605) {
-          commonTextFieldBloc.enterMsgCode("");
-          _resSuccessBehavior.sink.add(_resSuccess=true);
-        } else {
-          commonTextFieldBloc.enterMsgCode(response!.message["msg_code"].toString());
-          _resSuccessBehavior.sink.add(_resSuccess=false);
-          // commonTextFieldBloc.addOptionalError(response!.message["msg_name"]);
+        if(response!=null) {
+          if (response!.message["msg_code"] == MSG_SUCCESS_REGISTER_S605) {
+            commonTextFieldBloc.enterMsgCode("");
+            _resSuccessBehavior.sink.add(_resSuccess = true);
+          } else {
+            commonTextFieldBloc.enterMsgCode(
+                response!.message["msg_code"].toString());
+            _resSuccessBehavior.sink.add(_resSuccess = false);
+            // commonTextFieldBloc.addOptionalError(response!.message["msg_name"]);
+          }
         }
       }
 
@@ -276,18 +271,19 @@ class AuthenticationBloc with Validation{
         commonTextFieldBloc.enterMsgCode("");
         if (checkingTokenRes != null){
           publicValues.userNow = PlayerModel.fromJson(jsonDecode(checkingTokenRes.body));
-          Navigator.pushNamed(navigatorKey.currentContext!, '/home');
+          Navigator.popAndPushNamed(navigatorKey.currentContext!, '/home');
         }
       }else{
         if (router=='/login') {
           commonTextFieldBloc.enterMsgCode(
               jsonDecode(response!.body)["message"]["msg_code"].toString());
         }else{
-          show.dialog(context,
-              dialogWidget:AddDialog.AddDialogbuilder(
+          show.dialog(
+              dialogWidget:AddDialog.dialogCustom(
+              context: navigatorKey.currentContext!,
               onApply: (){Navigator.popAndPushNamed(context, "/");},
               content: jsonDecode(response!.body)["message"]["msg_name"],
-              context: context));
+              ));
           // showDialog(
           //     barrierDismissible: false,
           //     context: context, builder: (context){
@@ -343,7 +339,7 @@ class AuthenticationBloc with Validation{
         break;
       case '/inputOTP':
         otpController.clear();
-
+        timerBloc.dispose();
         break;
       case '/inputPass':
         _controllerPassword.clear();
@@ -370,14 +366,14 @@ class AuthenticationBloc with Validation{
         await login('/register' ,emailRegister: info.email, passRegister: info.password);
         Navigator.pop(context);
     } else {
-      show.dialog(context,
-          dialogWidget:AddDialog.AddDialogbuilder(
+      show.dialog(
+          dialogWidget:AddDialog.dialogCustom(
           onApply: (){
             Navigator.popAndPushNamed(context, "/");
             clearAllController();
           },
           content: response!.message["msg_name"],
-          context: context));
+          context: navigatorKey.currentContext!));
     }
   }
 
@@ -395,6 +391,7 @@ class AuthenticationBloc with Validation{
     commonTextFieldBloc.enterEmail('');
     commonTextFieldBloc.enterPassword("");
     clearEmail();
+    timerBloc.dispose();
   }
 
   Future<void> resendPin(BuildContext context) async {

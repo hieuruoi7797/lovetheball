@@ -203,8 +203,8 @@ class SettingAvatarScreen extends StatelessWidget {
                     color: Colors.black,
                   ),
                   onTap: (){
-                    show.dialog(context,
-                      dialogWidget:AddDialog.AddDialogbuilder(
+                    show.dialog(
+                      dialogWidget:AddDialog.dialogCustom(
                         onApply: () async{
                           authenticationBloc.createUserLogin(context);
                         },
