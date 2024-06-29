@@ -37,10 +37,7 @@ class SettingAvatarBloc{
         uiSettings: [
           AndroidUiSettings(
               toolbarTitle: 'Cropper',
-              backgroundColor: Colors.black,
               cropFrameColor: Colors.black,
-              toolbarColor: Colors.black,
-              toolbarWidgetColor: Colors.white,
               initAspectRatio: CropAspectRatioPreset.original,
               lockAspectRatio: false),
           IOSUiSettings(
