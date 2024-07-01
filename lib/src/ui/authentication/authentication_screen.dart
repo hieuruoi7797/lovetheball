@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:splat_mobile/public/modal/modal_tab_view.dart';
 import 'package:splat_mobile/public/widget_item/app_button.dart';
+import 'package:splat_mobile/src/resources/show_dialog.dart';
 import 'package:splat_mobile/src/ui/authentication/modal_login_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:splat_mobile/widgets_common/button_gen1.dart';
@@ -41,12 +42,7 @@ class LoginScreen extends StatelessWidget {
                     Center(
                       child: AppButton.buttonGen1(
                           context: context,
-                          onTap: () => showCupertinoModalBottomSheet(
-                              expand: true,
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) => ModalLoginContent(context)
-                          ),
+                          onTap: () => show.cupertinoModalBottomSheet(ModalLoginContent(context)),
                           buttonName: localizations.login,
                           nameStyle: const TextStyle(
                               color: Color(0xFF62737A),
@@ -88,14 +84,7 @@ class LoginScreen extends StatelessWidget {
                     Center(
                       child:  AppButton.buttonGen1(
                         context: context,
-                        onTap: () => showCupertinoModalBottomSheet(
-                            expand: true,
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            builder: (context) {
-                              return ModalTabView();
-                            }
-                        ),
+                        onTap: () => show.cupertinoModalBottomSheet(ModalTabView()),
                         buttonName: "Tạo tài khoản mới",
                         height: 56,
                         width: MediaQuery.sizeOf(context).width * 0.775,

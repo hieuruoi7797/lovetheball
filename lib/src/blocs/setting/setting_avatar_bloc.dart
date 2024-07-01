@@ -27,6 +27,7 @@ class SettingAvatarBloc{
     if (_pickedFile != null) {
       CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: _pickedFile.path,
+        aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
         aspectRatioPresets: [
           CropAspectRatioPreset.square,
           CropAspectRatioPreset.ratio3x2,
@@ -37,14 +38,14 @@ class SettingAvatarBloc{
         uiSettings: [
           AndroidUiSettings(
               toolbarTitle: 'Cropper',
-              backgroundColor: Colors.black,
               cropFrameColor: Colors.black,
-              toolbarColor: Colors.black,
-              toolbarWidgetColor: Colors.white,
               initAspectRatio: CropAspectRatioPreset.original,
               lockAspectRatio: false),
           IOSUiSettings(
             title: 'Cropper',
+            showCancelConfirmationDialog: true,
+            doneButtonTitle: 'Hoàn thành',
+            cancelButtonTitle: 'Huỷ'
           ),
           // WebUiSettings(
           //   context: ApplicationService.materialKey.currentContext!,
