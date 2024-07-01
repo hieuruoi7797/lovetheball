@@ -7,15 +7,22 @@ import 'package:splat_mobile/src/blocs/match/match_bloc.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 
 class HomeBloc {
+
   int _pageIndexInt = 1;
+  bool showAddingPopup = false;
   PlayerModel? nowUserInfo;
+  Offset? fabOffset;
+  Offset? scaffoldOffset;
 
 
   final _pageIndexBehavior = BehaviorSubject<int>();
   final _userInfoBehavior = BehaviorSubject<PlayerModel>();
+  final _openedAddingPopup = BehaviorSubject<bool>();
+
 
 
   Stream<int> get pageIndex => _pageIndexBehavior.stream;
+  Stream<bool> get openedAddingPopup => _openedAddingPopup.stream;
   Stream<PlayerModel> get userInfo => _userInfoBehavior.stream;
 
 
@@ -35,6 +42,13 @@ class HomeBloc {
 
   void getUserSaved(BuildContext context) async {
     nowUserInfo = await PublicMethods.getNowUser();
+  }
+
+  openAddingPopup({required GlobalKey renderKey}) {
+    RenderBox? renderBox = renderKey.currentContext?.findRenderObject() as RenderBox;
+    fabOffset = renderBox.localToGlobal(Offset.zero);
+    showAddingPopup = !showAddingPopup;
+    _openedAddingPopup.add(showAddingPopup);
   }
 
 }
