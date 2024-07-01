@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:splat_mobile/src/blocs/home_bloc/home_bloc.dart';
 import 'package:splat_mobile/widgets_common/match_history_item.dart';
 import 'package:splat_mobile/widgets_common/rounded_image.dart';
 import 'package:splat_mobile/widgets_common/tag_info.dart';
 import 'package:splat_mobile/widgets_common/win_rate.dart';
 
+import '../../../public/app_global.dart';
 import '../../../widgets_common/button_gen1.dart';
 import '../../../widgets_common/square_button.dart';
 
@@ -19,13 +21,15 @@ class TabHomePage extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         // width: 100,
-        decoration: const BoxDecoration(
+        decoration:BoxDecoration(
             image: DecorationImage(
                 fit: BoxFit.cover,
                 // opacity: 0.2,
                 image: AssetImage(
                     'assets/png_images/image_home_bg.png',),
-                alignment: Alignment.topCenter)),
+                alignment: Alignment.topCenter
+            )
+        ),
         child: ListView(
           shrinkWrap: true,
           children: [
@@ -60,13 +64,24 @@ class TabHomePage extends StatelessWidget {
                   Container(
                     width: 72,
                     height: 72,
-                    decoration: BoxDecoration(
+                    decoration:homeBloc.nowUserInfo?.avatar!=''
+                    ?BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
-                      color: Colors.blue
+                      color: Colors.blue,
+                      image: DecorationImage(
+                          image: FileImage(appGlobal.avatarFile),
+                          fit: BoxFit.cover)
+                    ):
+                    BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.blue,
+                      image: DecorationImage(
+                        image: AssetImage(
+                            "assets/png_images/default_avt.png",
+                        ),
+                        fit: BoxFit.cover
+                      )
                     ),
-                    child: Image( image: AssetImage(
-                      "assets/png_images/default_avt.png"
-                    ),),
                   ),
                   Container(
                     margin: const EdgeInsets.only(top: 12),

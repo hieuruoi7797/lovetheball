@@ -31,6 +31,7 @@ class AuthenticationBloc with Validation{
   late BuildContext context;
   bool _passwordVisible=false;
   bool _checkRememberPass = false;
+  bool _stopTap = false;
   final _emailBehavior = BehaviorSubject<String>();
   String _verifyOTP = '';
   String _msgCode = '';
@@ -109,34 +110,42 @@ class AuthenticationBloc with Validation{
     }
   }
   Future<void> onTapContinue(BuildContext context) async {
-    if(_currentStep==0){
-      await createUser(context, email: _controllerRegisterEmail.text);
-      timerBloc.setCountDown();
-    }
-    if(_currentStep==1){
-      await verifiCreateUser(context, otp: otpController.text);
-    }
-    if(_currentStep==2){
-      if(_controllerRegisterPass.text==''){
-        commonTextFieldBloc.enterMsgCode('P000');
+    if(!_stopTap) {
+      _stopTap=true;
+      if (_currentStep == 0) {
+        await createUser(context, email: _controllerRegisterEmail.text);
+        timerBloc.setCountDown();
+        _stopTap=false;
       }
-      else{
-        await SharePreferUtils.removeInfoRegister();
-        show.dialog(dialogWidget: AddDialog.dialogCustom(
-            onApply: () async{
-              Navigator.popAndPushNamed(context, "/registerInfoUser");
-              if(checkRememberPass==true){
-                InfoLoginModel infoLoginModel = InfoLoginModel(email: _controllerRegisterEmail.text, password: _controllerRegisterPass.text);
-                await SharePreferUtils.saveInfoRegister(infoLoginModel);
-                _currentStepBehavior.sink.add(_currentStep =0);
-                _resSuccess=false;
-              }
-            },
-            content: "",
-            title: "Chúc mừng! Tài khoản của bạn đã được thiết lập",
-            contentWidget: WidgetRegisterSuccess(context),
-            buttonName: "Đăng nhập",
-            context: navigatorKey.currentContext!));
+      if (_currentStep == 1) {
+        await verifiCreateUser(context, otp: otpController.text);
+        _stopTap=false;
+      }
+      if (_currentStep == 2) {
+        if (_controllerRegisterPass.text == '') {
+          commonTextFieldBloc.enterMsgCode('P000');
+        }
+        else {
+          await SharePreferUtils.removeInfoRegister();
+          show.dialog(dialogWidget: AddDialog.dialogCustom(
+              onApply: () async {
+                Navigator.popAndPushNamed(context, "/registerInfoUser");
+                _currentStepBehavior.sink.add(_currentStep = 0);
+                _resSuccess = false;
+                if (checkRememberPass == true) {
+                  InfoLoginModel infoLoginModel = InfoLoginModel(
+                      email: _controllerRegisterEmail.text,
+                      password: _controllerRegisterPass.text);
+                  await SharePreferUtils.saveInfoRegister(infoLoginModel);
+                }
+              },
+              content: "",
+              title: "Chúc mừng! Tài khoản của bạn đã được thiết lập",
+              contentWidget: WidgetRegisterSuccess(context),
+              buttonName: "Đăng nhập",
+              context: navigatorKey.currentContext!));
+              _stopTap=false;
+        }
       }
     }
 
@@ -153,6 +162,7 @@ class AuthenticationBloc with Validation{
     if (_currentStep > 0) {
         _currentStepBehavior.sink.add(_currentStep -= 1);
         _resSuccess==false;
+        _stopTap=false;
         switch (_currentStep){
           case 1:
             onBackTabScreen(context, '/inputOTP');
@@ -273,7 +283,9 @@ class AuthenticationBloc with Validation{
           await storage.write(
             key: user_info,
             value: jsonEncode(PlayerModel.fromJson(
-                jsonDecode(checkingTokenRes.body)).toJson()));
+                json.decode(utf8.decode(checkingTokenRes.body.codeUnits))).toJson()));
+          //lỗi ký tự utf8 khi jsoDecode
+          print('xinhcheck${json.decode(utf8.decode(checkingTokenRes.body.codeUnits))}');
           // Navigator.of(context).popUntil(ModalRoute.withName('/'));
 
           Navigator.popAndPushNamed(navigatorKey.currentContext!, '/home');
@@ -346,7 +358,8 @@ class AuthenticationBloc with Validation{
         _sendOTPBehavior.sink.add('');
         break;
       case '/inputOTP':
-        otpController.clear();
+        _controllerOTP.clear();
+        commonTextFieldBloc.enterResVerifyOtp('');
         timerBloc.dispose();
         break;
       case '/inputPass':
@@ -363,16 +376,16 @@ class AuthenticationBloc with Validation{
           "name": _controllerNickName.text,
           "gender": 0,
           "birth_date": "12/02/2000",//type timestamp: "" lỗi format trên backend khi truyền rỗng
-          "email": info.email,
+          "email": _controllerRegisterEmail.text,
           "phone": "",
-          "avatar": '',
+          "avatar": '${settingAvatarBloc.avatarFile.path}',
           "role_ids": [],
           "otp": _verifyOTP,
-          "password": info.password
+          "password": _controllerRegisterPass.text
         });
+      print('${settingAvatarBloc.avatarFile.path}');
     if (response!.message["status_code"]== 201) {
-        Navigator.popAndPushNamed(context, '/');
-        await login(context,'/register' ,emailRegister: info.email, passRegister: info.password);
+        await login(context,'/register' ,emailRegister: _controllerRegisterEmail.text, passRegister: _controllerRegisterPass.text);
         clearAllController();
     } else {
       show.dialog(
@@ -400,6 +413,7 @@ class AuthenticationBloc with Validation{
     commonTextFieldBloc.enterEmail('');
     commonTextFieldBloc.enterPassword("");
     settingAvatarBloc.setAvatarFile('');
+    commonTextFieldBloc.enterResVerifyOtp('');
     clearEmail();
     timerBloc.dispose();
   }

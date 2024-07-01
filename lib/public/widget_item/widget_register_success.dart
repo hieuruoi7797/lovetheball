@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:splat_mobile/constants/icon_custom.dart';
+import 'package:splat_mobile/public/widget_item/svg_icon.dart';
 
 import '../../constants/ui_styles.dart';
 import '../../src/blocs/authentication/authentication_bloc.dart';
@@ -7,23 +9,13 @@ import '../../src/blocs/authentication/authentication_bloc.dart';
 Widget WidgetRegisterSuccess(BuildContext context){
   final size = MediaQuery.of(context).size;
   return Container(
-    height: size.height*0.26,
+    height: size.height*0.15,
     child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Container(
-          decoration: BoxDecoration(
-              border: Border.all(
-                  color: Color(0xff40cbe0)
-              ),
-              shape: BoxShape.circle,
-            color: Color(0xff40cbe0)
+        const SvgIcon(icon: CustomIcon.icon_check_succ_circle, size: 72),
 
-          ),
-          width: size.width*0.2,
-          height: size.height*0.2,
-        ),
         StreamBuilder<Object>(
             stream: authenticationBloc.checkRememberPassBehavior,
             builder: (context, snapshot) {
