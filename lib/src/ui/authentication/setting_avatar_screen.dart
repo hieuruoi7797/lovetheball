@@ -93,15 +93,15 @@ class SettingAvatarScreen extends StatelessWidget {
                           top: 70,
                           child: GestureDetector(
                             onTap: (){
-                              BottomSheetCustom.showBottomSheetSelectImage(
-                                  context: context,
-                                  onTapCam: () {
-                                    settingAvatarBloc.pickImageFromCam(context);
-                                  },
-                                  onTapLib: () {
-                                    settingAvatarBloc.pickImageFromLib(context);
-                                  }
-                              );
+                             show.listTileBottomSheet(BottomSheetCustom.showBottomSheetSelectImage(
+                                 context: context,
+                                 onTapCam: () {
+                                   settingAvatarBloc.pickImageFromCam(context);
+                                 },
+                                 onTapLib: () {
+                                   settingAvatarBloc.pickImageFromLib(context);
+                                 }
+                             ));
                             },
                             child: Container(
                               alignment: Alignment.center,
@@ -183,7 +183,7 @@ class SettingAvatarScreen extends StatelessWidget {
                     color: Colors.black,
                   ),
                   onTap: (){
-                    BottomSheetCustom.showBottomSheetSelectImage(
+                    show.listTileBottomSheet(BottomSheetCustom.showBottomSheetSelectImage(
                         context: context,
                         onTapCam: () {
                           settingAvatarBloc.pickImageFromCam(context);
@@ -191,7 +191,7 @@ class SettingAvatarScreen extends StatelessWidget {
                         onTapLib: () {
                           settingAvatarBloc.pickImageFromLib(context);
                         }
-                    );
+                    ));
                   }
                 )
                 :AppButton.btnTextCustom(
@@ -206,6 +206,7 @@ class SettingAvatarScreen extends StatelessWidget {
                     show.dialog(
                       dialogWidget:AddDialog.dialogCustom(
                         onApply: () async{
+                          Navigator.pop(context);
                           authenticationBloc.createUserLogin(context);
                         },
                         content: "Bạn chưa có ảnh đại diện, có chắc muốn hoàn thành đăng ký!",

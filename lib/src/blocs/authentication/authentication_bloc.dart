@@ -248,7 +248,7 @@ class AuthenticationBloc with Validation{
       );
   }
 
-  Future<void> login(String router,{String? emailRegister, String? passRegister}) async{
+  Future<void> login(BuildContext context,String router,{String? emailRegister, String? passRegister}) async{
     if(router=='/login'&& _controllerEmail.text==''){
       commonTextFieldBloc.enterMsgCode("E000");
       return;
@@ -274,6 +274,7 @@ class AuthenticationBloc with Validation{
             key: user_info,
             value: jsonEncode(PlayerModel.fromJson(
                 jsonDecode(checkingTokenRes.body)).toJson()));
+          // Navigator.of(context).popUntil(ModalRoute.withName('/'));
 
           Navigator.popAndPushNamed(navigatorKey.currentContext!, '/home');
         }
@@ -369,9 +370,10 @@ class AuthenticationBloc with Validation{
           "otp": _verifyOTP,
           "password": info.password
         });
-    if (response!.message["status_code"]== 200) {
-        await login('/register' ,emailRegister: info.email, passRegister: info.password);
-        Navigator.pop(context);
+    if (response!.message["status_code"]== 201) {
+        Navigator.popAndPushNamed(context, '/');
+        await login(context,'/register' ,emailRegister: info.email, passRegister: info.password);
+        clearAllController();
     } else {
       show.dialog(
           dialogWidget:AddDialog.dialogCustom(
@@ -397,6 +399,7 @@ class AuthenticationBloc with Validation{
     commonTextFieldBloc.enterMsgCode('');
     commonTextFieldBloc.enterEmail('');
     commonTextFieldBloc.enterPassword("");
+    settingAvatarBloc.setAvatarFile('');
     clearEmail();
     timerBloc.dispose();
   }
