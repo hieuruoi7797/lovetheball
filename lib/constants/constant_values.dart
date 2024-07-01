@@ -35,3 +35,10 @@ Map<String, String> headerWithToken(String token) => {
   'Content-Type': 'application/x-www-form-urlencoded',
   'Authorization': 'Bearer $token',
 };
+
+
+///Routes
+const String HOME = '/home';
+const String SETTING_MATCH = '/settingMatch';
+const String REGISTER_INFO = '/registerInfoUser';
+const String SETTING_AVT = '/settingAvatar';
