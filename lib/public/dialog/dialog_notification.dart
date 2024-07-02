@@ -84,31 +84,7 @@ class AddDialog {
     );
   }
 
-  static showAlertDialog(
-      BuildContext context,
-      String content,
-      Function() onPressedOK
-  )
-  => showCupertinoDialog<void>(
-    context: context,
-    barrierDismissible: false,
-    builder: (BuildContext context) => CupertinoAlertDialog(
-      title: Text(content),
-      actions: <CupertinoDialogAction>[
-        CupertinoDialogAction(
-          onPressed: () => Navigator.of(context).pop(),
-          textStyle: textButtonBlue,
-          child: const Text('Từ chối'),
-        ),
-        CupertinoDialogAction(
-          isDefaultAction: true,
-          textStyle: textButtonBlue,
-          onPressed: onPressedOK,
-          child: const Text('Xác nhận'),
-        ),
-      ],
-    ),
-  );
+
 
   static CupertinoAlertDialog cupertinoDialogTwoBtn({
     required BuildContext context,

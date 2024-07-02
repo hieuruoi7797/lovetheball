@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/constants/public_values.dart';
+import 'package:splat_mobile/public/app_global.dart';
 import 'package:splat_mobile/public/public_methods.dart';
 import 'package:splat_mobile/src/app.dart';
 import 'package:splat_mobile/src/blocs/match/match_bloc.dart';
@@ -42,6 +43,7 @@ class HomeBloc {
 
   void getUserSaved(BuildContext context) async {
     nowUserInfo = await PublicMethods.getNowUser();
+    // appGlobal.setAvatarFile(nowUserInfo?.avatar.toString()??"");
   }
 
   openAddingPopup({required GlobalKey renderKey}) {

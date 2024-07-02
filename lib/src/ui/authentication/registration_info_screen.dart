@@ -156,7 +156,7 @@ class RegistrationInfoScreen extends StatelessWidget {
                         return;
                       }
                       else{
-                        Navigator.pushNamed(context, "/settingAvatar");
+                        Navigator.popAndPushNamed(context, "/settingAvatar");
                       }
                     },
                     height: size.height*0.065,

@@ -10,6 +10,7 @@ class PlayerModel {
     this.inMatch,
     this.createdAt,
     this.updatedAt,
+    this.avatar
   });
 
   PlayerModel.fromJson(Map json) {
@@ -23,6 +24,7 @@ class PlayerModel {
     inMatch = json['in_match'] ?? '';
     createdAt = json['created_at'] ?? '';
     updatedAt = json['updated_at'] ?? '';
+    avatar = json['avatar'] ?? '';
   }
 
   String id = '';
@@ -35,6 +37,7 @@ class PlayerModel {
   String? inMatch;
   String? createdAt;
   String? updatedAt;
+  dynamic avatar;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -48,6 +51,7 @@ class PlayerModel {
     map['in_match'] = inMatch;
     map['created_at'] = createdAt;
     map['updated_at'] = updatedAt;
+    map['avatar'] = avatar;
     return map;
   }
 }

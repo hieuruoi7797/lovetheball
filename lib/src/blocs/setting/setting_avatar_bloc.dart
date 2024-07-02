@@ -69,7 +69,9 @@ class SettingAvatarBloc{
       XFile? imageFile = pickedFile != null ? XFile(pickedFile.path) : null;
       if (imageFile != null) {
         XFile? croppedImage = await _cropImage(imageFile);
-        await setImageFile(croppedImage);
+        if(croppedImage!=null){
+          await setImageFile(croppedImage);
+        }
       }
     }
   }
@@ -83,7 +85,9 @@ class SettingAvatarBloc{
       XFile? imageFile = pickedFile != null ? XFile(pickedFile.path) : null;
       if (imageFile != null) {
         XFile? croppedImage = await _cropImage(imageFile);
-        await setImageFile(croppedImage);
+        if(croppedImage!=null){
+          await setImageFile(croppedImage);
+        }
       }
     }
   }
