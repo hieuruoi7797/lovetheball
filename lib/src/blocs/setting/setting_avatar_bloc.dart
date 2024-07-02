@@ -101,7 +101,7 @@ class SettingAvatarBloc{
     imageCache.clear();
     imageCache.clearLiveImages();
     await SharePreferUtils.saveAvatar(pathAvartar.path, authenticationBloc.nickNameController.text);
-    appGlobal.setAvatarFile(pathAvartar.path);
+    appGlobal.setAvatarFile(pathAvartar);
     _imagePickerBehavior.sink.add(_avatarFile=pathAvartar);
   }
 }

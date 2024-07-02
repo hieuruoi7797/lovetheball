@@ -64,15 +64,7 @@ class TabHomePage extends StatelessWidget {
                   Container(
                     width: 72,
                     height: 72,
-                    decoration:homeBloc.nowUserInfo?.avatar!=''
-                    ?BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: Colors.blue,
-                      image: DecorationImage(
-                          image: FileImage(appGlobal.avatarFile),
-                          fit: BoxFit.cover)
-                    ):
-                    BoxDecoration(
+                    decoration:BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.blue,
                       image: DecorationImage(

@@ -43,7 +43,7 @@ class HomeBloc {
 
   void getUserSaved(BuildContext context) async {
     nowUserInfo = await PublicMethods.getNowUser();
-    appGlobal.setAvatarFile(nowUserInfo?.avatar.toString()??"");
+    // appGlobal.setAvatarFile(nowUserInfo?.avatar.toString()??"");
   }
 
   openAddingPopup({required GlobalKey renderKey}) {

@@ -284,7 +284,7 @@ class AuthenticationBloc with Validation{
             key: user_info,
             value: jsonEncode(PlayerModel.fromJson(
                 json.decode(utf8.decode(checkingTokenRes.body.codeUnits))).toJson()));
-          //lỗi ký tự utf8 khi jsoDecode
+          //lỗi ký tự khi jsonDecode tu varchar database
           print('xinhcheck${json.decode(utf8.decode(checkingTokenRes.body.codeUnits))}');
           // Navigator.of(context).popUntil(ModalRoute.withName('/'));
 
@@ -370,7 +370,7 @@ class AuthenticationBloc with Validation{
   }
 
   Future<void> createUserLogin(BuildContext context) async{
-    InfoLoginModel info = await SharePreferUtils.getInfoLogin();
+    // InfoLoginModel info = await SharePreferUtils.getInfoLogin();
     BaseApiModel? response = await repository.createUserLogin(
         body:{
           "name": _controllerNickName.text,
@@ -383,7 +383,6 @@ class AuthenticationBloc with Validation{
           "otp": _verifyOTP,
           "password": _controllerRegisterPass.text
         });
-      print('${settingAvatarBloc.avatarFile.path}');
     if (response!.message["status_code"]== 201) {
         await login(context,'/register' ,emailRegister: _controllerRegisterEmail.text, passRegister: _controllerRegisterPass.text);
         clearAllController();
