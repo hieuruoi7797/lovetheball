@@ -3,7 +3,7 @@ const String base_url =
     // 'http://localhost:8080'; //localhost hieutt
     // "http://127.0.0.1:8080/v1";//localhost cua xinh
       // "http://192.168.1.254:8080/v1";//privateIp cua xinh
-    "http://192.168.6.59:8080/v1";//privateIp cua mang cong ty
+    "http://localhost:8080/v1";//privateIp cua mang cong ty
 
 const String matches_path = '/matches';
 const String user_path = '/users';
