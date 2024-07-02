@@ -191,7 +191,7 @@ class TabHomePage extends StatelessWidget {
             ),
             const SizedBox(height: 20,),
 
-            ///Wining Percentage
+            ///Scoring Percentage
             Container(
               padding: EdgeInsets.all(12),
               // height: 150,

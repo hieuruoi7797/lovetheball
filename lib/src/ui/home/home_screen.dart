@@ -77,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 64,
                       width: 64,
                       child: FloatingActionButton(
+                        heroTag: "floating1",
                         backgroundColor: Color(0xFFF77C3C),
                         elevation: 0,
                         onPressed: () => homeBloc.openAddingPopup(renderKey: buttonKey),
@@ -141,6 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 64,
                             width: 64,
                             child: FloatingActionButton(
+                              heroTag: "floating2",
                               backgroundColor: const Color(0xFFF77C3C),
                               elevation: 0,
                               onPressed: () => homeBloc.openAddingPopup(renderKey: buttonKey),
@@ -169,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               // left:(homeBloc.fabOffset?.dx??0) - 93,
                               // top:(homeBloc.fabOffset?.dy??0) - 284,
                               left:(homeBloc.fabOffset?.dx??0) - 93,
-                              bottom: MediaQuery.sizeOf(context).height - (homeBloc.fabOffset?.dy??0) - 16,
+                              bottom: MediaQuery.sizeOf(context).height - (homeBloc.fabOffset?.dy??0),
                               child: SizedBox(
                                 width: 250,
                                 child: ListView(
@@ -178,6 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   children: [
                                     GestureDetector(
                                       child: Container(
+                                        padding: EdgeInsets.only(left: 16,right: 16),
                                         width: 250,
                                         height: 84,
                                          decoration: BoxDecoration(
@@ -185,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         borderRadius: BorderRadius.circular(16)
                                       ),
                                       child: Container(
-                                        margin: EdgeInsets.only(left: 16),
+                                        // margin: EdgeInsets.only(left: 16),
                                         child: Row(
                                           children: [
                                             RoundedImage(width: 44, height: 44,),
@@ -202,12 +205,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   decoration: TextDecoration.none, // Underline decoration
                                                 ),),
                                                 SizedBox(height: 4,),
-                                                Text("Tạo trận đấu ngay lập tức",
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: 12,
-                                                    color: Color(0xFF677986),
-                                                    decoration: TextDecoration.none, // Underline decoration
+                                                SizedBox(
+                                                  width: 155,
+                                                  child: Text("Tạo trận đấu ngay lập tức",
+                                                    maxLines: 2,
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.w400,
+                                                      fontSize: 12,
+                                                      color: Color(0xFF677986),
+                                                      decoration: TextDecoration.none, // Underline decoration
+                                                    ),
                                                   ),
                                                 )
                                               ],
