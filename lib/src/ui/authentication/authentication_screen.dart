@@ -13,7 +13,7 @@ import 'package:splat_mobile/widgets_common/button_gen1.dart';
 
 class LoginScreen extends StatelessWidget {
 
-  LoginScreen({Key? key}):super(key: key);
+  const LoginScreen({Key? key}):super(key: key);
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;

@@ -17,6 +17,11 @@ class MatchCustomSetting extends StatefulWidget {
 
 class _MatchCustomSettingState extends State<MatchCustomSetting> {
   final _matchTypeSelectorKey = GlobalKey();
+  @override
+  void initState() {
+    // TODO: implement initState
+    matchSettingBloc.setDefaultValue();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,11 +79,18 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
                    ),
                    child: Row(
                      children: [
-                       Container(
-                         margin:EdgeInsets.only(left: 65),
-                         child: Text('3v3',style: TextStyle(
-                             fontSize: 17
-                         ),),
+                       StreamBuilder<int>(
+                         stream: matchSettingBloc.choosingMatchTypeIndex,
+                         builder: (context, matchTypeIndex) {
+                           return Container(
+                             margin:EdgeInsets.only(left: 65),
+                             child:  matchTypeIndex.hasData ? Text(
+                               matchSettingBloc.matchTypesList[matchTypeIndex.data??0],
+                               style: TextStyle(
+                                 fontSize: 17
+                             ),):SizedBox(),
+                           );
+                         }
                        ),
                        Spacer(),
                        Icon(Icons.keyboard_arrow_down_rounded,)
@@ -90,44 +102,47 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
          const SizedBox(height: 16,),
 
          ///So hiep
-         DetailMatchSettingItem(
-           title: "So hiep",
-           widget: Row(
-             children: [
-               GestureDetector(
-                 onTap: () {
-                   // matchSettingBloc.showOverlayEntry(context,_matchTypeSelectorKey);
-                   ///Show OVERLAY
-                 },
-                 child: SizedBox(
-                   width: 58,
-                   height: 42,
-                   child: Container(
-                       // key: _matchTypeSelectorKey,
+         StreamBuilder<int>(
+           stream: matchSettingBloc.numberOfQuarter,
+           builder: (context, numberOfQuarter) {
+             return DetailMatchSettingItem(
+               title: "So hiep",
+               widget: Row(
+                 children: [
+                   GestureDetector(
+                     onTap: () {
+                       matchSettingBloc.changeNumberOfQuarter(num: 1);
+                       ///Show OVERLAY
+                     },
+                     child: SizedBox(
+                       width: 58,
+                       height: 42,
+                       child: Container(
+                           // key: _matchTypeSelectorKey,
 
-                       // padding: EdgeInsets.all(8),
-                       decoration: BoxDecoration(
-                           color: Colors.white,
-                           borderRadius: BorderRadius.only(topLeft: Radius.circular(10),bottomLeft: Radius.circular(10))
-                       ),
-                        child: Center(child: Text("1",style: TextStyle(fontSize: 17),)),
-                       ),
-                 ),
-               ),
-               GestureDetector(
-                 onTap: () {
-                   // matchSettingBloc.showOverlayEntry(context,_matchTypeSelectorKey);
-                   ///Show OVERLAY
-                 },
-                 child: SizedBox(
-                   width: 58,
-                   height: 42,
-                   child: Container(
-                     // key: _matchTypeSelectorKey,
+                           // padding: EdgeInsets.all(8),
+                           decoration: BoxDecoration(
+                               color: numberOfQuarter.data == 1 ? Colors.white : Color(0xFF677986).withOpacity(0.4),
+                               borderRadius: BorderRadius.only(topLeft: Radius.circular(10),bottomLeft: Radius.circular(10))
+                           ),
+                            child: Center(child: Text("1",style: TextStyle(fontSize: 17),)),
+                           ),
+                     ),
+                   ),
+                   GestureDetector(
+                     onTap: () {
+                       matchSettingBloc.changeNumberOfQuarter(num: 2);
+                       ///Show OVERLAY
+                     },
+                     child: SizedBox(
+                       width: 58,
+                       height: 42,
+                       child: Container(
+                         // key: _matchTypeSelectorKey,
 
                      // padding: EdgeInsets.all(8),
                      decoration: BoxDecoration(
-                         color: Color(0xFFEAF1FA),
+                         color: numberOfQuarter.data == 2 ? Colors.white : Color(0xFF677986).withOpacity(0.4),
                        border: Border.symmetric(
                            vertical: BorderSide(
                                color: Color(0xFF677986).withOpacity(0.4),
@@ -140,7 +155,7 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
                ),
                GestureDetector(
                  onTap: () {
-                   // matchSettingBloc.showOverlayEntry(context,_matchTypeSelectorKey);
+                   matchSettingBloc.changeNumberOfQuarter(num: 4);
                    ///Show OVERLAY
                  },
                  child: SizedBox(
@@ -149,17 +164,19 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
                    child: Container(
                      // key: _matchTypeSelectorKey,
 
-                     // padding: EdgeInsets.all(8),
-                     decoration: BoxDecoration(
-                         color: Color(0xFFEAF1FA),
-                         borderRadius: BorderRadius.only(topRight: Radius.circular(10),bottomRight: Radius.circular(10))
+                         // padding: EdgeInsets.all(8),
+                         decoration: BoxDecoration(
+                             color:  numberOfQuarter.data == 4 ? Colors.white : Color(0xFF677986).withOpacity(0.4),
+                             borderRadius: BorderRadius.only(topRight: Radius.circular(10),bottomRight: Radius.circular(10))
+                         ),
+                         child: Center(child: Text("4",style: TextStyle(fontSize: 17),)),
+                       ),
                      ),
-                     child: Center(child: Text("4",style: TextStyle(fontSize: 17),)),
                    ),
-                 ),
+                 ],
                ),
-             ],
-           ),
+             );
+           }
          ),
           const SizedBox(height: 16,),
 
@@ -170,7 +187,7 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    // matchSettingBloc.showOverlayEntry(context,_matchTypeSelectorKey);
+                    matchSettingBloc.changeMinutesPerQuarter(symbol: "-");
                     ///Show OVERLAY
                   },
                   child: SizedBox(
@@ -189,28 +206,28 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
                   ),
                 ),
                 SizedBox(width: 8,),
-                GestureDetector(
-                  onTap: () {
-                  },
-                  child: SizedBox(
-                    width: 74,
-                    height: 42,
-                    child: Container(
-                      // key: _matchTypeSelectorKey,
+                SizedBox(
+                  width: 74,
+                  height: 42,
+                  child: Container(
+                    // key: _matchTypeSelectorKey,
 
-                      // padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(10))
-                      ),
-                      child: Center(child: Text("2",style: TextStyle(fontSize: 17),)),
+                    // padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(10))
+                    ),
+                    child: StreamBuilder<int>(
+                      stream: matchSettingBloc.minutesPerQuarter,
+                      builder: (context, minutesPerQuarter) {
+                        return Center(child: Text("${minutesPerQuarter.data??2}'",style: TextStyle(fontSize: 17),));
+                      }
                     ),
                   ),
                 ),
                 SizedBox(width: 8,),
                 GestureDetector(
-                  onTap: () {
-                  },
+                  onTap: () =>  matchSettingBloc.changeMinutesPerQuarter(symbol: "+"),
                   child: SizedBox(
                     width: 42,
                     height: 42,
