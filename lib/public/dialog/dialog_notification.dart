@@ -89,13 +89,14 @@ class AddDialog {
   static CupertinoAlertDialog cupertinoDialogTwoBtn({
     required BuildContext context,
     required String content,
-    required Function() onPressedOK
+    required Function() onPressedOK,
+    Function()? onPressedCancel
   }){
     return CupertinoAlertDialog(
       title: Text(content),
       actions: <CupertinoDialogAction>[
         CupertinoDialogAction(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => onPressedCancel??Navigator.of(context).pop(),
           textStyle: textButtonBlue,
           child: const Text('Từ chối'),
         ),

@@ -378,7 +378,7 @@ class AuthenticationBloc with Validation{
           "birth_date": "12/02/2000",//type timestamp: "" lỗi format trên backend khi truyền rỗng
           "email": _controllerRegisterEmail.text,
           "phone": "",
-          "avatar": '${settingAvatarBloc.avatarFile.path}',
+          "avatar": '${settingAvatarBloc.base64Image}',
           "role_ids": [],
           "otp": _verifyOTP,
           "password": _controllerRegisterPass.text
@@ -422,8 +422,10 @@ class AuthenticationBloc with Validation{
     otpController.clear();
   }
 
-  void loginWithGoogle(){
-
+  Future<void> loginWithGoogle() async {
+    Response? response = await repository.loginGG();
+    print('xinhcheck${response!.body}');
+    // show.cupertinoModalBottomSheet(contentView)
   }
 }
   final authenticationBloc = AuthenticationBloc();

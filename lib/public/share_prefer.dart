@@ -28,13 +28,26 @@ class SharePreferUtils {
   static Future<String> getAvatar(String userName) async {
     String bannerPath = "";
     SharedPreferences pref = await SharedPreferences.getInstance();
-    bannerPath = pref.getString("avatar$userName") ?? "";
+    bannerPath = pref.getString("avatar_$userName") ?? "";
+    print('getAvatar ${bannerPath}');
     return bannerPath;
+  }
+
+  // lưu trạng thái khi login
+  static Future<bool> saveLoginSharedPreference(islogin) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return await prefs.setBool(loginSharedPreference, islogin);
+  }
+
+  //kiem tra da login hay chưa
+  static Future getUserSharedPreferences() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getBool(loginSharedPreference);
   }
 
   static Future<void> saveAvatar(String avartar, String userName) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    await pref.setString("avatar$userName", avartar);
+    await pref.setString("avatar_$userName", avartar);
   }
 
 }

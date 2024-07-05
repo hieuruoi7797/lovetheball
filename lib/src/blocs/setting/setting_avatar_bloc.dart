@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -16,9 +17,12 @@ import '../../../public/share_prefer.dart';
 class SettingAvatarBloc{
   final  picker = ImagePicker();
   File _avatarFile = File('');
+  String _base64Image = '';
   final _imagePickerBehavior = BehaviorSubject<File>();
   Stream<File> get imagePickerBehavior => _imagePickerBehavior.stream;
   File get avatarFile => _avatarFile;
+  String get base64Image => _base64Image;
+
 
   void setAvatarFile(String value) => _imagePickerBehavior.sink.add(_avatarFile=File(value));
 
@@ -97,11 +101,12 @@ class SettingAvatarBloc{
     String path = '/image_avatar' + authenticationBloc.registerEmailController.text + '.jpg';
     XFile? imageFile = pickedFile != null ? XFile(pickedFile.path) : null;
     final Uint8List uInt8 = await imageFile!.readAsBytes();
+    _base64Image = base64Encode(uInt8);
     File pathAvartar = await File(basePath.path + path).writeAsBytes(uInt8, mode: FileMode.write);
     imageCache.clear();
     imageCache.clearLiveImages();
-    await SharePreferUtils.saveAvatar(pathAvartar.path, authenticationBloc.nickNameController.text);
-    appGlobal.setAvatarFile(pathAvartar);
+    await SharePreferUtils.saveAvatar(_base64Image, authenticationBloc.nickNameController.text);
+    await SharePreferUtils.getAvatar(authenticationBloc.nickNameController.text);
     _imagePickerBehavior.sink.add(_avatarFile=pathAvartar);
   }
 }

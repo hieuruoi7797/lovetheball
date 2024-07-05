@@ -82,6 +82,7 @@ class Repository {
   Future<Response?> testToken() => _authenticationProvider.testToken();
 
   Future<Response?> refreshToken() =>  _authenticationProvider.refreshToken();
+  Future<Response?> loginGG() =>  _authenticationProvider.loginGG();
 
   Future<Response?> logout() => _authenticationProvider.logout();
 }
