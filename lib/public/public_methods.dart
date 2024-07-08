@@ -2,22 +2,24 @@ import 'dart:convert';
 import 'dart:io';
 
 // import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:splat_mobile/constants/api_paths.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/constants/public_values.dart';
+import 'package:splat_mobile/public/dialog/dialog_notification.dart';
 import 'package:splat_mobile/src/blocs/services_bloc.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 import 'package:splat_mobile/src/resources/show_dialog.dart';
 
+import '../src/app.dart';
 import '../widgets_common/dialogs.dart';
 
 class PublicMethods {
   Client client = Client();
   // final dio = Dio();
-
+  /// Check xem có mạng không
   Future<String> get localPath async {
     final directory = await getApplicationDocumentsDirectory();
     // For your reference print the AppDoc directory
@@ -54,6 +56,33 @@ class PublicMethods {
     required bool isFormData,
   }) async {
     // Client client = Client();
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    switch(connectivityResult){
+      case ConnectivityResult.wifi:
+      // TODO: Handle this case.
+        break;
+      case ConnectivityResult.mobile:
+      // TODO: Handle this case.
+        break;
+      case ConnectivityResult.none:
+        show.dialog(dialogWidget: AddDialog.cupertinoDialogTwoBtn(
+            context: navigatorKey.currentContext!,
+            content: 'No Internet connection found',
+            onPressedOK: (){}));
+        break;
+      case ConnectivityResult.bluetooth:
+      // TODO: Handle this case.
+        break;
+      case ConnectivityResult.ethernet:
+      // TODO: Handle this case.
+        break;
+      case ConnectivityResult.vpn:
+      // TODO: Handle this case.
+        break;
+      case ConnectivityResult.other:
+      // TODO: Handle this case.
+        break;
+    }
     Response response;
     const baseUrl = base_url;
     String? token = '';
