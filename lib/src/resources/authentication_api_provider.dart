@@ -181,6 +181,21 @@ class AuthenticationiApiProvider {
     }
   }
 
+  Future<Response?> loginGG() async{
+    Response response;
+    response = await PublicMethods().get(
+        subUri: login_gg_api,
+        showLoader: true,
+        queryParameters: {});
+    if (response.statusCode != 505) {
+      return response;
+    } else {
+      // await Future.delayed(
+      //     Duration.zero, () => DialogWidget().showFailDialog(error_fail));
+      return null;
+    }
+  }
+
   Future<Response?> logout() async {
     Response response;
     response = await PublicMethods().delete(

@@ -26,6 +26,8 @@ const String refresh_token_key = 'refresh_token';
 const String user_info = 'user_info';
 
 const String USER_LOGIN = 'USER_LOGIN';
+const String loginSharedPreference = "LOGGEDINKEY";
+
 
 Map<String, String> headerWithToken(String token) => {
   'Content-Type': 'application/json; charset=UTF-8',
