@@ -40,4 +40,18 @@ class MatchApiProvider {
     });
     return response;
   }
+
+  Future<Response> getMatchSetting({
+    required BuildContext context,
+  }) async {
+    Response response;
+    response = await PublicMethods().get(
+        subUri: MATCH_SETTING,
+        showLoader: false,
+        queryParameters:  {
+          'limit':'500',
+          'offset':'0'
+        });
+    return response;
+  }
 }

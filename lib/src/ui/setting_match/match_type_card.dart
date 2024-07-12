@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MatchTypeCard extends StatelessWidget {
-  MatchTypeCard();
+  bool isPicking;
+  MatchTypeCard({super.key, required this.isPicking});
   @override
   Widget build(BuildContext context) {
    return Container(
@@ -31,7 +32,7 @@ class MatchTypeCard extends StatelessWidget {
                    color: Colors.orange,
                    borderRadius: BorderRadius.circular(100)
                ),
-               child: Icon(Icons.check,color: Colors.white,size: 14,),
+               child:  Icon(Icons.check,color: Colors.white,size: 14,),
              ),
            ],
          ),
