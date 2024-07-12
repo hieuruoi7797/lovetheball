@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/public/widget_item/overlay_entry_sample.dart';
+import 'package:splat_mobile/src/app.dart';
+import 'package:splat_mobile/src/resources/match_api_provider.dart';
 
 class MatchSettingBloc {
   OverlayEntry? overlayEntry;
@@ -15,10 +17,14 @@ class MatchSettingBloc {
   final _choosingMatchTypeIndex = BehaviorSubject<int>();
   final _numberOfQuarter = BehaviorSubject<int>();
   final _minutesPerQuarter = BehaviorSubject<int>();
+  final _pickingMatchTitle = BehaviorSubject<String>();
 
   Stream<int> get choosingMatchTypeIndex => _choosingMatchTypeIndex.stream;
   Stream<int> get numberOfQuarter => _numberOfQuarter.stream;
   Stream<int> get minutesPerQuarter => _minutesPerQuarter.stream;
+  Stream<String> get pickingMatchTitle => _pickingMatchTitle.stream;
+
+  MatchApiProvider matchApiProvider = MatchApiProvider();
 
 
   void showOverlayEntry(BuildContext context,GlobalKey entryKey) {
@@ -70,6 +76,14 @@ class MatchSettingBloc {
     _numberOfQuarter.add(1);
     _minutesPerQuarter.add(3);
     _choosingMatchTypeIndex.add(0);
+  }
+
+  pickAMatchTitle({required String title}){
+    _pickingMatchTitle.add(title);
+  }
+
+  Future<void> getMatchSetting() async {
+    await matchApiProvider.getMatchSetting(context: navigatorKey.currentContext!);
   }
 }
 

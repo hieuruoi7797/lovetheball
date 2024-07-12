@@ -4,10 +4,8 @@ import 'package:splat_mobile/public/widget_item/detail_match_setting_item.dart';
 import 'package:splat_mobile/src/blocs/match/match_setting_bloc.dart';
 
 class MatchCustomSetting extends StatefulWidget {
-
-  MatchCustomSetting({super.key});
-
-
+  bool isPicking;
+  MatchCustomSetting({super.key, required this.isPicking});
 
 
   @override

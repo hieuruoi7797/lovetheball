@@ -130,6 +130,7 @@ class PublicMethods {
     response = await client.get(
       // Uri.parse(base_url + subUri),
       Uri.parse(base_url + subUri).replace(queryParameters: queryParameters),
+      headers: headerWithToken(token??'')
     );
     showLoader ? DialogWidget().dismissLoader() : null;
     return response;
