@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:splat_mobile/constants/constant_values.dart';
+import 'package:splat_mobile/src/blocs/match/match_setting_bloc.dart';
 
 class MatchTypeCard extends StatelessWidget {
   bool isPicking;
@@ -25,14 +27,18 @@ class MatchTypeCard extends StatelessWidget {
                    fontWeight: FontWeight.w700
                ),),
              Spacer(),
-             Container(
-               width: 20,
-               height: 20,
-               decoration: BoxDecoration(
-                   color: Colors.orange,
-                   borderRadius: BorderRadius.circular(100)
+             GestureDetector(
+               onTap: () => matchSettingBloc.pickAMatchTitle(title: STANDARD_3v3),
+               child: Container(
+                 width: 20,
+                 height: 20,
+                 decoration: BoxDecoration(
+                     color: isPicking ? Colors.orange : Colors.white,
+                     borderRadius: BorderRadius.circular(100),
+                      border: Border.all(color:isPicking ?Colors.white: Colors.grey)
+                 ),
+                 child:  Icon(Icons.check,color: Colors.white,size: 14,),
                ),
-               child:  Icon(Icons.check,color: Colors.white,size: 14,),
              ),
            ],
          ),
