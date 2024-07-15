@@ -126,6 +126,7 @@ class SettingAvatarScreen extends StatelessWidget {
           // onTapContinue: (){
           //   authenticationBloc.createUserLogin(context);
           // },
+           titleBtnContinue: 'Nhìn ổn đấy',
           floatingActionButton:Padding(
             padding: EdgeInsets.only(left: 30),
             child: Column(
@@ -164,7 +165,7 @@ class SettingAvatarScreen extends StatelessWidget {
                   onTap: settingAvatarBloc.avatarFile.path!=''?(){
                     authenticationBloc.createUserLogin(context);
                   }:(){},
-                  buttonName: "Nhìn ổn đây",
+                  buttonName: "Nhìn ổn đấy",
                   decoration: settingAvatarBloc.avatarFile.path==''?BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                     color:Color(0xffe5601a).withOpacity(0.3)

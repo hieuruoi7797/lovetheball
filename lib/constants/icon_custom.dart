@@ -11,4 +11,7 @@ class CustomIcon{
   static const String icon_error_input = "svg_pictures/icon_error_input.svg";
   static const String icon_delete_textfield = "svg_pictures/icon_delete_textfield.svg";
   static const String icon_check_succ_circle = "svg_pictures/icon_check_succ_circle.svg";
+  static const String logo_splat_orange = "svg_pictures/logo_splat_orange.svg";
+  static const String icon_anm_checkmark = "assets/animations/checkmark.json";
+  static const String red_xicon = "svg_pictures/red_xicon.svg";
 }

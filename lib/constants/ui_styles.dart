@@ -18,6 +18,7 @@ const Color color_B3BBC4 = Color(0xffb3bbc4);
 const Color color_F3F7FE = Color(0xfff3f7fe);
 const Color color_E5601A = Color(0xffe5601a);
 const Color color_000000 = Color(0xff000000);
+const Color color_677986 = Color(0xff677986);
 ///Widgets
 const Widget gap_default = SizedBox(height: 16,);
 const Widget gap_24 = SizedBox(height: 16,);

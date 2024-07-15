@@ -8,18 +8,18 @@ import '../../src/ui/authentication/authentication_screen.dart';
 import '../../widgets_common/button_gen1.dart';
 
 class LayoutScreen extends StatelessWidget {
-  final String titleAppbar;
+  final String? titleAppbar;
   final Widget bodyLayout;
-  final Function() onTapBack;
+  final Function()? onTapBack;
   final Widget? floatingActionButton;
   final Function()? onTapContinue;
   final String? titleBtnContinue;
   final bool? enableLoadingForMainButton;
   final bool? resizeToAvoidBottomInset;
   const LayoutScreen({super.key,
-    required this.titleAppbar,
+    this.titleAppbar,
     required this.bodyLayout,
-    required this.onTapBack,
+    this.onTapBack,
     this.floatingActionButton,
     this.onTapContinue,
     this.titleBtnContinue,
@@ -30,9 +30,9 @@ class LayoutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: titleAppbar!=null?AppBar(
         title: Text(
-            titleAppbar,
+            titleAppbar??"",
             style: headerTextStyle,
             textAlign: TextAlign.center,
         ),
@@ -47,17 +47,17 @@ class LayoutScreen extends StatelessWidget {
               )
           ),
         ),
-      ),
+      ):null,
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       body: bodyLayout,
-      floatingActionButton: floatingActionButton??AppButton.buttonGen1(
+      floatingActionButton: titleBtnContinue!=null?floatingActionButton??AppButton.buttonGen1(
         onTap: onTapContinue??(){},
         buttonName: titleBtnContinue??"Tiếp tục",
         height: 56,
         width: MediaQuery.sizeOf(context).width * 0.92,
         enableLoadingAnimation: enableLoadingForMainButton??false,
         context: context,
-      ),
+      ):null,
     );
   }
 }

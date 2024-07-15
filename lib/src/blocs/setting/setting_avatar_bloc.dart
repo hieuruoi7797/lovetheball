@@ -105,8 +105,6 @@ class SettingAvatarBloc{
     File pathAvartar = await File(basePath.path + path).writeAsBytes(uInt8, mode: FileMode.write);
     imageCache.clear();
     imageCache.clearLiveImages();
-    await SharePreferUtils.saveAvatar(_base64Image, authenticationBloc.nickNameController.text);
-    await SharePreferUtils.getAvatar(authenticationBloc.nickNameController.text);
     _imagePickerBehavior.sink.add(_avatarFile=pathAvartar);
   }
 }

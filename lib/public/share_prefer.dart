@@ -33,7 +33,7 @@ class SharePreferUtils {
     return bannerPath;
   }
 
-  // lưu trạng thái khi login
+  // Ghi nhớ tài khoản đăng nhập
   static Future<bool> saveLoginSharedPreference(islogin) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return await prefs.setBool(loginSharedPreference, islogin);
@@ -44,6 +44,7 @@ class SharePreferUtils {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getBool(loginSharedPreference);
   }
+
 
   static Future<void> saveAvatar(String avartar, String userName) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
