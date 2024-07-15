@@ -13,16 +13,26 @@ class MatchSettingBloc {
     "4v4",
     "5v5",
   ];
+  bool _checkRememberPass = false;
+
 
   final _choosingMatchTypeIndex = BehaviorSubject<int>();
   final _numberOfQuarter = BehaviorSubject<int>();
   final _minutesPerQuarter = BehaviorSubject<int>();
+  final _numberOfOT = BehaviorSubject<int>();
   final _pickingMatchTitle = BehaviorSubject<String>();
+  final _checkRememberBehavior = BehaviorSubject<bool>();
+
 
   Stream<int> get choosingMatchTypeIndex => _choosingMatchTypeIndex.stream;
   Stream<int> get numberOfQuarter => _numberOfQuarter.stream;
   Stream<int> get minutesPerQuarter => _minutesPerQuarter.stream;
+  Stream<int> get numberOfOT => _numberOfOT.stream;
   Stream<String> get pickingMatchTitle => _pickingMatchTitle.stream;
+  Stream<bool> get checkRememberBehavior => _checkRememberBehavior.stream;
+
+  bool get checkRememberPass => _checkRememberPass;
+
 
   MatchApiProvider matchApiProvider = MatchApiProvider();
 
@@ -75,6 +85,7 @@ class MatchSettingBloc {
   void setDefaultValue() {
     _numberOfQuarter.add(1);
     _minutesPerQuarter.add(3);
+    _numberOfOT.add(3);
     _choosingMatchTypeIndex.add(0);
   }
 
@@ -85,6 +96,25 @@ class MatchSettingBloc {
   Future<void> getMatchSetting() async {
     await matchApiProvider.getMatchSetting(context: navigatorKey.currentContext!);
   }
+
+  void changeNumberOfOT({required String symbol}) {
+    switch (symbol){
+      case "-":{
+        if (_numberOfOT.value > 0){
+          int nowValue = _numberOfOT.value - 1;
+          _numberOfOT.add(nowValue);
+        }
+      }
+      case "+":{
+        int nowValue = _numberOfOT.value + 1;
+        _numberOfOT.add(nowValue);
+      }
+    }
+  }
+
+  void setCheckRemember(bool? value) =>
+      _checkRememberBehavior.sink.add(_checkRememberPass=value!);
+
 }
 
 MatchSettingBloc matchSettingBloc = MatchSettingBloc();

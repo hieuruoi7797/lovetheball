@@ -27,6 +27,9 @@ const String user_info = 'user_info';
 
 const String USER_LOGIN = 'USER_LOGIN';
 const String loginSharedPreference = "LOGGEDINKEY";
+const String STANDARD_3v3 = "Standard_3v3";
+const String STANDARD_5v5 = "Standard_5v5";
+const String CUSTOM_MATCH = "Custom";
 
 
 Map<String, String> headerWithToken(String token) => {
