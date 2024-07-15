@@ -11,40 +11,38 @@ class LoginExistedAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Theme(
-      data: ThemeData(
-        backgroundColor: color_FFFFFF
-      ),
-      child: LayoutScreen(
-          bodyLayout: Stack(
-            children: [
-              Positioned(
-                top: 150,
-                left: 50,
-                right: 50,
-                child: Container(
-                  height: size.height*0.5,
-                  alignment: Alignment.topCenter,
-                  margin: EdgeInsets.symmetric(horizontal: size.width*0.1, vertical: size.height*0.03),
-                  child: SvgIcon(icon: CustomIcon.logo_splat_orange, size: 60),
-                ),
+    return LayoutScreen(
+        bodyLayout: Stack(
+          children: [
+            Container(
+              color: color_FFFFFF,
+            ),
+            Positioned(
+              top: 150,
+              left: 50,
+              right: 50,
+              child: Container(
+                height: size.height*0.5,
+                alignment: Alignment.topCenter,
+                margin: EdgeInsets.symmetric(horizontal: size.width*0.1, vertical: size.height*0.03),
+                child: SvgIcon(icon: CustomIcon.logo_splat_orange, size: 60),
               ),
-              Container(
-                child: ListView(
-                  children: <Widget>[
-                    Container(
-                      child: Row(
-                        children: [
+            ),
+            Container(
+              child: ListView(
+                children: <Widget>[
+                  Container(
+                    child: Row(
+                      children: [
 
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
-      ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
     );
   }
 }
