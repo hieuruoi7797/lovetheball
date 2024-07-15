@@ -385,6 +385,8 @@ class AuthenticationBloc with Validation{
         });
     if (response!.message["status_code"]== 201) {
         await login(context,'/register' ,emailRegister: _controllerRegisterEmail.text, passRegister: _controllerRegisterPass.text);
+        await SharePreferUtils.saveAvatar(settingAvatarBloc.base64Image, authenticationBloc.nickNameController.text);
+        await SharePreferUtils.getAvatar(authenticationBloc.nickNameController.text);
         clearAllController();
     } else {
       show.dialog(

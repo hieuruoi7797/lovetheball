@@ -17,6 +17,7 @@ class Common{
         String? optionalErrorText,
         TypeEnableValidateEnum? typeEnableValidate,
         bool? hideErrorText,
+        List<TextInputFormatter>? inputFormatters,
         required TextFieldTypeEnum type,
         required TextEditingController controller,
         required FocusNode focusNode,
@@ -139,6 +140,7 @@ class Common{
                               ? TextInputType.number
                               : TextInputType.text,
                           textInputAction: TextInputAction.done,
+                          inputFormatters: inputFormatters,
                         ),
 
                       ],

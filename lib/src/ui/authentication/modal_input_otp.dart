@@ -54,7 +54,11 @@ Widget TabInputOtp(BuildContext context){
             labelText: 'Mã xác thực',
             type: TextFieldTypeEnum.numberOtp,
             typeEnableValidate: TypeEnableValidateEnum.otp,
-            focusNode: authenticationBloc.focusNodeOtp),
+            focusNode: authenticationBloc.focusNodeOtp,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            ]
+        ),
       ],
     ),
   );

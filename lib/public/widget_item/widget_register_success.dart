@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:splat_mobile/constants/icon_custom.dart';
 import 'package:splat_mobile/public/widget_item/svg_icon.dart';
 
@@ -14,8 +15,13 @@ Widget WidgetRegisterSuccess(BuildContext context){
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SvgIcon(icon: CustomIcon.icon_check_succ_circle, size: 72),
-
+        Container(
+          child: Lottie.asset(
+              CustomIcon.icon_anm_checkmark,
+              width: 72,
+              height: 72
+          ),
+        ),
         StreamBuilder<Object>(
             stream: authenticationBloc.checkRememberPassBehavior,
             builder: (context, snapshot) {

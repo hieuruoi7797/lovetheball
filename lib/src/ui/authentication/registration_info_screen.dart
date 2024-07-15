@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:splat_mobile/public/widget_item/app_button.dart';
 import 'package:splat_mobile/public/widget_item/common_text_field.dart';
 import 'package:splat_mobile/public/widget_item/layout_screen.dart';
@@ -62,7 +63,11 @@ class RegistrationInfoScreen extends StatelessWidget {
                               commonTextFieldBloc.checkInputReNickName(value);
                               commonTextFieldBloc.enterMsgCode('');
                             },
-                            focusNode: authenticationBloc.focusNodeNickName),
+                            focusNode: authenticationBloc.focusNodeNickName,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(24),
+                            ]
+                        ),
                       );
                     }
                   ),
