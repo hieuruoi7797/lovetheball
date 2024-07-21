@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/public/widget_item/detail_match_setting_item.dart';
 import 'package:splat_mobile/src/blocs/match/match_setting_bloc.dart';
+import 'package:splat_mobile/src/models/basketball_match_setting_model.dart';
 
 class MatchCustomSetting extends StatefulWidget {
   bool isPicking;
@@ -105,9 +106,9 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
          const SizedBox(height: 16,),
 
          ///So hiep
-         StreamBuilder<int>(
-           stream: matchSettingBloc.numberOfQuarter,
-           builder: (context, numberOfQuarter) {
+         StreamBuilder<BasketballMatchSettingModel>(
+           stream: matchSettingBloc.settingMatch,
+           builder: (context, nowSetting) {
              return DetailMatchSettingItem(
                title: "So hiep",
                widget: Row(
@@ -125,7 +126,7 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
 
                            // padding: EdgeInsets.all(8),
                            decoration: BoxDecoration(
-                               color: numberOfQuarter.data == 1 ? Colors.white : Color(0xFF677986).withOpacity(0.4),
+                               color: nowSetting.data?.numbersOfRound == 1 ? Colors.white : Color(0xFF677986).withOpacity(0.4),
                                borderRadius: BorderRadius.only(topLeft: Radius.circular(10),bottomLeft: Radius.circular(10))
                            ),
                             child: Center(child: Text("1",style: TextStyle(fontSize: 17),)),
@@ -145,7 +146,7 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
 
                      // padding: EdgeInsets.all(8),
                      decoration: BoxDecoration(
-                         color: numberOfQuarter.data == 2 ? Colors.white : Color(0xFF677986).withOpacity(0.4),
+                         color: nowSetting.data?.numbersOfRound == 2 ? Colors.white : Color(0xFF677986).withOpacity(0.4),
                        border: Border.symmetric(
                            vertical: BorderSide(
                                color: Color(0xFF677986).withOpacity(0.4),
@@ -169,7 +170,7 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
 
                          // padding: EdgeInsets.all(8),
                          decoration: BoxDecoration(
-                             color:  numberOfQuarter.data == 4 ? Colors.white : Color(0xFF677986).withOpacity(0.4),
+                             color:  nowSetting.data?.numbersOfRound == 4 ? Colors.white : Color(0xFF677986).withOpacity(0.4),
                              borderRadius: BorderRadius.only(topRight: Radius.circular(10),bottomRight: Radius.circular(10))
                          ),
                          child: Center(child: Text("4",style: TextStyle(fontSize: 17),)),
@@ -220,10 +221,10 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(10))
                     ),
-                    child: StreamBuilder<int>(
-                      stream: matchSettingBloc.minutesPerQuarter,
-                      builder: (context, minutesPerQuarter) {
-                        return Center(child: Text("${minutesPerQuarter.data??2}'",style: TextStyle(fontSize: 17),));
+                    child: StreamBuilder<BasketballMatchSettingModel>(
+                      stream: matchSettingBloc.settingMatch,
+                      builder: (context, nowSetting) {
+                        return Center(child: Text("${nowSetting.data?.timeOfEachRound ?? 2}'",style: TextStyle(fontSize: 17),));
                       }
                     ),
                   ),
@@ -288,10 +289,10 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(10))
                     ),
-                    child: StreamBuilder<int>(
-                        stream: matchSettingBloc.numberOfOT,
-                        builder: (context, numbetOfOT) {
-                          return Center(child: Text("${numbetOfOT.data??2}'",style: TextStyle(fontSize: 17),));
+                    child: StreamBuilder<BasketballMatchSettingModel>(
+                        stream: matchSettingBloc.settingMatch,
+                        builder: (context, nowSetting) {
+                          return Center(child: Text("${nowSetting.data?.timeOfSubRound??2}'",style: TextStyle(fontSize: 17),));
                         }
                     ),
                   ),
@@ -316,6 +317,131 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
                 ),
               ],
             ),
+          ),
+          const SizedBox(height: 16,),
+
+          ///Diem cham
+          DetailMatchSettingItem(
+            title: "Diem cham",
+            widget: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    matchSettingBloc.changePointsToWin(symbol: "-");
+                    ///Show OVERLAY
+                  },
+                  child: SizedBox(
+                    width: 42,
+                    height: 42,
+                    child: Container(
+                      // key: _matchTypeSelectorKey,
+
+                      // padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(10))
+                      ),
+                      child: Center(child: Icon(Icons.remove)),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8,),
+                SizedBox(
+                  width: 74,
+                  height: 42,
+                  child: Container(
+                    // key: _matchTypeSelectorKey,
+
+                    // padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(10))
+                    ),
+                    child: StreamBuilder<BasketballMatchSettingModel>(
+                        stream: matchSettingBloc.settingMatch,
+                        builder: (context, nowSetting) {
+                          return Center(child: Text("${nowSetting.data?.cutOffPoints??2}'",style: TextStyle(fontSize: 17),));
+                        }
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8,),
+                GestureDetector(
+                  onTap: () =>  matchSettingBloc.changePointsToWin(symbol: "+"),
+                  child: SizedBox(
+                    width: 42,
+                    height: 42,
+                    child: Container(
+                      // key: _matchTypeSelectorKey,
+
+                      // padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(10))
+                      ),
+                      child: Center(child: Icon(Icons.add)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16,),
+
+          ///Nem phat
+          StreamBuilder<BasketballMatchSettingModel>(
+              stream: matchSettingBloc.settingMatch,
+              builder: (context, nowSetting) {
+                return DetailMatchSettingItem(
+                  title: "Nem phat",
+                  widget: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          matchSettingBloc.changeEnableFreeThrow(false);
+                          ///Show OVERLAY
+                        },
+                        child: SizedBox(
+                          width: 87,
+                          height: 42,
+                          child: Container(
+                            // key: _matchTypeSelectorKey,
+
+                            // padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                color:  nowSetting.data?.enableFreeThrow == false ? Colors.white : Color(0xFF677986).withOpacity(0.4),
+                                borderRadius: BorderRadius.only(topLeft: Radius.circular(10),bottomLeft: Radius.circular(10))
+
+                            ),
+                            child: Center(child: Text("Khong",style: TextStyle(fontSize: 17),)),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          matchSettingBloc.changeEnableFreeThrow(true);
+                          ///Show OVERLAY
+                        },
+                        child: SizedBox(
+                          width: 87,
+                          height: 42,
+                          child: Container(
+                            // key: _matchTypeSelectorKey,
+
+                            // padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                color: nowSetting.data?.enableFreeThrow == true ? Colors.white : Color(0xFF677986).withOpacity(0.4),
+                                borderRadius: const BorderRadius.only(topRight: Radius.circular(10),bottomRight: Radius.circular(10))
+                            ),
+                            child: const Center(child: Text("Co",style: TextStyle(fontSize: 17),)),
+                          ),
+                        ),
+                      ),
+
+                    ],
+                  ),
+                );
+              }
           ),
           const SizedBox(height: 16,),
 

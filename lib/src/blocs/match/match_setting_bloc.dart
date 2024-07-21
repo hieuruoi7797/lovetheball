@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/public/widget_item/overlay_entry_sample.dart';
 import 'package:splat_mobile/src/app.dart';
+import 'package:splat_mobile/src/models/basketball_match_setting_model.dart';
 import 'package:splat_mobile/src/resources/match_api_provider.dart';
 
 class MatchSettingBloc {
   OverlayEntry? overlayEntry;
   bool matchTypeVisible = false;
   List<String> matchTypesList = [
-    "2v2",
     "3v3",
     "4v4",
     "5v5",
@@ -17,19 +18,19 @@ class MatchSettingBloc {
 
 
   final _choosingMatchTypeIndex = BehaviorSubject<int>();
-  final _numberOfQuarter = BehaviorSubject<int>();
-  final _minutesPerQuarter = BehaviorSubject<int>();
-  final _numberOfOT = BehaviorSubject<int>();
-  final _pickingMatchTitle = BehaviorSubject<String>();
   final _checkRememberBehavior = BehaviorSubject<bool>();
+  final _pickingMatchTitle = BehaviorSubject<String>();
+
+  final _settingMatch = BehaviorSubject<BasketballMatchSettingModel>();
+
 
 
   Stream<int> get choosingMatchTypeIndex => _choosingMatchTypeIndex.stream;
-  Stream<int> get numberOfQuarter => _numberOfQuarter.stream;
-  Stream<int> get minutesPerQuarter => _minutesPerQuarter.stream;
-  Stream<int> get numberOfOT => _numberOfOT.stream;
-  Stream<String> get pickingMatchTitle => _pickingMatchTitle.stream;
   Stream<bool> get checkRememberBehavior => _checkRememberBehavior.stream;
+  Stream<String> get pickingMatchTitle => _pickingMatchTitle.stream;
+
+
+  Stream<BasketballMatchSettingModel> get settingMatch => _settingMatch.stream;
 
   bool get checkRememberPass => _checkRememberPass;
 
@@ -64,29 +65,39 @@ class MatchSettingBloc {
   }
 
   changeNumberOfQuarter({required int num}){
-    _numberOfQuarter.add(num);
+    BasketballMatchSettingModel nowSetting = _settingMatch.value;
+    nowSetting.numbersOfRound = num;
+    _settingMatch.add(nowSetting);
   }
 
   Future<void> changeMinutesPerQuarter({required String symbol}) async {
+    BasketballMatchSettingModel nowSetting = _settingMatch.value;
     switch (symbol){
       case "-":{
-        if (_minutesPerQuarter.value > 0){
-          int nowValue = _minutesPerQuarter.value - 1;
-          _minutesPerQuarter.add(nowValue);
+        if ( (nowSetting.timeOfEachRound??0) > 0){
+          nowSetting.timeOfEachRound = (nowSetting.timeOfEachRound ?? 1) - 1;
         }
       }
       case "+":{
-        int nowValue = _minutesPerQuarter.value + 1;
-        _minutesPerQuarter.add(nowValue);
+        nowSetting.timeOfEachRound = (nowSetting.timeOfEachRound ?? 0) + 1;
       }
     }
+    _settingMatch.add(nowSetting);
   }
 
   void setDefaultValue() {
-    _numberOfQuarter.add(1);
-    _minutesPerQuarter.add(3);
-    _numberOfOT.add(3);
     _choosingMatchTypeIndex.add(0);
+
+    _pickingMatchTitle.add(STANDARD_3v3);
+
+    _settingMatch.add(BasketballMatchSettingModel(
+      format: 0,
+      numbersOfRound: 1,
+      timeOfEachRound: 3,
+      timeOfSubRound: 3,
+      cutOffPoints: 3,
+      enableFreeThrow: true,
+    ));
   }
 
   pickAMatchTitle({required String title}){
@@ -98,22 +109,49 @@ class MatchSettingBloc {
   }
 
   void changeNumberOfOT({required String symbol}) {
+    BasketballMatchSettingModel nowSetting = _settingMatch.value;
+
     switch (symbol){
       case "-":{
-        if (_numberOfOT.value > 0){
-          int nowValue = _numberOfOT.value - 1;
-          _numberOfOT.add(nowValue);
+        if ((nowSetting.timeOfSubRound??0) > 0){
+          nowSetting.timeOfSubRound = (nowSetting.timeOfSubRound ?? 1) - 1;
         }
       }
       case "+":{
-        int nowValue = _numberOfOT.value + 1;
-        _numberOfOT.add(nowValue);
+        nowSetting.timeOfSubRound = (nowSetting.timeOfSubRound ?? 0) + 1;
       }
     }
+    _settingMatch.add(nowSetting);
   }
 
   void setCheckRemember(bool? value) =>
       _checkRememberBehavior.sink.add(_checkRememberPass=value!);
+
+  void changePointsToWin({required String symbol}) {
+    BasketballMatchSettingModel nowSetting = _settingMatch.value;
+
+    switch (symbol){
+      case "-":{
+        if ((nowSetting.cutOffPoints??0) > 0){
+          nowSetting.cutOffPoints = (nowSetting.cutOffPoints ?? 1) - 1;
+        }
+      }
+      case "+":{
+        nowSetting.cutOffPoints = (nowSetting.cutOffPoints ?? 1) + 1;
+      }
+    }
+    _settingMatch.add(nowSetting);
+  }
+
+  void changeEnableFreeThrow(bool bool) {
+    BasketballMatchSettingModel nowSetting = _settingMatch.value;
+    nowSetting.enableFreeThrow = bool;
+    _settingMatch.add(nowSetting);
+  }
+
+  void submitMatchSetting() async {
+
+  }
 
 }
 

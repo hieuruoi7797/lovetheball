@@ -54,4 +54,15 @@ class MatchApiProvider {
         });
     return response;
   }
+
+  Future<Response> postMatchSetting({
+    required Map body}) async {
+    Response response;
+    response = await PublicMethods().post(
+        body:body,
+        subUri: MATCH_SETTING,
+        showLoader: false,
+        isFormData: false);
+    return response;
+  }
 }
