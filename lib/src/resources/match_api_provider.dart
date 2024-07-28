@@ -49,9 +49,21 @@ class MatchApiProvider {
         subUri: MATCH_SETTING,
         showLoader: false,
         queryParameters:  {
-          'limit':'500',
+          "match_type" : '0',
+          'limit':'1',
           'offset':'0'
         });
+    return response;
+  }
+
+  Future<Response> postMatchSetting({
+    required Map body}) async {
+    Response response;
+    response = await PublicMethods().post(
+        body:body,
+        subUri: MATCH_SETTING,
+        showLoader: true,
+        isFormData: false);
     return response;
   }
 }

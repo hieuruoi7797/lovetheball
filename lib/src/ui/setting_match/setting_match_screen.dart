@@ -48,7 +48,7 @@ class SettingMatchScreen extends StatelessWidget {
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 0.8,
               child: AppButton.buttonGen1(
-                onTap: (){},
+                onTap: () => matchSettingBloc.sendMatch(),
                 buttonName: "tiep tuc",
                 height: 50,
                 enableLoadingAnimation: false,
@@ -66,7 +66,7 @@ class SettingMatchScreen extends StatelessWidget {
           builder: (context, pickingMatchTitle) {
             return ListView(
               children: [
-                MatchTypeCard(isPicking: pickingMatchTitle.data == STANDARD_3v3,),
+                MatchTypeCard(isPicking: pickingMatchTitle.data == STANDARD_3v3,typeName: STANDARD_3v3,),
                 const SizedBox(height: 16,),
                 MatchCustomSetting(isPicking: pickingMatchTitle.data == CUSTOM_MATCH)
               ],
