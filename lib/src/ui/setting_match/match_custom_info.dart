@@ -4,6 +4,7 @@ import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/public/widget_item/detail_match_setting_item.dart';
 import 'package:splat_mobile/src/blocs/match/match_setting_bloc.dart';
 import 'package:splat_mobile/src/models/basketball_match_setting_model.dart';
+import 'package:splat_mobile/src/ui/setting_match/match_type_card.dart';
 
 class MatchCustomSetting extends StatefulWidget {
   bool isPicking;
@@ -25,7 +26,8 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return widget.isPicking ?
+    Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
           color: Color(0xFFFBE8DE).withOpacity(0.6),
@@ -448,7 +450,8 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
         ],
       ),
       // height: MediaQuery.sizeOf(context).height,
-    );
+    ) :
+    MatchTypeCard(isPicking: widget.isPicking, typeName: CUSTOM_MATCH,);
   }
 
 }

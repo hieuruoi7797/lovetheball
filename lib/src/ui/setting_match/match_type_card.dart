@@ -5,7 +5,8 @@ import 'package:splat_mobile/src/blocs/match/match_setting_bloc.dart';
 
 class MatchTypeCard extends StatelessWidget {
   bool isPicking;
-  MatchTypeCard({super.key, required this.isPicking});
+  String typeName;
+  MatchTypeCard({super.key, required this.isPicking, required this.typeName});
   @override
   Widget build(BuildContext context) {
    return Container(
@@ -28,7 +29,7 @@ class MatchTypeCard extends StatelessWidget {
                ),),
              Spacer(),
              GestureDetector(
-               onTap: () => matchSettingBloc.pickAMatchTitle(title: STANDARD_3v3),
+               onTap: () => matchSettingBloc.pickAMatchTitle(title: typeName),
                child: Container(
                  width: 20,
                  height: 20,

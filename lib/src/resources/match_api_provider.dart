@@ -49,7 +49,8 @@ class MatchApiProvider {
         subUri: MATCH_SETTING,
         showLoader: false,
         queryParameters:  {
-          'limit':'500',
+          "match_type" : '0',
+          'limit':'1',
           'offset':'0'
         });
     return response;
@@ -61,7 +62,7 @@ class MatchApiProvider {
     response = await PublicMethods().post(
         body:body,
         subUri: MATCH_SETTING,
-        showLoader: false,
+        showLoader: true,
         isFormData: false);
     return response;
   }

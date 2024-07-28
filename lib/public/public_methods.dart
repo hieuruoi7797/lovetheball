@@ -109,9 +109,6 @@ class PublicMethods {
           "msg_name":'Service error'
           }
           }['message']!['msg_name'].toString(), 505);
-      // if (kDebugMode) {
-        print('HieuttError: $e');
-      // }
     }
 
     if (applicationBloc.isLoading == true) applicationBloc.changeLoadingStatus();

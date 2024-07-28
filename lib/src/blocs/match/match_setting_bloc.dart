@@ -91,7 +91,7 @@ class MatchSettingBloc {
     _pickingMatchTitle.add(STANDARD_3v3);
 
     _settingMatch.add(BasketballMatchSettingModel(
-      format: 0,
+      format: 2,
       numbersOfRound: 1,
       timeOfEachRound: 3,
       timeOfSubRound: 3,
@@ -101,6 +101,16 @@ class MatchSettingBloc {
   }
 
   pickAMatchTitle({required String title}){
+    BasketballMatchSettingModel nowSetting = _settingMatch.value;
+    switch (title) {
+      case STANDARD_3v3:
+        nowSetting.format = 2;
+      case STANDARD_5v5:
+        nowSetting.format = 1;
+      case CUSTOM_MATCH:
+        nowSetting.format = 0;
+    }
+    _settingMatch.add(nowSetting);
     _pickingMatchTitle.add(title);
   }
 
@@ -149,8 +159,16 @@ class MatchSettingBloc {
     _settingMatch.add(nowSetting);
   }
 
-  void submitMatchSetting() async {
 
+  Future<void> sendMatch() async {
+    BasketballMatchSettingModel nowSetting = _settingMatch.value;
+    Map body = {
+      "name": _pickingMatchTitle.value,
+      "match_type": 0,
+      "type_": 1,
+      "settings": nowSetting.toJson()
+    };
+    await MatchApiProvider().postMatchSetting(body: body);
   }
 
 }
