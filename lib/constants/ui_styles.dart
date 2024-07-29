@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 ///COLORS
 const Color color_main = Color(0xFFE55807);
@@ -19,6 +20,9 @@ const Color color_F3F7FE = Color(0xfff3f7fe);
 const Color color_E5601A = Color(0xffe5601a);
 const Color color_000000 = Color(0xff000000);
 const Color color_677986 = Color(0xff677986);
+const Color color_627488 = Color(0xff627488);
+const Color color_31393E = Color(0xff31393e);
+const Color color_ACC7E1 = Color(0xffacc7e1);
 ///Widgets
 const Widget gap_default = SizedBox(height: 16,);
 const Widget gap_24 = SizedBox(height: 16,);
@@ -78,3 +82,28 @@ const TextStyle textButtonBlue = TextStyle(
   fontFamily: 'Inter',
 );
 
+const TextStyle textSubTitle = TextStyle(
+  fontWeight: FontWeight.w400,
+  fontSize: 11,
+  letterSpacing: -0.4,
+  color: color_627488
+);
+
+TextStyle textLabelTab = TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: 13,
+    letterSpacing: -0.08,
+    color: color_31393E
+);
+TextStyle textUnSelectLabelTab = TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 13,
+    letterSpacing: -0.08,
+    color: color_627488
+);
+TextStyle textNameItem = TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: 17,
+    letterSpacing: -0.4,
+    color: color_31393E
+);

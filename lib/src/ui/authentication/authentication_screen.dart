@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/public/modal/modal_tab_view.dart';
 import 'package:splat_mobile/public/widget_item/app_button.dart';
 import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
@@ -69,7 +70,10 @@ class LoginScreen extends StatelessWidget {
                               fontSize: 17,
                               fontWeight: FontWeight.w600
                           ),
-                          onTap: ()=> authenticationBloc.loginWithGoogle(),
+                          onTap: (){
+                            // authenticationBloc.loginWithGoogle()
+                            Navigator.pushNamed(context, QUICK_MATCH);
+                          },
                           height: 56,
                           width: MediaQuery.sizeOf(context).width * 0.775,
                           decoration: BoxDecoration(
