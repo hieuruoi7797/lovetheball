@@ -11,5 +11,8 @@
     "close": "Đóng",
     "register": "Đăng ký",
     "btn_continue": "Tiếp tục",
-    "user_info_title": "Thông tin cá nhân"
+    "user_info_title": "Thông tin cá nhân",
+    "select_other_image": "Chọn ảnh khác",
+    "note_setting_avatar": "Bạn chưa có ảnh đại diện, có chắc muốn hoàn thành đăng ký!",
+    "tip_set_avatar": "Tip: Sử dụng hình ảnh thật và rõ mặt sẽ giúp đồng đội dễ dàng nhận diện bạn"
 }

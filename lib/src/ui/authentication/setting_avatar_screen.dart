@@ -178,7 +178,7 @@ class SettingAvatarScreen extends StatelessWidget {
                 settingAvatarBloc.avatarFile.path!=''?AppButton.btnTextCustom(
                   buttonName: 'Chọn ảnh khác',
                   styleTextBtn: const TextStyle(
-                    decoration: TextDecoration.underline,
+                    // decoration: TextDecoration.underline,
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                     color: Colors.black,
