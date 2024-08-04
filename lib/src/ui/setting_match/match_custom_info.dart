@@ -5,6 +5,7 @@ import 'package:splat_mobile/public/widget_item/detail_match_setting_item.dart';
 import 'package:splat_mobile/src/blocs/match/match_setting_bloc.dart';
 import 'package:splat_mobile/src/models/basketball_match_setting_model.dart';
 import 'package:splat_mobile/src/ui/setting_match/match_type_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MatchCustomSetting extends StatefulWidget {
   bool isPicking;
@@ -26,6 +27,7 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return widget.isPicking ?
     Container(
       padding: EdgeInsets.all(16),
@@ -40,14 +42,14 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
           ///Title
           Row(
             children: [
-              const Text("Tran dau tuy chinh",
+              Text(localizations!.custom_match,
                 style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700
                 ),),
               Spacer(),
               GestureDetector(
-                onTap: () => matchSettingBloc.pickAMatchTitle(title: CUSTOM_MATCH),
+                onTap: () => matchSettingBloc.pickAMatchTitle(context,title: localizations.custom_match),
                 child: Container(
                   width: 20,
                   height: 20,
@@ -451,7 +453,26 @@ class _MatchCustomSettingState extends State<MatchCustomSetting> {
       ),
       // height: MediaQuery.sizeOf(context).height,
     ) :
-    MatchTypeCard(isPicking: widget.isPicking, typeName: CUSTOM_MATCH,);
+    StreamBuilder<BasketballMatchSettingModel>(
+      stream: matchSettingBloc.settingMatch,
+      builder: (context, settingMatch) {
+          return MatchTypeCard(
+            isPicking: widget.isPicking,
+            typeName: localizations!.custom_match,
+            settingInfo: settingMatch.hasData ? settingMatch.data! :
+            BasketballMatchSettingModel(
+              format: 0,
+              numbersOfRound: 4,
+              timeOfSubRound: 1,
+              timeOfEachRound: 10,
+              cutOffPoints: null,
+              threePointsValue: 3,
+              enableFreeThrow: true,
+              personalFoulsLimit: 5
+            ),
+          );
+      }
+    );
   }
 
 }

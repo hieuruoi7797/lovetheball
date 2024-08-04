@@ -11,7 +11,8 @@
   "register": "Registration",
   "btn_continue": "Continue",
   "close": "Close",
-  "@helloWorld": {
-    "description": "The conventional newborn programmer greeting"
-  }
+  "quick_setting_title": "Quick Match Setting",
+  "standard_3": "Standart 3v3",
+  "standard_5": "Standart 5v5",
+  "custom_match": "Custom Match"
 }
