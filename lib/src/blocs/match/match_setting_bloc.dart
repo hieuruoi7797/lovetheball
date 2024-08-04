@@ -5,6 +5,8 @@ import 'package:splat_mobile/public/widget_item/overlay_entry_sample.dart';
 import 'package:splat_mobile/src/app.dart';
 import 'package:splat_mobile/src/models/basketball_match_setting_model.dart';
 import 'package:splat_mobile/src/resources/match_api_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class MatchSettingBloc {
   OverlayEntry? overlayEntry;
@@ -88,7 +90,7 @@ class MatchSettingBloc {
   void setDefaultValue() {
     _choosingMatchTypeIndex.add(0);
 
-    _pickingMatchTitle.add(STANDARD_3v3);
+    _pickingMatchTitle.add("");
 
     _settingMatch.add(BasketballMatchSettingModel(
       format: 2,
@@ -100,15 +102,19 @@ class MatchSettingBloc {
     ));
   }
 
-  pickAMatchTitle({required String title}){
+  pickAMatchTitle(BuildContext context,{required String title}){
+    final localizations = AppLocalizations.of(context);
     BasketballMatchSettingModel nowSetting = _settingMatch.value;
-    switch (title) {
-      case STANDARD_3v3:
-        nowSetting.format = 2;
-      case STANDARD_5v5:
-        nowSetting.format = 1;
-      case CUSTOM_MATCH:
-        nowSetting.format = 0;
+    if (overlayEntry?.mounted == true) {
+      matchTypeVisible = false;
+      overlayEntry?.remove();
+    };
+    if (title == localizations!.standard_3){
+      nowSetting.format = 2;
+    }else if (title == localizations.standard_5){
+      nowSetting.format = 1;
+    }else if (title == localizations.custom_match){
+      nowSetting.format = 0;
     }
     _settingMatch.add(nowSetting);
     _pickingMatchTitle.add(title);
@@ -162,13 +168,17 @@ class MatchSettingBloc {
 
   Future<void> sendMatch() async {
     BasketballMatchSettingModel nowSetting = _settingMatch.value;
-    Map body = {
-      "name": _pickingMatchTitle.value,
-      "match_type": 0,
-      "type_": 1,
-      "settings": nowSetting.toJson()
-    };
-    await MatchApiProvider().postMatchSetting(body: body);
+    if (_pickingMatchTitle.value.isNotEmpty){
+      Map body = {
+        "name": _pickingMatchTitle.value,
+        "match_type": 0,
+        "type_": 1,
+        "settings": nowSetting.toJson()
+      };
+      await MatchApiProvider().postMatchSetting(body: body);
+    }else{
+      return;
+    }
   }
 
 }
