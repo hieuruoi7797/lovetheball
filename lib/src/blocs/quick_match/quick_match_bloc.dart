@@ -4,10 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:splat_mobile/src/app.dart';
 
 import '../../resources/repository.dart';
-import '../../ui/quick_match/quick_match_screen.dart';
+
 
 class QuickMatchBloc{
   bool _checkRememberAction = false;
@@ -15,6 +14,7 @@ class QuickMatchBloc{
   int _totalListData =0;
   int _indexTab =0;
   TextEditingController searchFriendController = TextEditingController();
+
   Map<String, dynamic> modelFriend = {
     "responseCode": "1",
     "responseText": "List friend.",
