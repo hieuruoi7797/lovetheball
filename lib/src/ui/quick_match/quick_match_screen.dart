@@ -11,117 +11,125 @@ class QuickMatchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      initialIndex: 1,
+      initialIndex: 0,
       length: 2,
-      child: LayoutScreen(
-          titleAppbar: "MỜI BẠN BÈ",
-          subTitle: "ĐANG MỜI 1/12",
-          bottomAppbar: PreferredSize(
-            preferredSize: Size.fromHeight(70),
-            child: Container(
-              height: 45,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10,
-              ),
-              margin: EdgeInsets.symmetric(
-                horizontal: 5,
-                vertical: 15
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    25,
+      child: StreamBuilder<Object>(
+        stream: quickMatchBloc.indexTabBehavior,
+        builder: (context, snapshot) {
+          // quickMatchBloc.checkTab(0);
+          return LayoutScreen(
+              titleAppbar: "MỜI BẠN BÈ",
+              subTitle: "ĐANG MỜI ${quickMatchBloc.numberSelect}/${quickMatchBloc.totalListData}",
+              onClose: (){},
+              bottomAppbar: PreferredSize(
+                preferredSize: Size.fromHeight(70),
+                child: Container(
+                  height: 45,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
                   ),
-                  color: Color(0xffd8e5f3).withOpacity(0.6),
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 3,
-                  vertical: 3
-                ),
-                child: TabBar(
-                    indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: color_FFFFFF
-                    ),
-                    splashBorderRadius: BorderRadius.circular(25,),
-                    dividerColor: Colors.transparent,
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    labelColor: color_313A3E,
-                    labelStyle: textLabelTab,
-                    unselectedLabelStyle: textUnSelectLabelTab,
-                    unselectedLabelColor: color_627488,
-                    tabs: <Widget>[
-                      Tab(
-                        text: "Danh sách bạn bè",
-                      ),
-                      Tab(
-                        text: "Đội bóng",
-                      ),
-                    ]),
-              ),
-            ),
-          ),
-          onClose: (){
-
-          },
-          bodyLayout:TabBarView(
-            children: <Widget>[
-              listFriend(context),
-              listTeam(context),
-            ],
-          ),
-        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomSheet: Container(
-          height: MediaQuery.of(context).size.height*0.18,
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          color: color_FFFFFF,
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  StreamBuilder<Object>(
-                    stream: quickMatchBloc.checkRememberActionBehavior,
-                    builder: (context, snapshot) {
-                      return Checkbox(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
-                        checkColor: Colors.white,
-                        activeColor: color_E5601A,
-                        value: quickMatchBloc.checkRememberAction,
-                        onChanged: (bool? value) {
-                          quickMatchBloc.setCheckRememberAction(value);
-                        },
-                      );
-                    }
-                  ),
-                  Text(
-                    "Ghi nhớ danh sách mời",
-                    style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                        color: color_313A3E
+                  // margin: EdgeInsets.symmetric(
+                  //   horizontal: 5,
+                  //   vertical: 15
+                  // ),
+                  child: Container(
+                    // decoration: BoxDecoration(
+                    //   borderRadius: BorderRadius.circular(
+                    //     25,
+                    //   ),
+                    //   color: Color(0xffd8e5f3).withOpacity(0.6),
+                    // ),
+                    // padding: const EdgeInsets.symmetric(
+                    //   horizontal: 3,
+                    //   vertical: 3
+                    // ),
+                    child: TabBar(
+                        // indicator: BoxDecoration(
+                        //   borderRadius: BorderRadius.circular(20),
+                        //   color: color_FFFFFF
+                        // ),
+                        indicatorColor: color_E5601A,
+                        // splashBorderRadius: BorderRadius.circular(25,),
+                        dividerColor: Colors.transparent,
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        labelColor: color_313A3E,
+                        labelStyle: textLabelTab,
+                        unselectedLabelStyle: textUnSelectLabelTab,
+                        unselectedLabelColor: color_627488,
+                        tabs: <Widget>[
+                          Tab(
+                            text: "Danh sách bạn bè",
+                          ),
+                          Tab(
+                            text: "Đội bóng",
+                          ),
+                        ],
+                      onTap: (int tab){
+                          quickMatchBloc.checkTab(tab);
+                      },
                     ),
                   ),
-                ],
+                ),
               ),
-              AppButton.buttonGen1(
-                onTap: (){},
-                buttonName: "Bắt đầu trận đấu",
-                height: 56,
-                width: MediaQuery.sizeOf(context).width * 0.92,
-                enableLoadingAnimation: false,
-                context: context,
-              )
-            ],
-          ),
-        ),
-      ),
-    )
-    ;
+              bodyLayout:TabBarView(
+                    children: <Widget>[
+                      listFriend(context),
+                      listTeams(context)
+                    ],
+                  ),
+                // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+              bottomSheet: Container(
+                  height: MediaQuery.of(context).size.height*0.18,
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  color: color_FFFFFF,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          StreamBuilder<Object>(
+                            stream: quickMatchBloc.checkRememberActionBehavior,
+                            builder: (context, snapshot) {
+                              return Checkbox(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5)),
+                                checkColor: Colors.white,
+                                activeColor: color_E5601A,
+                                value: quickMatchBloc.checkRememberAction,
+                                onChanged: (bool? value) {
+                                  quickMatchBloc.setCheckRememberAction(value);
+                                },
+                              );
+                            }
+                          ),
+                          Text(
+                            "Ghi nhớ danh sách mời",
+                            style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w600,
+                                color: color_313A3E
+                            ),
+                          ),
+                        ],
+                      ),
+                      AppButton.buttonGen1(
+                        onTap: (){},
+                        buttonName: "Bắt đầu trận đấu",
+                        height: 56,
+                        width: MediaQuery.sizeOf(context).width * 0.92,
+                        enableLoadingAnimation: false,
+                        context: context,
+                      )
+                    ],
+                  ),
+                ),
+          );
+        }
+      )
+    );
   }
 }
-Widget listTeam(BuildContext context){
+Widget listTeams(BuildContext context){
   return Container(
     color: Color(0xffd8e5f3).withOpacity(0.6),
     child: Column(
@@ -168,7 +176,7 @@ Widget listTeam(BuildContext context){
                             ),
                             width: MediaQuery.of(context).size.width*0.767,
                             child: CheckboxListTile(
-                                checkboxShape:  CircleBorder(),
+                                checkboxShape:CircleBorder(),
                                 activeColor: color_E5601A,
                                 side: const BorderSide(
                                     color: color_ACC7E1
@@ -180,6 +188,9 @@ Widget listTeam(BuildContext context){
                                 value: quickMatchBloc.lsTeams.contains(quickMatchBloc.modelTeams["responseBody"][index]['teams_id']),
                                 onChanged: (bool? selected){
                                   quickMatchBloc.onTeamsSelected(selected!, quickMatchBloc.modelTeams["responseBody"][index]['teams_id']);
+                                  quickMatchBloc.setNumberCount(quickMatchBloc.lsTeams.length);
+                                  quickMatchBloc.checkTab(1);
+                                  quickMatchBloc.setTotal(quickMatchBloc.modelTeams["responseTotalResult"]);
                                 }
                             ),
                           ),
@@ -254,6 +265,9 @@ Widget listFriend(BuildContext context){
                             value: quickMatchBloc.lsFriends.contains(quickMatchBloc.modelFriend["responseBody"][index]['user_id']),
                             onChanged: (bool? selected){
                               quickMatchBloc.onFriendsSelected(selected!, quickMatchBloc.modelFriend["responseBody"][index]['user_id']);
+                              quickMatchBloc.setNumberCount(quickMatchBloc.lsFriends.length);
+                              quickMatchBloc.setTotal(quickMatchBloc.modelFriend["responseTotalResult"]);
+                              quickMatchBloc.checkTab(0);
                             }
                         ),
                       ),
