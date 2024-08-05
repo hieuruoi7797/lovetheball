@@ -140,5 +140,6 @@ class QuickMatchBloc{
     modelFriend["responseTotalResult"] = bodyRes['data'].length;
   }
 
+
 }
 final  quickMatchBloc= QuickMatchBloc();
