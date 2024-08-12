@@ -48,3 +48,4 @@ const String SETTING_MATCH = '/settingMatch';
 const String REGISTER_INFO = '/registerInfoUser';
 const String SETTING_AVT = '/settingAvatar';
 const String QUICK_MATCH = '/quickMatch';
+const String LOBBY = '/lobby';
