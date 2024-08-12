@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/public/widget_item/overlay_entry_sample.dart';
@@ -175,7 +176,12 @@ class MatchSettingBloc {
         "type_": 1,
         "settings": nowSetting.toJson()
       };
-      await MatchApiProvider().postMatchSetting(body: body);
+      Response apiRes = await MatchApiProvider().postMatchSetting(body: body);
+      if (apiRes.statusCode == 201){
+        if (navigatorKey.currentState!.context.mounted){
+          Navigator.pushNamed(navigatorKey.currentState!.context, LOBBY);
+        }
+      }
     }else{
       return;
     }

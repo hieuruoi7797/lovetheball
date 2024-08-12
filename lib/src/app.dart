@@ -9,6 +9,7 @@ import 'package:splat_mobile/src/ui/authentication/login_existed_account_screen.
 import 'package:splat_mobile/src/ui/authentication/registration_info_screen.dart';
 import 'package:splat_mobile/src/ui/authentication/setting_avatar_screen.dart';
 import 'package:splat_mobile/src/ui/home/home_screen.dart';
+import 'package:splat_mobile/src/ui/lobby/lobby_screen.dart';
 import 'package:splat_mobile/src/ui/quick_match/quick_match_screen.dart';
 import 'package:splat_mobile/src/ui/setting_match/setting_match_screen.dart';
 
@@ -58,7 +59,8 @@ class MyApp extends StatelessWidget {
       //   '/overview_history_game': (context) => const OverviewHistoryScreen(),
         REGISTER_INFO: (context) => const RegistrationInfoScreen(),
         SETTING_AVT: (context) => const SettingAvatarScreen(),
-        QUICK_MATCH: (context) => const QuickMatchScreen()
+        QUICK_MATCH: (context) => const QuickMatchScreen(),
+        LOBBY: (context) => const LobbyScreen()
       },
       // home: const MyHomePage(),
     );
