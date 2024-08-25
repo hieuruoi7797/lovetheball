@@ -14,4 +14,5 @@ class CustomIcon{
   static const String logo_splat_orange = "svg_pictures/logo_splat_orange.svg";
   static const String icon_anm_checkmark = "assets/animations/checkmark.json";
   static const String red_xicon = "svg_pictures/red_xicon.svg";
+  static const String icon_search = "svg_pictures/icon_search.svg";
 }
