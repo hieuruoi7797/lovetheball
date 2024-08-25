@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
@@ -175,6 +176,80 @@ class Common{
               });
         });
   }
+ static Widget commonSearchText(
+     BuildContext context, {
+       String? hintText,
+       double? borderRadius,
+       bool? readOnly,
+       bool? enable,
+       bool? expands,
+       Widget? suffixIcon,
+       InputBorder? inputBorder,
+       InputBorder? focusedBorder,
+       InputBorder? disabledBorder,
+       double? height,
+       double? width,
+       TextStyle? style,
+       int? maxLength,
+       TextAlign? textAlign,
+       Function(String)? onChanged,
+       Function(String)? onSubmitted,
+       Function()? onTap,
+       Function()? onEditingComplete,
+       required TextInputType type,
+       required TextEditingController controller,
+       FocusNode? focusNode,
+       List<TextInputFormatter>? inputFormatters,
+       Widget? prefixIcon,
+       TextCapitalization? textCapitalization,
+       EdgeInsetsGeometry? paddingBox
+     }
+     ){
+   return Container(
+     height: height??null,
+     width: width,
+     padding: paddingBox,
+     child: TextField(
+         textAlign: textAlign??TextAlign.justify,
+         readOnly: readOnly??false,
+         enabled: enable??true,
+         maxLength: maxLength,
+         onTap: onTap,
+         onChanged: onChanged,
+         onSubmitted: onSubmitted,
+         controller: controller,
+         focusNode: focusNode,
+         onEditingComplete: onEditingComplete,
+         decoration: InputDecoration(
+             counterText: "",
+             hintText: hintText,
+             hintStyle: const TextStyle(
+                 fontWeight: FontWeight.w500,
+                 fontSize: 17,
+                 letterSpacing: -0.4,
+                 color: Color(0xFF8DA3BC)
+             ),
+             filled: true,
+             fillColor: Color(0xFFD8E5F3),
+             contentPadding: EdgeInsets.all(10),
+             focusedBorder: focusedBorder,
+             enabledBorder: focusedBorder,
+             disabledBorder: disabledBorder,
+             border: inputBorder??OutlineInputBorder(
+                 borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(16)
+             ),
+             suffixIcon: suffixIcon,
+             prefixIcon: prefixIcon
+         ),
+         keyboardType: type,
+         inputFormatters: inputFormatters,
+         textCapitalization: textCapitalization??TextCapitalization.none,
+         onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus()
+     ),
+   );
+
+ }
 
 }
 

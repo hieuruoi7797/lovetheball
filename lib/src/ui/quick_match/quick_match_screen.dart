@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:splat_mobile/constants/icon_custom.dart';
 import 'package:splat_mobile/constants/ui_styles.dart';
+import 'package:splat_mobile/public/widget_item/common_text_field.dart';
 import 'package:splat_mobile/public/widget_item/layout_screen.dart';
+import 'package:splat_mobile/public/widget_item/svg_icon.dart';
 import 'package:splat_mobile/src/blocs/quick_match/quick_match_bloc.dart';
 
 import '../../../public/widget_item/app_button.dart';
@@ -20,7 +23,8 @@ class QuickMatchScreen extends StatelessWidget {
           return LayoutScreen(
               titleAppbar: "MỜI BẠN BÈ",
               subTitle: "ĐANG MỜI ${quickMatchBloc.numberSelect}/${quickMatchBloc.totalListData}",
-              onClose: (){},
+              onClose: (){Navigator.pop(context);},
+              onTapBack: (){Navigator.pop(context);},
               bottomAppbar: PreferredSize(
                 preferredSize: Size.fromHeight(70),
                 child: Container(
@@ -210,10 +214,33 @@ Widget listFriend(BuildContext context){
     color: Color(0xffd8e5f3).withOpacity(0.6),
     child: Column(
       children: [
+        SizedBox(
+          height: 10,
+        ),
+        StreamBuilder<Object>(
+          stream: quickMatchBloc.searchFriends,
+          builder: (context, snapshot) {
+            return Common.commonSearchText(context,
+              paddingBox: EdgeInsets.symmetric(
+                vertical: 10,horizontal: 20
+              ),
+              hintText: "Tìm kiếm bạn bè",
+              prefixIcon: const Padding(
+                padding: EdgeInsets.all(12),
+                child: SvgIcon(icon: CustomIcon.icon_search, size: 6),
+              ),
+              type: TextInputType.text,
+              controller: quickMatchBloc.searchFriendController,
+              onChanged: (value){
+                // quickMatchBloc.onSearchFriends(value);
+              }
+            );
+          }
+        ),
         Container(
           width: MediaQuery.of(context).size.width*0.9,
-          height: MediaQuery.of(context).size.height*0.54,
-          margin: EdgeInsets.symmetric(vertical: 15),
+          height: MediaQuery.of(context).size.height*0.45,
+          margin: EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
             color: color_FFFFFF,
             borderRadius: BorderRadius.circular(10),
@@ -242,7 +269,7 @@ Widget listFriend(BuildContext context){
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(vertical: 10),
+                        padding: EdgeInsets.symmetric(vertical: 4),
                         decoration: BoxDecoration(
                             border: Border(
                                 bottom: BorderSide(

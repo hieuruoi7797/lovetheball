@@ -10,6 +10,7 @@ class QuickMatchBloc{
   int _numberCountSelect =0;
   int _totalListData =0;
   int _indexTab =0;
+  TextEditingController searchFriendController = TextEditingController();
   Map<String, dynamic> modelFriend = {
     "responseCode": "1",
     "responseText": "List friend.",
@@ -39,6 +40,7 @@ class QuickMatchBloc{
   };
   List _lsFriends = [];
   List _lsTeams =[];
+  List _lsSearchFriends =[];
 
   void onFriendsSelected(bool selected, user_id) {
     if (selected == true) {
@@ -79,6 +81,10 @@ class QuickMatchBloc{
   int get indexTab => _indexTab;
   final _indexTabBehavior = BehaviorSubject<int>();
   Stream<int> get indexTabBehavior => _indexTabBehavior.stream;
+  List get lsSearchFriends => _lsSearchFriends;
+  final _searchFriends = BehaviorSubject<List>();
+  Stream<List> get searchFriends => _searchFriends.stream;
+
   void checkTab(int? index){
     _indexTabBehavior.sink.add(_indexTab=index!);
     if(_indexTab==0){
@@ -102,6 +108,19 @@ class QuickMatchBloc{
       _totalListDataBehavior.sink.add(_totalListData = modelFriend['responseTotalResult']);
     }else{
       _totalListDataBehavior.sink.add(_totalListData = modelTeams['responseTotalResult']);
+    }
+  }
+  List filteredList = [];
+
+  void onSearchFriends(String query) {
+    if (query.isEmpty) {
+      _searchFriends.sink.add(lsFriends);
+    } else {
+      filteredList = modelFriend['responseBody']['user_name']
+          .where((item) => item.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+      _searchFriends.sink.add(filteredList);
+      print('xinhcheck ${lsSearchFriends.length}');
     }
   }
 
