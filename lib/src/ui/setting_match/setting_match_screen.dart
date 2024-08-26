@@ -61,6 +61,7 @@ class SettingMatchScreen extends StatelessWidget {
                   Navigator.pushNamed(context, Routes.LOBBY);
                 },
                 buttonName: localizations.btn_continue,
+
                 height: 50,
                 enableLoadingAnimation: true,
                 context: context,

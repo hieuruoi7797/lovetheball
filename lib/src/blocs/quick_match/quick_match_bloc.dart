@@ -7,7 +7,6 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../resources/repository.dart';
 
-
 class QuickMatchBloc{
   bool _checkRememberAction = false;
   int _numberCountSelect =0;
