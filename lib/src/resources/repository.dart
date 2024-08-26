@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 import 'package:splat_mobile/src/models/base_api_model.dart';
 import 'package:splat_mobile/src/resources/authentication_api_provider.dart';
 import 'package:splat_mobile/src/resources/gameon_api_provider.dart';
+import 'package:splat_mobile/src/resources/invitation_api_provider.dart';
 import 'package:splat_mobile/src/resources/match_api_provider.dart';
 import 'package:splat_mobile/src/resources/player_api_provider.dart';
 
@@ -12,6 +13,7 @@ class Repository {
   final _playerApiProvider = PlayerApiProvider();
   final _authenticationProvider = AuthenticationiApiProvider();
   final _gameOnApiProvider = GameOnApiProvider();
+  final _invitationUserProvider = InvitationApiProvider();
 
   Future<Response> createMatch({
     required BuildContext context,
@@ -33,6 +35,9 @@ class Repository {
 
   Future<Response?> login({required String email, required String pw})
   => _authenticationProvider.login(inputEmail: email, inputPasswords: pw);
+
+  Future<Response> getUsers(BuildContext context)
+  => _invitationUserProvider.getUser(context: context);
 
   Future<BaseApiModel?> createUser(
           {

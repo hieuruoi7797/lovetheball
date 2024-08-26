@@ -286,12 +286,12 @@ Widget listFriend(BuildContext context){
                             ),
                             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             title: Text(
-                              quickMatchBloc.modelFriend["responseBody"][index]['user_name'],
+                              quickMatchBloc.modelFriend["responseBody"][index]['name'],
                               style: textNameItem,
                             ),
-                            value: quickMatchBloc.lsFriends.contains(quickMatchBloc.modelFriend["responseBody"][index]['user_id']),
+                            value: quickMatchBloc.lsFriends.contains(quickMatchBloc.modelFriend["responseBody"][index]['id_']),
                             onChanged: (bool? selected){
-                              quickMatchBloc.onFriendsSelected(selected!, quickMatchBloc.modelFriend["responseBody"][index]['user_id']);
+                              quickMatchBloc.onFriendsSelected(selected!, quickMatchBloc.modelFriend["responseBody"][index]['id_']);
                               quickMatchBloc.setNumberCount(quickMatchBloc.lsFriends.length);
                               quickMatchBloc.setTotal(quickMatchBloc.modelFriend["responseTotalResult"]);
                               quickMatchBloc.checkTab(0);

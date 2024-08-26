@@ -72,7 +72,6 @@ class LoginScreen extends StatelessWidget {
                           ),
                           onTap: (){
                             // authenticationBloc.loginWithGoogle()
-                            Navigator.pushNamed(context, QUICK_MATCH);
                           },
                           height: 56,
                           width: MediaQuery.sizeOf(context).width * 0.775,
