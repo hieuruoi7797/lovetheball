@@ -169,6 +169,7 @@ class MatchSettingBloc {
       "settings": nowSetting.toJson()
     };
     await MatchApiProvider().postMatchSetting(body: body);
+
   }
 
 }

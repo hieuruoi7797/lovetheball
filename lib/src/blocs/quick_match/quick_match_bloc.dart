@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/src/app.dart';
 
+import '../../resources/repository.dart';
 import '../../ui/quick_match/quick_match_screen.dart';
 
 class QuickMatchBloc{
@@ -122,6 +126,18 @@ class QuickMatchBloc{
       _searchFriends.sink.add(filteredList);
       print('xinhcheck ${lsSearchFriends.length}');
     }
+  }
+
+  Future<void> searchUserByName(BuildContext context) async{
+
+  }
+
+  Future<void> getUsers(BuildContext context) async{
+    Response resUserList = await repository.getUsers(context);
+    dynamic resEncode = jsonEncode(json.decode(utf8.decode(resUserList.body.codeUnits)));
+    Map bodyRes = jsonDecode(resEncode);
+    modelFriend['responseBody'] = bodyRes["data"];
+    modelFriend["responseTotalResult"] = bodyRes['data'].length;
   }
 
 }

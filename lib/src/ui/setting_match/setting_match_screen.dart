@@ -4,6 +4,7 @@ import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/constants/ui_styles.dart';
 import 'package:splat_mobile/public/widget_item/app_button.dart';
 import 'package:splat_mobile/src/blocs/match/match_setting_bloc.dart';
+import 'package:splat_mobile/src/blocs/quick_match/quick_match_bloc.dart';
 import 'package:splat_mobile/src/ui/setting_match/match_custom_info.dart';
 import 'package:splat_mobile/src/ui/setting_match/match_type_card.dart';
 
@@ -48,7 +49,11 @@ class SettingMatchScreen extends StatelessWidget {
             SizedBox(
               width: MediaQuery.sizeOf(context).width * 0.8,
               child: AppButton.buttonGen1(
-                onTap: () => matchSettingBloc.sendMatch(),
+                onTap: () {
+                  matchSettingBloc.sendMatch();
+                  quickMatchBloc.getUsers(context);
+                  Navigator.pushNamed(context, QUICK_MATCH);
+                },
                 buttonName: "tiep tuc",
                 height: 50,
                 enableLoadingAnimation: false,
