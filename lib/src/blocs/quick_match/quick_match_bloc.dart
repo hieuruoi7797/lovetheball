@@ -1,13 +1,20 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:splat_mobile/src/app.dart';
+
+import '../../resources/repository.dart';
+import '../../ui/quick_match/quick_match_screen.dart';
 
 class QuickMatchBloc{
   bool _checkRememberAction = false;
-  bool _selectItem= false;
-  bool _checkboxValue1 = true;
-  Map<String, bool> values = {
-    'Xinh Ngo': true,
-    'Hoang Mai': false,
-  };
+  int _numberCountSelect =0;
+  int _totalListData =0;
+  int _indexTab =0;
+  TextEditingController searchFriendController = TextEditingController();
   Map<String, dynamic> modelFriend = {
     "responseCode": "1",
     "responseText": "List friend.",
@@ -31,12 +38,13 @@ class QuickMatchBloc{
       {"teams_id": "2", "teams_name": "SuperHero"},
       {"teams_id": "3", "teams_name": "I AM KING"},
       {"teams_id": "4", "teams_name": "I AM QUEEN"},
-      {"teams_id": "5", "teams_name": "I AM KING"}
+      {"teams_id": "5", "teams_name": "ssss"}
     ],
     "responseTotalResult": 5 // Total result is 3 here becasue we have 3 categories in responseBody.
   };
   List _lsFriends = [];
   List _lsTeams =[];
+  List _lsSearchFriends =[];
 
   void onFriendsSelected(bool selected, user_id) {
     if (selected == true) {
@@ -67,7 +75,70 @@ class QuickMatchBloc{
   final _addTeamsBehavior = BehaviorSubject<List>();
   Stream<List> get addTeamsBehavior => _addTeamsBehavior.stream;
   List get lsTeams => _lsTeams;
-
   void setCheckRememberAction(bool? value)=> _checkRememberActionBehavior.sink.add(_checkRememberAction=value!);
+  int get numberSelect => _numberCountSelect;
+  final _countSelectBehavior = BehaviorSubject<int>();
+  Stream<int> get countSelectBehavior => _countSelectBehavior.stream;
+  int get totalListData => _totalListData;
+  final _totalListDataBehavior = BehaviorSubject<int>();
+  Stream<int> get totalListDataBehavior => _totalListDataBehavior.stream;
+  int get indexTab => _indexTab;
+  final _indexTabBehavior = BehaviorSubject<int>();
+  Stream<int> get indexTabBehavior => _indexTabBehavior.stream;
+  List get lsSearchFriends => _lsSearchFriends;
+  final _searchFriends = BehaviorSubject<List>();
+  Stream<List> get searchFriends => _searchFriends.stream;
+
+  void checkTab(int? index){
+    _indexTabBehavior.sink.add(_indexTab=index!);
+    if(_indexTab==0){
+      quickMatchBloc.setNumberCount(quickMatchBloc.lsTeams.length);
+      quickMatchBloc.setTotal(quickMatchBloc.modelTeams["responseTotalResult"]);
+    }else{
+      quickMatchBloc.setNumberCount(quickMatchBloc.lsTeams.length);
+      quickMatchBloc.setTotal(quickMatchBloc.modelTeams["responseTotalResult"]);
+    }
+  }
+  void setNumberCount(int? value){
+      if(_indexTab==0){
+        _countSelectBehavior.sink.add(_numberCountSelect=_lsFriends.length!);
+      }else{
+        _countSelectBehavior.sink.add(_numberCountSelect=_lsTeams.length!);
+      }
+
+  }
+  void setTotal(int? total){
+    if(_indexTab==0){
+      _totalListDataBehavior.sink.add(_totalListData = modelFriend['responseTotalResult']);
+    }else{
+      _totalListDataBehavior.sink.add(_totalListData = modelTeams['responseTotalResult']);
+    }
+  }
+  List filteredList = [];
+
+  void onSearchFriends(String query) {
+    if (query.isEmpty) {
+      _searchFriends.sink.add(lsFriends);
+    } else {
+      filteredList = modelFriend['responseBody']['user_name']
+          .where((item) => item.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+      _searchFriends.sink.add(filteredList);
+      print('xinhcheck ${lsSearchFriends.length}');
+    }
+  }
+
+  Future<void> searchUserByName(BuildContext context) async{
+
+  }
+
+  Future<void> getUsers(BuildContext context) async{
+    Response resUserList = await repository.getUsers(context);
+    dynamic resEncode = jsonEncode(json.decode(utf8.decode(resUserList.body.codeUnits)));
+    Map bodyRes = jsonDecode(resEncode);
+    modelFriend['responseBody'] = bodyRes["data"];
+    modelFriend["responseTotalResult"] = bodyRes['data'].length;
+  }
+
 }
 final  quickMatchBloc= QuickMatchBloc();
