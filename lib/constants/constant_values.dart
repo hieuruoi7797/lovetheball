@@ -9,6 +9,7 @@ const String png_background_home = "assets/png_images/bg_home.png";
 const String subtracting = "assets/svg_pictures/SUBTRACTING.svg";
 const String svg_adding = "assets/svg_pictures/ADD_PLAYER.svg";
 const String svg_matches_list = "assets/svg_pictures/listing_matches_icon.svg";
+const String svg_friends = "assets/svg_pictures/icon_friends.svg";
 
 
 

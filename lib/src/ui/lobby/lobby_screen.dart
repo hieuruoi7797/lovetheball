@@ -26,6 +26,10 @@ class _LobbyState extends State<LobbyScreen> {
       body: Container(
         width: MediaQuery.sizeOf(context).width,
         height: MediaQuery.sizeOf(context).height,
+        padding: EdgeInsets.symmetric(
+            horizontal: 52,
+            // vertical: 24
+        ),
         color: Color(0xFFD8E5F3),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,7 +37,7 @@ class _LobbyState extends State<LobbyScreen> {
              Expanded(
                flex: 1,
                  child: Container(
-                   padding: const EdgeInsets.symmetric(horizontal: 20),
+                   // padding: const EdgeInsets.symmetric(: 52),
                // color: Colors.yellow,
                    child: SingleChildScrollView(
                      child: Column(
@@ -58,7 +62,9 @@ class _LobbyState extends State<LobbyScreen> {
              )),
             Expanded(
                 flex: 1,
-                child: Container(
+                child:
+
+                Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: SingleChildScrollView(
                     child: Column(
@@ -74,7 +80,7 @@ class _LobbyState extends State<LobbyScreen> {
             Expanded(
                 flex: 1,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  // padding: const EdgeInsets.symmetric(horizontal: 20),
                   // color: Colors.yellow,
                   child: SingleChildScrollView(
                     child: Column(
