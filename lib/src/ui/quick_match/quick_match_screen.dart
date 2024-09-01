@@ -232,7 +232,7 @@ Widget listFriend(BuildContext context){
               type: TextInputType.text,
               controller: quickMatchBloc.searchFriendController,
               onChanged: (value){
-                // quickMatchBloc.onSearchFriends(value);
+                // quickMatchBloc.searchUserByName(context,value);
               }
             );
           }
@@ -248,7 +248,7 @@ Widget listFriend(BuildContext context){
           child: StreamBuilder<Object>(
             stream: quickMatchBloc.lsAddFriendsBehavior,
             builder: (context, snapshot) {
-              return ListView.builder(
+              return quickMatchBloc.modelFriend["responseTotalResult"]!=0?ListView.builder(
                 itemCount: quickMatchBloc.modelFriend["responseTotalResult"],
                 itemBuilder: (BuildContext context, int index){
                   return Row(
@@ -301,6 +301,8 @@ Widget listFriend(BuildContext context){
                     ],
                   );
                 }
+              ):Center(
+                  child: Text("Không có người chơi trong danh sách!")
               );
             }
           ),

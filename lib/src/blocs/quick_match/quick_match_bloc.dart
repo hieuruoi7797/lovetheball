@@ -129,16 +129,31 @@ class QuickMatchBloc{
   }
 
   Future<void> searchUserByName(BuildContext context) async{
+    if(searchFriendController.text.isNotEmpty){
+      String userId = utf8.decode(searchFriendController.text.trim().codeUnits);
+      Response resUserSearch = await repository.getUsersById(context,userId);
+      if(resUserSearch.statusCode==200){
+        dynamic resEncode = jsonEncode(json.decode(utf8.decode(resUserSearch.body.codeUnits)));
+        print("Xinhcheck${resEncode}");
+      }
+    }
 
   }
 
   Future<void> getUsers(BuildContext context) async{
     Response resUserList = await repository.getUsers(context);
-    dynamic resEncode = jsonEncode(json.decode(utf8.decode(resUserList.body.codeUnits)));
-    Map bodyRes = jsonDecode(resEncode);
-    modelFriend['responseBody'] = bodyRes["data"];
-    modelFriend["responseTotalResult"] = bodyRes['data'].length;
+    if(resUserList.statusCode==200){
+      dynamic resEncode = jsonEncode(json.decode(utf8.decode(resUserList.body.codeUnits)));
+      Map bodyRes = jsonDecode(resEncode);
+      modelFriend['responseBody'] = bodyRes["data"];
+      modelFriend["responseTotalResult"] = bodyRes['data'].length;
+    }else{
+      modelFriend['responseBody'] = [];
+      modelFriend["responseTotalResult"] = 0;
+    }
+
   }
+
 
 }
 final  quickMatchBloc= QuickMatchBloc();

@@ -18,4 +18,17 @@ class InvitationApiProvider{
         });
     return response;
   }
+
+  Future<Response> getUserById({
+    required BuildContext context,
+    required String userId,
+  }) async {
+    Response response;
+    response = await PublicMethods().get(
+        subUri: "$user_path/$userId",
+        showLoader: false,
+        queryParameters:  {});
+    return response;
+  }
+
 }
