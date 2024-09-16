@@ -286,7 +286,7 @@ Widget listFriend(BuildContext context){
                             ),
                             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             title: Text(
-                              quickMatchBloc.modelFriend["responseBody"][index]['name'],
+                              quickMatchBloc.modelFriend["responseBody"]?[index]['name']??'',
                               style: textNameItem,
                             ),
                             value: quickMatchBloc.lsFriends.contains(quickMatchBloc.modelFriend["responseBody"][index]['id_']),
