@@ -44,6 +44,7 @@ class QuickMatchBloc{
     ],
     "responseTotalResult":  8
   };
+
   Map<String, dynamic> modelTeams = {
     "responseCode": "1",
     "responseText": "List teams.",
