@@ -118,7 +118,7 @@ class QuickMatchScreen extends StatelessWidget {
                       ),
                       AppButton.buttonGen1(
                         onTap: (){},
-                        buttonName: "Bắt đầu trận đấu",
+                        buttonName: "Chọn người chơi trận đấu trước",
                         height: 56,
                         width: MediaQuery.sizeOf(context).width * 0.92,
                         enableLoadingAnimation: false,
