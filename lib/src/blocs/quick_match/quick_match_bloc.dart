@@ -30,6 +30,7 @@ class QuickMatchBloc{
     ],
     "responseTotalResult":  8// Total result is 3 here becasue we have 3 categories in responseBody.
   };
+  Map<String, dynamic> modelFriendSearch ={};
   Map<String, dynamic> modelTeams = {
     "responseCode": "1",
     "responseText": "List teams.",
@@ -151,9 +152,20 @@ class QuickMatchBloc{
       modelFriend['responseBody'] = [];
       modelFriend["responseTotalResult"] = 0;
     }
-
   }
+  List lisFilterData = [];
+  final _searchListFriendsBehavior = BehaviorSubject<String>();
+  Stream<String> get searchListFriendsBehavior => _searchListFriendsBehavior.stream;
 
+  void filterFriends(String query) {
+    if (query.isEmpty) return modelFriend['responseBody'];
+
+    List lsSearch = modelFriend['responseBody'].where((friend) {
+      String userName = friend['user_name'].toLowerCase();
+      return userName.contains(query.toLowerCase());
+    }).toList();
+    print('Xinhcheck ${lsSearch}');
+  }
 
 }
 final  quickMatchBloc= QuickMatchBloc();

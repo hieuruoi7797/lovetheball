@@ -218,7 +218,7 @@ Widget listFriend(BuildContext context){
           height: 10,
         ),
         StreamBuilder<Object>(
-          stream: quickMatchBloc.searchFriends,
+          stream: quickMatchBloc.searchListFriendsBehavior,
           builder: (context, snapshot) {
             return Common.commonSearchText(context,
               paddingBox: EdgeInsets.symmetric(
@@ -232,7 +232,7 @@ Widget listFriend(BuildContext context){
               type: TextInputType.text,
               controller: quickMatchBloc.searchFriendController,
               onChanged: (value){
-                // quickMatchBloc.searchUserByName(context,value);
+                quickMatchBloc.filterFriends(snapshot.data.toString());
               }
             );
           }
@@ -307,6 +307,7 @@ Widget listFriend(BuildContext context){
             }
           ),
         ),
+
       ],
     ),
   );
