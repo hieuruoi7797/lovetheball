@@ -39,6 +39,9 @@ class Repository {
   Future<Response> getUsers(BuildContext context)
   => _invitationUserProvider.getUser(context: context);
 
+  Future<Response> getUsersById(BuildContext context, String userId)
+  => _invitationUserProvider.getUserById(context: context, userId: userId);
+
   Future<BaseApiModel?> createUser(
           {
             required String email,
