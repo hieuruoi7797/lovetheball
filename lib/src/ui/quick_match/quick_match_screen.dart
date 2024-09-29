@@ -210,105 +210,110 @@ Widget listTeams(BuildContext context){
   );
 }
 Widget listFriend(BuildContext context){
-  return Container(
-    color: Color(0xffd8e5f3).withOpacity(0.6),
-    child: Column(
-      children: [
-        SizedBox(
-          height: 10,
-        ),
-        StreamBuilder<Object>(
-          stream: quickMatchBloc.searchListFriendsBehavior,
-          builder: (context, snapshot) {
-            return Common.commonSearchText(context,
-              paddingBox: EdgeInsets.symmetric(
-                vertical: 10,horizontal: 20
-              ),
-              hintText: "Tìm kiếm bạn bè",
-              prefixIcon: const Padding(
-                padding: EdgeInsets.all(12),
-                child: SvgIcon(icon: CustomIcon.icon_search, size: 6),
-              ),
-              type: TextInputType.text,
-              controller: quickMatchBloc.searchFriendController,
-              onChanged: (value){
-                quickMatchBloc.filterFriends(snapshot.data.toString());
+  return StreamBuilder<Object>(
+    stream: quickMatchBloc.searching,
+    builder: (context, snapshot) {
+      return Container(
+        color: Color(0xffd8e5f3).withOpacity(0.6),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            StreamBuilder<Object>(
+              stream: quickMatchBloc.searchListFriendsBehavior,
+              builder: (context, snapshot) {
+                return Common.commonSearchText(context,
+                  paddingBox: EdgeInsets.symmetric(
+                    vertical: 10,horizontal: 20
+                  ),
+                  hintText: "Tìm kiếm bạn bè",
+                  prefixIcon: const Padding(
+                    padding: EdgeInsets.all(12),
+                    child: SvgIcon(icon: CustomIcon.icon_search, size: 6),
+                  ),
+                  type: TextInputType.text,
+                  controller: quickMatchBloc.searchFriendController,
+                  onChanged: (value){
+                    quickMatchBloc.filterFriends(context,quickMatchBloc.searchFriendController.text);
+                  }
+                );
               }
-            );
-          }
-        ),
-        Container(
-          width: MediaQuery.of(context).size.width*0.9,
-          height: MediaQuery.of(context).size.height*0.45,
-          margin: EdgeInsets.symmetric(vertical: 12),
-          decoration: BoxDecoration(
-            color: color_FFFFFF,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: StreamBuilder<Object>(
-            stream: quickMatchBloc.lsAddFriendsBehavior,
-            builder: (context, snapshot) {
-              return quickMatchBloc.modelFriend["responseTotalResult"]!=0?ListView.builder(
-                itemCount: quickMatchBloc.modelFriend["responseTotalResult"],
-                itemBuilder: (BuildContext context, int index){
-                  return Row(
-                    children: [
-                      Container(
-                        width: 32,
-                        height:32,
-                        margin: EdgeInsets.only(right: 10,left: 10),
-                        decoration:BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: Colors.blue,
-                            image: DecorationImage(
-                                image: AssetImage(
-                                  "assets/png_images/default_avt.png",
-                                ),
-                                fit: BoxFit.cover
-                            )
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 4),
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(
-                                  color:  color_E4EBF2,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width*0.9,
+              height: MediaQuery.of(context).size.height*0.45,
+              margin: EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(
+                color: color_FFFFFF,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: StreamBuilder<Object>(
+                stream: quickMatchBloc.lsAddFriendsBehavior,
+                builder: (context, snapshot) {
+                  return quickMatchBloc.modelFriend["responseTotalResult"]!=0?ListView.builder(
+                    itemCount: quickMatchBloc.isSearching?quickMatchBloc.modelFriendSearch['responseTotalResult']:quickMatchBloc.modelFriend["responseTotalResult"],
+                    itemBuilder: (BuildContext context, int index){
+                      return Row(
+                        children: [
+                          Container(
+                            width: 32,
+                            height:32,
+                            margin: EdgeInsets.only(right: 10,left: 10),
+                            decoration:BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                color: Colors.blue,
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                      "assets/png_images/default_avt.png",
+                                    ),
+                                    fit: BoxFit.cover
                                 )
-                            )
-                        ),
-                        width: MediaQuery.of(context).size.width*0.767,
-                        child: CheckboxListTile(
-                            checkboxShape:  CircleBorder(),
-                            activeColor: color_E5601A,
-                            side: const BorderSide(
-                                color: color_ACC7E1
                             ),
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            title: Text(
-                              quickMatchBloc.modelFriend["responseBody"]?[index]['name']??'',
-                              style: textNameItem,
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(vertical: 4),
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                      color:  color_E4EBF2,
+                                    )
+                                )
                             ),
-                            value: quickMatchBloc.lsFriends.contains(quickMatchBloc.modelFriend["responseBody"][index]['id_']),
-                            onChanged: (bool? selected){
-                              quickMatchBloc.onFriendsSelected(selected!, quickMatchBloc.modelFriend["responseBody"][index]['id_']);
-                              quickMatchBloc.setNumberCount(quickMatchBloc.lsFriends.length);
-                              quickMatchBloc.setTotal(quickMatchBloc.modelFriend["responseTotalResult"]);
-                              quickMatchBloc.checkTab(0);
-                            }
-                        ),
-                      ),
-                    ],
+                            width: MediaQuery.of(context).size.width*0.767,
+                            child: CheckboxListTile(
+                                checkboxShape:  CircleBorder(),
+                                activeColor: color_E5601A,
+                                side: const BorderSide(
+                                    color: color_ACC7E1
+                                ),
+                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                title: Text(
+                                  quickMatchBloc.isSearching?quickMatchBloc.modelFriendSearch["responseBody"][index]['name']:quickMatchBloc.modelFriend["responseBody"][index]['name'],
+                                  style: textNameItem,
+                                ),
+                                value: quickMatchBloc.isSearching?quickMatchBloc.lsFriends.contains(quickMatchBloc.modelFriendSearch["responseBody"][index]['id_']):quickMatchBloc.lsFriends.contains(quickMatchBloc.modelFriend["responseBody"][index]['id_']),
+                                onChanged: (bool? selected){
+                                  quickMatchBloc.onFriendsSelected(selected!, quickMatchBloc.isSearching?quickMatchBloc.modelFriendSearch["responseBody"][index]['id_']:quickMatchBloc.modelFriend["responseBody"][index]['id_']);
+                                  quickMatchBloc.setNumberCount(quickMatchBloc.lsFriends.length);
+                                  quickMatchBloc.setTotal(quickMatchBloc.isSearching?quickMatchBloc.modelFriendSearch["responseTotalResult"]:quickMatchBloc.modelFriend["responseTotalResult"]);
+                                  quickMatchBloc.checkTab(0);
+                                }
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                  ):Center(
+                      child: Text("Không có người chơi trong danh sách!")
                   );
                 }
-              ):Center(
-                  child: Text("Không có người chơi trong danh sách!")
-              );
-            }
-          ),
-        ),
+              ),
+            ),
 
-      ],
-    ),
+          ],
+        ),
+      );
+    }
   );
 }

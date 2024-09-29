@@ -277,19 +277,19 @@ class AuthenticationBloc with Validation{
         String refreshToken = jsonDecode(response.body)["refresh_token"];
         await storage.write(key: access_token_key, value: accessToken);
         await storage.write(key: refresh_token_key, value: refreshToken);
-        Response? checkingTokenRes = await repository.testToken();
-        commonTextFieldBloc.enterMsgCode("");
-        if (checkingTokenRes != null){
-          await storage.write(
-            key: user_info,
-            value: jsonEncode(PlayerModel.fromJson(
-                json.decode(utf8.decode(checkingTokenRes.body.codeUnits))).toJson()));
-          //lỗi ký tự khi jsonDecode tu varchar database
-          print('xinhcheck${json.decode(utf8.decode(checkingTokenRes.body.codeUnits))}');
-          // Navigator.of(context).popUntil(ModalRoute.withName('/'));
+        // Response? checkingTokenRes = await repository.testToken();
+        // commonTextFieldBloc.enterMsgCode("");
+        // if (checkingTokenRes != null){
+        //   await storage.write(
+        //     key: user_info,
+        //     value: jsonEncode(PlayerModel.fromJson(
+        //         json.decode(utf8.decode(checkingTokenRes.body.codeUnits))).toJson()));
+        //   //lỗi ký tự khi jsonDecode tu varchar database
+        //   print('xinhcheck${json.decode(utf8.decode(checkingTokenRes.body.codeUnits))}');
+        //   // Navigator.of(context).popUntil(ModalRoute.withName('/'));
 
           Navigator.popAndPushNamed(navigatorKey.currentContext!, '/home');
-        }
+        // }
       }else{
         if (router=='/login') {
           commonTextFieldBloc.enterMsgCode(
