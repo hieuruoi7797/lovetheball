@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -29,12 +31,14 @@ class _LobbyState extends State<LobbyScreen> {
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
+    lobbyBloc.initData();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    lobbyBloc.dispose();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
@@ -89,22 +93,29 @@ class _LobbyState extends State<LobbyScreen> {
                       Expanded(
                          flex: 1,
                            child: SingleChildScrollView(
-                             child: Column(
-                               crossAxisAlignment: CrossAxisAlignment.start,
-                               children: [
-                                 const SizedBox(height: 8,),
-                                 const Text("TEAM 1"),
-                                 StreamBuilder<List<PlayerModel>>(
-                                   stream: lobbyBloc.getListTeamOnePlayers,
-                                   builder: (context, snapshot) {
-                                       return ListStartingFive(
-                                         listStartingFive: snapshot.hasData ? snapshot.data! : [],
-                                         expanded: !pendingListExpanded,
-                                         rightToLeft: false,);
-                                   }
-                                 ),
-                                 // Spacer(),
-                               ],
+                             child: StreamBuilder<List<PlayerModel>>(
+                               stream: lobbyBloc.getListTeamOnePlayers,
+                               builder: (context, snapshot)
+                               {
+                                 if (snapshot.connectionState == ConnectionState.waiting) {
+                                   return Text('Waiting for data...');
+                                 } else if (snapshot.hasData) {
+                                   return ListStartingFive(
+                                             teamKey: "TEAM_1",
+                                             listStartingFive: snapshot.hasData ? snapshot.data! : [],
+                                             expanded: !pendingListExpanded,
+                                             rightToLeft: false,);
+                                 } else {
+                                   return Text('No data available');
+                                 }
+                               },
+                               // {
+                               //   log("hieuttMAIN1: ${snapshot.data?[0].name}");
+                               //   return ListStartingFive(
+                               //       listStartingFive: snapshot.hasData ? snapshot.data! : [],
+                               //       expanded: !pendingListExpanded,
+                               //       rightToLeft: false,);
+                               // }
                              ),
                            )),
                       Expanded(
@@ -130,8 +141,6 @@ class _LobbyState extends State<LobbyScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  const SizedBox(height: 8,),
-                                  const Text("TEAM 2"),
                                   StreamBuilder<List<PlayerModel>>(
                                     stream: lobbyBloc.getListTeamTwoPlayers,
                                     builder: (context, snapshot) {
@@ -139,6 +148,7 @@ class _LobbyState extends State<LobbyScreen> {
                                         expanded: !pendingListExpanded,
                                         rightToLeft: true,
                                         listStartingFive: snapshot.hasData? snapshot.data!:[],
+                                        teamKey: 'TEAM_2',
                                       );
                                     }
                                   ),
@@ -163,10 +173,10 @@ class _LobbyState extends State<LobbyScreen> {
                         children: [
                           const Text("DU BI TEAM 1"),
                           const SizedBox(height: 8,),
-                          Container(
+                          SizedBox(
                             // color: Colors.orange,
                             width: MediaQuery.sizeOf(context).width * 0.27,
-                              child: ListSubTeam(itemCount: 8)),
+                              child: ListSubTeam(subTeamKey: "SUB_1")),
                         ],
                       ),
                       const Spacer(),
@@ -175,10 +185,10 @@ class _LobbyState extends State<LobbyScreen> {
                         children: [
                           const Text("DU BI TEAM 2"),
                           const SizedBox(height: 8,),
-                          Container(
+                          SizedBox(
                             // color: Colors.orange,
                               width: MediaQuery.sizeOf(context).width * 0.27,
-                              child: ListSubTeam(itemCount: 8, alignment: WrapAlignment.end,)),
+                              child: ListSubTeam(subTeamKey: "SUB_2", alignment: WrapAlignment.end,)),
                         ],
                       )
                     ],

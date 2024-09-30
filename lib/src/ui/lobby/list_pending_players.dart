@@ -8,13 +8,12 @@ import 'package:splat_mobile/src/blocs/lobby/lobby_bloc.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 
 class ListPendingPlayers extends StatelessWidget {
-  bool expanded = false;
-  Function()? onTapExpanded;
-  ListPendingPlayers({super.key, required this.expanded, this.onTapExpanded});
+  final bool expanded;
+  final Function()? onTapExpanded;
+  const ListPendingPlayers({super.key, required this.expanded, this.onTapExpanded});
 
   @override
   Widget build(BuildContext context) {
-    lobbyBloc.setListPendingPlayers(lobbyBloc.listPendingNow);
     return Container(
       padding:expanded?const EdgeInsets.all(0): const EdgeInsets.all(8),
       height: expanded ? MediaQuery.sizeOf(context).height * 0.5 :null,
@@ -34,7 +33,6 @@ class ListPendingPlayers extends StatelessWidget {
               listPendingPlayers: listPendingNow.data ?? [],
             );
           }else{
-            log("hieuttCHECK_PendingListEMPTY");
             return ExpandedPendingTeam(
                 onTapCollapse: onTapExpanded,
                 listPendingPlayers: []);
@@ -61,26 +59,29 @@ class ExpandedPendingTeam extends StatelessWidget {
       listWidget.add(
         GestureDetector(
           onTap: () => lobbyBloc.changeAddingEnable(index: listPlayers.indexOf(item)),
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(6)
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 20,
-                  height: 20,
-                  color: Colors.orange,
-                ),
-                SizedBox(width: 4,),
-                Container(
-                  child: Text(item.name),
-                )
-              ],
-            ),
+          child: StreamBuilder<PlayerModel?>(
+            stream: lobbyBloc.getAddingPlayer,
+            builder: (context, snapshot){
+                return Container(
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                  decoration:BoxDecoration(
+                      color: ( snapshot.hasData && item.id == snapshot.data?.id) ? Colors.white : Colors.grey,
+                      borderRadius: BorderRadius.circular(6)
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        color: Colors.orange,
+                      ),
+                      const SizedBox(width: 4,),
+                      Text(item.name)
+                    ],
+                  ),
+                );
+            }
           ),
         )
       );
