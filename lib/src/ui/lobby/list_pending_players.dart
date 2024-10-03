@@ -53,12 +53,12 @@ class ExpandedPendingTeam extends StatelessWidget {
 
 
   List<Widget> loadPendingPlayer(List<PlayerModel> listPlayers){
-    lobbyBloc.changeAddingEnable(index: null);
+    lobbyBloc.changeAddingEnable(null,"");
     List<Widget> listWidget = [];
     for ( PlayerModel item in listPlayers){
       listWidget.add(
         GestureDetector(
-          onTap: () => lobbyBloc.changeAddingEnable(index: listPlayers.indexOf(item)),
+          onTap: () => lobbyBloc.changeAddingEnable(item,Constants.TEAM_PENDING),
           child: StreamBuilder<PlayerModel?>(
             stream: lobbyBloc.getAddingPlayer,
             builder: (context, snapshot){

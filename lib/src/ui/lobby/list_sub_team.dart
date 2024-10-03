@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/src/blocs/lobby/lobby_bloc.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 
@@ -10,7 +11,7 @@ class ListSubTeam extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<PlayerModel>>(
-      stream: subTeamKey == "SUB_1" ?
+      stream: subTeamKey == Constants.SUB_1 ?
             lobbyBloc.getListSubOnePlayers :
             lobbyBloc.getListSubTwoPlayers,
       builder: (context, listSubStream) {
@@ -36,13 +37,16 @@ class ListSubTeam extends StatelessWidget {
                             ),
                           );
                         }else{
-                          return Container(
-                            margin: const EdgeInsets.only(right: 8, bottom: 8),
-                            width: MediaQuery.sizeOf(context).height*0.07,
-                            height: MediaQuery.sizeOf(context).height*0.07,
-                            decoration: BoxDecoration(
-                                color: listSubStream.data![index].id == "000" ? Colors.grey : Colors.orange,
-                                borderRadius: BorderRadius.circular(6)
+                          return GestureDetector(
+                            onTap: () => lobbyBloc.changeAddingEnable(listSubStream.data![index],subTeamKey),
+                            child: Container(
+                              margin: const EdgeInsets.only(right: 8, bottom: 8),
+                              width: MediaQuery.sizeOf(context).height*0.07,
+                              height: MediaQuery.sizeOf(context).height*0.07,
+                              decoration: BoxDecoration(
+                                  color: listSubStream.data![index].id == "000" ? Colors.grey : Colors.orange,
+                                  borderRadius: BorderRadius.circular(6)
+                              ),
                             ),
                           );
                         }

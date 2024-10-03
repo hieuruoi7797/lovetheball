@@ -45,7 +45,7 @@ class ListStartingFive extends StatelessWidget {
                         builder: (context, snapshot) {
                           if (snapshot.data != null && listStartingFive[index].id == "000") {
                             return GestureDetector(
-                              onTap: () => lobbyBloc.addToMainPlayersList(index, teamKey: teamKey),
+                              onTap: () => lobbyBloc.addToMainPlayersList(index, addingTeam: teamKey),
                               child: Container(
                                 height: MediaQuery
                                     .sizeOf(context)
@@ -57,20 +57,23 @@ class ListStartingFive extends StatelessWidget {
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(6)
                                 ),
-                                child: Icon(Icons.add,color: Colors.green,),
+                                child: const Icon(Icons.add,color: Colors.green,),
                               ),
                             );
                           }else {
-                            return Container(
-                              height: MediaQuery
-                                  .sizeOf(context)
-                                  .height * 0.1,
-                              width: MediaQuery
-                                  .sizeOf(context)
-                                  .height * 0.1,
-                              decoration: BoxDecoration(
-                                  color: listStartingFive[index].id == "000" ? Colors.grey : Colors.orange,
-                                  borderRadius: BorderRadius.circular(6)
+                            return GestureDetector(
+                              onTap: () => lobbyBloc.changeAddingEnable(listStartingFive[index],teamKey),
+                              child: Container(
+                                height: MediaQuery
+                                    .sizeOf(context)
+                                    .height * 0.1,
+                                width: MediaQuery
+                                    .sizeOf(context)
+                                    .height * 0.1,
+                                decoration: BoxDecoration(
+                                    color: listStartingFive[index].id == "000" ? Colors.grey : Colors.orange,
+                                    borderRadius: BorderRadius.circular(6)
+                                ),
                               ),
                             );
                           }
