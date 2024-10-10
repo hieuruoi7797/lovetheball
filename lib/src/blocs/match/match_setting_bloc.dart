@@ -179,7 +179,7 @@ class MatchSettingBloc {
       Response apiRes = await MatchApiProvider().postMatchSetting(body: body);
       if (apiRes.statusCode == 201){
         if (navigatorKey.currentState!.context.mounted){
-          Navigator.pushNamed(navigatorKey.currentState!.context, LOBBY);
+          Navigator.pushNamed(navigatorKey.currentState!.context, Routes.LOBBY);
         }
       }
     }else{

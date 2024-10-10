@@ -277,6 +277,7 @@ class AuthenticationBloc with Validation{
         String refreshToken = jsonDecode(response.body)["refresh_token"];
         await storage.write(key: access_token_key, value: accessToken);
         await storage.write(key: refresh_token_key, value: refreshToken);
+        repository.socketConnect("notifications");
         // Response? checkingTokenRes = await repository.testToken();
         // commonTextFieldBloc.enterMsgCode("");
         // if (checkingTokenRes != null){
@@ -287,8 +288,7 @@ class AuthenticationBloc with Validation{
         //   //lỗi ký tự khi jsonDecode tu varchar database
         //   print('xinhcheck${json.decode(utf8.decode(checkingTokenRes.body.codeUnits))}');
         //   // Navigator.of(context).popUntil(ModalRoute.withName('/'));
-
-          Navigator.popAndPushNamed(navigatorKey.currentContext!, '/home');
+          Navigator.popAndPushNamed(navigatorKey.currentContext!, Routes.HOME);
         // }
       }else{
         if (router=='/login') {

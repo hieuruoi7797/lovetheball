@@ -129,7 +129,6 @@ class LobbyBloc {
     _listSubPlayersOne.add(subList) :
     _listSubPlayersTwo.add(subList);
     lobbyBloc.changeAddingEnable(null,"");
-
   }
 
   void removePlayerFromOldList({required String id}) {
@@ -177,6 +176,14 @@ class LobbyBloc {
        _listPendingPlayers.add(pendingList);
    }
 
+  }
+
+  movePlayerToPending(PlayerModel nowMovingPlayer, String teamKey) {
+    nowSwappingFromTeam = teamKey;
+    removePlayerFromOldList(id: nowMovingPlayer.id);
+    List<PlayerModel> listPendingNow = _listPendingPlayers.value;
+    listPendingNow.add(nowMovingPlayer);
+    _listPendingPlayers.add(listPendingNow);
   }
 }
 

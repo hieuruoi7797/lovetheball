@@ -149,7 +149,7 @@ class GameOnBloc {
 
   void emitChangesSocket({bool? isFirstEmit}) {
     Map body = {};
-    repository.socketConnect();
+    repository.socketConnect('stat');
     if (isFirstEmit == true) {
       body = {
         "first_emit": true,

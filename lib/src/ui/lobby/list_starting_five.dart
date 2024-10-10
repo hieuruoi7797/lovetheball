@@ -84,7 +84,33 @@ class ListStartingFive extends StatelessWidget {
                       Container(
                           margin: EdgeInsets.symmetric(horizontal: 10),
                           child: (index >= listStartingFive.length) ? Text("Nguoi choi 1") : Text(listStartingFive[index].name)):
-                      const SizedBox()
+                      const SizedBox(),
+                      Spacer(),
+                      StreamBuilder<PlayerModel?>(
+                          stream: lobbyBloc.getAddingPlayer,
+                          builder:  (context, snapshot) {
+                                if (snapshot.data != null && listStartingFive[index].id != "000") {
+                                  return GestureDetector(
+                                    onTap: () => lobbyBloc.movePlayerToPending(listStartingFive[index], teamKey),
+                                    child: Container(
+                                      height: MediaQuery
+                                          .sizeOf(context)
+                                          .height * 0.1,
+                                      width: MediaQuery
+                                          .sizeOf(context)
+                                          .height * 0.1,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(6)
+                                      ),
+                                      child: const Icon(Icons.remove,color: Colors.red,),
+                                    ),
+                                  );
+                                }else{
+                                  return const SizedBox();
+                                }
+                          }
+                      )
                     ],
                   ),
                 );

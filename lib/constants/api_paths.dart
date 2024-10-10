@@ -3,7 +3,11 @@ const String base_url =
     // 'http://localhost:8080'; //localhost hieutt
 
     // "http://127.0.0.1:8080/v1";//localhost cua xinh
+<<<<<<< HEAD
       // "http://192.168.1.254:8080/v1";//privateIp cua xinh
+=======
+    //   "http://192.168.1.254:8080/v1";//privateIp cua xinh
+>>>>>>> 645a44a (update socket connection)
     "http://localhost:8080/v1";//privateIp cua mang cong ty
     // "http://192.168.6.59:8080/v1";//privateIp cua mang cong ty
 

@@ -66,8 +66,8 @@ class Repository {
   Future<Response> getPlayers({String? matchId}) async =>
       await _playerApiProvider.getPlayer(matchId:  matchId);
 
-  void socketConnect() {
-    _gameOnApiProvider.socketConnect();
+  void socketConnect(String namespace) {
+    _gameOnApiProvider.socketConnect(namespace);
   }
 
   void emitSocket(String emit, {required Map<dynamic, dynamic> body}) {
