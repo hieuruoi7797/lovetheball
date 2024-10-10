@@ -1,8 +1,10 @@
 import 'dart:core';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
+import 'package:splat_mobile/src/blocs/lobby/lobby_bloc.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 
 class ListPendingPlayers extends StatelessWidget {
@@ -12,6 +14,7 @@ class ListPendingPlayers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    lobbyBloc.setListPendingPlayers(lobbyBloc.listPendingNow);
     return Container(
       padding:expanded?const EdgeInsets.all(0): const EdgeInsets.all(8),
       height: expanded ? MediaQuery.sizeOf(context).height * 0.5 :null,
@@ -22,7 +25,22 @@ class ListPendingPlayers extends StatelessWidget {
       width: double.infinity,
       // height: MediaQuery.sizeOf(context).height * 0.56,
       child: expanded ?
-      ExpandedPendingTeam(onTapCollapse: onTapExpanded,):
+      StreamBuilder<List<PlayerModel>>(
+        stream: lobbyBloc.getListPendingPlayers,
+        builder: (context, listPendingNow) {
+          if (listPendingNow.hasData){
+            return ExpandedPendingTeam(
+              onTapCollapse: onTapExpanded,
+              listPendingPlayers: listPendingNow.data ?? [],
+            );
+          }else{
+            log("hieuttCHECK_PendingListEMPTY");
+            return ExpandedPendingTeam(
+                onTapCollapse: onTapExpanded,
+                listPendingPlayers: []);
+          }
+        }
+      ):
       CollapsedPendingTeam(onTapExpanded: onTapExpanded,),
     );
   }
@@ -30,49 +48,39 @@ class ListPendingPlayers extends StatelessWidget {
 }
 
 class ExpandedPendingTeam extends StatelessWidget {
-  ExpandedPendingTeam({super.key, this.onTapCollapse});
+  ExpandedPendingTeam({super.key, this.onTapCollapse, required this.listPendingPlayers});
   Function()? onTapCollapse;
-
-  List<PlayerModel> listPlayers = [
-    PlayerModel(id: '12',name: "Tran Trung Hieu"),
-    PlayerModel(id: '12',name: "Tran Trung Hieu"),
-    PlayerModel(id: '12',name: "Tran Trung Hieu"),
-    PlayerModel(id: '12',name: "Tran Trung Hieu"),
-    PlayerModel(id: '12',name: "Tran Trung Hieu"),
-    PlayerModel(id: '12',name: "Nguyễn Sơn"),
-    PlayerModel(id: '12',name: "Nguyễn Sơn"),
-    PlayerModel(id: '12',name: "Tran Trung Hieu"),
-    PlayerModel(id: '12',name: "Nguyễn Sơn"),
-    PlayerModel(id: '12',name: "Nguyễn Sơn"),
-    PlayerModel(id: '12',name: "Tran Trung Hieu"),
-    PlayerModel(id: '12',name: "Nguyễn Sơn"),
-  ];
+  List<PlayerModel> listPendingPlayers;
 
 
 
   List<Widget> loadPendingPlayer(List<PlayerModel> listPlayers){
+    lobbyBloc.changeAddingEnable(index: null);
     List<Widget> listWidget = [];
     for ( PlayerModel item in listPlayers){
       listWidget.add(
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(6)
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 20,
-                height: 20,
-                color: Colors.orange,
-              ),
-              SizedBox(width: 4,),
-              Container(
-                child: Text(item.name),
-              )
-            ],
+        GestureDetector(
+          onTap: () => lobbyBloc.changeAddingEnable(index: listPlayers.indexOf(item)),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(6)
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 20,
+                  height: 20,
+                  color: Colors.orange,
+                ),
+                SizedBox(width: 4,),
+                Container(
+                  child: Text(item.name),
+                )
+              ],
+            ),
           ),
         )
       );
@@ -88,11 +96,11 @@ class ExpandedPendingTeam extends StatelessWidget {
         Expanded(
           flex: 2,
           child: Container(
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 14,
               vertical: 6
             ),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color:Colors.white,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12),
@@ -157,7 +165,7 @@ class ExpandedPendingTeam extends StatelessWidget {
                 direction: Axis.horizontal,
                 spacing: 8,
                 runSpacing: 8,
-                children: loadPendingPlayer(listPlayers),
+                children: loadPendingPlayer(listPendingPlayers),
               ),
             ),
           ),

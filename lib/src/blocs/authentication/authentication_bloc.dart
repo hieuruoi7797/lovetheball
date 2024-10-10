@@ -322,14 +322,14 @@ class AuthenticationBloc with Validation{
     if (response != null){
       String accessToken = jsonDecode(response.body)["access_token"];
       await storage.write(key: access_token_key, value: accessToken);
-      Response? checkingTokenRes = await repository.testToken();
-      if (checkingTokenRes != null) {
-        await storage.write(
-            key: user_info,
-            value: jsonEncode(PlayerModel.fromJson(
-                jsonDecode(checkingTokenRes.body)).toJson()));
+      // Response? checkingTokenRes = await repository.testToken();
+      // if (checkingTokenRes != null) {
+      //   await storage.write(
+      //       key: user_info,
+      //       value: jsonEncode(PlayerModel.fromJson(
+      //           jsonDecode(checkingTokenRes.body)).toJson()));
         Navigator.pushNamed(navigatorKey.currentContext!, '/home');
-      }
+      // }
     }
   }
 

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:splat_mobile/src/models/player_model.dart';
 
 class ListStartingFive extends StatelessWidget {
-  int itemCount;
+  List<PlayerModel> listStartingFive = [];
   bool expanded;
   bool rightToLeft;
 
-  ListStartingFive({super.key, required this.itemCount, required this.expanded, required this.rightToLeft});
+  ListStartingFive({super.key, required this.listStartingFive, required this.expanded, required this.rightToLeft});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class ListStartingFive extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8),
       child: ListView.builder(
         shrinkWrap: true,
-          itemCount: itemCount,
+          itemCount: 5,
           itemBuilder: (context, index){
             return Container(
               padding: const EdgeInsets.all(6),
@@ -39,7 +40,7 @@ class ListStartingFive extends StatelessWidget {
                   expanded?
                   Container(
                       margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text("Nguoi choi 1")):
+                      child: (index >= listStartingFive.length) ? Text("Nguoi choi 1") : Text(listStartingFive[index].name)):
                   const SizedBox()
                 ],
               ),
