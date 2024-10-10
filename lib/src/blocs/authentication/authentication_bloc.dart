@@ -277,6 +277,7 @@ class AuthenticationBloc with Validation{
         String refreshToken = jsonDecode(response.body)["refresh_token"];
         await storage.write(key: access_token_key, value: accessToken);
         await storage.write(key: refresh_token_key, value: refreshToken);
+        repository.socketConnect("notifications");
         // Response? checkingTokenRes = await repository.testToken();
         // commonTextFieldBloc.enterMsgCode("");
         // if (checkingTokenRes != null){
@@ -287,8 +288,7 @@ class AuthenticationBloc with Validation{
         //   //lỗi ký tự khi jsonDecode tu varchar database
         //   print('xinhcheck${json.decode(utf8.decode(checkingTokenRes.body.codeUnits))}');
         //   // Navigator.of(context).popUntil(ModalRoute.withName('/'));
-
-          Navigator.popAndPushNamed(navigatorKey.currentContext!, '/home');
+          Navigator.popAndPushNamed(navigatorKey.currentContext!, Routes.HOME);
         // }
       }else{
         if (router=='/login') {
@@ -322,14 +322,14 @@ class AuthenticationBloc with Validation{
     if (response != null){
       String accessToken = jsonDecode(response.body)["access_token"];
       await storage.write(key: access_token_key, value: accessToken);
-      Response? checkingTokenRes = await repository.testToken();
-      if (checkingTokenRes != null) {
-        await storage.write(
-            key: user_info,
-            value: jsonEncode(PlayerModel.fromJson(
-                jsonDecode(checkingTokenRes.body)).toJson()));
+      // Response? checkingTokenRes = await repository.testToken();
+      // if (checkingTokenRes != null) {
+      //   await storage.write(
+      //       key: user_info,
+      //       value: jsonEncode(PlayerModel.fromJson(
+      //           jsonDecode(checkingTokenRes.body)).toJson()));
         Navigator.pushNamed(navigatorKey.currentContext!, '/home');
-      }
+      // }
     }
   }
 

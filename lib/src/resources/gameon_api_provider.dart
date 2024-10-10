@@ -35,17 +35,18 @@ class GameOnApiProvider {
     }
   }
 
-  void socketConnect() {
+  void socketConnect(String namespace) {
     socket = IO.io(
-      'https://ample-crawdad-kind.ngrok-free.app',
+        base_url,
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .disableAutoConnect() // for Flutter or Dart VM
-          .setPath("/sio/socket.io")
+          .setPath("/socket")
           .build());
-    socket.nsp = '/stats';
+    socket.nsp = '/$namespace';
     socket.connect();
     socket.onConnect((data) {
+      print("SOCKET CONNECTED");
       socket.on('get_stats', (data) =>  gameOnBloc.updateStats(data));
       socket.on('disconnect', (data) =>  gameOnBloc.dispose(data));
     });

@@ -58,8 +58,7 @@ class SettingMatchScreen extends StatelessWidget {
                 onTap: () {
                   matchSettingBloc.sendMatch();
                   quickMatchBloc.getUsers(context);
-                  quickMatchBloc.setSearching(false);
-                  Navigator.pushNamed(context, QUICK_MATCH);
+                  Navigator.pushNamed(context, Routes.QUICK_MATCH);
                 },
                 buttonName: localizations.btn_continue,
                 height: 50,

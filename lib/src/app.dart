@@ -2,11 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/src/ui/authentication/authentication_screen.dart';
-import 'package:splat_mobile/src/ui/authentication/login_existed_account_screen.dart';
 import 'package:splat_mobile/src/ui/authentication/registration_info_screen.dart';
 import 'package:splat_mobile/src/ui/authentication/setting_avatar_screen.dart';
 import 'package:splat_mobile/src/ui/home/home_screen.dart';
@@ -57,14 +55,14 @@ class MyApp extends StatelessWidget {
       routes: {
       //   '/': (context) => LoginScreen(),
       //   '/sign_up': (context) => const PlayerCreatingScreen(),
-        HOME: (context) => const HomeScreen(),
-        SETTING_MATCH: (context) => SettingMatchScreen(),
+        Routes.HOME: (context) => const HomeScreen(),
+        Routes.SETTING_MATCH: (context) => SettingMatchScreen(),
       //   '/game_on': (context) => const GameOnScreen(),
       //   '/overview_history_game': (context) => const OverviewHistoryScreen(),
-        REGISTER_INFO: (context) => const RegistrationInfoScreen(),
-        SETTING_AVT: (context) => const SettingAvatarScreen(),
-        QUICK_MATCH: (context) => const QuickMatchScreen(),
-        LOBBY: (context) => const LobbyScreen()
+        Routes.REGISTER_INFO: (context) => const RegistrationInfoScreen(),
+        Routes.SETTING_AVT: (context) => const SettingAvatarScreen(),
+        Routes.QUICK_MATCH: (context) => const QuickMatchScreen(),
+        Routes.LOBBY: (context) => const LobbyScreen()
       },
       // home: const MyHomePage(),
     );

@@ -220,7 +220,7 @@ class MatchBloc {
 
   goToMatch(MatchModel match) {
     if (match.status == 0) {
-      repository.socketConnect();
+      repository.socketConnect('stat');
       Navigator.pushNamed(navigatorKey.currentContext!, '/game_on');
     }else{
 

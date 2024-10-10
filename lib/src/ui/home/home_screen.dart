@@ -236,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ],
                                               ),
                                             ),),
-                                            onTap: () => Navigator.pushNamed(context,SETTING_MATCH),
+                                            onTap: () => Navigator.pushNamed(context,Routes.SETTING_MATCH),
                                           ),
                                           // SizedBox(height: 16,),
                                           // Container(

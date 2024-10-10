@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:splat_mobile/constants/constant_values.dart';
+import 'package:splat_mobile/src/blocs/lobby/lobby_bloc.dart';
+import 'package:splat_mobile/src/models/player_model.dart';
 import 'package:splat_mobile/src/ui/lobby/list_pending_players.dart';
 import 'package:splat_mobile/src/ui/lobby/list_starting_five.dart';
 import 'package:splat_mobile/src/ui/lobby/list_sub_team.dart';
@@ -27,12 +32,14 @@ class _LobbyState extends State<LobbyScreen> {
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
+    lobbyBloc.initData();
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    lobbyBloc.dispose();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
@@ -63,7 +70,7 @@ class _LobbyState extends State<LobbyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tran dau tuy chinh - 5v5"),
+        title: Text("Tran dau tuy chinh"),
         backgroundColor: Colors.white,
         actions: [],
       ),
@@ -77,50 +84,42 @@ class _LobbyState extends State<LobbyScreen> {
                 // vertical: 24
             ),
             color: Color(0xFFD8E5F3),
-            child: Column(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                       flex: 1,
-                         child: Container(
-                           // padding: const EdgeInsets.symmetric(: 52),
-                       // color: Colors.yellow,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                         flex: 1,
                            child: SingleChildScrollView(
-                             child: Column(
-                               crossAxisAlignment: CrossAxisAlignment.start,
-                               children: [
-                                 const SizedBox(height: 16,),
-                                 const Text("TEAM 1"),
-                                 ListStartingFive(
-                                     itemCount: 5,
-                                      expanded: !pendingListExpanded,
-                                   rightToLeft: false,),
-                                 // Spacer(),
-                                 const SizedBox(height: 8,),
-                                 Column(
-                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                   children: [
-                                     const SizedBox(height: 8,),
-                                   ],
-                                 )
-                               ],
+                             child: StreamBuilder<List<PlayerModel>>(
+                               stream: lobbyBloc.getListTeamOnePlayers,
+                               builder: (context, snapshot)
+                               {
+                                 if (snapshot.connectionState == ConnectionState.waiting) {
+                                   return Text('Waiting for data...');
+                                 } else if (snapshot.hasData) {
+                                   return ListStartingFive(
+                                             teamKey: Constants.TEAM_1,
+                                             listStartingFive: snapshot.hasData ? snapshot.data! : [],
+                                             expanded: !pendingListExpanded,
+                                             rightToLeft: false,);
+                                 } else {
+                                   return Text('No data available');
+                                 }
+                               },
                              ),
-                           ),
-                     )),
-                    Expanded(
-                        flex: pendingListExpanded ? 6 : 1,
-                        child:
-
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: SingleChildScrollView(
+                           )),
+                      Expanded(
+                          flex: pendingListExpanded ? 6 : 1,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Column(
                               children: [
                                 const SizedBox(height: 16,),
                                 const Text(""),
-                                const SizedBox(height: 8,),
                                 ListPendingPlayers(
                                     expanded: pendingListExpanded,
                                     onTapExpanded: () => setState(() {
@@ -128,60 +127,66 @@ class _LobbyState extends State<LobbyScreen> {
                                     }),)
                               ],
                             ),
-                          ),
-                        )),
-                    Expanded(
-                        flex: 1,
-                        child: Container(
-                          // padding: const EdgeInsets.symmetric(horizontal: 20),
-                          // color: Colors.yellow,
+                          )),
+                      Expanded(
+                          flex: 1,
                           child: SingleChildScrollView(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                const SizedBox(height: 16,),
-                                const Text("TEAM 2"),
-                                ListStartingFive(
-                                  itemCount: 5,
-                                  expanded: !pendingListExpanded,
-                                  rightToLeft: true
+                                StreamBuilder<List<PlayerModel>>(
+                                  stream: lobbyBloc.getListTeamTwoPlayers,
+                                  builder: (context, snapshot) {
+                                    return ListStartingFive(
+                                      expanded: !pendingListExpanded,
+                                      rightToLeft: true,
+                                      listStartingFive: snapshot.hasData? snapshot.data!:[],
+                                      teamKey: Constants.TEAM_2,
+                                    );
+                                  }
                                 ),
                                 // Spacer(),
                                 const SizedBox(height: 8,),
-                                Column(
+                                const Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    const SizedBox(height: 8,),
+                                    SizedBox(height: 8,),
                                   ],
                                 )
                               ],
                             ),
-                          ),
-                        ))
-                  ],
-                ),
-                Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("DU BI TEAM 1"),
-                        const SizedBox(height: 8,),
-                        ListSubTeam(itemCount: 6),
-                      ],
-                    ),
-                    const Spacer(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const Text("DU BI TEAM 2"),
-                        const SizedBox(height: 8,),
-                        ListSubTeam(itemCount: 6),
-                      ],
-                    )
-                  ],
-                )
-              ],
+                          ))
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("DU BI TEAM 1"),
+                          const SizedBox(height: 8,),
+                          SizedBox(
+                            // color: Colors.orange,
+                            width: MediaQuery.sizeOf(context).width * 0.27,
+                              child: ListSubTeam(subTeamKey: Constants.SUB_1)),
+                        ],
+                      ),
+                      const Spacer(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          const Text("DU BI TEAM 2"),
+                          const SizedBox(height: 8,),
+                          SizedBox(
+                            // color: Colors.orange,
+                              width: MediaQuery.sizeOf(context).width * 0.27,
+                              child: ListSubTeam(subTeamKey: Constants.SUB_2, alignment: WrapAlignment.end,)),
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
           Align(

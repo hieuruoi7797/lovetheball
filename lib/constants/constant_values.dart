@@ -44,9 +44,20 @@ Map<String, String> headerWithToken(String token) => {
 
 
 ///Routes
-const String HOME = '/home';
-const String SETTING_MATCH = '/settingMatch';
-const String REGISTER_INFO = '/registerInfoUser';
-const String SETTING_AVT = '/settingAvatar';
-const String QUICK_MATCH = '/quickMatch';
-const String LOBBY = '/lobby';
+class Routes{
+  static const String HOME = '/home';
+  static const String SETTING_MATCH = '/settingMatch';
+  static const String REGISTER_INFO = '/registerInfoUser';
+  static const String SETTING_AVT = '/settingAvatar';
+  static const String QUICK_MATCH = '/quickMatch';
+  static const String LOBBY = '/lobby';
+}
+
+
+class Constants{
+  static const String TEAM_1 = "TEAM_1";
+  static const String TEAM_2 = "TEAM_2";
+  static const String SUB_1 = "SUB_1";
+  static const String SUB_2 = "SUB_2";
+  static const String TEAM_PENDING = "PENDING";
+}
