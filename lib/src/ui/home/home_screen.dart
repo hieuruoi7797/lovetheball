@@ -10,6 +10,7 @@ import 'package:splat_mobile/src/blocs/home_bloc/home_bloc.dart';
 import 'package:splat_mobile/src/blocs/match/match_bloc.dart';
 import 'package:splat_mobile/src/resources/show_dialog.dart';
 import 'package:splat_mobile/src/ui/home/nav_bar.dart';
+import 'package:splat_mobile/src/ui/home/setting_screen.dart';
 import 'package:splat_mobile/src/ui/home/tap_home_page.dart';
 import 'package:splat_mobile/widgets_common/rounded_image.dart';
 import 'nav_model.dart';
@@ -43,11 +44,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     items = [
       NavModel(
-        page: const TabHomePage(tab: 1),
+        page: const TabHomePage(tab: 0),
         navKey: homeNavKey,
       ),
       NavModel(
-        page: const TabHomePage(tab: 2),
+        page: const SettingScreen(tab: 1),
         navKey: searchNavKey,
       ),
     ];

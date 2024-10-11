@@ -51,6 +51,7 @@ class Routes{
   static const String SETTING_AVT = '/settingAvatar';
   static const String QUICK_MATCH = '/quickMatch';
   static const String LOBBY = '/lobby';
+  static const String LOGIN_GOOGLE = '/loginGoogle';
 }
 
 
@@ -61,3 +62,4 @@ class Constants{
   static const String SUB_2 = "SUB_2";
   static const String TEAM_PENDING = "PENDING";
 }
+

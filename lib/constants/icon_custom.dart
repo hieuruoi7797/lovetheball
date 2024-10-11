@@ -15,4 +15,5 @@ class CustomIcon{
   static const String icon_anm_checkmark = "assets/animations/checkmark.json";
   static const String red_xicon = "svg_pictures/red_xicon.svg";
   static const String icon_search = "svg_pictures/icon_search.svg";
+  static const String icon_edit = "svg_pictures/ic_edit.svg";
 }

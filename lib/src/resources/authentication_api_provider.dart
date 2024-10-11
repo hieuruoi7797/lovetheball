@@ -188,8 +188,32 @@ class AuthenticationiApiProvider {
     if (response.statusCode != 505) {
       return response;
     } else {
-      // await Future.delayed(
-      //     Duration.zero, () => DialogWidget().showFailDialog(error_fail));
+      await Future.delayed(
+          Duration.zero, () => show.dialog(
+          dialogWidget: AddDialog.cupertinoDialogOneBtn(
+            context: navigatorKey.currentContext!,
+            content: 'Hệ thông gián đoạn vui lòng quay lại sau!',
+          )
+      ));
+      return null;
+    }
+  }
+  Future<Response?> authGG() async{
+    Response response;
+    response = await PublicMethods().get(
+        subUri: auth_gg_api,
+        showLoader: true,
+        queryParameters: {});
+    if (response.statusCode != 505) {
+      return response;
+    } else {
+      await Future.delayed(
+          Duration.zero, () => show.dialog(
+          dialogWidget: AddDialog.cupertinoDialogOneBtn(
+            context: navigatorKey.currentContext!,
+            content: 'Hệ thông gián đoạn vui lòng quay lại sau!',
+          )
+      ));
       return null;
     }
   }
@@ -203,8 +227,13 @@ class AuthenticationiApiProvider {
     if (response.statusCode != 505) {
       return response;
     } else {
-      // await Future.delayed(
-      //     Duration.zero, () => DialogWidget().showFailDialog(error_fail));
+      await Future.delayed(
+          Duration.zero, () => show.dialog(
+          dialogWidget: AddDialog.cupertinoDialogOneBtn(
+            context: navigatorKey.currentContext!,
+            content: 'Hệ thông gián đoạn vui lòng quay lại sau!',
+          )
+      ));
       return null;
     }
   }

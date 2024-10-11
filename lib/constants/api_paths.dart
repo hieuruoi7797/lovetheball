@@ -14,6 +14,7 @@ const String test_token_path = '/users/current_user';
 const String refresh_token_url = '/authentication/refresh_token';
 const String logout_path = '/authentication/logout';
 const String login_gg_api = '/authentication/google/login';
+const String auth_gg_api = '/authentication/google/auth';
 const String reset_password_path = '/authentication/reset_password';
 const String finish_match_path = '/matches/finish';
 const String API_REGISTER_EMAIL = "/users/email_registration";
