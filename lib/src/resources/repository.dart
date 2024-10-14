@@ -70,8 +70,8 @@ class Repository {
     _gameOnApiProvider.socketConnect(namespace);
   }
 
-  void emitSocket(String emit, {required Map<dynamic, dynamic> body}) {
-    _gameOnApiProvider.emitSocket(emit, body: body);
+  void emitSocket(String event, {required Map<dynamic, dynamic> body}) {
+    _gameOnApiProvider.emitSocket(event, body: body);
   }
 
   void disconnect() {

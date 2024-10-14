@@ -278,6 +278,16 @@ class AuthenticationBloc with Validation{
         await storage.write(key: access_token_key, value: accessToken);
         await storage.write(key: refresh_token_key, value: refreshToken);
         repository.socketConnect("notifications");
+        repository.emitSocket("register", body: {
+          "interactor": {
+            "id_": "38012d14-29b7-41c1-bfaa-c5c198007d4a",
+            "name": "trần trung hiếu",
+            "interactor_type": 0
+          },
+          "notification_to_be_received": [
+            0
+          ]
+        });
         // Response? checkingTokenRes = await repository.testToken();
         // commonTextFieldBloc.enterMsgCode("");
         // if (checkingTokenRes != null){
