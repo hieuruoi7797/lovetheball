@@ -11,7 +11,7 @@ import 'package:splat_mobile/src/ui/authentication/setting_avatar_screen.dart';
 import 'package:splat_mobile/src/ui/home/home_screen.dart';
 import 'package:splat_mobile/src/ui/lobby/lobby_screen.dart';
 import 'package:splat_mobile/src/ui/login_with_google/login_with_google_screen.dart';
-import 'package:splat_mobile/src/ui/quick_match/quick_match_screen.dart';
+import 'package:splat_mobile/src/ui/quick_match/add_player_screen.dart';
 import 'package:splat_mobile/src/ui/setting_match/setting_match_screen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();

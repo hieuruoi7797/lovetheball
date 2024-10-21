@@ -7,7 +7,7 @@ import 'package:splat_mobile/constants/ui_styles.dart';
 import 'package:splat_mobile/public/widget_item/app_button.dart';
 import 'package:splat_mobile/src/blocs/match/match_setting_bloc.dart';
 import 'package:splat_mobile/src/models/basketball_match_setting_model.dart';
-import 'package:splat_mobile/src/blocs/quick_match/quick_match_bloc.dart';
+import 'package:splat_mobile/src/blocs/quick_match/add_player_bloc.dart';
 import 'package:splat_mobile/src/ui/setting_match/match_custom_info.dart';
 import 'package:splat_mobile/src/ui/setting_match/match_type_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -57,8 +57,8 @@ class SettingMatchScreen extends StatelessWidget {
               child: AppButton.buttonGen1(
                 onTap: () {
                   matchSettingBloc.sendMatch();
-                  quickMatchBloc.getUsers(context);
                   Navigator.pushNamed(context, Routes.LOBBY);
+
                 },
                 buttonName: localizations.btn_continue,
 

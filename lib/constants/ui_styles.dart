@@ -71,7 +71,7 @@ const TextStyle typing_text = TextStyle(
 );
 
 const TextStyle headerTextStyle = TextStyle(
-  fontSize: 15,
+  fontSize: 18,
   fontWeight: FontWeight.w600,
   color: Colors.black,
 );
