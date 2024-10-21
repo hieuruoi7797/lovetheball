@@ -1,7 +1,11 @@
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
+import 'package:splat_mobile/main.dart';
 import 'package:splat_mobile/src/blocs/home_bloc/home_bloc.dart';
 import 'package:splat_mobile/src/blocs/match/match_bloc.dart';
 import 'package:splat_mobile/src/resources/show_dialog.dart';
@@ -11,8 +15,11 @@ import 'package:splat_mobile/widgets_common/rounded_image.dart';
 import 'nav_model.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
+  const HomeScreen(this.notificationAppLaunchDetails,{
+    super.key});
+  final NotificationAppLaunchDetails? notificationAppLaunchDetails;
+  bool get didNotificationLaunchApp =>
+      notificationAppLaunchDetails?.didNotificationLaunchApp ?? false;
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -25,9 +32,15 @@ class _HomeScreenState extends State<HomeScreen> {
   final buttonKey = GlobalKey();
   final searchNavKey = GlobalKey<NavigatorState>();
   final notificationNavKey = GlobalKey<NavigatorState>();
+  bool _notificationsEnabled = false;
+
 
   @override
   void initState() {
+
+    // TODO: implement initState
+    super.initState();
+
     items = [
       NavModel(
         page: const TabHomePage(tab: 1),
@@ -39,8 +52,96 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     ];
     homeBloc.getUserSaved(context);
-    // TODO: implement initState
-    super.initState();
+
+    _isAndroidPermissionGranted();
+    _requestPermissions();
+    _configureDidReceiveLocalNotificationSubject();
+    _configureSelectNotificationSubject();
+  }
+
+  Future<void> _isAndroidPermissionGranted() async {
+    if (Platform.isAndroid) {
+      final bool granted = await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+          ?.areNotificationsEnabled() ??
+          false;
+
+      setState(() {
+        _notificationsEnabled = granted;
+      });
+    }
+  }
+
+  Future<void> _requestPermissions() async {
+    if (Platform.isIOS || Platform.isMacOS) {
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin>()
+          ?.requestPermissions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+          MacOSFlutterLocalNotificationsPlugin>()
+          ?.requestPermissions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+    } else if (Platform.isAndroid) {
+      final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
+      flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>();
+
+      final bool? grantedNotificationPermission =
+      await androidImplementation?.requestNotificationsPermission();
+      setState(() {
+        _notificationsEnabled = grantedNotificationPermission ?? false;
+      });
+    }
+  }
+
+  void _configureDidReceiveLocalNotificationSubject() {
+    didReceiveLocalNotificationStream.stream
+        .listen((ReceivedNotification receivedNotification) async {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) => CupertinoAlertDialog(
+          title: receivedNotification.title != null
+              ? Text(receivedNotification.title!)
+              : null,
+          content: receivedNotification.body != null
+              ? Text(receivedNotification.body!)
+              : null,
+          actions: <Widget>[
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              onPressed: () async {
+                Navigator.of(context, rootNavigator: true).pop();
+                await Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) =>
+                        HomeScreen(widget.notificationAppLaunchDetails),
+                  ),
+                );
+              },
+              child: const Text('Ok'),
+            )
+          ],
+        ),
+      );
+    });
+  }
+
+  void _configureSelectNotificationSubject() {
+    selectNotificationStream.stream.listen((String? payload) async {
+      await Navigator.of(context).push(MaterialPageRoute<void>(
+        builder: (BuildContext context) => HomeScreen(widget.notificationAppLaunchDetails),
+      ));
+    });
   }
 
   @override
@@ -236,7 +337,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ],
                                               ),
                                             ),),
-                                            onTap: () => Navigator.pushNamed(context,Routes.SETTING_MATCH),
+                                            onTap: () {
+                                              Navigator.pushNamed(context,Routes.SETTING_MATCH);
+                                              flutterLocalNotificationsPlugin.show(000, "Testing title", "Somebody",
+                                                  NotificationDetails(
+                                                  ));
+                                            }
                                           ),
                                           // SizedBox(height: 16,),
                                           // Container(

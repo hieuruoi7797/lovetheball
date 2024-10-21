@@ -45,13 +45,19 @@ class GameOnApiProvider {
           .build());
     socket.nsp = '/$namespace';
     socket.connect();
+    socket.onclose((reason){
+      print("SOCKET CLOSED");
+    });
     socket.onConnect((data) {
       print("SOCKET CONNECTED");
-      socket.on('get_stats', (data) =>  gameOnBloc.updateStats(data));
-      socket.on('disconnect', (data) =>  gameOnBloc.dispose(data));
+      // socket.on('get_stats', (data) =>  gameOnBloc.updateStats(data));
+      // socket.on('disconnect', (data) =>  gameOnBloc.dispose(data));
     });
-    socket.onConnectError((data) => log('E: ${data.toString()}'));
-    socket.onDisconnect((data) => log('disconnected to socket'));
+    socket.onConnectError(
+            (data) => log('SOCKET ERR: ${data.toString()}')
+    );
+    socket.onDisconnect(
+            (data) => log('disconnected to socket'));
 
   }
 

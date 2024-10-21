@@ -62,7 +62,10 @@ class ListStartingFive extends StatelessWidget {
                             );
                           }else {
                             return GestureDetector(
-                              onTap: () => lobbyBloc.changeAddingEnable(listStartingFive[index],teamKey),
+                              onTap: () => lobbyBloc.changeAddingEnable(
+                                  listStartingFive[index],
+                                  teamKey,
+                                  disableExpandedPendingList: true),
                               child: Container(
                                 height: MediaQuery
                                     .sizeOf(context)
@@ -89,7 +92,7 @@ class ListStartingFive extends StatelessWidget {
                       StreamBuilder<PlayerModel?>(
                           stream: lobbyBloc.getAddingPlayer,
                           builder:  (context, snapshot) {
-                                if (snapshot.data != null && listStartingFive[index].id != "000") {
+                                if (snapshot.data != null && listStartingFive[index].id == snapshot.data?.id) {
                                   return GestureDetector(
                                     onTap: () => lobbyBloc.movePlayerToPending(listStartingFive[index], teamKey),
                                     child: Container(

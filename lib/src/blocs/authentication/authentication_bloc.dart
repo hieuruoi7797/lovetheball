@@ -288,7 +288,7 @@ class AuthenticationBloc with Validation{
             0
           ]
         });
-        // Response? checkingTokenRes = await repository.testToken();
+        Response? checkingTokenRes = await repository.testToken();
         // commonTextFieldBloc.enterMsgCode("");
         // if (checkingTokenRes != null){
         //   await storage.write(

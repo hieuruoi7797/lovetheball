@@ -150,7 +150,10 @@ class PublicMethods {
   static Future<PlayerModel?> getNowUser() async {
     String? stringUserNow = await storage.read(
         key: user_info);
-    PlayerModel? userNow = PlayerModel.fromJson(jsonDecode(stringUserNow??''));
+    PlayerModel userNow = PlayerModel(id: '000', name: 'UNKNOWN');
+    if (stringUserNow != null && stringUserNow.isNotEmpty){
+      userNow = PlayerModel.fromJson(jsonDecode(stringUserNow??''));
+    }
     return userNow;
   }
 }

@@ -41,11 +41,9 @@ class AuthenticationiApiProvider {
   }
 
   Future<Response?> testToken() async {
-    response = await PublicMethods().post(
-        body: {},
+    response = await PublicMethods().get(
         subUri: test_token_path,
-        showLoader: false,
-        isFormData: false
+        showLoader: false, queryParameters: {},
     );
       if (response!.statusCode != 505) {
         return response;

@@ -21,13 +21,13 @@ class LobbyScreen extends StatefulWidget {
 }
 
 class _LobbyState extends State<LobbyScreen> {
-  bool pendingListExpanded = false;
+  // bool pendingListExpanded = false;
 
   @override
   void initState() {
     super.initState();
     // TODO: implement initState
-    pendingListExpanded = false;
+    // pendingListExpanded = false;
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
@@ -96,38 +96,50 @@ class _LobbyState extends State<LobbyScreen> {
                            child: SingleChildScrollView(
                              child: StreamBuilder<List<PlayerModel>>(
                                stream: lobbyBloc.getListTeamOnePlayers,
-                               builder: (context, snapshot)
+                               builder: (context, listTeamOne)
                                {
-                                 if (snapshot.connectionState == ConnectionState.waiting) {
+                                 if (listTeamOne.connectionState == ConnectionState.waiting) {
                                    return Text('Waiting for data...');
-                                 } else if (snapshot.hasData) {
-                                   return ListStartingFive(
-                                             teamKey: Constants.TEAM_1,
-                                             listStartingFive: snapshot.hasData ? snapshot.data! : [],
-                                             expanded: !pendingListExpanded,
-                                             rightToLeft: false,);
+                                 } else if (listTeamOne.hasData) {
+                                   return StreamBuilder<bool?>(
+                                     stream: lobbyBloc.pendingListExpanded,
+                                     builder: (context, pendingListExpanded) {
+                                       if (pendingListExpanded.hasData){
+                                         return ListStartingFive(
+                                           teamKey: Constants.TEAM_1,
+                                           listStartingFive: listTeamOne.hasData ? listTeamOne.data! : [],
+                                           expanded: !(pendingListExpanded.data!),
+                                           rightToLeft: false,);
+                                       }else{
+                                         return const SizedBox();
+                                       }
+                                     }
+                                   );
                                  } else {
                                    return Text('No data available');
                                  }
                                },
                              ),
                            )),
-                      Expanded(
-                          flex: pendingListExpanded ? 6 : 1,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 16,),
-                                const Text(""),
-                                ListPendingPlayers(
-                                    expanded: pendingListExpanded,
-                                    onTapExpanded: () => setState(() {
-                                      pendingListExpanded = !pendingListExpanded;
-                                    }),)
-                              ],
-                            ),
-                          )),
+                      StreamBuilder<bool?>(
+                        stream: lobbyBloc.pendingListExpanded,
+                        builder: (context, pendingListExpanded) {
+                          return Expanded(
+                              flex: pendingListExpanded.data == true ? 6 : 1,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: Column(
+                                  children: [
+                                    const SizedBox(height: 16,),
+                                    const Text(""),
+                                    ListPendingPlayers(
+                                        expanded: pendingListExpanded.data == true,
+                                        onTapExpanded: () => lobbyBloc.setPendingListExpanded(),)
+                                  ],
+                                ),
+                              ));
+                        }
+                      ),
                       Expanded(
                           flex: 1,
                           child: SingleChildScrollView(
@@ -136,12 +148,17 @@ class _LobbyState extends State<LobbyScreen> {
                               children: [
                                 StreamBuilder<List<PlayerModel>>(
                                   stream: lobbyBloc.getListTeamTwoPlayers,
-                                  builder: (context, snapshot) {
-                                    return ListStartingFive(
-                                      expanded: !pendingListExpanded,
-                                      rightToLeft: true,
-                                      listStartingFive: snapshot.hasData? snapshot.data!:[],
-                                      teamKey: Constants.TEAM_2,
+                                  builder: (context, listTeamTwo) {
+                                    return StreamBuilder<bool?>(
+                                      stream: lobbyBloc.pendingListExpanded,
+                                      builder: (context, pendingListExpanded) {
+                                        return ListStartingFive(
+                                          expanded: !(pendingListExpanded.data??false),
+                                          rightToLeft: true,
+                                          listStartingFive: listTeamTwo.hasData? listTeamTwo.data!:[],
+                                          teamKey: Constants.TEAM_2,
+                                        );
+                                      }
                                     );
                                   }
                                 ),

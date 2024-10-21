@@ -11,6 +11,7 @@ class LobbyBloc {
   BehaviorSubject<List<PlayerModel>> _listTeamPlayersTwo = BehaviorSubject<List<PlayerModel>>();
   BehaviorSubject<List<PlayerModel>> _listSubPlayersTwo = BehaviorSubject<List<PlayerModel>>();
   BehaviorSubject<PlayerModel?> _nowSwappingPlayer = BehaviorSubject<PlayerModel?>();
+  final BehaviorSubject<bool?> _pendingListExpanded = BehaviorSubject<bool?>();
   String nowSwappingFromTeam = "";
   String nowSwappingToTeam = "";
  final List<PlayerModel> _listPendingDumb = [
@@ -28,6 +29,7 @@ class LobbyBloc {
  Stream<List<PlayerModel>> get getListSubOnePlayers => _listSubPlayersOne.stream;
  Stream<List<PlayerModel>> get getListTeamTwoPlayers => _listTeamPlayersTwo.stream;
  Stream<List<PlayerModel>> get getListSubTwoPlayers => _listSubPlayersTwo.stream;
+ Stream<bool?> get pendingListExpanded => _pendingListExpanded.stream;
 
  LobbyBloc();
 
@@ -78,13 +80,20 @@ class LobbyBloc {
      PlayerModel(id: '000',name: "unknown"),
      PlayerModel(id: '000',name: "unknown"),
    ]);
+
+   _pendingListExpanded.add(false);
  }
 
  void setListPendingPlayers(List<PlayerModel> listPlayers){
    _listPendingPlayers.add(listPlayers);
  }
 
- Future<void> changeAddingEnable(PlayerModel? editingPlayer, String nowSwappingTeam) async {
+ Future<void> changeAddingEnable(PlayerModel? editingPlayer, String nowSwappingTeam,
+     {bool? disableExpandedPendingList}) async {
+    if (disableExpandedPendingList == true) {
+      _pendingListExpanded.value == true ?
+      setPendingListExpanded():null;
+    }
        if ( (_nowSwappingPlayer.hasValue && editingPlayer?.id == _nowSwappingPlayer.value?.id) ||
             editingPlayer?.id == "000"){
          _nowSwappingPlayer.add(null);
@@ -184,6 +193,11 @@ class LobbyBloc {
     List<PlayerModel> listPendingNow = _listPendingPlayers.value;
     listPendingNow.add(nowMovingPlayer);
     _listPendingPlayers.add(listPendingNow);
+  }
+
+  setPendingListExpanded() {
+   bool nowExpandedStatus = _pendingListExpanded.value ?? false;
+   _pendingListExpanded.add(!nowExpandedStatus);
   }
 }
 

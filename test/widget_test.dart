@@ -5,14 +5,30 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:splat_mobile/constants/constant_values.dart';
+import 'package:splat_mobile/main.dart';
 import 'package:splat_mobile/src/app.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    final NotificationAppLaunchDetails? notificationAppLaunchDetails = !kIsWeb &&
+        Platform.isLinux
+        ? null
+        : await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    String initialRoute = Routes.REGISTER_INFO;
+    if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+      selectedNotificationPayload =
+          notificationAppLaunchDetails!.notificationResponse?.payload;
+      initialRoute = Routes.HOME;
+    }
     // Build our app and trigger a frame.
-    await tester.pumpWidget( MyApp());
+    await tester.pumpWidget( MyApp(notificationAppLaunchDetails));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
