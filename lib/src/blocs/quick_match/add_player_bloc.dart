@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -18,14 +19,14 @@ class QuickMatchBloc{
     "responseCode": "1",
     "responseText": "List friend.",
     "responseBody": [
-      {"user_id": "5", "user_name": "Xinh Ngô"},
-      {"user_id": "3", "user_name": "Nguyễn Thị Vân Anh"},
-      {"user_id": "7", "user_name": "Minh An"},
-      {"user_id": "9", "user_name": "Hoàng Anh"},
-      {"user_id": "10", "user_name": "Phạm Hiếu"},
-      {"user_id": "11", "user_name": "Hiếu Trần"},
-      {"user_id": "12", "user_name": "Phạm Trang"},
-      {"user_id": "15", "user_name": "Daniel Kang"}
+      {"user_id": "5", "user_name": "Xinh Ngô","isInvited":false,"countdown":0},
+      {"user_id": "3", "user_name": "Nguyễn Thị Vân Anh","isInvited":false,"countdown":0},
+      {"user_id": "7", "user_name": "Minh An","isInvited":false,"countdown":0},
+      {"user_id": "9", "user_name": "Hoàng Anh","isInvited":false,"countdown":0},
+      {"user_id": "10", "user_name": "Phạm Hiếu","isInvited":false,"countdown":0},
+      {"user_id": "11", "user_name": "Hiếu Trần","isInvited":false,"countdown":0},
+      {"user_id": "12", "user_name": "Phạm Trang","isInvited":false,"countdown":0},
+      {"user_id": "15", "user_name": "Daniel Kang","isInvited":false,"countdown":0}
     ],
     "responseTotalResult":  8// Total result is 3 here becasue we have 3 categories in responseBody.
   };
@@ -204,5 +205,94 @@ class QuickMatchBloc{
 
   }
 
+  List<Friend> friends = [];
+  final _friendsController = BehaviorSubject<List<Friend>>();
+
+  Stream<List<Friend>> get friendsStream => _friendsController.stream;
+
+  void inviteFriend(String userId) {
+    final friend = friends.firstWhere((f) => f.userId == userId);
+    if (!friend.isInvited) {
+      friend.isInvited = true;
+      friend.countdown.add(5); // Set the countdown to 5 seconds
+      _startCountdown(friend);
+      _updateFriendsList(); // Update the stream with the latest list
+    }
+  }
+
+  void _startCountdown(Friend friend) {
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      final currentCountdown = friend.countdown.value;
+
+      if (currentCountdown > 0) {
+        friend.countdown.add(currentCountdown - 1); // Update countdown
+      } else {
+        friend.isInvited = false; // Reset invitation state
+        friend.countdown.add(0); // Reset countdown
+        timer.cancel(); // Stop the timer
+        _updateFriendsList(); // Update the stream with the latest list
+      }
+    });
+  }
+
+  void _updateFriendsList() {
+    _friendsController.add(List.from(friends)); // Emit the updated friends list
+  }
+
+  // Don't forget to dispose streams when they are no longer needed
+  void dispose() {
+    _friendsController.close();
+    for (var friend in friends) {
+      friend.countdown.close();
+    }
+  }
+
+
+  // Existing properties and methods...
+
+  Map<String, int> friendTimers = {}; // To track timers for each friend
+
+  // A BehaviorSubject to manage the timer stream
+  final BehaviorSubject<Map<String, int>> _timerStreamController = BehaviorSubject<Map<String, int>>();
+
+  Stream<Map<String, int>> get timerStream => _timerStreamController.stream;
+
+  void startFriendTimer(String friendId) {
+    friendTimers[friendId] = 30; // Set the initial countdown time (30 seconds)
+
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      if (friendTimers[friendId] != null && friendTimers[friendId]! > 0) {
+        friendTimers[friendId] = friendTimers[friendId]! - 1; // Decrease timer
+        // Emit the current state of timers
+        _timerStreamController.add(Map.from(friendTimers));
+      } else {
+        timer.cancel(); // Stop the timer when it reaches zero
+        friendTimers.remove(friendId); // Remove the friend's timer
+        _timerStreamController.add(Map.from(friendTimers)); // Update the stream
+      }
+    });
+  }
+
+  void resetFriendTimer(String friendId) {
+    // Reset the timer when countdown reaches 0
+    if (friendTimers.containsKey(friendId)) {
+      friendTimers.remove(friendId);
+      _timerStreamController.add(Map.from(friendTimers)); // Emit updated timers
+    }
+  }
 }
 final  quickMatchBloc= QuickMatchBloc();
+
+class Friend {
+  final String userId;
+  final String userName;
+  bool isInvited;
+  BehaviorSubject<int> countdown; // Use a BehaviorSubject for countdown
+
+  Friend({
+    required this.userId,
+    required this.userName,
+    this.isInvited = false,
+    int initialCountdown = 0,
+  }) : countdown = BehaviorSubject<int>.seeded(initialCountdown);
+}

@@ -181,8 +181,8 @@ class MatchSettingBloc {
       Response apiRes = await MatchApiProvider().postMatchSetting(body: body);
       if (apiRes.statusCode == 201){
         if (navigatorKey.currentState!.context.mounted){
-      quickMatchBloc.getUsers(navigatorKey.currentState!.context);
-      quickMatchBloc.setSearching(false);
+          quickMatchBloc.getUsers(navigatorKey.currentState!.context);
+          quickMatchBloc.setSearching(false);
           Navigator.pushNamed(navigatorKey.currentState!.context, Routes.LOBBY);
         }
       }

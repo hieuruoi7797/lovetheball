@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:splat_mobile/constants/icon_custom.dart';
@@ -8,6 +10,7 @@ import 'package:splat_mobile/public/widget_item/svg_icon.dart';
 import 'package:splat_mobile/src/blocs/quick_match/add_player_bloc.dart';
 
 import '../../../public/widget_item/app_button.dart';
+import '../../resources/timer_counter_bloc.dart';
 
 class QuickMatchScreen extends StatelessWidget {
   const QuickMatchScreen({super.key});
@@ -342,7 +345,7 @@ Widget listTeams(BuildContext context){
     ),
   );
 }
-Widget listFriend(BuildContext context){
+Widget listFriend(BuildContext context) {
   return StreamBuilder<Object>(
     stream: quickMatchBloc.searching,
     builder: (context, snapshot) {
@@ -350,16 +353,13 @@ Widget listFriend(BuildContext context){
         color: Color(0xffd8e5f3).withOpacity(0.6),
         child: Column(
           children: [
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             StreamBuilder<Object>(
               stream: quickMatchBloc.searchListFriendsBehavior,
               builder: (context, snapshot) {
-                return Common.commonSearchText(context,
-                  paddingBox: EdgeInsets.symmetric(
-                    vertical: 10,horizontal: 20
-                  ),
+                return Common.commonSearchText(
+                  context,
+                  paddingBox: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   hintText: "Tìm kiếm bạn bè",
                   prefixIcon: const Padding(
                     padding: EdgeInsets.all(12),
@@ -367,15 +367,16 @@ Widget listFriend(BuildContext context){
                   ),
                   type: TextInputType.text,
                   controller: quickMatchBloc.searchFriendController,
-                  onChanged: (value){
-                    quickMatchBloc.filterFriends(context,quickMatchBloc.searchFriendController.text);
-                  }
+                  onChanged: (value) {
+                    quickMatchBloc.filterFriends(
+                        context, quickMatchBloc.searchFriendController.text);
+                  },
                 );
-              }
+              },
             ),
             Container(
-              width: MediaQuery.of(context).size.width*0.5,
-              height: MediaQuery.of(context).size.height*0.5,
+              width: MediaQuery.of(context).size.width * 0.5,
+              height: MediaQuery.of(context).size.height * 0.5,
               margin: EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
                 color: color_FFFFFF,
@@ -384,150 +385,111 @@ Widget listFriend(BuildContext context){
               child: StreamBuilder<Object>(
                 stream: quickMatchBloc.lsAddFriendsBehavior,
                 builder: (context, snapshot) {
-                  return quickMatchBloc.modelFriend["responseTotalResult"]!=0?ListView.builder(
-                    itemCount: quickMatchBloc.isSearching?quickMatchBloc.modelFriendSearch['responseTotalResult']:quickMatchBloc.modelFriend["responseTotalResult"],
-                    itemBuilder: (BuildContext context, int index){
+                  final totalResults = quickMatchBloc.isSearching
+                      ? quickMatchBloc.modelFriendSearch['responseTotalResult']
+                      : quickMatchBloc.modelFriend['responseTotalResult'];
+
+                  return totalResults != 0
+                      ? ListView.builder(
+                    itemCount: totalResults,
+                    itemBuilder: (BuildContext context, int index) {
+                      final friend = quickMatchBloc.isSearching
+                          ? quickMatchBloc.modelFriendSearch["responseBody"][index]
+                          : quickMatchBloc.modelFriend["responseBody"][index];
+
+                      final friendId = friend['id_'];
+                      final isInvited = quickMatchBloc.lsFriends.contains(friendId);
+
                       return Row(
                         children: [
+                          // Friend Avatar
                           Container(
                             width: 24,
-                            height:24,
+                            height: 24,
                             margin: EdgeInsets.only(left: 10),
-                            decoration:BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                color: Colors.blue,
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                      "assets/png_images/default_avt.png",
-                                    ),
-                                    fit: BoxFit.cover
-                                )
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color: Colors.blue,
+                              image: DecorationImage(
+                                image: AssetImage("assets/png_images/default_avt.png"),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
+                          // Friend Name and Button
                           Container(
                             alignment: Alignment.centerLeft,
                             padding: EdgeInsets.symmetric(vertical: 4),
                             decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                      color:  color_E4EBF2,
-                                    )
-                                )
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: color_E4EBF2,
+                                ),
+                              ),
                             ),
-                            width: MediaQuery.of(context).size.width*0.46,
-                            child:ListTile(
+                            width: MediaQuery.of(context).size.width * 0.46,
+                            child: ListTile(
                               title: Text(
-                                quickMatchBloc.isSearching
-                                    ? quickMatchBloc.modelFriendSearch["responseBody"][index]['name']
-                                    : quickMatchBloc.modelFriend["responseBody"][index]['name'],
+                                friend['name'],
                                 style: textNameItem,
                                 textAlign: TextAlign.left,
                               ),
-                              trailing: Container(
-                                child: TextButton.icon(
+                              trailing: StreamBuilder<Map<String, int>>(
+                                stream: quickMatchBloc.timerStream,
+                                builder: (context, timerSnapshot) {
+                                  // Get the remaining time for the current friend
+                                  final remainingTime = timerSnapshot.data?[friendId] ?? 0;
 
-                                  label: Text(
-                                    quickMatchBloc.isSearching
-                                        ? quickMatchBloc.lsFriends.contains(
-                                        quickMatchBloc.modelFriendSearch["responseBody"][index]['id_'])
-                                        ? "Gửi lại sau(60s)"
-                                        : "Gửi lời mời"
-                                        : quickMatchBloc.lsFriends.contains(
-                                        quickMatchBloc.modelFriend["responseBody"][index]['id_'])
-                                        ? "Gửi lại sau(60s)"
-                                        : "Gửi lời mời",
-                                    style: TextStyle(
-                                      color: quickMatchBloc.isSearching
-                                          ? quickMatchBloc.lsFriends.contains(
-                                          quickMatchBloc.modelFriendSearch["responseBody"][index]['id_'])
-                                          ?  color_ACC7E1// Active color for selected
-                                          : color_31393E // Inactive color for unselected
-                                          : quickMatchBloc.lsFriends.contains(
-                                          quickMatchBloc.modelFriend["responseBody"][index]['id_'])
-                                          ? color_ACC7E1
-                                          : color_31393E,
+                                  return TextButton.icon(
+                                    onPressed: isInvited && remainingTime > 0
+                                        ? null // Disable if already invited
+                                        : () {
+                                      quickMatchBloc.onFriendsSelected(
+                                        !isInvited,
+                                        friendId,
+                                      );
+
+                                      // Start Countdown
+                                      quickMatchBloc.setNumberCount(quickMatchBloc.lsFriends.length);
+                                      quickMatchBloc.setTotal(totalResults);
+                                      quickMatchBloc.checkTab(0);
+                                      quickMatchBloc.startFriendTimer(friendId); // Start a timer for this friend
+                                    },
+                                    icon: Icon(
+                                      isInvited && remainingTime > 0? Icons.check : Icons.add,
+                                      color: isInvited && remainingTime > 0? color_ACC7E1 : color_31393E,
                                     ),
-                                  ),
-                                  onPressed: () {
-                                    bool isSelected = quickMatchBloc.isSearching
-                                        ? quickMatchBloc.lsFriends.contains(
-                                        quickMatchBloc.modelFriendSearch["responseBody"][index]['id_'])
-                                        : quickMatchBloc.lsFriends.contains(
-                                        quickMatchBloc.modelFriend["responseBody"][index]['id_']);
-
-                                    quickMatchBloc.onFriendsSelected(
-                                      !isSelected,
-                                      quickMatchBloc.isSearching
-                                          ? quickMatchBloc.modelFriendSearch["responseBody"][index]['id_']
-                                          : quickMatchBloc.modelFriend["responseBody"][index]['id_'],
-                                    );
-
-                                    quickMatchBloc.setNumberCount(quickMatchBloc.lsFriends.length);
-                                    quickMatchBloc.setTotal(
-                                      quickMatchBloc.isSearching
-                                          ? quickMatchBloc.modelFriendSearch["responseTotalResult"]
-                                          : quickMatchBloc.modelFriend["responseTotalResult"],
-                                    );
-                                    quickMatchBloc.checkTab(0);
-                                  },
-                                  icon:  Icon(
-                                    quickMatchBloc.lsFriends.contains(
-                                        quickMatchBloc.isSearching
-                                            ? quickMatchBloc.modelFriendSearch["responseBody"][index]['id_']
-                                            : quickMatchBloc.modelFriend["responseBody"][index]['id_'])
-                                        ? Icons.check
-                                        : Icons.add,
-                                    color: quickMatchBloc.lsFriends.contains(
-                                        quickMatchBloc.isSearching
-                                            ? quickMatchBloc.modelFriendSearch["responseBody"][index]['id_']
-                                            : quickMatchBloc.modelFriend["responseBody"][index]['id_'])
-                                        ? color_ACC7E1
-                                        : color_31393E, // Inactive color when not selected
-                                  ),
-                                ),
-                                decoration:  BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: Color(0xffd8e5f3).withOpacity(0.6),
-
-
-                                ),
+                                    label: Text(
+                                      isInvited && remainingTime > 0
+                                          ? "Gửi lại sau (${remainingTime}s)" // Show remaining time if invited
+                                          : "Gửi lời mời", // Active button label
+                                      style: TextStyle(
+                                        color: isInvited && remainingTime > 0 ? color_ACC7E1 : color_31393E,
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
-                            )
-
-                            // CheckboxListTile(
-                            //     checkboxShape:  CircleBorder(),
-                            //     activeColor: color_E5601A,
-                            //     side: const BorderSide(
-                            //         color: color_ACC7E1
-                            //     ),
-                            //     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            //     title: Text(
-                            //       quickMatchBloc.isSearching?quickMatchBloc.modelFriendSearch["responseBody"][index]['name']:quickMatchBloc.modelFriend["responseBody"][index]['name'],
-                            //       style: textNameItem,
-                            //       textAlign: TextAlign.left,
-                            //     ),
-                            //     value: quickMatchBloc.isSearching?quickMatchBloc.lsFriends.contains(quickMatchBloc.modelFriendSearch["responseBody"][index]['id_']):quickMatchBloc.lsFriends.contains(quickMatchBloc.modelFriend["responseBody"][index]['id_']),
-                            //     onChanged: (bool? selected){
-                            //       quickMatchBloc.onFriendsSelected(selected!, quickMatchBloc.isSearching?quickMatchBloc.modelFriendSearch["responseBody"][index]['id_']:quickMatchBloc.modelFriend["responseBody"][index]['id_']);
-                            //       quickMatchBloc.setNumberCount(quickMatchBloc.lsFriends.length);
-                            //       quickMatchBloc.setTotal(quickMatchBloc.isSearching?quickMatchBloc.modelFriendSearch["responseTotalResult"]:quickMatchBloc.modelFriend["responseTotalResult"]);
-                            //       quickMatchBloc.checkTab(0);
-                            //     }
-                            // ),
+                            ),
                           ),
                         ],
                       );
-                    }
-                  ):Center(
-                      child: Text("Không có người chơi trong danh sách!")
-                  );
-                }
+                    },
+                  )
+                      : Center(child: Text("Không có người chơi trong danh sách!"));
+                },
               ),
             ),
-
           ],
         ),
       );
-    }
+    },
   );
 }
+
+
+
+
+
+
+

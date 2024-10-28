@@ -15,6 +15,7 @@ import 'package:splat_mobile/src/ui/lobby/list_sub_team.dart';
 import 'package:splat_mobile/src/ui/quick_match/add_player_screen.dart';
 
 import '../../blocs/quick_match/add_player_bloc.dart';
+import '../../resources/timer_counter_bloc.dart';
 
 class LobbyScreen extends StatefulWidget {
   const LobbyScreen({super.key});
@@ -48,6 +49,7 @@ class _LobbyState extends State<LobbyScreen> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
+    timerBloc.dispose();
   }
 
   @override
