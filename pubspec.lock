@@ -1130,7 +1130,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.1"
-<<<<<<< HEAD
   timezone:
     dependency: transitive
     description:
@@ -1139,8 +1138,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.4"
-=======
->>>>>>> e187540 (set timeout invitation)
   timing:
     dependency: transitive
     description:

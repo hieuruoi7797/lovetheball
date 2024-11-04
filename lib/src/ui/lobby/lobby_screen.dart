@@ -80,6 +80,7 @@ class _LobbyState extends State<LobbyScreen> {
       keyScaffold: _scaffoldKey,
       titleAppbar: "Tran dau tuy chinh",
       drawer: QuickMatchScreen(),
+      onTapBack: (){Navigator.pop(context);},
       bodyLayout: Stack(
         children: [
           Container(
@@ -140,7 +141,9 @@ class _LobbyState extends State<LobbyScreen> {
                                     const Text(""),
                                     ListPendingPlayers(
                                         expanded: pendingListExpanded.data == true,
-                                        onTapExpanded: () => lobbyBloc.setPendingListExpanded(),)
+                                        onTapExpanded: () => lobbyBloc.setPendingListExpanded(),
+                                        openDrawer: ()=>Scaffold.of(context).openDrawer()
+                                    )
                                   ],
                                 ),
                               ));

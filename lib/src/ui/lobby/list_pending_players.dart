@@ -32,16 +32,18 @@ class ListPendingPlayers extends StatelessWidget {
           if (listPendingNow.hasData){
             return ExpandedPendingTeam(
               onTapCollapse: onTapExpanded,
+              openDrawer: openDrawer,
               listPendingPlayers: listPendingNow.data ?? [],
             );
           }else{
             return ExpandedPendingTeam(
                 onTapCollapse: onTapExpanded,
+                openDrawer: openDrawer,
                 listPendingPlayers: []);
           }
         }
       ):
-      CollapsedPendingTeam(onTapExpanded: onTapExpanded,),
+      CollapsedPendingTeam(onTapExpanded: onTapExpanded,openDrawer: openDrawer,),
 
     );
   }
@@ -52,7 +54,7 @@ class ExpandedPendingTeam extends StatelessWidget {
   ExpandedPendingTeam({super.key, this.onTapCollapse, required this.listPendingPlayers, this.openDrawer});
   Function()? onTapCollapse;
   List<PlayerModel> listPendingPlayers;
-Function()? openDrawer;
+  Function()? openDrawer;
 
 
 
