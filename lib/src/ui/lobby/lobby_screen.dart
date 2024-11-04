@@ -1,15 +1,21 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/src/blocs/lobby/lobby_bloc.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
+import 'package:splat_mobile/public/widget_item/layout_screen.dart';
 import 'package:splat_mobile/src/ui/lobby/list_pending_players.dart';
 import 'package:splat_mobile/src/ui/lobby/list_starting_five.dart';
 import 'package:splat_mobile/src/ui/lobby/list_sub_team.dart';
+import 'package:splat_mobile/src/ui/quick_match/add_player_screen.dart';
+
+import '../../blocs/quick_match/add_player_bloc.dart';
+import '../../resources/timer_counter_bloc.dart';
 
 class LobbyScreen extends StatefulWidget {
   const LobbyScreen({super.key});
@@ -43,6 +49,7 @@ class _LobbyState extends State<LobbyScreen> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
+    timerBloc.dispose();
   }
 
   @override
@@ -64,17 +71,17 @@ class _LobbyState extends State<LobbyScreen> {
       DeviceOrientation.landscapeLeft,
     ]);
   }
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Tran dau tuy chinh"),
-        backgroundColor: Colors.white,
-        actions: [],
-      ),
-      body: Stack(
+
+    return LayoutScreen(
+      keyScaffold: _scaffoldKey,
+      titleAppbar: "Tran dau tuy chinh",
+      drawer: QuickMatchScreen(),
+      onTapBack: (){Navigator.pop(context);},
+      bodyLayout: Stack(
         children: [
           Container(
             width: MediaQuery.sizeOf(context).width,
@@ -134,7 +141,9 @@ class _LobbyState extends State<LobbyScreen> {
                                     const Text(""),
                                     ListPendingPlayers(
                                         expanded: pendingListExpanded.data == true,
-                                        onTapExpanded: () => lobbyBloc.setPendingListExpanded(),)
+                                        onTapExpanded: () => lobbyBloc.setPendingListExpanded(),
+                                        openDrawer: ()=>Scaffold.of(context).openDrawer()
+                                    )
                                   ],
                                 ),
                               ));

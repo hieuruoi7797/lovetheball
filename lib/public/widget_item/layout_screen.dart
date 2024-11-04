@@ -8,6 +8,7 @@ import '../../src/ui/authentication/authentication_screen.dart';
 import '../../widgets_common/button_gen1.dart';
 
 class LayoutScreen extends StatelessWidget {
+  final Key? keyScaffold;
   final String? titleAppbar;
   final Widget bodyLayout;
   final Function()? onTapBack;
@@ -21,6 +22,8 @@ class LayoutScreen extends StatelessWidget {
   final String? subTitle;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
   final Widget? bottomSheet;
+  final Widget? drawer;
+
   const LayoutScreen({super.key,
     this.titleAppbar,
     required this.bodyLayout,
@@ -34,12 +37,14 @@ class LayoutScreen extends StatelessWidget {
     this.onClose,
     this.subTitle,
     this.floatingActionButtonLocation,
-    this.bottomSheet}
+    this.bottomSheet,
+    this.drawer, this.keyScaffold}
   );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: keyScaffold,
       appBar: titleAppbar!=null?AppBar(
         title: subTitle!=null?Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -89,6 +94,7 @@ class LayoutScreen extends StatelessWidget {
         ]:null,
       ):null,
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+      drawer: drawer,
       body: bodyLayout,
       floatingActionButtonLocation: floatingActionButtonLocation?? FloatingActionButtonLocation.centerFloat,
       floatingActionButton: titleBtnContinue!=null?floatingActionButton??AppButton.buttonGen1(

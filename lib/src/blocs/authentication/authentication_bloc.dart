@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:rxdart/rxdart.dart';
@@ -428,15 +429,40 @@ class AuthenticationBloc with Validation{
     clearEmail();
     timerBloc.dispose();
   }
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    clientId: '656903079437-bmvr7099qij8s4435g0ujf9hngfhvv17.apps.googleusercontent.com', // Use the correct client ID
+    scopes: ['email'],
+  );
+
+  Future<void> _handleSignIn() async {
+    try {
+      final GoogleSignInAccount? account = await _googleSignIn.signIn();
+      print('Signed in as ${account?.email}');
+    } catch (error) {
+      print(error);  // Handle any errors here
+    }
+  }
+
 
   Future<void> resendPin(BuildContext context) async {
     await createUser(context, email: _controllerRegisterEmail.text);
     otpController.clear();
   }
+  static String html ='';
+  Future<void> loginWithGoogle(BuildContext context) async {
+    final GoogleSignInAccount? account = await _googleSignIn.signIn();
+    print('Signed in as ${account?.email} ${account?.displayName}');
 
-  Future<void> loginWithGoogle() async {
-    Response? response = await repository.loginGG();
-    print('xinhcheck${response!.body}');
+
+    // html = response.body;
+    if(account?.email!=null){
+      Response? response = await repository.loginGG();
+      Response? responseAuth = await repository.authGG();
+      print("Xinhcheck ${responseAuth!.body}");
+      print('xinhcheck${response!.body}');
+      // Navigator.pushNamed(context,LOGIN_GOOGLE);
+
+    }
     // show.cupertinoModalBottomSheet(contentView)
   }
 }

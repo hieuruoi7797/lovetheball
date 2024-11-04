@@ -3,6 +3,7 @@ import 'dart:io';
 
 // import 'package:dio/dio.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:splat_mobile/constants/api_paths.dart';
@@ -155,6 +156,14 @@ class PublicMethods {
       userNow = PlayerModel.fromJson(jsonDecode(stringUserNow??''));
     }
     return userNow;
+  }
+
+  static Image imageFromBase64String(String base64String, {BoxFit? fit}) {
+    return Image.memory(
+      base64Decode(base64String),
+      fit: fit?? BoxFit.fill,
+      gaplessPlayback: true,
+    );
   }
 }
 

@@ -71,7 +71,7 @@ class LoginScreen extends StatelessWidget {
                               fontWeight: FontWeight.w600
                           ),
                           onTap: (){
-                            // authenticationBloc.loginWithGoogle()
+                            authenticationBloc.loginWithGoogle(context);
                           },
                           height: 56,
                           width: MediaQuery.sizeOf(context).width * 0.775,

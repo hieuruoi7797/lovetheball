@@ -12,7 +12,7 @@ class BottomSheetCustom {
   }){
     final size = MediaQuery.of(context).size;
     return Container(
-      width: size.width,
+      width: size.width*0.5,
       height: size.height*0.2,
       padding: EdgeInsets.symmetric(horizontal: size.width*0.01, vertical: size.height*0.01),
       child: Column(
@@ -37,6 +37,46 @@ class BottomSheetCustom {
           ),
         ],
       ),
+    );
+  }
+
+  static Future<void> showLeftModal(BuildContext context) async {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return FractionallySizedBox(
+          heightFactor: 1.0,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 3, // Control the width of the left-side modal
+                child: Container(
+                  color: Colors.redAccent,
+                  child: Center(
+                    child: Text(
+                      'Left-Side Modal Sheet',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 7,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    color: Colors.transparent, // Close modal on tap outside
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+      backgroundColor: Colors.transparent, // Make the background transparent
+      isScrollControlled: true, // Allows full-height display
     );
   }
 }

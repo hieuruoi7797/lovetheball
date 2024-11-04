@@ -8,6 +8,8 @@ import 'package:splat_mobile/src/models/basketball_match_setting_model.dart';
 import 'package:splat_mobile/src/resources/match_api_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../quick_match/add_player_bloc.dart';
+
 
 class MatchSettingBloc {
   OverlayEntry? overlayEntry;
@@ -179,6 +181,8 @@ class MatchSettingBloc {
       Response apiRes = await MatchApiProvider().postMatchSetting(body: body);
       if (apiRes.statusCode == 201){
         if (navigatorKey.currentState!.context.mounted){
+          quickMatchBloc.getUsers(navigatorKey.currentState!.context);
+          quickMatchBloc.setSearching(false);
           Navigator.pushNamed(navigatorKey.currentState!.context, Routes.LOBBY);
         }
       }

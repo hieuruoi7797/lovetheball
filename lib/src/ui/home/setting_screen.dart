@@ -2,141 +2,84 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_mobile/constants/ui_styles.dart';
+import 'package:splat_mobile/public/widget_item/svg_icon.dart';
 import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:splat_mobile/src/blocs/home_bloc/home_bloc.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 
+import '../../../constants/icon_custom.dart';
+import '../../../public/app_global.dart';
+
 class SettingScreen extends StatelessWidget {
-  const SettingScreen({super.key});
+  final int tab;
+  const SettingScreen({super.key, required this.tab});
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Container(
-      width: MediaQuery.sizeOf(context).width,
-      height: MediaQuery.sizeOf(context).height,
-      child: Stack(
-        children: [
-          Container(
-            width: MediaQuery.sizeOf(context).width,
-            height: MediaQuery.sizeOf(context).height,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _itemSetting(
-                        label: "Chỉnh sửa",
-                        iconPath: "assets/svg_pictures/edit_orange.svg"),
-                    _itemSetting(
-                        label: "Đội bóng",
-                        iconPath: "assets/svg_pictures/team_orange.svg")
-                  ],
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _itemSetting(
-                        label: "Bạn bè",
-                        iconPath: "assets/svg_pictures/friends_orange.svg"),
-                    _itemSetting(
-                        label: "Thông báo",
-                        iconPath: "assets/svg_pictures/message.svg")
-                  ],
-                ),
-              ],
+    return Stack(
+      children: [
+        Container(
+          color: color_8DA3BC.withOpacity(0.2),
+        ),
+        SafeArea(
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 20
             ),
-          ),
-          Container(
-            width: MediaQuery.sizeOf(context).width,
-            height: MediaQuery.sizeOf(context).height * 0.55,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
-                ),
-                color: Color(0xFFFD8F51)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    _itemAchivement(
-                        label: "Game đã chơi",
-                        value: 18,
-                        iconPath: "assets/svg_pictures/game_count.svg"),
-                  ],
+                Text('Thiet Lap',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 28,
+                    color: color_31393E,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-                SizedBox(width: MediaQuery.of(context).size.width * 0.25),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    _itemAchivement(
-                        label: "Thành tích",
-                        value: 37,
-                        iconPath: "assets/svg_pictures/achievement.svg"),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: MediaQuery.sizeOf(context).height * 0.4,
-            width: MediaQuery.sizeOf(context).width,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20))),
-            child: StreamBuilder<PlayerModel>(
-                stream: homeBloc.userInfo,
-                builder: (context, snapshot) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: color_FFFFFF
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        width: 125,
-                        height: 125,
-                        child: CircleAvatar(
-                          // radius: 50,
-                          backgroundImage:
-                              AssetImage('assets/png_images/avatar_temp.png'),
+                        width: 48,
+                        height:48,
+                        decoration:BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.blue,
+                            image: DecorationImage(
+                                image: FileImage(appGlobal.avatarFile),
+                                fit: BoxFit.cover
+                            )
                         ),
                       ),
-                      (snapshot.hasData)
-                          ? Container(
-                              margin: EdgeInsets.only(top: 16),
-                              child: Text(
-                                snapshot.data!.name,
-                                style: name_big_size,
-                              ),
-                            )
-                          : Container(),
                       Container(
-                        width: 100,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black)
-                        ),
-                        child: GestureDetector(
-                          onTap: () => authenticationBloc.logout(),
-                          child: Center(
-                            child: Text(
-                              "QUIT"
-                            ),
+                        width: 280,
+                        child: Text('Xinh dddddd',
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: color_31393E,
+                            fontWeight: FontWeight.w700,
                           ),
+                          textAlign: TextAlign.left,
                         ),
-                      )
+                      ),
+                      SvgIcon(icon: CustomIcon.icon_edit, size: 17,),
                     ],
-                  );
-                }),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

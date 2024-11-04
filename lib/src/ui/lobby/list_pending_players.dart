@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
@@ -10,7 +11,8 @@ import 'package:splat_mobile/src/models/player_model.dart';
 class ListPendingPlayers extends StatelessWidget {
   final bool expanded;
   final Function()? onTapExpanded;
-  const ListPendingPlayers({super.key, required this.expanded, this.onTapExpanded});
+  final Function()? openDrawer;
+  const ListPendingPlayers({super.key, required this.expanded, this.onTapExpanded,this.openDrawer});
 
   @override
   Widget build(BuildContext context) {
@@ -30,31 +32,37 @@ class ListPendingPlayers extends StatelessWidget {
           if (listPendingNow.hasData){
             return ExpandedPendingTeam(
               onTapCollapse: onTapExpanded,
+              openDrawer: openDrawer,
               listPendingPlayers: listPendingNow.data ?? [],
             );
           }else{
             return ExpandedPendingTeam(
                 onTapCollapse: onTapExpanded,
+                openDrawer: openDrawer,
                 listPendingPlayers: []);
           }
         }
       ):
-      CollapsedPendingTeam(onTapExpanded: onTapExpanded,),
+      CollapsedPendingTeam(onTapExpanded: onTapExpanded,openDrawer: openDrawer,),
+
     );
   }
 
 }
 
 class ExpandedPendingTeam extends StatelessWidget {
-  ExpandedPendingTeam({super.key, this.onTapCollapse, required this.listPendingPlayers});
+  ExpandedPendingTeam({super.key, this.onTapCollapse, required this.listPendingPlayers, this.openDrawer});
   Function()? onTapCollapse;
   List<PlayerModel> listPendingPlayers;
+  Function()? openDrawer;
+
 
 
 
   List<Widget> loadPendingPlayer(List<PlayerModel> listPlayers){
     lobbyBloc.changeAddingEnable(null,"");
     List<Widget> listWidget = [];
+
     for ( PlayerModel item in listPlayers){
       listWidget.add(
         GestureDetector(
@@ -92,6 +100,7 @@ class ExpandedPendingTeam extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
     return Column(
       children: [
         Expanded(
@@ -109,17 +118,20 @@ class ExpandedPendingTeam extends StatelessWidget {
             ),
               child: Row(
                 children: [
-                  Container(
-                    width: 28,
-                    height: 28,
-                    decoration: BoxDecoration(
-                        color: Color(0xFFE5601A).withOpacity(0.12),
-                        borderRadius: BorderRadius.circular(6.22)
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.add,
-                        color:Color(0xFFE5601A),
+                  GestureDetector(
+                    onTap: openDrawer,
+                    child: Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                          color: Color(0xFFE5601A).withOpacity(0.12),
+                          borderRadius: BorderRadius.circular(6.22)
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.add,
+                          color:Color(0xFFE5601A),
+                        ),
                       ),
                     ),
                   ),
@@ -178,24 +190,28 @@ class ExpandedPendingTeam extends StatelessWidget {
 }
 
 class CollapsedPendingTeam extends StatelessWidget {
-  CollapsedPendingTeam({super.key, this.onTapExpanded});
+  CollapsedPendingTeam({super.key, this.onTapExpanded, this.openDrawer});
   Function()? onTapExpanded;
+  Function()? openDrawer;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
-          width: 28,
-          height: 28,
-          decoration: BoxDecoration(
-            color: Color(0xFFE5601A).withOpacity(0.12),
-            borderRadius: BorderRadius.circular(6.22)
-          ),
-          child: Center(
-            child: Icon(
-                Icons.add,
-              color:Color(0xFFE5601A),
+        InkWell(
+          onTap: openDrawer,
+          child: Container(
+            width: 28,
+            height: 28,
+            decoration: BoxDecoration(
+              color: Color(0xFFE5601A).withOpacity(0.12),
+              borderRadius: BorderRadius.circular(6.22)
+            ),
+            child: Center(
+              child: Icon(
+                  Icons.add,
+                color:Color(0xFFE5601A),
+              ),
             ),
           ),
         ),

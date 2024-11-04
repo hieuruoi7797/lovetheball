@@ -10,7 +10,8 @@ import 'package:splat_mobile/src/ui/authentication/registration_info_screen.dart
 import 'package:splat_mobile/src/ui/authentication/setting_avatar_screen.dart';
 import 'package:splat_mobile/src/ui/home/home_screen.dart';
 import 'package:splat_mobile/src/ui/lobby/lobby_screen.dart';
-import 'package:splat_mobile/src/ui/quick_match/quick_match_screen.dart';
+import 'package:splat_mobile/src/ui/login_with_google/login_with_google_screen.dart';
+import 'package:splat_mobile/src/ui/quick_match/add_player_screen.dart';
 import 'package:splat_mobile/src/ui/setting_match/setting_match_screen.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -64,7 +65,8 @@ class MyApp extends StatelessWidget {
         Routes.REGISTER_INFO: (context) => const RegistrationInfoScreen(),
         Routes.SETTING_AVT: (context) => const SettingAvatarScreen(),
         Routes.QUICK_MATCH: (context) => const QuickMatchScreen(),
-        Routes.LOBBY: (context) => const LobbyScreen()
+        Routes.LOBBY: (context) => const LobbyScreen(),
+        Routes.LOGIN_GOOGLE: (context) => const LoginWithGoogleScreen(),
       },
       // home: const MyHomePage(),
     );
