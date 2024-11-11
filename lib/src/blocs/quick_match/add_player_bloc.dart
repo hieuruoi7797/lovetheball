@@ -268,7 +268,9 @@ class QuickMatchBloc{
       } else {
         timer.cancel(); // Stop the timer when it reaches zero
         friendTimers.remove(friendId); // Remove the friend's timer
+        onFriendsSelected(true, friendId);
         _timerStreamController.add(Map.from(friendTimers)); // Update the stream
+
       }
     });
   }
