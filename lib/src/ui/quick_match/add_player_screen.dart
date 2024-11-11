@@ -404,8 +404,8 @@ Widget listFriend(BuildContext context) {
                         children: [
                           // Friend Avatar
                           Container(
-                            width: 24,
-                            height: 24,
+                            width: 25,
+                            height: 25,
                             margin: EdgeInsets.only(left: 10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6),
@@ -432,39 +432,63 @@ Widget listFriend(BuildContext context) {
                               title: Text(
                                 friend['name'],
                                 style: textNameItem,
-                                textAlign: TextAlign.left,
+                                textAlign: TextAlign.start,
                               ),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                              titleAlignment: ListTileTitleAlignment.top,
                               trailing: StreamBuilder<Map<String, int>>(
                                 stream: quickMatchBloc.timerStream,
                                 builder: (context, timerSnapshot) {
                                   // Get the remaining time for the current friend
                                   final remainingTime = timerSnapshot.data?[friendId] ?? 0;
 
-                                  return TextButton.icon(
-                                    onPressed: isInvited && remainingTime > 0
-                                        ? null // Disable if already invited
-                                        : () {
-                                      quickMatchBloc.onFriendsSelected(
-                                        !isInvited,
-                                        friendId,
-                                      );
+                                  return Container(
+                                    width: MediaQuery.of(context).size.width * 0.18,
+                                    child: TextButton.icon(
+                                      style: ButtonStyle(
+                                        backgroundColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+                                          if (states.contains(MaterialState.disabled)) {
+                                            return Colors.transparent; // Color when the button is pressed
+                                          }
+                                          return Color(0xffd8e5f3).withOpacity(0.6);// Default color
+                                        }),
+                                        shape: MaterialStateProperty.resolveWith<OutlinedBorder?>((Set<MaterialState> states) {
+                                          if (states.contains(MaterialState.selected)) {
+                                            return null; // No border when selected
+                                          }
+                                          return RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12), // Default border shape
+                                          );
+                                        }),
+                                      ),
+                                      onPressed: isInvited && remainingTime > 0
+                                          ? null // Disable if already invited
+                                          : () {
+                                        quickMatchBloc.onFriendsSelected(
+                                          !isInvited,
+                                          friendId,
+                                        );
 
-                                      // Start Countdown
-                                      quickMatchBloc.setNumberCount(quickMatchBloc.lsFriends.length);
-                                      quickMatchBloc.setTotal(totalResults);
-                                      quickMatchBloc.checkTab(0);
-                                      quickMatchBloc.startFriendTimer(friendId); // Start a timer for this friend
-                                    },
-                                    icon: Icon(
-                                      isInvited && remainingTime > 0? Icons.check : Icons.add,
-                                      color: isInvited && remainingTime > 0? color_ACC7E1 : color_31393E,
-                                    ),
-                                    label: Text(
-                                      isInvited && remainingTime > 0
-                                          ? "Gửi lại sau (${remainingTime}s)" // Show remaining time if invited
-                                          : "Gửi lời mời", // Active button label
-                                      style: TextStyle(
-                                        color: isInvited && remainingTime > 0 ? color_ACC7E1 : color_31393E,
+                                        // Start Countdown
+                                        quickMatchBloc.setNumberCount(quickMatchBloc.lsFriends.length);
+                                        quickMatchBloc.setTotal(totalResults);
+                                        quickMatchBloc.checkTab(0);
+                                        quickMatchBloc.startFriendTimer(friendId); // Start a timer for this friend
+                                      },
+                                      icon: Icon(
+                                        isInvited && remainingTime > 0? Icons.check : Icons.add,
+                                        color: isInvited && remainingTime > 0? color_ACC7E1 : color_31393E,
+                                      ),
+                                      label: Container(
+                                        width: isInvited && remainingTime > 0?MediaQuery.of(context).size.width * 0.12:MediaQuery.of(context).size.width * 0.08,
+                                        child: Text(
+                                          isInvited && remainingTime > 0
+                                              ? "Gửi lại sau (${remainingTime}s)" // Show remaining time if invited
+                                              : "Gửi lời mời", // Active button label
+                                          style: TextStyle(
+                                            color: isInvited && remainingTime > 0 ? color_ACC7E1 : color_31393E,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   );
