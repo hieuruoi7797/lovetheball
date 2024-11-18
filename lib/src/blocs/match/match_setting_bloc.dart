@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/public/widget_item/overlay_entry_sample.dart';
 import 'package:splat_mobile/src/app.dart';
+import 'package:splat_mobile/src/blocs/lobby/lobby_bloc.dart';
 import 'package:splat_mobile/src/models/basketball_match_setting_model.dart';
 import 'package:splat_mobile/src/resources/match_api_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -180,7 +183,12 @@ class MatchSettingBloc {
       };
       Response apiRes = await MatchApiProvider().postMatchSetting(body: body);
       if (apiRes.statusCode == 201){
+        final result = jsonDecode(apiRes.body);
+        
+        print("Xinhceheck ${result['data'][0]['name']}");
+
         if (navigatorKey.currentState!.context.mounted){
+          lobbyBloc.createLobby(context: navigatorKey.currentState!.context, name: result['data'][0]['name'], matchSettingId: result['data'][0]['id_'], scheduleAt: result['data'][0]['created_at']);
           quickMatchBloc.getUsers(navigatorKey.currentState!.context);
           quickMatchBloc.setSearching(false);
           Navigator.pushNamed(navigatorKey.currentState!.context, Routes.LOBBY);

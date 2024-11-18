@@ -20,6 +20,7 @@ const String finish_match_path = '/matches/finish';
 const String API_REGISTER_EMAIL = "/users/email_registration";
 const String API_REGISTER_VERIFI = "/users/email_verification";
 const String API_CREATE_USER ="/users";
-const String MATCH_SETTING ="/match_setting";
-const String INVITATION = "/v1/invitations";
+const String MATCH_SETTING ="/match_settings";
+const String INVITATION = "/invitations";
+const String LOBBY = "/lobbies";
 

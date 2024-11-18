@@ -31,4 +31,29 @@ class InvitationApiProvider{
     return response;
   }
 
+  Future<Response> createInvitation({
+    required BuildContext context,
+    required String lobbyId,
+    required String lobbyName,
+    required String type,
+    required String destinationId,
+    required String destinationType,
+  }) async {
+    Response response;
+    response = await PublicMethods().post(body:{
+      "content": {
+        "lobby_id":lobbyId,
+        "lobby_name":lobbyName
+      },
+      "type_": type,
+      "destinations": [
+        {
+          "destination_id":destinationId,
+          "destination_type":destinationType
+        }
+      ]
+    }, subUri: INVITATION, showLoader: true, isFormData: false);
+    return response;
+  }
+
 }
