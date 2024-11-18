@@ -443,7 +443,7 @@ Widget listFriend(BuildContext context) {
                                   final remainingTime = timerSnapshot.data?[friendId] ?? 0;
 
                                   return Container(
-                                    width: MediaQuery.of(context).size.width * 0.18,
+                                    width: MediaQuery.of(context).size.width * 0.2,
                                     child: TextButton.icon(
                                       style: ButtonStyle(
                                         backgroundColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
@@ -480,7 +480,7 @@ Widget listFriend(BuildContext context) {
                                         color: isInvited && remainingTime > 0? color_ACC7E1 : color_31393E,
                                       ),
                                       label: Container(
-                                        width: isInvited && remainingTime > 0?MediaQuery.of(context).size.width * 0.12:MediaQuery.of(context).size.width * 0.08,
+                                        width: isInvited && remainingTime > 0?MediaQuery.of(context).size.width * 0.19:MediaQuery.of(context).size.width * 0.08,
                                         child: Text(
                                           isInvited && remainingTime > 0
                                               ? "Gửi lại sau (${remainingTime}s)" // Show remaining time if invited

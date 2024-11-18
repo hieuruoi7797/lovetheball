@@ -66,10 +66,27 @@ class QuickMatchBloc{
     if (selected == true) {
       _lsFriends.add(user_id);
       _lsAddFriendsBehavior.sink.add(_lsFriends);
+
     } else {
       _lsFriends.remove(user_id);
       _lsAddFriendsBehavior.sink.add(_lsFriends);
     }
+  }
+  createLobby({
+    required BuildContext context,
+    // required String name,
+    // required String matchSettingId,
+    // required String scheduleAt,
+  }) async{
+    Response response = await repository.createInvitation(
+        context: context,
+        lobbyId: '',
+        lobbyName: '',
+      type: '0',
+        destinationId: '',
+        destinationType: '',
+    );
+    print("Xinhcheck -----${jsonDecode(response.body)}------");
   }
   void onTeamsSelected(bool selected, teams_id) {
     if (selected == true) {

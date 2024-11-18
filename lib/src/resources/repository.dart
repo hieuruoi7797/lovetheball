@@ -5,6 +5,7 @@ import 'package:splat_mobile/src/models/base_api_model.dart';
 import 'package:splat_mobile/src/resources/authentication_api_provider.dart';
 import 'package:splat_mobile/src/resources/gameon_api_provider.dart';
 import 'package:splat_mobile/src/resources/invitation_api_provider.dart';
+import 'package:splat_mobile/src/resources/lobby_api_provider.dart';
 import 'package:splat_mobile/src/resources/match_api_provider.dart';
 import 'package:splat_mobile/src/resources/player_api_provider.dart';
 
@@ -14,6 +15,7 @@ class Repository {
   final _authenticationProvider = AuthenticationiApiProvider();
   final _gameOnApiProvider = GameOnApiProvider();
   final _invitationUserProvider = InvitationApiProvider();
+  final _lobbyApiProvider = LobbyApiProvider();
 
   Future<Response> createMatch({
     required BuildContext context,
@@ -28,6 +30,36 @@ class Repository {
         location: location,
         type: type,
         players: players,
+      );
+
+  Future<Response> createLobby({
+    required BuildContext context,
+    required String name,
+    required String matchSettingId,
+    required String scheduledAt,
+  }) =>
+      _lobbyApiProvider.createLobby(
+        context: context,
+        name: name,
+        matchSettingId: matchSettingId,
+        scheduledAt: scheduledAt,
+      );
+
+  Future<Response> createInvitation({
+    required BuildContext context,
+    required String lobbyId,
+    required String lobbyName,
+    required String type,
+    required String destinationId,
+    required String destinationType,
+  }) =>
+      _invitationUserProvider.createInvitation(
+        context: context,
+        lobbyId: lobbyId,
+        lobbyName: lobbyName,
+        type: type,
+        destinationId: destinationId,
+        destinationType: destinationType
       );
 
   Future<Response> getMatchesList(BuildContext context)

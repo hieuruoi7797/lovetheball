@@ -1,8 +1,13 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
+
+import '../../resources/repository.dart';
 
 class LobbyBloc {
   BehaviorSubject<List<PlayerModel>> _listPendingPlayers = BehaviorSubject<List<PlayerModel>>();
@@ -198,6 +203,21 @@ class LobbyBloc {
   setPendingListExpanded() {
    bool nowExpandedStatus = _pendingListExpanded.value ?? false;
    _pendingListExpanded.add(!nowExpandedStatus);
+  }
+
+  createLobby({
+    required BuildContext context,
+    required String name,
+    required String matchSettingId,
+    required String scheduleAt,
+  }) async{
+    Response response = await repository.createLobby(
+        context: context,
+        name: name,
+        matchSettingId: matchSettingId,
+        scheduledAt: scheduleAt
+    );
+    print("Xinhcheck -----${jsonDecode(response.body)}------");
   }
 }
 
