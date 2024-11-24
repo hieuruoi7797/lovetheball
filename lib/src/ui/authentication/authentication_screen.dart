@@ -5,6 +5,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/public/modal/modal_tab_view.dart';
 import 'package:splat_mobile/public/widget_item/app_button.dart';
+import 'package:splat_mobile/src/background_task_manager/BackgroundTaskManager.dart';
 import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:splat_mobile/src/resources/show_dialog.dart';
 import 'package:splat_mobile/src/ui/authentication/modal_login_ui.dart';
