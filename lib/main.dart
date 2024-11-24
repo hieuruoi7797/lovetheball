@@ -8,6 +8,8 @@ import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/src/app.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import 'src/background_task_manager/BackgroundTaskManager.dart';
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
 
@@ -171,5 +173,34 @@ void main() async{
     },
     onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
   );
+
+  // Listen for background task notifications
+  BackgroundTaskManager.setupMethodCallHandler(() {
+    _showNotification();
+  });
   runApp( MyApp(notificationAppLaunchDetails));
 }
+
+// Function to show the notification
+Future<void> _showNotification() async {
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+  AndroidNotificationDetails(
+    'your_channel_id',
+    'your_channel_name',
+    channelDescription: 'your_channel_description',
+    importance: Importance.max,
+    priority: Priority.high,
+    ticker: 'ticker',
+  );
+
+  const NotificationDetails platformChannelSpecifics =
+  NotificationDetails(android: androidPlatformChannelSpecifics);
+
+  await flutterLocalNotificationsPlugin.show(
+    0,
+    'Hello',
+    'This is a notification from the background!',
+    platformChannelSpecifics,
+  );
+}
+
