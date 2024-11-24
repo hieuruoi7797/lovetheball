@@ -3,7 +3,11 @@ import 'dart:io';
 
 // import 'package:dio/dio.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+<<<<<<< HEAD
 import 'package:flutter/material.dart';
+=======
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+>>>>>>> 2b85eb6 (added background task for ios)
 import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:splat_mobile/constants/api_paths.dart';
@@ -14,6 +18,7 @@ import 'package:splat_mobile/src/blocs/services_bloc.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 import 'package:splat_mobile/src/resources/show_dialog.dart';
 
+import '../main.dart';
 import '../src/app.dart';
 import '../widgets_common/dialogs.dart';
 
@@ -164,6 +169,34 @@ class PublicMethods {
       fit: fit?? BoxFit.fill,
       gaplessPlayback: true,
     );
+    }
+  static Future<void> requestPermissions() async {
+    if (Platform.isIOS || Platform.isMacOS) {
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin>()
+          ?.requestPermissions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+          MacOSFlutterLocalNotificationsPlugin>()
+          ?.requestPermissions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+    } else if (Platform.isAndroid) {
+      final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
+      flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>();
+
+      final bool? grantedNotificationPermission =
+      await androidImplementation?.requestNotificationsPermission();
+    }
   }
+
 }
 

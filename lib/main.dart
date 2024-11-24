@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
+import 'package:splat_mobile/public/public_methods.dart';
 import 'package:splat_mobile/src/app.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -156,6 +157,7 @@ void main() async{
     macOS: initializationSettingsDarwin,
     linux: initializationSettingsLinux,
   );
+  await PublicMethods.requestPermissions();
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
     onDidReceiveNotificationResponse:
