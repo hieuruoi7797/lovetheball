@@ -3,11 +3,8 @@ import 'dart:io';
 
 // import 'package:dio/dio.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-<<<<<<< HEAD
 import 'package:flutter/material.dart';
-=======
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
->>>>>>> 2b85eb6 (added background task for ios)
 import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:splat_mobile/constants/api_paths.dart';
