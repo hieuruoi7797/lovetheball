@@ -61,8 +61,6 @@ class GameOnBloc {
   }
 
   dispose(dynamic data) {
-    repository.disconnect();
-    repository.close();
     _pickedStatIndex.add(0);
     _nowPlayerStatPublish.add(Stats(matchId: '', playerId: ''));
     listStatChange = [];
@@ -96,7 +94,6 @@ class GameOnBloc {
         _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
 
     }
-    emitChangesSocket(isFirstEmit: false);
   }
 
   decrease() {
@@ -126,7 +123,6 @@ class GameOnBloc {
           _nowPlayerStatPublish.sink.add(listStatChange[pickedPlayerInt].stats);
         }
     }
-    emitChangesSocket(isFirstEmit: false);
   }
 
   void updateListPlayers(List<PlayerModel> list) {
@@ -147,49 +143,6 @@ class GameOnBloc {
 
   }
 
-  void emitChangesSocket({bool? isFirstEmit}) {
-    Map body = {};
-    repository.socketConnect('stat');
-    if (isFirstEmit == true) {
-      body = {
-        "first_emit": true,
-        "stats_changes": [
-          {
-            "has_change": false,
-            "stats": {
-              "match_id": matchId,
-              "player_id": homeBloc.nowUserInfo!.id,
-              "lay_up": 0,
-              "assit": 0,
-              "two_points_shoot": 0,
-              "three_points_shoot": 0,
-              "rebound": 0,
-              "block": 0,
-              "steal": 0,
-              "personal_foul": 0,
-              "turn_over": 0,
-              "dunk": 0
-            }
-          }
-        ]
-      };
-    } else {
-      List<Map> listStatsMap = [];
-      for (var element in listStatChange) {
-        if (listStatChange.indexOf(element) == pickedPlayerInt) {
-          element.hasChange = true;
-        } else {
-          element.hasChange = false;
-        }
-        listStatsMap.add(element.toJson());
-      }
-      body = {
-        "first_emit": false,
-        "stats_changes": listStatsMap
-      };
-    }
-    repository.emitSocket('changes', body: body);
-  }
 
   pickPlayer(int index) {
     pickedPlayerInt = index;

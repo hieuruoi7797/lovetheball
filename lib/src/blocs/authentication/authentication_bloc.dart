@@ -10,6 +10,8 @@ import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/public/app_service.dart';
 import 'package:splat_mobile/public/dialog/dialog_notification.dart';
+import 'package:splat_mobile/public/public_methods.dart';
+import 'package:splat_mobile/src/background_task_manager/BackgroundTaskManager.dart';
 import 'package:splat_mobile/src/resources/show_dialog.dart';
 import 'package:splat_mobile/public/widget_item/widget_register_success.dart';
 import 'package:splat_mobile/src/app.dart';
@@ -21,6 +23,7 @@ import 'package:splat_mobile/src/models/player_model.dart';
 import 'package:splat_mobile/src/resources/repository.dart';
 import 'package:splat_mobile/src/resources/timer_counter_bloc.dart';
 import 'package:splat_mobile/src/ui/authentication/validate.dart';
+import '../../../constants/api_paths.dart';
 import '../../../constants/api_response_codes.dart';
 import '../../../constants/public_values.dart';
 import '../../../public/share_prefer.dart';
@@ -207,7 +210,7 @@ class AuthenticationBloc with Validation{
         BaseApiModel? response =
         await repository.createUser( email: email);
         if(response!=null) {
-          if (response!.message["msg_code"] == MSG_SUCCESS_REGISTER_S605) {
+          if (response!.message["msg_code"] == MSG_SUCCESS_REGISTER) {
             commonTextFieldBloc.enterMsgCode("");
             _resSuccessBehavior.sink.add(_resSuccess = true);
           } else {
@@ -272,24 +275,24 @@ class AuthenticationBloc with Validation{
       // String email = await commonTextFieldBloc.emailValidateBehavior.first;
       // String password = await commonTextFieldBloc.passwordValidateBehavior.first;
 
-      Response? response = await repository.login(email: emailRegister??_controllerEmail.text, pw: passRegister??_controllerPassword.text);
+      Response? response = await repository.login(
+          email: emailRegister??_controllerEmail.text,
+          pw: passRegister??_controllerPassword.text);
       if (response != null && response.statusCode == 200){
         String accessToken = jsonDecode(response.body)["access_token"];
         String refreshToken = jsonDecode(response.body)["refresh_token"];
         await storage.write(key: access_token_key, value: accessToken);
         await storage.write(key: refresh_token_key, value: refreshToken);
-        repository.socketConnect("notifications");
-        repository.emitSocket("register", body: {
-          "interactor": {
-            "id_": "38012d14-29b7-41c1-bfaa-c5c198007d4a",
-            "name": "trần trung hiếu",
-            "interactor_type": 0
-          },
-          "notification_to_be_received": [
-            0
-          ]
-        });
         Response? checkingTokenRes = await repository.testToken();
+
+        ///request push notification permission:
+        await PublicMethods.requestNotificationPermissions();
+
+        ///connect to socket on native side:
+        await BackgroundTaskManager.startBackgroundTask(
+          "000",
+          "LacQuan"
+        );
         // commonTextFieldBloc.enterMsgCode("");
         // if (checkingTokenRes != null){
         //   await storage.write(
@@ -390,6 +393,7 @@ class AuthenticationBloc with Validation{
           "email": _controllerRegisterEmail.text,
           "phone": "",
           "avatar": '${settingAvatarBloc.base64Image}',
+          "default_jersey_number": 0,
           "role_ids": [],
           "otp": _verifyOTP,
           "password": _controllerRegisterPass.text
@@ -465,5 +469,6 @@ class AuthenticationBloc with Validation{
     }
     // show.cupertinoModalBottomSheet(contentView)
   }
+
 }
   final authenticationBloc = AuthenticationBloc();

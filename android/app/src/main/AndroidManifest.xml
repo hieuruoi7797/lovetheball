@@ -39,6 +39,11 @@
             </intent-filter>
         </receiver>
         <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver"/>
+        <service
+            android:name="managers.SocketManager"
+            android:exported="true"
+            android:foregroundServiceType="connectedDevice">
+        </service>
     </application>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.VIBRATE"/>

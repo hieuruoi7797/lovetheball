@@ -137,7 +137,6 @@ class MatchBloc {
                 .showResultDialog(context,
                 isSuccess: true, content: "Tạo game thành công!")
                 .then((value) {
-                  gameOnBloc.emitChangesSocket(isFirstEmit: true);
               Navigator.pushNamed(context, '/game_on');
             });
           });
@@ -220,7 +219,6 @@ class MatchBloc {
 
   goToMatch(MatchModel match) {
     if (match.status == 0) {
-      repository.socketConnect('stat');
       Navigator.pushNamed(navigatorKey.currentContext!, '/game_on');
     }else{
 
