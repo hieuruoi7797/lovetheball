@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:splat_mobile/public/share_prefer.dart';
+import 'package:splat_mobile/src/models/player_model.dart';
 
 class BackgroundTaskManager {
   static const _channel = MethodChannel('com.splat/background');
 
   // Call this method to start the background task
   static Future<void> startBackgroundTask(String id, String name) async {
-    print("hieutt_checkstart");
+    PlayerModel userInfo = await SharePreferUtils.getUserInfo();
+
     try {
       await _channel.invokeMethod('startBackgroundTask',
         {
-          "id": "086f07e7-48bd-4c9b-b602-87049d6cf054",
-          "name": "Pham Trung Hieu 1"
+          "id": userInfo.id,
+          "name": userInfo.name
         }
       );
     } on PlatformException catch (e) {

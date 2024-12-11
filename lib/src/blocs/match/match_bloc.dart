@@ -55,6 +55,7 @@ class MatchBloc {
 
   getPlayerList(
        BuildContext context,{ bool? isAdding, String? matchId}) async {
+    PlayerModel nowUserInfo = await homeBloc.userInfo.last;
     Response response;
     response = await repository.getPlayers(matchId: matchId);
     List<dynamic> listPlayerRes = jsonDecode(response.body)['data'] as List;
@@ -65,7 +66,7 @@ class MatchBloc {
       listPlayers.add(PlayerModel.fromJson(listPlayerRes[i]));
 
       ///CHECK USER IF THEY ARE IN ANY MATCH
-      if (homeBloc.nowUserInfo!.id == listPlayerRes[i]['id_']){
+      if (nowUserInfo.id == listPlayerRes[i]['id_']){
         if (listPlayerRes[i]['in_match'] != null){
           matchRunningId = listPlayerRes[i]['in_match'];
           _matchIdBehavior.sink.add(matchRunningId);
@@ -98,7 +99,7 @@ class MatchBloc {
       ///get 5 players start of the result list to add on default added players
       else {
         listPlayerRes.removeWhere((element) => (element['in_match'] != null));
-        listPlayerRes.removeWhere((element) => (element['id_'] == homeBloc.nowUserInfo!.id));
+        listPlayerRes.removeWhere((element) => (element['id_'] == nowUserInfo.id));
         if (listPlayers.length > 5){
           _addedPlayersBehavior.sink.add(listPlayers.sublist(0,6));
         }else{

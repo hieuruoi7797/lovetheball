@@ -151,16 +151,6 @@ class PublicMethods {
     return response;
   }
 
-  static Future<PlayerModel?> getNowUser() async {
-    String? stringUserNow = await storage.read(
-        key: user_info);
-    PlayerModel userNow = PlayerModel(id: '000', name: 'UNKNOWN');
-    if (stringUserNow != null && stringUserNow.isNotEmpty){
-      userNow = PlayerModel.fromJson(jsonDecode(stringUserNow??''));
-    }
-    return userNow;
-  }
-
   static Image imageFromBase64String(String base64String, {BoxFit? fit}) {
     return Image.memory(
       base64Decode(base64String),

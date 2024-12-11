@@ -4,6 +4,7 @@ import 'package:splat_mobile/constants/public_values.dart';
 import 'package:splat_mobile/public/app_global.dart';
 import 'package:splat_mobile/public/dialog/dialog_notification.dart';
 import 'package:splat_mobile/public/public_methods.dart';
+import 'package:splat_mobile/public/share_prefer.dart';
 import 'package:splat_mobile/src/app.dart';
 import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:splat_mobile/src/blocs/match/match_bloc.dart';
@@ -15,7 +16,6 @@ class HomeBloc {
   int _pageIndexInt = 1;
   bool showAddingPopup = false;
   bool canPop = false;
-  PlayerModel? nowUserInfo;
   Offset? fabOffset;
   Offset? scaffoldOffset;
 
@@ -48,7 +48,11 @@ class HomeBloc {
   }
 
   void getUserSaved(BuildContext context) async {
-    nowUserInfo = await PublicMethods.getNowUser();
+    PlayerModel? nowUserInfo;
+    nowUserInfo = await SharePreferUtils.getUserInfo();
+    if (nowUserInfo != null){
+      _userInfoBehavior.add(nowUserInfo);
+    }
     // appGlobal.setAvatarFile(nowUserInfo?.avatar.toString()??"");
     appGlobal.createFileFromString(nowUserInfo);
   }

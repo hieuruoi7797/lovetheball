@@ -51,6 +51,8 @@ import SocketIO
     
     
     private func setupSocketConnection(id: String?, name: String?) {
+        let controller = window?.rootViewController as! FlutterViewController
+        let channel = FlutterMethodChannel(name: "com.splat/background", binaryMessenger: controller.binaryMessenger)
         let serverURL = URL(string: "https://ample-crawdad-kind.ngrok-free.app")! // Replace with your server URL
         socketManager = SocketManager(
             socketURL: serverURL,
@@ -69,15 +71,16 @@ import SocketIO
         // Handle connection event
         socket?.on(clientEvent: .connect) { _, _ in
             print("Socket connected")
+            channel.invokeMethod("showNotification", arguments: "true")
             self.emitRegisterEvent(id: id, name: name) // Emit your custom event after connection is opened
         }
 
         // Handle a custom event (example: "message")
-        socket?.on("message") { data, ack in
-            if let response = data.first as? [String: Any] {
-                print("Received message: \(response)")
+        socket?.on("check_register_notifications") { data, ack in
+//            if let response = data.first as? [String: Any] {
+                print("Received message: \(data)")
                 // You can use FlutterMethodChannel to send this back to Flutter
-            }
+//            }
         }
         
         // Handle disconnect event

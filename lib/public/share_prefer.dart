@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splat_mobile/src/models/info_login_model.dart';
+import 'package:splat_mobile/src/models/player_model.dart';
 
 import '../constants/constant_values.dart';
 
@@ -12,7 +13,7 @@ class SharePreferUtils {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     return pref.getString(USER_LOGIN) ?? '';
   }
-  static Future<void> saveInfoRegister(InfoLoginModel infoLogin) async{
+  static Future<void> saveInfoLogin(InfoLoginModel infoLogin) async{
     SharedPreferences pref = await SharedPreferences.getInstance();
     await pref.setString('USER_INFO_REGISTER', jsonEncode(infoLogin.toJson()).toString());
   }
@@ -23,6 +24,15 @@ class SharePreferUtils {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     String info = pref.getString("USER_INFO_REGISTER") ?? '';
     return InfoLoginModel.fromJson(jsonDecode(info));
+  }
+  static Future<void> saveUserInfo(PlayerModel userInfo) async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString('USER_INFO', jsonEncode(userInfo.toJson()).toString());
+  }
+  static Future<PlayerModel> getUserInfo() async{
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    String info = pref.getString("USER_INFO") ?? '';
+    return PlayerModel.fromJson(jsonDecode(info));
   }
 
   static Future<String> getAvatar(String userName) async {

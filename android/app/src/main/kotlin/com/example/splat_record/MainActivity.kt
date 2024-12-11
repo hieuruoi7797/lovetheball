@@ -1,10 +1,13 @@
 package com.splat.splat_mobile
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.NonNull
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import androidx.core.app.ActivityCompat
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.embedding.android.FlutterActivity
@@ -22,6 +25,18 @@ class MainActivity: FlutterActivity() {
         // Ensure BinaryMessenger is non-null
         val binaryMessenger = flutterEngine.dartExecutor.binaryMessenger
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                        Manifest.permission.BLUETOOTH_CONNECT,
+                        Manifest.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE
+                    ),
+                    1001
+                )
+            }
+        }
         // Create the MethodChannel
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
             .setMethodCallHandler { call, result ->
