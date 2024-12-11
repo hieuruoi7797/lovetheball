@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -100,9 +101,9 @@ class LoginScreen extends StatelessWidget {
                     Center(
                       child: RichText(
                         textAlign: TextAlign.center,
-                        text: const TextSpan(
+                        text: TextSpan(
                             text: "Bằng cách chọn \"Đăng nhập\" hoặc \"Đăng ký/Tạo tài khoản\", bạn đồng ý với ",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 12,
                                 color: Color(0xFF62737A),
                                 fontWeight: FontWeight.w400
@@ -110,14 +111,14 @@ class LoginScreen extends StatelessWidget {
                             children: [
                               TextSpan(
                                 text: "Điều khoản",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 12,
                                     color: Color(0xFF007AFF),
                                     decoration: TextDecoration.underline,
                                     fontWeight: FontWeight.w400
                                 ),
                               ),
-                              TextSpan(
+                              const TextSpan(
                                 text: " của Splat",
                                 style: TextStyle(
                                     fontSize: 12,

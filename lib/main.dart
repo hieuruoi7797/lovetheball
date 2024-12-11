@@ -157,7 +157,6 @@ void main() async{
     macOS: initializationSettingsDarwin,
     linux: initializationSettingsLinux,
   );
-  await PublicMethods.requestPermissions();
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
     onDidReceiveNotificationResponse:
@@ -177,14 +176,14 @@ void main() async{
   );
 
   // Listen for background task notifications
-  BackgroundTaskManager.setupMethodCallHandler(() {
-    _showNotification();
+  BackgroundTaskManager.setupMethodCallHandler((call) {
+    _showNotification(content: call.arguments?.toString() ?? "No content");
   });
   runApp( MyApp(notificationAppLaunchDetails));
 }
 
 // Function to show the notification
-Future<void> _showNotification() async {
+Future<void> _showNotification({required String content}) async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
   AndroidNotificationDetails(
     'your_channel_id',
@@ -201,7 +200,7 @@ Future<void> _showNotification() async {
   await flutterLocalNotificationsPlugin.show(
     0,
     'Hello',
-    'This is a notification from the background!',
+    'Notifications connected : $content',
     platformChannelSpecifics,
   );
 }

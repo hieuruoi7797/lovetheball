@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:http/http.dart';
+  import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:splat_mobile/constants/api_paths.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
@@ -105,6 +105,7 @@ class PublicMethods {
         headers: isFormData ? headerWithTokenFormData(token??''):headerWithToken(token??''),
       );
     } catch (e) {
+      print("hieuttCHECK_ERR: $e");
       if (applicationBloc.isLoading == true) applicationBloc.changeLoadingStatus();
       response = Response(
           {
@@ -150,16 +151,6 @@ class PublicMethods {
     return response;
   }
 
-  static Future<PlayerModel?> getNowUser() async {
-    String? stringUserNow = await storage.read(
-        key: user_info);
-    PlayerModel userNow = PlayerModel(id: '000', name: 'UNKNOWN');
-    if (stringUserNow != null && stringUserNow.isNotEmpty){
-      userNow = PlayerModel.fromJson(jsonDecode(stringUserNow??''));
-    }
-    return userNow;
-  }
-
   static Image imageFromBase64String(String base64String, {BoxFit? fit}) {
     return Image.memory(
       base64Decode(base64String),
@@ -167,7 +158,7 @@ class PublicMethods {
       gaplessPlayback: true,
     );
     }
-  static Future<void> requestPermissions() async {
+  static Future<void> requestNotificationPermissions() async {
     if (Platform.isIOS || Platform.isMacOS) {
       await flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
@@ -189,9 +180,7 @@ class PublicMethods {
       final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
       flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>();
-
-      final bool? grantedNotificationPermission =
-      await androidImplementation?.requestNotificationsPermission();
+      final bool? grantedNotificationPermission = await androidImplementation?.requestNotificationsPermission();
     }
   }
 

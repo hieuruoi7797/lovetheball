@@ -15,7 +15,7 @@ class PlayerModel {
 
   PlayerModel.fromJson(Map json) {
     id = json['id_'];
-    name = json['name'];
+    name = json['name']??"UNKNOWN";
     gender = json['gender'] ?? 0;
     birthDate = json['birth_date'] ?? '';
     email = json['email'] ?? '';

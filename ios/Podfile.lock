@@ -48,6 +48,9 @@ PODS:
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - Socket.IO-Client-Swift (16.1.1):
+    - Starscream (~> 4.0.8)
+  - Starscream (4.0.8)
   - TOCropViewController (2.6.1)
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
@@ -65,6 +68,7 @@ DEPENDENCIES:
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - Socket.IO-Client-Swift (~> 16.0)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 SPEC REPOS:
@@ -73,6 +77,8 @@ SPEC REPOS:
     - GoogleSignIn
     - GTMAppAuth
     - GTMSessionFetcher
+    - Socket.IO-Client-Swift
+    - Starscream
     - TOCropViewController
 
 EXTERNAL SOURCES:
@@ -120,9 +126,11 @@ SPEC CHECKSUMS:
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
+  Socket.IO-Client-Swift: 3614bea82ba005df1c2ff01154f4004993e05ad7
+  Starscream: 19b5533ddb925208db698f0ac508a100b884a1b9
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   webview_flutter_wkwebview: 2a23822e9039b7b1bc52e5add778e5d89ad488d1
 
-PODFILE CHECKSUM: 79f4df6286fffe79b4fcab581094f666c38d7b59
+PODFILE CHECKSUM: 8453a788234c8b7f505e874869c477fcae9fc325
 
 COCOAPODS: 1.15.2

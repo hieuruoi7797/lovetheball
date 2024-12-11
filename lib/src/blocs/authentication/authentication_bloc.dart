@@ -10,6 +10,8 @@ import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/public/app_service.dart';
 import 'package:splat_mobile/public/dialog/dialog_notification.dart';
+import 'package:splat_mobile/public/public_methods.dart';
+import 'package:splat_mobile/src/background_task_manager/BackgroundTaskManager.dart';
 import 'package:splat_mobile/src/resources/show_dialog.dart';
 import 'package:splat_mobile/public/widget_item/widget_register_success.dart';
 import 'package:splat_mobile/src/app.dart';
@@ -21,6 +23,7 @@ import 'package:splat_mobile/src/models/player_model.dart';
 import 'package:splat_mobile/src/resources/repository.dart';
 import 'package:splat_mobile/src/resources/timer_counter_bloc.dart';
 import 'package:splat_mobile/src/ui/authentication/validate.dart';
+import '../../../constants/api_paths.dart';
 import '../../../constants/api_response_codes.dart';
 import '../../../constants/public_values.dart';
 import '../../../public/share_prefer.dart';
@@ -67,38 +70,33 @@ class AuthenticationBloc with Validation{
   FocusNode get focusNodeNickName=> _focusNodeNickName;
   FocusNode get focusNodeRePass => _focusNodeRePass;
 
-
   final _otpBehavior = BehaviorSubject<String>();
   final _sendOTPBehavior = BehaviorSubject<String>();
-
-
-
   final _passwordVisibleBehavior = BehaviorSubject<bool>();
   final _checkRememberPassBehavior = BehaviorSubject<bool>();
+  final _currentStepBehavior = BehaviorSubject<int>();
+  final _isShowBackBehavior = BehaviorSubject<bool>();
+  final _resSuccessBehavior = BehaviorSubject<bool>();
+  final _showButtonContinueBehavior = BehaviorSubject<bool>();
+
+  Stream<int> get currentStepBehavior => _currentStepBehavior.stream;
+  Stream<bool> get isShowBackBehavior => _isShowBackBehavior.stream;
+  Stream<bool> get resSuccessBehavior => _resSuccessBehavior.stream;
   Stream<bool> get passwordVisibleBehavior => _passwordVisibleBehavior.stream;
   Stream<bool> get checkRememberPassBehavior => _checkRememberPassBehavior.stream;
   Stream<String> get emailBehavior => _emailBehavior.stream;
+  Stream<bool> get showButtonContinueBehavior => _showButtonContinueBehavior.stream;
+
   bool get passwordVisible => _passwordVisible;
   bool get checkRememberPass => _checkRememberPass;
-
-
   int _currentStep = 0;
-  final _currentStepBehavior = BehaviorSubject<int>();
-  Stream<int> get currentStepBehavior => _currentStepBehavior.stream;
   int get currentStep => _currentStep;
   bool _isShowBack =false;
   bool get isShowBack => _isShowBack;
-  final _isShowBackBehavior = BehaviorSubject<bool>();
-  Stream<bool> get isShowBackBehavior => _isShowBackBehavior.stream;
   bool _resSuccess =false;
   bool get resSuccess => _resSuccess;
-  final _resSuccessBehavior = BehaviorSubject<bool>();
-  Stream<bool> get resSuccessBehavior => _resSuccessBehavior.stream;
-
   bool _showButtonContinue = false;
   bool get showButtonContinue => _showButtonContinue;
-  final _showButtonContinueBehavior = BehaviorSubject<bool>();
-  Stream<bool> get showButtonContinueBehavior => _showButtonContinueBehavior.stream;
 
   void setIconBack(){
     if(_currentStep>=0){
@@ -137,7 +135,7 @@ class AuthenticationBloc with Validation{
                   InfoLoginModel infoLoginModel = InfoLoginModel(
                       email: _controllerRegisterEmail.text,
                       password: _controllerRegisterPass.text);
-                  await SharePreferUtils.saveInfoRegister(infoLoginModel);
+                  await SharePreferUtils.saveInfoLogin(infoLoginModel);
                 }
               },
               content: "",
@@ -207,7 +205,7 @@ class AuthenticationBloc with Validation{
         BaseApiModel? response =
         await repository.createUser( email: email);
         if(response!=null) {
-          if (response!.message["msg_code"] == MSG_SUCCESS_REGISTER_S605) {
+          if (response!.message["msg_code"] == MSG_SUCCESS_REGISTER) {
             commonTextFieldBloc.enterMsgCode("");
             _resSuccessBehavior.sink.add(_resSuccess = true);
           } else {
@@ -272,24 +270,29 @@ class AuthenticationBloc with Validation{
       // String email = await commonTextFieldBloc.emailValidateBehavior.first;
       // String password = await commonTextFieldBloc.passwordValidateBehavior.first;
 
-      Response? response = await repository.login(email: emailRegister??_controllerEmail.text, pw: passRegister??_controllerPassword.text);
+      Response? response = await repository.login(
+          email: emailRegister??_controllerEmail.text,
+          pw: passRegister??_controllerPassword.text);
       if (response != null && response.statusCode == 200){
+
+
+
+        ///Save access token
         String accessToken = jsonDecode(response.body)["access_token"];
         String refreshToken = jsonDecode(response.body)["refresh_token"];
         await storage.write(key: access_token_key, value: accessToken);
         await storage.write(key: refresh_token_key, value: refreshToken);
-        repository.socketConnect("notifications");
-        repository.emitSocket("register", body: {
-          "interactor": {
-            "id_": "38012d14-29b7-41c1-bfaa-c5c198007d4a",
-            "name": "trần trung hiếu",
-            "interactor_type": 0
-          },
-          "notification_to_be_received": [
-            0
-          ]
-        });
-        Response? checkingTokenRes = await repository.testToken();
+
+        ///Save UserInfo
+        await saveUserInfo();
+        ///request push notification permission:
+        await PublicMethods.requestNotificationPermissions();
+
+        ///connect to socket on native side:
+        await BackgroundTaskManager.startBackgroundTask(
+          "000",
+          "LacQuan"
+        );
         // commonTextFieldBloc.enterMsgCode("");
         // if (checkingTokenRes != null){
         //   await storage.write(
@@ -386,10 +389,11 @@ class AuthenticationBloc with Validation{
         body:{
           "name": _controllerNickName.text,
           "gender": 0,
-          "birth_date": "12/02/2000",//type timestamp: "" lỗi format trên backend khi truyền rỗng
+          "birth_date": "19970707",//type timestamp: "" lỗi format trên backend khi truyền rỗng
           "email": _controllerRegisterEmail.text,
           "phone": "",
           "avatar": '${settingAvatarBloc.base64Image}',
+          "default_jersey_number": 0,
           "role_ids": [],
           "otp": _verifyOTP,
           "password": _controllerRegisterPass.text
@@ -465,5 +469,20 @@ class AuthenticationBloc with Validation{
     }
     // show.cupertinoModalBottomSheet(contentView)
   }
+
+ Future<void> saveUserInfo() async{
+   PlayerModel userInfo;
+   Response? checkingTokenRes = await repository.testToken();
+   if (checkingTokenRes != null){
+     userInfo = PlayerModel.fromJson(jsonDecode(checkingTokenRes.body)["data"][0]);
+     SharePreferUtils.saveUserInfo(userInfo);
+   }
+   InfoLoginModel infoLoginModel = InfoLoginModel(
+       email: _controllerRegisterEmail.text,
+       password: _controllerRegisterPass.text);
+   await SharePreferUtils.saveInfoLogin(infoLoginModel);
+
+ }
+
 }
   final authenticationBloc = AuthenticationBloc();

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:splat_mobile/src/blocs/home_bloc/home_bloc.dart';
+import 'package:splat_mobile/src/models/player_model.dart';
 import 'package:splat_mobile/widgets_common/match_history_item.dart';
 import 'package:splat_mobile/widgets_common/rounded_image.dart';
 import 'package:splat_mobile/widgets_common/tag_info.dart';
@@ -59,51 +60,60 @@ class TabHomePage extends StatelessWidget {
                     )),
                 const SizedBox(height: 20,),
                 ///Identifier Info
-                Container(
-                  width: 100,
-                  padding: EdgeInsets.only(bottom: 16, top: 16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.white,
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 72,
-                        height: 72,
-                        decoration:BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: Colors.blue,
-                            image: homeBloc.nowUserInfo?.avatar!=''?DecorationImage(
-                                image: FileImage(appGlobal.avatarFile),
-                                fit: BoxFit.cover
-                            ):DecorationImage(
-                                image: AssetImage(
-                                  "assets/png_images/default_avt.png",
-                                ),
-                                fit: BoxFit.cover
-                            )
+                StreamBuilder<PlayerModel>(
+                  stream: homeBloc.userInfo,
+                  builder: (context, userInfo) {
+                    if (userInfo.hasData){
+                      return Container(
+                        width: 100,
+                        padding: EdgeInsets.only(bottom: 16, top: 16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.white,
                         ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 12),
-                        child: Text(homeBloc.nowUserInfo?.name??'',
-                                  style: TextStyle(
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 72,
+                              height: 72,
+                              decoration:BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.blue,
+                                  image: userInfo.data?.avatar!=''?DecorationImage(
+                                      image: FileImage(appGlobal.avatarFile),
+                                      fit: BoxFit.cover
+                                  ):DecorationImage(
+                                      image: AssetImage(
+                                        "assets/png_images/default_avt.png",
+                                      ),
+                                      fit: BoxFit.cover
+                                  )
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(top: 12),
+                              child: Text(userInfo.data?.name??'',
+                                style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w600
-                                  ),),
-                      ),
-                      SizedBox(height: 24,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TagInfo(value: 17.toString(),label: " Trận đấu",),
-                          TagInfo(value: 15.toString(),label: " Thành tích",),
-                          TagInfo(value: 5.toString(),label: " MVP",),
-                        ],
-                      ),
-                    ],
-                  ),
+                                ),),
+                            ),
+                            SizedBox(height: 24,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TagInfo(value: 17.toString(),label: " Trận đấu",),
+                                TagInfo(value: 15.toString(),label: " Thành tích",),
+                                TagInfo(value: 5.toString(),label: " MVP",),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    }else{
+                      return SizedBox();
+                    }
+                  }
                 ),
                 const SizedBox(height: 20,),
 

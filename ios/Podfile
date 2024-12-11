@@ -32,6 +32,10 @@ target 'Runner' do
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+  
+  # Add Socket.IO dependency
+  pod 'Socket.IO-Client-Swift', '~> 16.0'
+  
   target 'RunnerTests' do
     inherit! :search_paths
   end
