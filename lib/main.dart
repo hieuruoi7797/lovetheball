@@ -189,7 +189,7 @@ Future<void> _showNotification({required String content}) async {
     'your_channel_id',
     'your_channel_name',
     channelDescription: 'your_channel_description',
-    importance: Importance.max,
+    importance: Importance.high,
     priority: Priority.high,
     ticker: 'ticker',
   );
@@ -197,10 +197,13 @@ Future<void> _showNotification({required String content}) async {
   const NotificationDetails platformChannelSpecifics =
   NotificationDetails(android: androidPlatformChannelSpecifics);
 
+  ///Show received noti
+  final int uniqueNotificationId = DateTime.now().millisecondsSinceEpoch % 100000;
+
   await flutterLocalNotificationsPlugin.show(
-    0,
+    uniqueNotificationId,
     'Hello',
-    'Notifications connected : $content',
+    '$content',
     platformChannelSpecifics,
   );
 }

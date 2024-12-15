@@ -71,16 +71,22 @@ import SocketIO
         // Handle connection event
         socket?.on(clientEvent: .connect) { _, _ in
             print("Socket connected")
-            channel.invokeMethod("showNotification", arguments: "true")
             self.emitRegisterEvent(id: id, name: name) // Emit your custom event after connection is opened
         }
 
         // Handle a custom event (example: "message")
         socket?.on("check_register_notifications") { data, ack in
-//            if let response = data.first as? [String: Any] {
-                print("Received message: \(data)")
+            
+     
+            if let response = data.first as? [String: Any] {
+                guard let msgName = response["msg_name"] as? String else {
+                print("msg_name not found or invalid")
+                return
+            }
+                print("Received message: \(msgName)")
+            channel.invokeMethod("showNotification", arguments: msgName)
                 // You can use FlutterMethodChannel to send this back to Flutter
-//            }
+            }
         }
         
         // Handle disconnect event
