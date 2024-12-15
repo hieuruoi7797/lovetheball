@@ -41,11 +41,14 @@ class MainActivity: FlutterActivity() {
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
             .setMethodCallHandler { call, result ->
             if (call.method == "startBackgroundTask") {
+                val map = call.arguments as? Map<*, *>
                 val intent = Intent(this, SocketManager::class.java)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     intent.putExtra("serverUrl", "https://ample-crawdad-kind.ngrok-free.app")
                     intent.putExtra("path", "/socket")
                     intent.putExtra("namespace", "/notifications")
+                    intent.putExtra("id", map!!["id"] as? String)
+                    intent.putExtra("username", map["name"] as? String)
                     startForegroundService(intent)
                 }
                 result.success("Background task started")
