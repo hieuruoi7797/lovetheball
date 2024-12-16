@@ -6,7 +6,6 @@ import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
 import 'package:splat_mobile/src/ui/authentication/validate.dart';
 
 class CommonTextFieldBloc with Validation {
-
   CommonTextFieldBloc() {
     changeVisiblePassword(false);
   }
@@ -24,15 +23,22 @@ class CommonTextFieldBloc with Validation {
 
   ///Getter
   bool get passwordLoginVisible => _passwordLoginVisible;
-  Stream<String> get emailValidateBehavior => _emailBehavior.stream.transform(eMailValidate);
+  // Stream<String> get emailValidateBehavior => _emailBehavior.stream.transform(eMailValidate(context));
   Stream<String> get passwordValidateBehavior => _passwordBehavior.stream.transform(passwordValidate);
   Stream<String> get optionalErrorStream => _optionalErrorBehavior.stream.transform(optionalError);
-  Stream<String> get responseErrorStream => _msgCodeBehavior.stream.transform(responseValidate);
+  // Stream<String> get responseErrorStream => _msgCodeBehavior.stream.transform(responseValidate(context));
   Stream<bool> get visiblePassword => _visiblePasswordBehavior;
   Stream<String> get emailBehavior => _emailBehavior;
   Stream<String> get otpValidateBehavior => _sendOTPBehavior.stream.transform(otpValidate);
   Stream<String> get checkRePassBehavior => _checkRePassBehavior.stream.transform(passwordValidate);
   Stream<String> get checkReNickNameBehavior => _checkReNickNameBehavior.stream.transform(nickNameValidate);
+  Stream<String> emailValidateBehavior(BuildContext context) {
+    return _emailBehavior.stream.transform(eMailValidate(context));
+  }
+
+  Stream<String> responseErrorStream(BuildContext context) {
+    return _msgCodeBehavior.stream.transform(responseValidate(context));
+  }
 
   ///Setter
   void enterPassword(String value) => enteringPassword(value);

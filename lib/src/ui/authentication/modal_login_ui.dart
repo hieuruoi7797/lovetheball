@@ -18,7 +18,7 @@ Widget ModalLoginContent(BuildContext context){
         Container(
             padding: EdgeInsets.symmetric(vertical:  size.height*0.01, horizontal: size.width*0.04),
             child: StreamBuilder<String>(
-              stream: commonTextFieldBloc.responseErrorStream,
+              stream: commonTextFieldBloc.responseErrorStream(context),
               builder: (context, AsyncSnapshot<String> snapshotError) {
                 return Common.CommonTextField(
                     context,
@@ -35,7 +35,7 @@ Widget ModalLoginContent(BuildContext context){
         Container(
           padding: EdgeInsets.symmetric(vertical:  size.height*0.01, horizontal: size.width*0.04),
           child: StreamBuilder<String>(
-            stream: commonTextFieldBloc.responseErrorStream,
+            stream: commonTextFieldBloc.responseErrorStream(context),
             builder: (context, AsyncSnapshot<String> snapshotError) {
               return Common.CommonTextField(
                   context,

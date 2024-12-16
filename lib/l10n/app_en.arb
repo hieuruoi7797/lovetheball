@@ -14,5 +14,8 @@
   "quick_setting_title": "Quick Match Setting",
   "standard_3": "Standart 3v3",
   "standard_5": "Standart 5v5",
-  "custom_match": "Custom Match"
+  "custom_match": "Custom Match",
+  "login_error_incorrect": "Incorrect user's email or password. Please try again!",
+  "invalid_email": "Invalid email",
+  "empty_pass_input": "Please enter password"
 }
