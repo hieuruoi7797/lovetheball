@@ -11,6 +11,7 @@ import 'package:splat_mobile/src/resources/show_dialog.dart';
 
 import '../../../constants/ui_styles.dart';
 import '../../../public/dialog/dialog_notification.dart';
+import '../../../public/widget_item/common_text_field.dart';
 import '../../../public/widget_item/svg_icon.dart';
 import '../../../widgets_common/button_gen1.dart';
 
@@ -27,7 +28,7 @@ class SettingAvatarScreen extends StatelessWidget {
             titleAppbar: "THÔNG TIN CÁ NHÂN",
             resizeToAvoidBottomInset: true,
             bodyLayout: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 children: [
                   Container(
@@ -54,7 +55,7 @@ class SettingAvatarScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 100,),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 70),
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
                     child: Stack(
                       children: [
                         Container(
@@ -116,6 +117,21 @@ class SettingAvatarScreen extends StatelessWidget {
                       ],
                     ),
                   ),
+                  SizedBox(height: 20,),
+                  Container(
+                    padding: EdgeInsets.only(left: 30),
+                    child: Common.CommonTextField(
+                    context,
+                    type: TextFieldTypeEnum.number,
+                    typeEnableValidate:TypeEnableValidateEnum.otp,
+                    labelText: '',
+                    textAlign: TextAlign.center,
+                    // enableEmailValidator: true,
+                    hideErrorText: false,
+                    focusNode: FocusNode(),
+                    controller: authenticationBloc.numberOfPlayerController),
+                  )
+
 
                 ],
               ),

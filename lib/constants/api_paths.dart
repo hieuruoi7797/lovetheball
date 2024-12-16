@@ -1,10 +1,9 @@
 const String base_url =
-    // 'https://ample-crawdad-kind.ngrok-free.app';
+    'https://ample-crawdad-kind.ngrok-free.app/v1';
     // 'http://localhost:8080'; //localhost hieutt
 
     // "http://127.0.0.1:8080/v1";//localhost cua xinh
     //   "http://192.168.1.254:8080/v1";//privateIp cua xinh
-    "https://ample-crawdad-kind.ngrok-free.app";//privateIp cua mang cong ty
     // "http://192.168.6.59:8080/v1";//privateIp cua mang cong ty
 const String versions = "/v1";
 

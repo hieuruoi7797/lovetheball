@@ -37,7 +37,7 @@ Widget TabRegisterPass(BuildContext context) {
               const SizedBox(height: 30,),
               Container(
                   child:StreamBuilder<String>(
-                    stream: commonTextFieldBloc.responseErrorStream,
+                    stream: commonTextFieldBloc.responseErrorStream(context),
                     builder: (context, AsyncSnapshot<String> snapshotError) {
                       return Common.CommonTextField(
                           context,

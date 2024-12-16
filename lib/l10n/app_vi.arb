@@ -18,5 +18,9 @@
     "quick_setting_title": "Thiết lập trận đấu nhanh",
     "standard_3": "3v3 Tiêu chuẩn",
     "standard_5": "5v5 Tiêu chuẩn",
-    "custom_match": "Tuỳ chỉnh"
+    "custom_match": "Tuỳ chỉnh",
+    "login_error_incorrect": "Thông tin đăng nhập không chính xác. Vui lòng thử lại",
+    "invalid_email": "Email không hợp lệ",
+    "empty_pass_input": "Vui lòng nhập mật khẩu"
+
 }

@@ -19,6 +19,7 @@ class Common{
         TypeEnableValidateEnum? typeEnableValidate,
         bool? hideErrorText,
         List<TextInputFormatter>? inputFormatters,
+        TextAlign? textAlign,
         required TextFieldTypeEnum type,
         required TextEditingController controller,
         required FocusNode focusNode,
@@ -28,13 +29,13 @@ class Common{
     return StreamBuilder<String>(
         stream:
         typeEnableValidate == TypeEnableValidateEnum.email
-        ? commonTextFieldBloc.emailValidateBehavior
+        ? commonTextFieldBloc.emailValidateBehavior(context)
         : typeEnableValidate == TypeEnableValidateEnum.password
         ? commonTextFieldBloc.passwordValidateBehavior
         : typeEnableValidate == TypeEnableValidateEnum.otp
         ? commonTextFieldBloc.otpValidateBehavior
         : typeEnableValidate == TypeEnableValidateEnum.response
-        ? commonTextFieldBloc.responseErrorStream
+        ? commonTextFieldBloc.responseErrorStream(context)
         : null,
         builder: (context, snapshotValidate) {
           final size = MediaQuery.of(context).size;
@@ -62,6 +63,7 @@ class Common{
                         TextField(
                           focusNode: focusNode,
                           autofocus: true,
+                          textAlign: textAlign?? TextAlign.start,
                           decoration: InputDecoration(
                             alignLabelWithHint: true,
                             filled: false,
@@ -138,6 +140,8 @@ class Common{
                               : type == TextFieldTypeEnum.email
                               ? TextInputType.emailAddress
                               : type == TextFieldTypeEnum.numberOtp
+                              ? TextInputType.number
+                              :type == TextFieldTypeEnum.number
                               ? TextInputType.number
                               : TextInputType.text,
                           textInputAction: TextInputAction.done,
@@ -253,5 +257,5 @@ class Common{
 
 }
 
-enum TextFieldTypeEnum { password, email, nonSpecial, numberOtp }
+enum TextFieldTypeEnum { password, email, nonSpecial, numberOtp, number }
 enum TypeEnableValidateEnum { email, password, otp, rePass, reNickname, response,}

@@ -50,7 +50,7 @@ class RegistrationInfoScreen extends StatelessWidget {
                   ),
                  SizedBox(height: 30,),
                   StreamBuilder<String>(
-                    stream: commonTextFieldBloc.responseErrorStream,
+                    stream: commonTextFieldBloc.responseErrorStream(context),
                     builder: (context, AsyncSnapshot<String> snapshotError) {
                       return Container(
                         child: Common.CommonTextField(context,

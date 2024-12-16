@@ -46,6 +46,7 @@ class AuthenticationBloc with Validation{
   TextEditingController _controllerNickName = TextEditingController();
   TextEditingController _controllerRegisterEmail = TextEditingController();
   TextEditingController _controllerRegisterPass = TextEditingController();
+  TextEditingController _controllerNumberOfPlayer = TextEditingController(text: '0');
 
   TextEditingController get emailController => _controllerEmail;
   TextEditingController get passController => _controllerPassword;
@@ -53,6 +54,7 @@ class AuthenticationBloc with Validation{
   TextEditingController get otpController => _controllerOTP;
   TextEditingController get registerEmailController => _controllerRegisterEmail;
   TextEditingController get registerPassController => _controllerRegisterPass;
+  TextEditingController get numberOfPlayerController => _controllerNumberOfPlayer;
 
   FocusNode _focusNodeEmail = FocusNode();
   FocusNode _focusNodePass = FocusNode();
@@ -393,7 +395,7 @@ class AuthenticationBloc with Validation{
           "email": _controllerRegisterEmail.text,
           "phone": "",
           "avatar": '${settingAvatarBloc.base64Image}',
-          "default_jersey_number": 0,
+          "default_jersey_number": int.parse(_controllerNumberOfPlayer.text),
           "role_ids": [],
           "otp": _verifyOTP,
           "password": _controllerRegisterPass.text
