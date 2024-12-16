@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:splat_mobile/constants/icon_custom.dart';
 import 'package:splat_mobile/public/bottom_sheet/bottom_sheet.dart';
@@ -27,8 +28,9 @@ class SettingAvatarScreen extends StatelessWidget {
         return LayoutScreen(
             titleAppbar: "THÔNG TIN CÁ NHÂN",
             resizeToAvoidBottomInset: true,
-            bodyLayout: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+            bodyLayout: authenticationBloc.focusNodeNumberOfPlayer.hasFocus?Container()
+            :Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
                   Container(
@@ -53,9 +55,9 @@ class SettingAvatarScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 100,),
+                  SizedBox(height: 30,),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 50),
+                    padding: const EdgeInsets.symmetric(horizontal: 60),
                     child: Stack(
                       children: [
                         Container(
@@ -117,21 +119,27 @@ class SettingAvatarScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(height: 20,),
-                  Container(
-                    padding: EdgeInsets.only(left: 30),
-                    child: Common.CommonTextField(
-                    context,
-                    type: TextFieldTypeEnum.number,
-                    typeEnableValidate:TypeEnableValidateEnum.otp,
-                    labelText: '',
-                    textAlign: TextAlign.center,
-                    // enableEmailValidator: true,
-                    hideErrorText: false,
-                    focusNode: FocusNode(),
-                    controller: authenticationBloc.numberOfPlayerController),
-                  )
-
+                  SizedBox(height: 10,),
+                  settingAvatarBloc.avatarFile.path!=''?AppButton.btnTextCustom(
+                      buttonName: 'Chọn ảnh khác',
+                      styleTextBtn: const TextStyle(
+                        // decoration: TextDecoration.underline,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: color_E5601A,
+                      ),
+                      onTap: (){
+                        show.listTileBottomSheet(BottomSheetCustom.showBottomSheetSelectImage(
+                            context: context,
+                            onTapCam: () {
+                              settingAvatarBloc.pickImageFromCam(context);
+                            },
+                            onTapLib: () {
+                              settingAvatarBloc.pickImageFromLib(context);
+                            }
+                        ));
+                      }
+                  ):Container()
 
                 ],
               ),
@@ -143,13 +151,55 @@ class SettingAvatarScreen extends StatelessWidget {
           //   authenticationBloc.createUserLogin(context);
           // },
            titleBtnContinue: 'Nhìn ổn đấy',
-          floatingActionButton:Padding(
-            padding: EdgeInsets.only(left: 30),
+          floatingActionButton:Container(
+            // color: Colors.white,
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Số áo cầu thủ",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10,),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Số áo trên sân bóng của bạn",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color:color_62737A,
+                        letterSpacing: -0.4,
+                        wordSpacing: -0.4
+                    ),
+                  ),
+                ),
+                SizedBox(height: 30,),
+                Container(
+                  // padding: EdgeInsets.only(left: 30),
+                  child: Common.CommonTextField(
+                      context,
+                      type: TextFieldTypeEnum.number,
+                      typeEnableValidate:TypeEnableValidateEnum.otp,
+                      labelText: '',
+                      textAlign: TextAlign.center,
+                      // enableEmailValidator: true,
+                      hideErrorText: false,
+                      focusNode: authenticationBloc.focusNodeNumberOfPlayer,
+                      controller: authenticationBloc.numberOfPlayerController,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(10)
+                    ]
+                  ),
+                ),
+                SizedBox(height: 30,),
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
@@ -176,7 +226,7 @@ class SettingAvatarScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height:20,),
                 ButtonGen1(
                   onTap: settingAvatarBloc.avatarFile.path!=''?(){
                     authenticationBloc.createUserLogin(context);
@@ -190,53 +240,34 @@ class SettingAvatarScreen extends StatelessWidget {
                   width: MediaQuery.sizeOf(context).width * 0.92,
                   enableLoadingAnimation: true,
                 ),
-                SizedBox(height: 10,),
-                settingAvatarBloc.avatarFile.path!=''?AppButton.btnTextCustom(
-                  buttonName: 'Chọn ảnh khác',
-                  styleTextBtn: const TextStyle(
-                    // decoration: TextDecoration.underline,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
-                  onTap: (){
-                    show.listTileBottomSheet(BottomSheetCustom.showBottomSheetSelectImage(
-                        context: context,
-                        onTapCam: () {
-                          settingAvatarBloc.pickImageFromCam(context);
-                        },
-                        onTapLib: () {
-                          settingAvatarBloc.pickImageFromLib(context);
-                        }
-                    ));
-                  }
-                )
-                :AppButton.btnTextCustom(
-                  buttonName: 'Để sau',
-                  styleTextBtn: const TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
-                  onTap: (){
-                    show.dialog(
-                      dialogWidget:AddDialog.dialogCustom(
-                        onApply: () async{
-                          Navigator.pop(context);
-                          authenticationBloc.createUserLogin(context);
-                        },
-                        content: "Bạn chưa có ảnh đại diện, có chắc muốn hoàn thành đăng ký!",
-                        buttonName: "Đồng ý",
-                        onclose:(){
-                        Navigator.pop(context);
-                        },
-                        context: context
-                      ),
-                    );
+                authenticationBloc.focusNodeNumberOfPlayer.hasFocus?SizedBox(height:30,):SizedBox(height:10,)
 
-                  }
-                )
+                // AppButton.btnTextCustom(
+                //   buttonName: 'Để sau',
+                //   styleTextBtn: const TextStyle(
+                //     decoration: TextDecoration.underline,
+                //     fontSize: 15,
+                //     fontWeight: FontWeight.w600,
+                //     color: Colors.black,
+                //   ),
+                //   onTap: (){
+                //     show.dialog(
+                //       dialogWidget:AddDialog.dialogCustom(
+                //         onApply: () async{
+                //           Navigator.pop(context);
+                //           authenticationBloc.createUserLogin(context);
+                //         },
+                //         content: "Bạn chưa có ảnh đại diện, có chắc muốn hoàn thành đăng ký!",
+                //         buttonName: "Đồng ý",
+                //         onclose:(){
+                //         Navigator.pop(context);
+                //         },
+                //         context: context
+                //       ),
+                //     );
+                //
+                //   }
+                // )
               ],
             ),
           ),

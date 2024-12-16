@@ -62,7 +62,11 @@ class Common{
                         ),
                         TextField(
                           focusNode: focusNode,
-                          autofocus: true,
+                          // autofocus: true,
+                          onTapOutside: (event) {
+                            // Dismiss the keyboard
+                            FocusScope.of(context).unfocus();
+                            },
                           textAlign: textAlign?? TextAlign.start,
                           decoration: InputDecoration(
                             alignLabelWithHint: true,
@@ -110,7 +114,7 @@ class Common{
                                       fontWeight: FontWeight.w600
                                   ),
                                 )
-                            )
+                            ):type == TextFieldTypeEnum.number?null
                                 :controller.text!=''
                                 ?IconButton(
                                   padding: EdgeInsets.symmetric(vertical: 20),

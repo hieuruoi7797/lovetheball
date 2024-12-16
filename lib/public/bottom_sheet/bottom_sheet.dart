@@ -12,7 +12,7 @@ class BottomSheetCustom {
   }){
     final size = MediaQuery.of(context).size;
     return Container(
-      width: size.width*0.5,
+      width: size.width,
       height: size.height*0.2,
       padding: EdgeInsets.symmetric(horizontal: size.width*0.01, vertical: size.height*0.01),
       child: Column(
