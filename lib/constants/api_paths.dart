@@ -1,5 +1,5 @@
 const String base_url =
-    'https://ample-crawdad-kind.ngrok-free.app/v1';
+    'https://ample-crawdad-kind.ngrok-free.app';
     // 'http://localhost:8080'; //localhost hieutt
 
     // "http://127.0.0.1:8080/v1";//localhost cua xinh

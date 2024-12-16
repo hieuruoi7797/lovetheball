@@ -63,6 +63,7 @@ class AuthenticationBloc with Validation{
   FocusNode _focusNodeReP = FocusNode();
   FocusNode _focusNodeNickName = FocusNode();
   FocusNode _focusNodeRePass = FocusNode();
+  FocusNode _focusNodeNumberOfPlayer = FocusNode();
 
   FocusNode get focusNodeEmail => _focusNodeEmail;
   FocusNode get focusNodePass => _focusNodePass;
@@ -71,6 +72,7 @@ class AuthenticationBloc with Validation{
   FocusNode get focusNodeReP=> _focusNodeReP;
   FocusNode get focusNodeNickName=> _focusNodeNickName;
   FocusNode get focusNodeRePass => _focusNodeRePass;
+  FocusNode get focusNodeNumberOfPlayer => _focusNodeNumberOfPlayer;
 
   final _otpBehavior = BehaviorSubject<String>();
   final _sendOTPBehavior = BehaviorSubject<String>();
