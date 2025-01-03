@@ -217,15 +217,18 @@ class _LobbyState extends State<LobbyScreen> {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 18),
-              height: 56,
-              width: MediaQuery.sizeOf(context).width * 0.3,
-              decoration: BoxDecoration(
-                color: const Color(0xFFACC7E1),
-                borderRadius: BorderRadius.circular(12)
+            child: GestureDetector(
+              onTap: () => Navigator.pushNamed(context, Routes.LIVE_STAT),
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 18),
+                height: 56,
+                width: MediaQuery.sizeOf(context).width * 0.3,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFACC7E1),
+                  borderRadius: BorderRadius.circular(12)
+                ),
+                child: Center(child: const Text("BẮT ĐẦU")),
               ),
-              child: Center(child: const Text("BẮT ĐẦU")),
             ),
           )
         ],
