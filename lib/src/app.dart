@@ -15,6 +15,8 @@ import 'package:splat_mobile/src/ui/login_with_google/login_with_google_screen.d
 import 'package:splat_mobile/src/ui/quick_match/add_player_screen.dart';
 import 'package:splat_mobile/src/ui/setting_match/setting_match_screen.dart';
 
+import 'blocs/match/live_stat_bloc.dart';
+
 final navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {

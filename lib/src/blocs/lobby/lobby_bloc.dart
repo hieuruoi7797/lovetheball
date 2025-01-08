@@ -11,10 +11,10 @@ import '../../resources/repository.dart';
 
 class LobbyBloc {
   BehaviorSubject<List<PlayerModel>> _listPendingPlayers = BehaviorSubject<List<PlayerModel>>();
-  BehaviorSubject<List<PlayerModel>> _listTeamPlayersOne = BehaviorSubject<List<PlayerModel>>();
-  BehaviorSubject<List<PlayerModel>> _listSubPlayersOne = BehaviorSubject<List<PlayerModel>>();
-  BehaviorSubject<List<PlayerModel>> _listTeamPlayersTwo = BehaviorSubject<List<PlayerModel>>();
-  BehaviorSubject<List<PlayerModel>> _listSubPlayersTwo = BehaviorSubject<List<PlayerModel>>();
+  BehaviorSubject<List<PlayerModel>> listTeamPlayersOne = BehaviorSubject<List<PlayerModel>>();
+  BehaviorSubject<List<PlayerModel>> listSubPlayersOne = BehaviorSubject<List<PlayerModel>>();
+  BehaviorSubject<List<PlayerModel>> listTeamPlayersTwo = BehaviorSubject<List<PlayerModel>>();
+  BehaviorSubject<List<PlayerModel>> listSubPlayersTwo = BehaviorSubject<List<PlayerModel>>();
   BehaviorSubject<PlayerModel?> _nowSwappingPlayer = BehaviorSubject<PlayerModel?>();
   final BehaviorSubject<bool?> _pendingListExpanded = BehaviorSubject<bool?>();
   String nowSwappingFromTeam = "";
@@ -30,10 +30,10 @@ class LobbyBloc {
 
  Stream<PlayerModel?> get getAddingPlayer => _nowSwappingPlayer.stream;
  Stream<List<PlayerModel>> get getListPendingPlayers => _listPendingPlayers.stream;
- Stream<List<PlayerModel>> get getListTeamOnePlayers => _listTeamPlayersOne.stream;
- Stream<List<PlayerModel>> get getListSubOnePlayers => _listSubPlayersOne.stream;
- Stream<List<PlayerModel>> get getListTeamTwoPlayers => _listTeamPlayersTwo.stream;
- Stream<List<PlayerModel>> get getListSubTwoPlayers => _listSubPlayersTwo.stream;
+ Stream<List<PlayerModel>> get getListTeamOnePlayers => listTeamPlayersOne.stream;
+ Stream<List<PlayerModel>> get getListSubOnePlayers => listSubPlayersOne.stream;
+ Stream<List<PlayerModel>> get getListTeamTwoPlayers => listTeamPlayersTwo.stream;
+ Stream<List<PlayerModel>> get getListSubTwoPlayers => listSubPlayersTwo.stream;
  Stream<bool?> get pendingListExpanded => _pendingListExpanded.stream;
 
  LobbyBloc();
@@ -41,10 +41,10 @@ class LobbyBloc {
  void initData(){
 
     _listPendingPlayers = BehaviorSubject<List<PlayerModel>>();
-    _listTeamPlayersOne = BehaviorSubject<List<PlayerModel>>();
-    _listSubPlayersOne = BehaviorSubject<List<PlayerModel>>();
-    _listTeamPlayersTwo = BehaviorSubject<List<PlayerModel>>();
-    _listSubPlayersTwo = BehaviorSubject<List<PlayerModel>>();
+    listTeamPlayersOne = BehaviorSubject<List<PlayerModel>>();
+    listSubPlayersOne = BehaviorSubject<List<PlayerModel>>();
+    listTeamPlayersTwo = BehaviorSubject<List<PlayerModel>>();
+    listSubPlayersTwo = BehaviorSubject<List<PlayerModel>>();
     _nowSwappingPlayer = BehaviorSubject<PlayerModel?>();
 
    _listPendingPlayers.add([
@@ -55,29 +55,29 @@ class LobbyBloc {
      PlayerModel(id: '8',name: "Phạm Hiếu"),
    ]
    );
-   _listTeamPlayersOne.add([
+   listTeamPlayersOne.add([
+     PlayerModel(id: '01', name: "Blaze"),
+     PlayerModel(id: '02', name: "Storm"),
+     PlayerModel(id: '03', name: "Echo"),
+     PlayerModel(id: '04', name: "Shadow"),
+     PlayerModel(id: '05', name: "Frost"),
+   ]);
+   listTeamPlayersTwo.add([
+     PlayerModel(id: '06', name: "Hunter"),
+     PlayerModel(id: '07', name: "Phoenix"),
+     PlayerModel(id: '08', name: "Rogue"),
+     PlayerModel(id: '09', name: "Viper"),
+     PlayerModel(id: '10', name: "Nova"),
+   ]);
+   listSubPlayersOne.add([
+     PlayerModel(id: '000',name: "unknown"),
      PlayerModel(id: '000',name: "unknown"),
      PlayerModel(id: '000',name: "unknown"),
      PlayerModel(id: '000',name: "unknown"),
      PlayerModel(id: '000',name: "unknown"),
      PlayerModel(id: '000',name: "unknown"),
    ]);
-   _listTeamPlayersTwo.add([
-     PlayerModel(id: '000',name: "unknown"),
-     PlayerModel(id: '000',name: "unknown"),
-     PlayerModel(id: '000',name: "unknown"),
-     PlayerModel(id: '000',name: "unknown"),
-     PlayerModel(id: '000',name: "unknown"),
-   ]);
-   _listSubPlayersOne.add([
-     PlayerModel(id: '000',name: "unknown"),
-     PlayerModel(id: '000',name: "unknown"),
-     PlayerModel(id: '000',name: "unknown"),
-     PlayerModel(id: '000',name: "unknown"),
-     PlayerModel(id: '000',name: "unknown"),
-     PlayerModel(id: '000',name: "unknown"),
-   ]);
-   _listSubPlayersTwo.add([
+   listSubPlayersTwo.add([
      PlayerModel(id: '000',name: "unknown"),
      PlayerModel(id: '000',name: "unknown"),
      PlayerModel(id: '000',name: "unknown"),
@@ -118,11 +118,11 @@ class LobbyBloc {
    ///REMOVE WHERE PLAYER COME FROM
    removePlayerFromOldList(id: nowAddingPlayer?.id ?? "000");
    ///GET THE TEAM WHAT IS ADDING PLAYER
-   List<PlayerModel> mainList = addingTeam == Constants.TEAM_1 ? _listTeamPlayersOne.value : _listTeamPlayersTwo.value;
+   List<PlayerModel> mainList = addingTeam == Constants.TEAM_A ? listTeamPlayersOne.value : listTeamPlayersTwo.value;
    _nowSwappingPlayer.hasValue ?  mainList[index] = (_nowSwappingPlayer.value!) : null;
-   addingTeam == Constants.TEAM_1 ?
-      _listTeamPlayersOne.add(mainList) :
-      _listTeamPlayersTwo.add(mainList);
+   addingTeam == Constants.TEAM_A ?
+      listTeamPlayersOne.add(mainList) :
+      listTeamPlayersTwo.add(mainList);
    lobbyBloc.changeAddingEnable(null,"");
  }
 
@@ -130,57 +130,57 @@ class LobbyBloc {
     initData();
    _nowSwappingPlayer.close();
    _listPendingPlayers.close();
-   _listTeamPlayersOne.close();
-   _listTeamPlayersTwo.close();
+   listTeamPlayersOne.close();
+   listTeamPlayersTwo.close();
   }
 
   addToSubPlayersList(int index, {required String subTeamKey}) {
     PlayerModel? nowAddingPlayer = _nowSwappingPlayer.value;
     removePlayerFromOldList(id: nowAddingPlayer?.id ?? "000");
-    List<PlayerModel> subList = subTeamKey == Constants.SUB_1 ? _listSubPlayersOne.value : _listSubPlayersTwo.value;
+    List<PlayerModel> subList = subTeamKey == Constants.SUB_1 ? listSubPlayersOne.value : listSubPlayersTwo.value;
     _nowSwappingPlayer.hasValue ?  subList[index] = (_nowSwappingPlayer.value!) : null;
     subTeamKey == Constants.SUB_1 ?
-    _listSubPlayersOne.add(subList) :
-    _listSubPlayersTwo.add(subList);
+    listSubPlayersOne.add(subList) :
+    listSubPlayersTwo.add(subList);
     lobbyBloc.changeAddingEnable(null,"");
   }
 
   void removePlayerFromOldList({required String id}) {
    switch (nowSwappingFromTeam) {
-     case Constants.TEAM_1:
-       List<PlayerModel> teamOne = _listTeamPlayersOne.hasValue ? _listTeamPlayersOne.value : [];
+     case Constants.TEAM_A:
+       List<PlayerModel> teamOne = listTeamPlayersOne.hasValue ? listTeamPlayersOne.value : [];
        for(int i = 0; i < teamOne.length; i ++){
          if (teamOne[i].id == id){
            teamOne[i] = PlayerModel(id: '000',name: "unknown");
          }
        }
-       _listTeamPlayersOne.add(teamOne);
-     case Constants.TEAM_2:
-       List<PlayerModel> teamTwo = _listTeamPlayersTwo.hasValue ? _listTeamPlayersTwo.value : [];
+       listTeamPlayersOne.add(teamOne);
+     case Constants.TEAM_B:
+       List<PlayerModel> teamTwo = listTeamPlayersTwo.hasValue ? listTeamPlayersTwo.value : [];
        for(int i = 0; i < teamTwo.length; i ++){
          if (teamTwo[i].id == id){
            teamTwo[i] = PlayerModel(id: '000',name: "unknown");
          }
        }
-       _listTeamPlayersTwo.add(teamTwo);
+       listTeamPlayersTwo.add(teamTwo);
 
      case Constants.SUB_1:
-       List<PlayerModel> subOne = _listSubPlayersOne.hasValue ? _listSubPlayersOne.value : [];
+       List<PlayerModel> subOne = listSubPlayersOne.hasValue ? listSubPlayersOne.value : [];
        for(int i = 0; i < subOne.length; i ++){
          if (subOne[i].id == id){
            subOne[i] = PlayerModel(id: '000',name: "unknown");
          }
        }
-       _listSubPlayersOne.add(subOne);
+       listSubPlayersOne.add(subOne);
 
      case Constants.SUB_2:
-       List<PlayerModel> subTwo = _listTeamPlayersTwo.hasValue ? _listSubPlayersTwo.value : [];
+       List<PlayerModel> subTwo = listTeamPlayersTwo.hasValue ? listSubPlayersTwo.value : [];
        for(int i = 0; i < subTwo.length; i ++){
          if (subTwo[i].id == id){
            subTwo[i] = PlayerModel(id: '000',name: "unknown");
          }
        }
-       _listSubPlayersOne.add(subTwo);
+       listSubPlayersOne.add(subTwo);
 
      case Constants.TEAM_PENDING:
        List<PlayerModel> pendingList = _listPendingPlayers.hasValue ? _listPendingPlayers.value : [];

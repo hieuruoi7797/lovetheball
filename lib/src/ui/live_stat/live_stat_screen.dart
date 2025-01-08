@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:splat_mobile/constants/constant_values.dart';
 import 'package:splat_mobile/public/public_methods.dart';
 import 'package:splat_mobile/src/blocs/match/live_stat_bloc.dart';
+import 'package:splat_mobile/src/models/live_stat_model.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 import 'package:splat_mobile/src/ui/lobby/list_starting_five.dart';
 
@@ -16,6 +18,13 @@ class _LiveStatState extends State<LiveStatScreen> {
 
   List<int> _offensiveItems = List.generate(6, (i) => i);
   List<int> _defensiveItems = List.generate(6, (i) => i);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    liveStatBloc.init();
+  }
 
 
   @override
@@ -82,10 +91,17 @@ class _LiveStatState extends State<LiveStatScreen> {
                         runSpacing: fullHeight * 0.028,
                         direction: Axis.horizontal,
                         children: _offensiveItems.map(
-                                (i) => myLiveStatButton(
-                                context: context,
-                                name: liveStatBloc.offensiveStatsList[i]["statName"],
-                                icon: liveStatBloc.offensiveStatsList[i]["icon"]??const Icon(Icons.sports_basketball))).toList(),
+                                (i) => StreamBuilder<bool>(
+                                  stream: liveStatBloc.statAddingStatus,
+                                  builder: (context, statAddingStatus) {
+                                    return myLiveStatButton(
+                                    onTap: () => liveStatBloc.addLiveStat(liveStatBloc.offensiveStatsList[i]["statName"]),
+                                    context: context,
+                                    name: liveStatBloc.offensiveStatsList[i]["statName"],
+                                    icon: liveStatBloc.offensiveStatsList[i]["icon"]??const Icon(Icons.sports_basketball),
+                                    addingStatus: statAddingStatus.hasData?statAddingStatus.data??false:false);
+                                  }
+                                )).toList(),
                       ),
                     ),
                   ),
@@ -98,13 +114,15 @@ class _LiveStatState extends State<LiveStatScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        height: fullHeight * 0.113,
-                        width: double.infinity,
-                        color: Colors.grey,
-                      ),
+                      myNameTag(
+                          context,
+                          pickingIndexStream: liveStatBloc.pickingPlayerIndexTeamA),
                       Spacer(),
-                      myListPlayerOnCourtUI(parentContext: context, listPlayer: []),
+                      myListPlayerOnCourtUI(
+                          parentContext: context, 
+                          listPlayer: [], teamName: Constants.TEAM_A,
+                          pickingIndexStream: liveStatBloc.pickingPlayerIndexTeamA
+                         ),
                       Spacer()
                     ],
                   ),
@@ -118,19 +136,29 @@ class _LiveStatState extends State<LiveStatScreen> {
                 color: Colors.green,
                 child: Stack(
                   children: [
-                    ListView.builder(
-                      itemCount: 10,
-                      itemBuilder: (context, index){
-                        return myUpdatedStatItem(
-                          context: context,
-                          margin: EdgeInsets.only(
-                              bottom: fullWidth * 0.01,
-                              left: fullWidth * 0.015,
-                              right: fullWidth * 0.015,
+                    StreamBuilder<List<LiveStatModel>>(
+                      stream: liveStatBloc.liveStatsStream,
+                      builder: (context, liveStatsStream) {
+                        if (liveStatsStream.hasData){
+                          return ListView.builder(
+                            itemCount: liveStatsStream.data?.length,
+                            itemBuilder: (context, index){
+                              return myUpdatedStatItem(
+                                  context: context,
+                                  model: liveStatsStream.data![index],
+                                  margin: EdgeInsets.only(
+                                    bottom: fullWidth * 0.01,
+                                    left: fullWidth * 0.015,
+                                    right: fullWidth * 0.015,
+                                  )
+                              );
+                            },
+                          );
+                        }else{
+                          return SizedBox();
+                        }
 
-                          )
-                        );
-                      },
+                      }
                     ),
                     Align(
                       alignment: Alignment.bottomCenter,
@@ -212,10 +240,18 @@ class _LiveStatState extends State<LiveStatScreen> {
                         runSpacing: fullHeight * 0.028,
                         direction: Axis.horizontal,
                         children: _defensiveItems.map(
-                                (i) => myLiveStatButton(
-                                context: context,
-                                name: liveStatBloc.defensiveStatsList[i]["statName"],
-                                icon: liveStatBloc.defensiveStatsList[i]["icon"]??const Icon(Icons.sports_basketball))).toList(),
+                                (i) => StreamBuilder<bool>(
+                                  stream: liveStatBloc.statAddingStatus,
+                                  builder: (context, statAddingStatus) {
+                                    return myLiveStatButton(
+                                    onTap: () => liveStatBloc.addLiveStat(liveStatBloc.defensiveStatsList[i]["statName"]),
+                                    context: context,
+                                    name: liveStatBloc.defensiveStatsList[i]["statName"],
+                                    icon: liveStatBloc.defensiveStatsList[i]["icon"]??const Icon(Icons.sports_basketball),
+                                    addingStatus: statAddingStatus.hasData?statAddingStatus.data??false:false
+                                    );
+                                  }
+                                )).toList(),
                       ),
                     ),
                   ),
@@ -228,13 +264,15 @@ class _LiveStatState extends State<LiveStatScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          height: fullHeight * 0.113,
-                          width: double.infinity,
-                          color: Colors.grey,
-                        ),
+                        myNameTag(
+                            context,
+                            pickingIndexStream: liveStatBloc.pickingPlayerIndexTeamB),
                         Spacer(),
-                        myListPlayerOnCourtUI(parentContext: context, listPlayer: []),
+                        myListPlayerOnCourtUI(
+                            parentContext: context,
+                            listPlayer: [],
+                            teamName: Constants.TEAM_B,
+                            pickingIndexStream: liveStatBloc.pickingPlayerIndexTeamB),
                         Spacer()
                       ],
                     ),
@@ -247,8 +285,46 @@ class _LiveStatState extends State<LiveStatScreen> {
   }
 }
 
+Widget myNameTag(BuildContext context, { required Stream<int> pickingIndexStream}) {
+  final fullHeight = MediaQuery.sizeOf(context).height;
+  return StreamBuilder<PlayerModel>(
+      stream: liveStatBloc.pickingPlayer,
+      builder: (context, pickingPlayerStream) {
+        if (pickingPlayerStream.hasData){
+          return StreamBuilder<int>(
+              stream: pickingIndexStream,
+              builder: (context, pickingIndexStream) {
+                if (pickingIndexStream.hasData && pickingIndexStream.data! < 6){
+                  return Container(
+                    height: fullHeight * 0.113,
+                    width: double.infinity,
+                    color: Colors.grey,
+                    child: Text(pickingPlayerStream.data!.name),
+                  );
+                }else{
+                  return Container(
+                    height: fullHeight * 0.113,
+                    width: double.infinity,
+                    color: Colors.grey,
+                  );
+                }
+              }
+          );
+        }else{
+          return Container(
+            height: fullHeight * 0.113,
+            width: double.infinity,
+            color: Colors.grey,
+          );
+        }
+
+      }
+  );
+}
+
 Widget myUpdatedStatItem({
   required BuildContext context,
+  required LiveStatModel model,
   EdgeInsets? margin
 }) {
     return Container(
@@ -264,7 +340,7 @@ Widget myUpdatedStatItem({
               Container(
                 padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                 color: Colors.yellow,
-                child: Text("TVC That bai"),
+                child: Text(model.statName),
               ),
               Spacer(),
               Container(
@@ -275,9 +351,9 @@ Widget myUpdatedStatItem({
           ),
           SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
           ///PlayerName
-          Text("Tran Trung Hieu"),
+          Text(model.player.name),
           ///LogTime
-          Text("20:57:34")
+          Text(model.timeStamp)
         ],
       ),
     );
@@ -286,6 +362,8 @@ Widget myUpdatedStatItem({
 Widget myListPlayerOnCourtUI({
   required BuildContext parentContext,
   required List<PlayerModel> listPlayer,
+  required String teamName,
+  required Stream<int> pickingIndexStream
 }) {
   return SizedBox(
     child: SizedBox(
@@ -295,15 +373,25 @@ Widget myListPlayerOnCourtUI({
           scrollDirection: Axis.horizontal,
           itemCount: 5,
           itemBuilder: (context, index) {
-            return true? Container(
-              width: 32,
-              height: 32,
-              color: Colors.blue,
-              margin: EdgeInsets.only(right: 20),
-              // child: Image(
-              //     image: AssetImage('assets/png_images/bg_home.png'),
-              //     fit: BoxFit.fill,
-              // ),
+            return true? GestureDetector(
+              onTap: () => liveStatBloc.changeEnableStatus(index, teamName),
+              child: StreamBuilder<int>(
+                stream: pickingIndexStream,
+                builder: (context, pickingPlayerIndex) {
+                  return Container(
+                    width: 32,
+                    height: 32,
+                    color: (pickingPlayerIndex.hasData && pickingPlayerIndex.data == index ) ?
+                        Colors.blue:
+                        Colors.red,
+                    margin: EdgeInsets.only(right: 20),
+                    // child: Image(
+                    //     image: AssetImage('assets/png_images/bg_home.png'),
+                    //     fit: BoxFit.fill,
+                    // ),
+                  );
+                }
+              ),
             ):Container(
 
             );
@@ -316,20 +404,25 @@ Widget myLiveStatButton({
   required BuildContext context,
   required String name,
   required Widget icon,
+  required bool addingStatus,
+  Function()? onTap,
   double? width}) {
 
-  return Container(
-    width: width ?? MediaQuery.of(context).size.height * 0.18,
-    height: width ?? MediaQuery.of(context).size.height * 0.18,
-    decoration: BoxDecoration(
-      color: Colors.lime
-    ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(child: icon),
-        Text(name,textAlign: TextAlign.center,style: TextStyle(fontSize: 8),)
-      ],
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      width: width ?? MediaQuery.of(context).size.height * 0.18,
+      height: width ?? MediaQuery.of(context).size.height * 0.18,
+      decoration: BoxDecoration(
+        color: addingStatus ? Colors.white : Colors.lime
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(child: icon),
+          Text(name,textAlign: TextAlign.center,style: TextStyle(fontSize: 8),)
+        ],
+      ),
     ),
   );
 }

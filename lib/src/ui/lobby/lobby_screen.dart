@@ -113,7 +113,7 @@ class _LobbyState extends State<LobbyScreen> {
                                      builder: (context, pendingListExpanded) {
                                        if (pendingListExpanded.hasData){
                                          return ListStartingFive(
-                                           teamKey: Constants.TEAM_1,
+                                           teamKey: Constants.TEAM_A,
                                            listStartingFive: listTeamOne.hasData ? listTeamOne.data! : [],
                                            expanded: !(pendingListExpanded.data!),
                                            rightToLeft: false,);
@@ -165,7 +165,7 @@ class _LobbyState extends State<LobbyScreen> {
                                           expanded: !(pendingListExpanded.data??false),
                                           rightToLeft: true,
                                           listStartingFive: listTeamTwo.hasData? listTeamTwo.data!:[],
-                                          teamKey: Constants.TEAM_2,
+                                          teamKey: Constants.TEAM_B,
                                         );
                                       }
                                     );

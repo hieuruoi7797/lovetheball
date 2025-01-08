@@ -57,8 +57,8 @@ class Routes{
 
 
 class Constants{
-  static const String TEAM_1 = "TEAM_1";
-  static const String TEAM_2 = "TEAM_2";
+  static const String TEAM_A = "TEAM_A";
+  static const String TEAM_B = "TEAM_B";
   static const String SUB_1 = "SUB_1";
   static const String SUB_2 = "SUB_2";
   static const String TEAM_PENDING = "PENDING";
