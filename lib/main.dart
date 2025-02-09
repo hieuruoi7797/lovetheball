@@ -69,6 +69,8 @@ class ReceivedNotification {
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+
+  ///Setup push notification
   final NotificationAppLaunchDetails? notificationAppLaunchDetails = !kIsWeb &&
       Platform.isLinux
       ? null
@@ -174,10 +176,13 @@ void main() async{
     },
     onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
   );
+  ///Setup push notification
 
-  // Listen for background task notifications
+  /// Listen for background task notifications
   BackgroundTaskManager.setupMethodCallHandler((call) {
-    _showNotification(content: call.arguments?.toString() ?? "No content");
+    if (call.method == "showNotification"){
+      _showNotification(content: call.arguments?.toString() ?? "No content");
+    }
   });
   runApp( MyApp(notificationAppLaunchDetails));
 }

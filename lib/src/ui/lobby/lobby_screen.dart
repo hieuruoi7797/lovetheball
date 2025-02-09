@@ -113,7 +113,7 @@ class _LobbyState extends State<LobbyScreen> {
                                      builder: (context, pendingListExpanded) {
                                        if (pendingListExpanded.hasData){
                                          return ListStartingFive(
-                                           teamKey: Constants.TEAM_1,
+                                           teamKey: Constants.TEAM_A,
                                            listStartingFive: listTeamOne.hasData ? listTeamOne.data! : [],
                                            expanded: !(pendingListExpanded.data!),
                                            rightToLeft: false,);
@@ -165,7 +165,7 @@ class _LobbyState extends State<LobbyScreen> {
                                           expanded: !(pendingListExpanded.data??false),
                                           rightToLeft: true,
                                           listStartingFive: listTeamTwo.hasData? listTeamTwo.data!:[],
-                                          teamKey: Constants.TEAM_2,
+                                          teamKey: Constants.TEAM_B,
                                         );
                                       }
                                     );
@@ -217,15 +217,18 @@ class _LobbyState extends State<LobbyScreen> {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 18),
-              height: 56,
-              width: MediaQuery.sizeOf(context).width * 0.3,
-              decoration: BoxDecoration(
-                color: const Color(0xFFACC7E1),
-                borderRadius: BorderRadius.circular(12)
+            child: GestureDetector(
+              onTap: () => Navigator.pushNamed(context, Routes.LIVE_STAT),
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 18),
+                height: 56,
+                width: MediaQuery.sizeOf(context).width * 0.3,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFACC7E1),
+                  borderRadius: BorderRadius.circular(12)
+                ),
+                child: Center(child: const Text("BẮT ĐẦU")),
               ),
-              child: Center(child: const Text("BẮT ĐẦU")),
             ),
           )
         ],

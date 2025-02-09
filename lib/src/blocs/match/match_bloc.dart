@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/src/app.dart';
-import 'package:splat_mobile/src/blocs/game_on/game_on_bloc.dart';
 import 'package:splat_mobile/src/blocs/home_bloc/home_bloc.dart';
 import 'package:splat_mobile/src/models/match_model.dart';
 import 'package:splat_mobile/src/models/player_model.dart';

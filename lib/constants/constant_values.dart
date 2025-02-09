@@ -51,13 +51,14 @@ class Routes{
   static const String SETTING_AVT = '/settingAvatar';
   static const String QUICK_MATCH = '/quickMatch';
   static const String LOBBY = '/lobby';
+  static const String LIVE_STAT = '/live_stat';
   static const String LOGIN_GOOGLE = '/loginGoogle';
 }
 
 
 class Constants{
-  static const String TEAM_1 = "TEAM_1";
-  static const String TEAM_2 = "TEAM_2";
+  static const String TEAM_A = "TEAM_A";
+  static const String TEAM_B = "TEAM_B";
   static const String SUB_1 = "SUB_1";
   static const String SUB_2 = "SUB_2";
   static const String TEAM_PENDING = "PENDING";
