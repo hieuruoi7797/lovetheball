@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
@@ -14,21 +17,17 @@ class LiveStatBloc {
   final BehaviorSubject<int> _pickingPlayerIndexTeamB = BehaviorSubject<int>();
   final BehaviorSubject<bool> _statAddingStatus = BehaviorSubject<bool>();
   final BehaviorSubject<PlayerModel> _pickingPlayer = BehaviorSubject<PlayerModel>();
+  final BehaviorSubject<int> _timerSubject = BehaviorSubject<int>();
+  final BehaviorSubject<bool> _timerRun = BehaviorSubject<bool>();
+
 
   Stream<List<LiveStatModel>> get liveStatsStream => _liveStatsStream.stream;
   Stream<bool> get statAddingStatus => _statAddingStatus.stream;
   Stream<int> get pickingPlayerIndexTeamA => _pickingPlayerIndexTeamA.stream;
   Stream<int> get pickingPlayerIndexTeamB => _pickingPlayerIndexTeamB.stream;
   Stream<PlayerModel> get pickingPlayer => _pickingPlayer.stream;
-
-  // PlayerModel pickingPlayer = PlayerModel(id: "000", name: "UNKNOWN");
-  init(){
-    _pickingPlayerIndexTeamA.add(6);
-    _pickingPlayerIndexTeamB.add(6);
-    _statAddingStatus.add(false);
-    _liveStatsStream.add([]);
-    _pickingPlayer.add(PlayerModel(id: "000", name: "UNKNOWN"));
-  }
+  Stream<int> get timeSubject => _timerSubject.stream;
+  Stream<bool> get timerRun => _timerRun.stream;
 
   List<Map> offensiveStatsList = [
     {
@@ -86,7 +85,57 @@ class LiveStatBloc {
     },
   ];
 
-  void changeEnableStatus(int playerIndex, String teamName) {
+  static const Duration countdownDuration = Duration(minutes: 10);
+  ValueNotifier<Duration> durationNotifier = ValueNotifier<Duration>(countdownDuration);
+  Timer? timer;
+
+  // PlayerModel pickingPlayer = PlayerModel(id: "000", name: "UNKNOWN");
+  init(){
+    _timerRun.add(false);
+    _pickingPlayerIndexTeamA.add(6);
+    _pickingPlayerIndexTeamB.add(6);
+    _statAddingStatus.add(false);
+    _liveStatsStream.add([]);
+    _pickingPlayer.add(PlayerModel(id: "000", name: "UNKNOWN"));
+  }
+
+  void changeTimer() {
+   bool runningStatus = _timerRun.value;
+   _timerRun.add(!runningStatus);
+   startTimer();
+  }
+
+  void startTimer() {
+    // if (durationNotifier.value.inMilliseconds == 0){
+    //   durationNotifier = ValueNotifier<Duration>(countdownDuration);
+    // }
+    if (_timerRun.value == true){
+      timer = Timer.periodic(const Duration(seconds: 1), (_) => addTime());
+    }else{
+      timer?.cancel();
+    }
+  }
+
+  String formatTime(int milliseconds) {
+    final int minutes = milliseconds ~/ 60000;
+    final int remainingSeconds = (milliseconds % 60000) ~/ 1000;
+    // final int centiseconds = (milliseconds % 1000) ~/ 10;
+    return "${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}";
+    // return "${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}:${centiseconds.toString().padLeft(2, '0')}";
+  }
+
+  void addTime() {
+    final seconds = durationNotifier.value.inSeconds - 1;
+    if (seconds < 0) {
+      timer?.cancel();
+      // showEndMessage();
+    } else {
+      durationNotifier.value = Duration(seconds: seconds);
+      _timerSubject.add(durationNotifier.value.inMilliseconds);
+    }
+  }
+
+  void pickPlayer(int playerIndex, String teamName) {
     switch (teamName){
       case Constants.TEAM_A:
         if (_pickingPlayerIndexTeamA.value == playerIndex){
@@ -125,10 +174,32 @@ class LiveStatBloc {
       LiveStatModel addingLiveStat = LiveStatModel(
           statName: statName,
           player: _pickingPlayer.value,
-          timeStamp: DateFormat("HH:mm:ss").format(DateTime.now()));
+          timeStamp: formatTime(_timerSubject.value));
       listStatNow.add(addingLiveStat);
       _liveStatsStream.add(listStatNow.reversed.toList());
     }
+  }
+
+  disablePicking() {
+    _statAddingStatus.add(false);
+    _pickingPlayerIndexTeamA.add(6);
+    _pickingPlayerIndexTeamB.add(6);
+    _pickingPlayer.add(PlayerModel(id: "000", name: "UNKNOWN"));
+  }
+
+  removeStat(int? index) {
+    List<LiveStatModel> listStatNow = _liveStatsStream.value;
+    listStatNow.removeAt(index??0);
+    _liveStatsStream.add(listStatNow);
+  }
+
+  dispose() {
+    _timerSubject.close();
+    _liveStatsStream.close();
+    _pickingPlayer.close();
+    _pickingPlayerIndexTeamB.close();
+    _pickingPlayerIndexTeamA.close();
+    _statAddingStatus.close();
   }
 }
 

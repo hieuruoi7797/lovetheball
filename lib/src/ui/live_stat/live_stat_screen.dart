@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
+import 'package:splat_mobile/constants/ui_styles.dart';
 import 'package:splat_mobile/public/public_methods.dart';
+import 'package:splat_mobile/src/blocs/lobby/lobby_bloc.dart';
 import 'package:splat_mobile/src/blocs/match/live_stat_bloc.dart';
 import 'package:splat_mobile/src/models/live_stat_model.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
@@ -116,11 +118,13 @@ class _LiveStatState extends State<LiveStatScreen> {
                     children: [
                       myNameTag(
                           context,
-                          pickingIndexStream: liveStatBloc.pickingPlayerIndexTeamA),
+                          pickingIndexStream: liveStatBloc.pickingPlayerIndexTeamA,
+                          teamCode: Constants.TEAM_A),
                       Spacer(),
                       myListPlayerOnCourtUI(
                           parentContext: context, 
-                          listPlayer: [], teamName: Constants.TEAM_A,
+                          listPlayer: [],
+                          teamName: Constants.TEAM_A,
                           pickingIndexStream: liveStatBloc.pickingPlayerIndexTeamA
                          ),
                       Spacer()
@@ -146,6 +150,7 @@ class _LiveStatState extends State<LiveStatScreen> {
                               return myUpdatedStatItem(
                                   context: context,
                                   model: liveStatsStream.data![index],
+                                  index: index,
                                   margin: EdgeInsets.only(
                                     bottom: fullWidth * 0.01,
                                     left: fullWidth * 0.015,
@@ -163,6 +168,7 @@ class _LiveStatState extends State<LiveStatScreen> {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Container(
+                        margin: EdgeInsets.only(bottom: fullHeight * 0.05),
                         height: fullHeight*0.207,
                         color: Colors.white54,
                         child: Row(
@@ -186,16 +192,37 @@ class _LiveStatState extends State<LiveStatScreen> {
                                 children: [
                                   Expanded(
                                     flex:1,
-                                    child: Container(
-                                      color: Colors.redAccent,
-                                      child: Center(child: Text("20:00:00"),),
+                                    child: StreamBuilder<int>(
+                                      stream: liveStatBloc.timeSubject,
+                                      builder: (context, snapshot) {
+                                        return Container(
+                                          color: Colors.redAccent,
+                                          child: Center(child: Text(
+                                            liveStatBloc.formatTime(snapshot.data??Duration(minutes: 10).inMilliseconds)
+                                            // snapshot.data.toString(),
+                                          ),),
+                                        );
+                                      }
                                     ),
                                   ),
                                   Expanded(
                                     flex:1,
-                                    child: Container(
-                                      color: Colors.lightBlueAccent,
-                                      child: Center(child: Icon(Icons.pause),),
+                                    child: GestureDetector(
+                                      onTap:() => liveStatBloc.changeTimer(),
+                                      child: Container(
+                                        color: Colors.lightBlueAccent,
+                                        child: Center(child: StreamBuilder<bool>(
+                                          stream: liveStatBloc.timerRun,
+                                          builder: (context, snapshot) {
+                                            if (snapshot.data == true){
+                                              return Icon(Icons.pause);
+                                            }else{
+                                              return Icon(Icons.play_arrow);
+                                            }
+
+                                          }
+                                        ),),
+                                      ),
                                     ),)
                                 ],
                               ),
@@ -266,7 +293,8 @@ class _LiveStatState extends State<LiveStatScreen> {
                       children: [
                         myNameTag(
                             context,
-                            pickingIndexStream: liveStatBloc.pickingPlayerIndexTeamB),
+                            pickingIndexStream: liveStatBloc.pickingPlayerIndexTeamB,
+                            teamCode: Constants.TEAM_B),
                         Spacer(),
                         myListPlayerOnCourtUI(
                             parentContext: context,
@@ -285,7 +313,12 @@ class _LiveStatState extends State<LiveStatScreen> {
   }
 }
 
-Widget myNameTag(BuildContext context, { required Stream<int> pickingIndexStream}) {
+Widget myNameTag(
+    BuildContext context,
+    {
+      required Stream<int> pickingIndexStream,
+      String? teamCode
+    }) {
   final fullHeight = MediaQuery.sizeOf(context).height;
   return StreamBuilder<PlayerModel>(
       stream: liveStatBloc.pickingPlayer,
@@ -299,7 +332,35 @@ Widget myNameTag(BuildContext context, { required Stream<int> pickingIndexStream
                     height: fullHeight * 0.113,
                     width: double.infinity,
                     color: Colors.grey,
-                    child: Text(pickingPlayerStream.data!.name),
+                    padding: teamCode == Constants.TEAM_A ?
+                            EdgeInsets.only(right: fullHeight * 0.02)
+                                : EdgeInsets.only(left: fullHeight * 0.02),
+                    child: Row(
+                      // mainAxisAlignment: teamCode == Constants.TEAM_A?
+                      //       MainAxisAlignment.end:
+                      //       MainAxisAlignment.start,
+                      textDirection:teamCode == Constants.TEAM_A? TextDirection.rtl : TextDirection.ltr,
+                      children: [
+                        GestureDetector(
+                          onTap: () => liveStatBloc.disablePicking(),
+                          child: Container(
+                            color: Colors.blue,
+                            child: Icon(Icons.close),
+                          ),
+                        ),
+                        SizedBox(width: fullHeight * 0.02,),
+                        Container(
+                          color: Colors.blue,
+                          child: Icon(Icons.loop),
+                        ),
+                        SizedBox(width: fullHeight * 0.04,),
+                        Text(
+                            pickingPlayerStream.data!.name,
+                            style: TextStyle(fontSize: 15),
+                        ),
+
+                      ],
+                    ),
                   );
                 }else{
                   return Container(
@@ -325,7 +386,8 @@ Widget myNameTag(BuildContext context, { required Stream<int> pickingIndexStream
 Widget myUpdatedStatItem({
   required BuildContext context,
   required LiveStatModel model,
-  EdgeInsets? margin
+  EdgeInsets? margin,
+  int? index
 }) {
     return Container(
       margin: margin,
@@ -343,15 +405,18 @@ Widget myUpdatedStatItem({
                 child: Text(model.statName),
               ),
               Spacer(),
-              Container(
-                color: Colors.blue,
-                child: Icon(Icons.close),
+              GestureDetector(
+                onTap: () => liveStatBloc.removeStat(index),
+                child: Container(
+                  color: Colors.blue,
+                  child: Icon(Icons.close),
+                ),
               ),
             ],
           ),
           SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
           ///PlayerName
-          Text(model.player.name),
+          Text('${model.player.id} - ${model.player.name}'),
           ///LogTime
           Text(model.timeStamp)
         ],
@@ -366,36 +431,88 @@ Widget myListPlayerOnCourtUI({
   required Stream<int> pickingIndexStream
 }) {
   return SizedBox(
-    child: SizedBox(
-      height: 32,
-      child: ListView.builder(
-          // padding: EdgeInsets.zero,
-          scrollDirection: Axis.horizontal,
-          itemCount: 5,
-          itemBuilder: (context, index) {
-            return true? GestureDetector(
-              onTap: () => liveStatBloc.changeEnableStatus(index, teamName),
-              child: StreamBuilder<int>(
-                stream: pickingIndexStream,
-                builder: (context, pickingPlayerIndex) {
-                  return Container(
-                    width: 32,
-                    height: 32,
-                    color: (pickingPlayerIndex.hasData && pickingPlayerIndex.data == index ) ?
-                        Colors.blue:
-                        Colors.red,
-                    margin: EdgeInsets.only(right: 20),
-                    // child: Image(
-                    //     image: AssetImage('assets/png_images/bg_home.png'),
-                    //     fit: BoxFit.fill,
-                    // ),
-                  );
-                }
-              ),
-            ):Container(
+    child: StreamBuilder<PlayerModel>(
+      stream: liveStatBloc.pickingPlayer,
+      builder: (context, pickingPlayer) {
+        if (pickingPlayer.hasData && pickingPlayer.data?.id != "000"){
+          return StreamBuilder<int>(
+            stream: pickingIndexStream,
+            builder: (context, pickingIndex) {
+              if (pickingIndex.hasData && pickingIndex.data != 6){
+                return Container(
+                  color: Colors.yellow,
+                  child: Row(
+                    textDirection: teamName == Constants.TEAM_A ? TextDirection.ltr : TextDirection.rtl,
+                    children: [
+                      Container(
+                        margin: teamName == Constants.TEAM_A ? EdgeInsets.only(left: 16) : EdgeInsets.only(right: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 40,
+                              height: 40,
+                              color: Colors.red,
+                              // margin: EdgeInsets.only(right: 20),
+                            ),
+                            Text(pickingPlayer.data?.id??"000")
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              }else{
+                return myPlayerItemList(teamName);
+              }
+            }
+          );
+        }else{
+          return myPlayerItemList(teamName);
+        }
+      }
+    ),
+  );
+}
 
-            );
-          }),
+Widget myPlayerItemList(String teamName) {
+  return SizedBox(
+    height: 48,
+    child: StreamBuilder<List<PlayerModel>>(
+      stream: teamName == Constants.TEAM_A ?
+      lobbyBloc.listTeamPlayersOne :
+      lobbyBloc.listTeamPlayersTwo,
+      builder: (context, listPlayer) {
+       if ( listPlayer.hasData){
+         return ListView.builder(
+           // padding: EdgeInsets.zero,
+             scrollDirection: Axis.horizontal,
+             itemCount: listPlayer.data!.length,
+             itemBuilder: (context, index) {
+               return true? Container(
+                 margin: EdgeInsets.only(right: 20),
+                 child: GestureDetector(
+                   onTap: () => liveStatBloc.pickPlayer(index, teamName),
+                   child: Column(
+                     children: [
+                       Container(
+                         width: 32,
+                         height: 32,
+                         color: Colors.red,
+                       ),
+                       Container(
+                           child: Text(listPlayer.data![index].id, style: TextStyle(fontSize: 11),))
+                     ],
+                   ),
+                 ),
+               ):Container(
+               );
+             });
+       }else{
+         return SizedBox();
+       }
+
+      }
     ),
   );
 }
