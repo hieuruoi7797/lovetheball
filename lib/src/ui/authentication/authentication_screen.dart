@@ -53,7 +53,7 @@ class LoginScreen extends StatelessWidget {
                               fontSize: 17,
                               fontWeight: FontWeight.w600
                           ),
-                          height: 56,
+                          height: MediaQuery.of(context).size.height*0.06,
                           width: MediaQuery.sizeOf(context).width * 0.775,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16),
@@ -75,7 +75,7 @@ class LoginScreen extends StatelessWidget {
                           onTap: (){
                             authenticationBloc.loginWithGoogle(context);
                           },
-                          height: 56,
+                          height: MediaQuery.of(context).size.height*0.06,
                           width: MediaQuery.sizeOf(context).width * 0.775,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16),
@@ -93,11 +93,11 @@ class LoginScreen extends StatelessWidget {
                         context: context,
                         onTap: () => show.cupertinoModalBottomSheet(ModalTabView()),
                         buttonName: "Tạo tài khoản mới",
-                        height: 56,
+                        height: MediaQuery.of(context).size.height*0.06,
                         width: MediaQuery.sizeOf(context).width * 0.775,
                       )
                     ),
-                    const SizedBox(height: 37),
+                    SizedBox(height: MediaQuery.of(context).size.height*0.03),
                     Center(
                       child: RichText(
                         textAlign: TextAlign.center,

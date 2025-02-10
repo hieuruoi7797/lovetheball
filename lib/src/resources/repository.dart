@@ -45,6 +45,28 @@ class Repository {
         scheduledAt: scheduledAt,
       );
 
+  Future<Response> deleteLobby({
+    required BuildContext context,
+    required String lobbyId,
+  }) =>
+      _lobbyApiProvider.deleteLobby(context: context, lobbyId: lobbyId);
+  Future<Response> getLobby({
+    required BuildContext context,
+    required String limit,
+    required String offset,
+    required String sortField,
+    required String sortOrder,
+    String? fromDate,
+    String? toDate,
+  }) =>
+      _lobbyApiProvider.getLobby(context: context,
+          limit: limit,
+          offset: offset,
+          sortField: sortField,
+          sortOrder: sortOrder,
+          fromDate: fromDate,
+          toDate: toDate);
+
   Future<Response> createInvitation({
     required BuildContext context,
     required String lobbyId,

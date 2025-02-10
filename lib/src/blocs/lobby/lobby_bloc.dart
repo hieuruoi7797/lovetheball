@@ -5,9 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
+import 'package:splat_mobile/public/modal/modal_lobby.dart';
+import 'package:splat_mobile/src/app.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 
+import '../../../public/dialog/dialog_notification.dart';
 import '../../resources/repository.dart';
+import '../../resources/show_dialog.dart';
 
 class LobbyBloc {
   BehaviorSubject<List<PlayerModel>> _listPendingPlayers = BehaviorSubject<List<PlayerModel>>();
@@ -19,6 +23,24 @@ class LobbyBloc {
   final BehaviorSubject<bool?> _pendingListExpanded = BehaviorSubject<bool?>();
   String nowSwappingFromTeam = "";
   String nowSwappingToTeam = "";
+  String _lobbyId ='';
+  String get lobbyId => _lobbyId;
+  String _lobbyName ='';
+  String get lobbyName => _lobbyName;
+  final lobbyIdBehavior = BehaviorSubject<String>();
+  List<LobbyModel> _lobbies = [];
+  List<LobbyModel>  get lobbies => _lobbies;
+  BehaviorSubject<List<LobbyModel>> listLobbyBehavior = BehaviorSubject<List<LobbyModel>>();
+
+  setListLobby(List<LobbyModel> ls){
+    listLobbyBehavior.sink.add(_lobbies=ls);
+  }
+  setLobbyId(String value){
+    lobbyIdBehavior.sink.add(_lobbyId=value);
+  }
+  setLobbyName(String value){
+    _lobbyName = value;
+  }
  final List<PlayerModel> _listPendingDumb = [
    PlayerModel(id: '1',name: "Tran Trung Hieu"),
    PlayerModel(id: '4',name: "Viet Hoang Nguyen"),
@@ -217,8 +239,66 @@ class LobbyBloc {
         matchSettingId: matchSettingId,
         scheduledAt: scheduleAt
     );
-    print("Xinhcheck -----${jsonDecode(response.body)}------");
+    Map<String, dynamic> result =  jsonDecode(response.body);
+    List fixedData = (result['data'] as List).map((item) {
+      item['name'] = Utf8Decoder().convert(item['name'].runes.toList());
+      return item;
+    }).toList();
+    // json.decode(utf8.decode
+    setLobbyId(fixedData[0]['id_']);
+    setLobbyName(fixedData[0]['name']);
+    print("Xinhcheck create -----${response.body}----${fixedData[0]['name']}");
   }
+
+  deleteLobby({
+    required BuildContext context,
+    required String lobbyId,
+  }) async{
+    Response response = await repository.deleteLobby(context: context, lobbyId: lobbyId);
+    print("Xinhcheck delete-----${jsonDecode(response.body)}------");
+  }
+
+  showDelLobbiesDialog(BuildContext context,{bool? isHasLobbies,String? id}) {
+
+    if(isHasLobbies==true) {
+      show.dialog(dialogWidget: AddDialog.cupertinoDialogOneBtn(
+          context: context, content: 'Bạn đang là chủ của lobbies khác, Vui lòng thoát để tiếp tục'));
+      deleteLobby(context: context, lobbyId: id??"");
+    }else{
+      show.dialog(dialogWidget: AddDialog.cupertinoDialogTwoBtn(
+          context: context,
+          content:'Bạn có chắc muốn rời khỏi lobby này không',
+          onPressedCancel: (){
+            Navigator.pop(context);
+          },
+          onPressedOK: ()async{
+            await deleteLobby(context: context, lobbyId: lobbyId);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          }));
+    }
+  }
+
+  getLobby(BuildContext context)async{
+    Response response = await repository.getLobby(context: context,
+        limit: '100',
+        offset: '0',
+        sortField: 'updated_at',
+        sortOrder: 'DESC',
+        fromDate: null,
+        toDate: null);
+    final result = jsonDecode(response.body);
+    final List<LobbyModel> lsLobbies = (result['data'] as List)
+        .map((item) => LobbyModel.fromJson(item))
+        .toList();
+    lobbies.clear();
+    setListLobby(lsLobbies);
+    print("Xinhcheck get lobby-----${jsonDecode(response.body)}------");
+  }
+
+
+
+
 }
 
 final lobbyBloc = LobbyBloc();

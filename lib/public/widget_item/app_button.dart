@@ -105,7 +105,7 @@ class AppButton {
         //     .of(context)
         //     .size
         //     .width * 0.47,
-        height: height ?? 48,
+        height: height ??  MediaQuery.of(context).size.height*0.056,
         decoration: decoration ?? BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             gradient: const LinearGradient(

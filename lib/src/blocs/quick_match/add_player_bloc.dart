@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:splat_mobile/src/app.dart';
+import 'package:splat_mobile/src/blocs/quick_match/socket_service.dart';
 
 import '../../resources/repository.dart';
 
@@ -231,6 +233,7 @@ class QuickMatchBloc{
     final friend = friends.firstWhere((f) => f.userId == userId);
     if (!friend.isInvited) {
       friend.isInvited = true;
+      sendFriendInvite(navigatorKey.currentContext!,lobbyId: '',lobbyName: '');
       friend.countdown.add(5); // Set the countdown to 5 seconds
       _startCountdown(friend);
       _updateFriendsList(); // Update the stream with the latest list
@@ -299,6 +302,19 @@ class QuickMatchBloc{
       _timerStreamController.add(Map.from(friendTimers)); // Emit updated timers
     }
   }
+  final inviteService = InviteService();
+  void sendFriendInvite(BuildContext context,{String? lobbyId, String? lobbyName}) async{
+    await inviteService.createInvitation(context,
+        type: '0',
+        lobbyName: lobbyName??'',
+        lobbyId: lobbyId??"",
+        destinationType: '',
+        destinationId: ''
+
+    );
+  }
+
+
 }
 final  quickMatchBloc= QuickMatchBloc();
 

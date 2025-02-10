@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:splat_mobile/constants/constant_values.dart';
+import 'package:splat_mobile/public/app_global.dart';
 import 'package:splat_mobile/public/widget_item/overlay_entry_sample.dart';
 import 'package:splat_mobile/src/app.dart';
+import 'package:splat_mobile/src/blocs/home_bloc/home_bloc.dart';
 import 'package:splat_mobile/src/blocs/lobby/lobby_bloc.dart';
 import 'package:splat_mobile/src/models/basketball_match_setting_model.dart';
 import 'package:splat_mobile/src/resources/match_api_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../models/player_model.dart';
 import '../quick_match/add_player_bloc.dart';
 
 
@@ -41,6 +44,7 @@ class MatchSettingBloc {
   Stream<BasketballMatchSettingModel> get settingMatch => _settingMatch.stream;
 
   bool get checkRememberPass => _checkRememberPass;
+
 
 
   MatchApiProvider matchApiProvider = MatchApiProvider();
@@ -128,6 +132,8 @@ class MatchSettingBloc {
 
   Future<void> getMatchSetting() async {
     await matchApiProvider.getMatchSetting(context: navigatorKey.currentContext!);
+    await lobbyBloc.getLobby(navigatorKey.currentContext!);
+
   }
 
   void changeNumberOfOT({required String symbol}) {
@@ -173,26 +179,45 @@ class MatchSettingBloc {
 
 
   Future<void> sendMatch() async {
+    // PlayerModel nowUserInfo = await homeBloc.userInfo.last;
+    List ownerLobbies = lobbyBloc.lobbies.map((e)=>e.owner).toList();
+    List<String> matchingIds = lobbyBloc.lobbies
+        .where((lobby) => lobby.owner == appGlobal.userId) // Filter lobbies by owner
+        .map((lobby) => lobby.id) // Extract the id_ of matching lobbies
+        .toList();
+    print('Xinhcheck sendMatch ${ownerLobbies}----${matchingIds}');
+
     BasketballMatchSettingModel nowSetting = _settingMatch.value;
     if (_pickingMatchTitle.value.isNotEmpty){
-      Map body = {
-        "name": _pickingMatchTitle.value,
-        "match_type": 0,
-        "type_": 1,
-        "settings": nowSetting.toJson()
-      };
-      Response apiRes = await MatchApiProvider().postMatchSetting(body: body);
-      if (apiRes.statusCode == 201){
-        final result = jsonDecode(apiRes.body);
-        
-        print("Xinhceheck ${result['data'][0]['name']}");
+      if(!ownerLobbies.contains(appGlobal.userId)) {
+        Map body = {
+          "name": _pickingMatchTitle.value,
+          "match_type": 0,
+          "type_": 1,
+          "settings": nowSetting.toJson()
+        };
 
-        if (navigatorKey.currentState!.context.mounted){
-          lobbyBloc.createLobby(context: navigatorKey.currentState!.context, name: result['data'][0]['name'], matchSettingId: result['data'][0]['id_'], scheduleAt: result['data'][0]['created_at']);
-          quickMatchBloc.getUsers(navigatorKey.currentState!.context);
-          quickMatchBloc.setSearching(false);
-          Navigator.pushNamed(navigatorKey.currentState!.context, Routes.LOBBY);
+        Response apiRes = await MatchApiProvider().postMatchSetting(body: body);
+        if (apiRes.statusCode == 201){
+          final result = json.decode(utf8.decode(apiRes.body.codeUnits));
+
+          print("Xinhcheck ${result['data'][0]['name']}");
+
+          if (navigatorKey.currentState!.context.mounted){
+            // lobbyBloc.getLobby(navigatorKey.currentState!.context);
+
+              lobbyBloc.createLobby(context: navigatorKey.currentState!.context,
+                  name: result['data'][0]['name'],
+                  matchSettingId: result['data'][0]['id_'],
+                  scheduleAt: result['data'][0]['created_at']);
+              quickMatchBloc.getUsers(navigatorKey.currentState!.context);
+              quickMatchBloc.setSearching(false);
+              Navigator.pushNamed(
+                  navigatorKey.currentState!.context, Routes.LOBBY);
+          }
         }
+      }else{
+        lobbyBloc.showDelLobbiesDialog(navigatorKey.currentContext!,isHasLobbies: true,id: matchingIds[0]);
       }
     }else{
       return;
