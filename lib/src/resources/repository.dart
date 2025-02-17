@@ -45,13 +45,35 @@ class Repository {
         scheduledAt: scheduledAt,
       );
 
+  Future<Response> deleteLobby({
+    required BuildContext context,
+    required String lobbyId,
+  }) =>
+      _lobbyApiProvider.deleteLobby(context: context, lobbyId: lobbyId);
+  Future<Response> getLobby({
+    required BuildContext context,
+    required String limit,
+    required String offset,
+    required String sortField,
+    required String sortOrder,
+    String? fromDate,
+    String? toDate,
+  }) =>
+      _lobbyApiProvider.getLobby(context: context,
+          limit: limit,
+          offset: offset,
+          sortField: sortField,
+          sortOrder: sortOrder,
+          fromDate: fromDate,
+          toDate: toDate);
+
   Future<Response> createInvitation({
     required BuildContext context,
     required String lobbyId,
     required String lobbyName,
-    required String type,
+    required int type,
     required String destinationId,
-    required String destinationType,
+    required int destinationType,
   }) =>
       _invitationUserProvider.createInvitation(
         context: context,
@@ -61,6 +83,12 @@ class Repository {
         destinationId: destinationId,
         destinationType: destinationType
       );
+
+  Future<Response> revokeInvitation({
+    required BuildContext context,
+    required String invitationId,
+  }) =>
+      _invitationUserProvider.revokeInvitation(context: context, invitationId: invitationId);
 
   Future<Response> getMatchesList(BuildContext context)
     => _matchApiProvider.getMatchesList(context: context);

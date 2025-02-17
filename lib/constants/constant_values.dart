@@ -41,6 +41,10 @@ Map<String, String> headerWithToken(String token) => {
   'Content-Type': 'application/x-www-form-urlencoded',
   'Authorization': 'Bearer $token',
 };
+Map<String, String> headerDelWithToken(String token) => {
+  'Content-Type': 'application/json',
+  'Authorization': 'Bearer $token',
+};
 
 
 ///Routes

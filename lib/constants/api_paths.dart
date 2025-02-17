@@ -23,4 +23,5 @@ const String API_CREATE_USER ="$versions/users";
 const String MATCH_SETTING ="$versions/match_settings";
 const String INVITATION = "$versions/invitations";
 const String LOBBY = "$versions/lobbies";
+const String EXIT_LOBBY = '$versions/lobbies/exit';
 

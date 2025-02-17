@@ -7,6 +7,7 @@ import 'package:splat_mobile/public/public_methods.dart';
 import 'package:splat_mobile/public/share_prefer.dart';
 import 'package:splat_mobile/src/app.dart';
 import 'package:splat_mobile/src/blocs/authentication/authentication_bloc.dart';
+import 'package:splat_mobile/src/blocs/lobby/lobby_bloc.dart';
 import 'package:splat_mobile/src/blocs/match/match_bloc.dart';
 import 'package:splat_mobile/src/models/player_model.dart';
 import 'package:splat_mobile/src/resources/show_dialog.dart';
@@ -26,7 +27,6 @@ class HomeBloc {
   final _popScopeBehavior = BehaviorSubject<bool>();
 
 
-
   Stream<int> get pageIndex => _pageIndexBehavior.stream;
   Stream<bool> get openedAddingPopup => _openedAddingPopup.stream;
   Stream<PlayerModel> get userInfo => _userInfoBehavior.stream;
@@ -35,6 +35,7 @@ class HomeBloc {
 
   HomeBloc() {
     _pageIndexBehavior.sink.add(_pageIndexInt);
+
   }
 
   void onTabPageIndex(int index){
@@ -52,6 +53,7 @@ class HomeBloc {
     nowUserInfo = await SharePreferUtils.getUserInfo();
     if (nowUserInfo != null){
       _userInfoBehavior.add(nowUserInfo);
+      appGlobal.setUserId(nowUserInfo.id);
     }
     // appGlobal.setAvatarFile(nowUserInfo?.avatar.toString()??"");
     appGlobal.createFileFromString(nowUserInfo);

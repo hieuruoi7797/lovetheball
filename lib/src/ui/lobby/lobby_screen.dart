@@ -39,6 +39,7 @@ class _LobbyState extends State<LobbyScreen> {
       DeviceOrientation.landscapeLeft,
     ]);
     lobbyBloc.initData();
+
   }
 
   @override
@@ -80,7 +81,9 @@ class _LobbyState extends State<LobbyScreen> {
       keyScaffold: _scaffoldKey,
       titleAppbar: "Tran dau tuy chinh",
       drawer: QuickMatchScreen(),
-      onTapBack: (){Navigator.pop(context);},
+      onTapBack: (){
+        lobbyBloc.showDelLobbiesDialog(context);
+      },
       bodyLayout: Stack(
         children: [
           Container(

@@ -30,13 +30,13 @@ class QuickMatchScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    width: 500,
+                    width: MediaQuery.of(context).size.width*0.5,
                     padding: EdgeInsets.symmetric(horizontal: 25,vertical: 15),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                            width: 410,
+                            width: MediaQuery.of(context).size.width*0.4,
                             child: Text('THÊM NGƯỜI CHƠI',
                               style: textNameItem,
                               textAlign: TextAlign.center,)
@@ -211,8 +211,8 @@ Widget listTeams(BuildContext context){
     child: Column(
       children: [
         Container(
-          width: MediaQuery.of(context).size.width*0.5,
-          height: MediaQuery.of(context).size.height*0.65,
+          // width: MediaQuery.of(context).size.width*0.5,
+          // height: MediaQuery.of(context).size.height*0.65,
           margin: EdgeInsets.symmetric(vertical: 15),
           decoration: BoxDecoration(
             color: color_FFFFFF,
@@ -353,13 +353,15 @@ Widget listFriend(BuildContext context) {
         color: Color(0xffd8e5f3).withOpacity(0.6),
         child: Column(
           children: [
-            SizedBox(height: 10),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
             StreamBuilder<Object>(
               stream: quickMatchBloc.searchListFriendsBehavior,
               builder: (context, snapshot) {
                 return Common.commonSearchText(
                   context,
-                  paddingBox: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  paddingBox: EdgeInsets.symmetric(
+                      vertical: MediaQuery.of(context).size.height * 0.01,
+                      horizontal: MediaQuery.of(context).size.width * 0.02),
                   hintText: "Tìm kiếm bạn bè",
                   prefixIcon: const Padding(
                     padding: EdgeInsets.all(12),
@@ -375,9 +377,9 @@ Widget listFriend(BuildContext context) {
               },
             ),
             Container(
-              width: MediaQuery.of(context).size.width * 0.5,
-              height: MediaQuery.of(context).size.height * 0.5,
-              margin: EdgeInsets.symmetric(vertical: 12),
+              width: MediaQuery.of(context).size.width * 0.55,
+              height: MediaQuery.of(context).size.height * 0.52,
+              margin: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height * 0.01),
               decoration: BoxDecoration(
                 color: color_FFFFFF,
                 borderRadius: BorderRadius.circular(10),
@@ -401,11 +403,12 @@ Widget listFriend(BuildContext context) {
                       final isInvited = quickMatchBloc.lsFriends.contains(friendId);
 
                       return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           // Friend Avatar
                           Container(
-                            width: 25,
-                            height: 25,
+                            width: 30,
+                            height: 30,
                             margin: EdgeInsets.only(left: 10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(6),
@@ -429,10 +432,13 @@ Widget listFriend(BuildContext context) {
                             ),
                             width: MediaQuery.of(context).size.width * 0.46,
                             child: ListTile(
-                              title: Text(
-                                friend['name'],
-                                style: textNameItem,
-                                textAlign: TextAlign.start,
+                              title: Container(
+                                child: Text(
+                                  friend['name'],
+                                  style: textNameItem,
+                                  textAlign: TextAlign.left,
+                                ),
+                                alignment: Alignment.centerLeft,
                               ),
                               contentPadding: EdgeInsets.symmetric(horizontal: 10),
                               titleAlignment: ListTileTitleAlignment.top,
@@ -443,7 +449,7 @@ Widget listFriend(BuildContext context) {
                                   final remainingTime = timerSnapshot.data?[friendId] ?? 0;
 
                                   return Container(
-                                    width: MediaQuery.of(context).size.width * 0.2,
+                                    width: MediaQuery.of(context).size.width * 0.21,
                                     child: TextButton.icon(
                                       style: ButtonStyle(
                                         backgroundColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
@@ -473,14 +479,15 @@ Widget listFriend(BuildContext context) {
                                         quickMatchBloc.setNumberCount(quickMatchBloc.lsFriends.length);
                                         quickMatchBloc.setTotal(totalResults);
                                         quickMatchBloc.checkTab(0);
-                                        quickMatchBloc.startFriendTimer(friendId); // Start a timer for this friend
+                                        quickMatchBloc.startFriendTimer(friendId);
+                                        quickMatchBloc.sendFriendInvite(context,friendId: friendId);// Start a timer for this friend
                                       },
                                       icon: Icon(
                                         isInvited && remainingTime > 0? Icons.check : Icons.add,
                                         color: isInvited && remainingTime > 0? color_ACC7E1 : color_31393E,
                                       ),
                                       label: Container(
-                                        width: isInvited && remainingTime > 0?MediaQuery.of(context).size.width * 0.19:MediaQuery.of(context).size.width * 0.08,
+                                        width: isInvited && remainingTime > 0?MediaQuery.of(context).size.width * 0.4:MediaQuery.of(context).size.width * 0.1,
                                         child: Text(
                                           isInvited && remainingTime > 0
                                               ? "Gửi lại sau (${remainingTime}s)" // Show remaining time if invited

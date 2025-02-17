@@ -11,10 +11,15 @@ import '../src/models/player_model.dart';
 class AppGlobal{
   File _avatarFile = new File('');
   File get avatarFile => _avatarFile;
+  String _userId = '';
+  String get userId => _userId;
   final _updateAvatarBehavior= BehaviorSubject<File>();
   Stream<File> get updateAvatarBehavior => _updateAvatarBehavior.stream;
   setAvatarFile(File file) {
     _updateAvatarBehavior.sink.add(_avatarFile = file);
+  }
+  setUserId(String value){
+    _userId = value;
   }
 
   createFileFromString(PlayerModel? nowUserInfo) async {

@@ -35,9 +35,9 @@ class InvitationApiProvider{
     required BuildContext context,
     required String lobbyId,
     required String lobbyName,
-    required String type,
+    required int type,
     required String destinationId,
-    required String destinationType,
+    required int destinationType,
   }) async {
     Response response;
     response = await PublicMethods().post(body:{
@@ -53,6 +53,32 @@ class InvitationApiProvider{
         }
       ]
     }, subUri: INVITATION, showLoader: true, isFormData: false);
+    print('Xinhcheck body ${lobbyId}');
+    return response;
+  }
+  Future<Response> getInvitation({
+    required BuildContext context,
+    required String userId,
+  }) async {
+    Response response;
+    response = await PublicMethods().get(
+        subUri: INVITATION,
+        showLoader: false,
+        queryParameters:  {
+          'limit':'100',
+          'offset':'0'
+        });
+    return response;
+  }
+
+  Future<Response> revokeInvitation({
+    required BuildContext context,
+    required String invitationId,
+  }) async {
+    Response response;
+    response = await PublicMethods().delete(
+        subUri: '$INVITATION/$invitationId}',
+        showLoader: false);
     return response;
   }
 
