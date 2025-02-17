@@ -93,6 +93,7 @@ import SocketIO
                socket?.on(clientEvent: .disconnect) { _, _ in
                    print("Socket disconnected")
                }
+
         
         // Connect to the socket
         socket?.connect()

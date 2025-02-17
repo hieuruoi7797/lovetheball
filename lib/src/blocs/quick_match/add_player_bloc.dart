@@ -5,10 +5,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:splat_mobile/constants/api_paths.dart';
+import 'package:splat_mobile/public/app_global.dart';
+import 'package:splat_mobile/public/native_socket_service.dart';
 import 'package:splat_mobile/src/app.dart';
-import 'package:splat_mobile/src/blocs/quick_match/socket_service.dart';
+import 'package:splat_mobile/src/blocs/lobby/lobby_bloc.dart';
 
+import '../../../public/dialog/dialog_notification.dart';
+import '../../background_task_manager/BackgroundTaskManager.dart';
 import '../../resources/repository.dart';
+import '../../resources/show_dialog.dart';
 
 class QuickMatchBloc{
   bool _checkRememberAction = false;
@@ -74,22 +80,35 @@ class QuickMatchBloc{
       _lsAddFriendsBehavior.sink.add(_lsFriends);
     }
   }
-  createLobby({
+  createInvite({
     required BuildContext context,
-    // required String name,
-    // required String matchSettingId,
-    // required String scheduleAt,
+    required String lobbyId,
+    required String lobbyName,
+    required String userId,
   }) async{
     Response response = await repository.createInvitation(
         context: context,
-        lobbyId: '',
-        lobbyName: '',
-      type: '0',
-        destinationId: '',
-        destinationType: '',
+        lobbyId: lobbyId,
+        lobbyName: lobbyName,
+      type: 0,
+        destinationId: userId,
+        destinationType:0
     );
-    print("Xinhcheck -----${jsonDecode(response.body)}------");
-  }
+      final result = jsonDecode(response.body);
+      await BackgroundTaskManager.startBackgroundTask(
+          userId,
+          "LacQuan"
+      );
+      if (response.statusCode == 200) {
+          NativeSocketService.connectSocket(userId, 'name');
+      } else {
+        show.dialog(dialogWidget: AddDialog.cupertinoDialogOneBtn(
+            context: context,
+            content: result['message']['msg_name'].toString()));
+        resetFriendTimer(userId);
+      }
+      print("Xinhcheck create invite-----${jsonDecode(response.body)}------");
+    }
   void onTeamsSelected(bool selected, teams_id) {
     if (selected == true) {
       _lsTeams.add(teams_id);
@@ -229,13 +248,12 @@ class QuickMatchBloc{
 
   Stream<List<Friend>> get friendsStream => _friendsController.stream;
 
-  void inviteFriend(String userId) {
+  void inviteFriend(String userId) async{
     final friend = friends.firstWhere((f) => f.userId == userId);
     if (!friend.isInvited) {
       friend.isInvited = true;
-      sendFriendInvite(navigatorKey.currentContext!,lobbyId: '',lobbyName: '');
-      friend.countdown.add(5); // Set the countdown to 5 seconds
-      _startCountdown(friend);
+      // friend.countdown.add(5); // Set the countdown to 5 seconds
+      // _startCountdown(friend);
       _updateFriendsList(); // Update the stream with the latest list
     }
   }
@@ -302,16 +320,19 @@ class QuickMatchBloc{
       _timerStreamController.add(Map.from(friendTimers)); // Emit updated timers
     }
   }
-  final inviteService = InviteService();
-  void sendFriendInvite(BuildContext context,{String? lobbyId, String? lobbyName}) async{
-    await inviteService.createInvitation(context,
-        type: '0',
-        lobbyName: lobbyName??'',
-        lobbyId: lobbyId??"",
-        destinationType: '',
-        destinationId: ''
-
-    );
+  void sendFriendInvite(BuildContext context,{String? lobbyId, String? lobbyName,String? friendId}) async{
+    createInvite(context: context,
+        lobbyId: lobbyBloc.lobbyId,
+        lobbyName: lobbyBloc.lobbyName,
+        userId: friendId??'');
+    // await inviteService.createInvitation(context,
+    //     type: '0',
+    //     lobbyName: lobbyName??'',
+    //     lobbyId: lobbyId??"",
+    //     destinationType: '',
+    //     destinationId: ''
+    //
+    // );
   }
 
 

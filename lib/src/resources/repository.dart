@@ -71,9 +71,9 @@ class Repository {
     required BuildContext context,
     required String lobbyId,
     required String lobbyName,
-    required String type,
+    required int type,
     required String destinationId,
-    required String destinationType,
+    required int destinationType,
   }) =>
       _invitationUserProvider.createInvitation(
         context: context,
@@ -83,6 +83,12 @@ class Repository {
         destinationId: destinationId,
         destinationType: destinationType
       );
+
+  Future<Response> revokeInvitation({
+    required BuildContext context,
+    required String invitationId,
+  }) =>
+      _invitationUserProvider.revokeInvitation(context: context, invitationId: invitationId);
 
   Future<Response> getMatchesList(BuildContext context)
     => _matchApiProvider.getMatchesList(context: context);

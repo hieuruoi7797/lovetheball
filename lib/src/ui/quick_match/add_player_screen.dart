@@ -479,7 +479,8 @@ Widget listFriend(BuildContext context) {
                                         quickMatchBloc.setNumberCount(quickMatchBloc.lsFriends.length);
                                         quickMatchBloc.setTotal(totalResults);
                                         quickMatchBloc.checkTab(0);
-                                        quickMatchBloc.startFriendTimer(friendId); // Start a timer for this friend
+                                        quickMatchBloc.startFriendTimer(friendId);
+                                        quickMatchBloc.sendFriendInvite(context,friendId: friendId);// Start a timer for this friend
                                       },
                                       icon: Icon(
                                         isInvited && remainingTime > 0? Icons.check : Icons.add,
